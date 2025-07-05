@@ -114,15 +114,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             className="flex items-center gap-2 group-data-[collapsible=icon]:justify-center"
           >
             <Logo className="size-8 text-primary" />
-            <div className="flex flex-col group-data-[collapsible=icon]:hidden">
+            <div className="flex items-center group-data-[collapsible=icon]:hidden">
                 <span className="text-lg font-semibold text-sidebar-foreground">
                 Mardisen
                 </span>
+                <Badge variant="outline" className="text-xs ml-2 border-sidebar-accent text-sidebar-foreground/80">SUITE</Badge>
             </div>
           </Link>
-           <Badge variant="outline" className="text-xs ml-2 border-primary text-primary group-data-[collapsible=icon]:hidden">SUITE</Badge>
            <SidebarTrigger asChild className="ml-auto group-data-[collapsible=icon]:hidden">
-             <Button variant="ghost" size="icon" className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground">
+             <Button variant="ghost" size="icon" className="rounded-full text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground">
                 <ChevronsLeft />
              </Button>
            </SidebarTrigger>
@@ -140,9 +140,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   <Avatar className="h-7 w-7">
                     <AvatarFallback className="bg-primary text-primary-foreground">N</AvatarFallback>
                   </Avatar>
-                  <span>User</span>
-                  <LogOut className="ml-auto" />
+                  <span className="group-data-[collapsible=icon]:hidden">User</span>
                 </span>
+                <LogOut className="ml-auto group-data-[collapsible=icon]:hidden" />
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
