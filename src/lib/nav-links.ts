@@ -43,11 +43,6 @@ import {
   Plug,
   Wand2,
   Calculator,
-  Shield,
-  Calendar,
-  AlertTriangle,
-  Zap,
-  Eye
 } from 'lucide-react';
 
 export type NavLink = {
@@ -130,10 +125,10 @@ export const navLinks: NavLink[] = [
     icon: Calculator,
     href: '/tax',
     items: [
-      { href: '#', label: 'Tax Dashboard', icon: LayoutGrid },
-      { href: '#', label: 'Tax Planning', icon: FileText },
-      { href: '#', label: 'Tax Filings', icon: FileStack },
-      { href: '#', label: 'Compliance', icon: ShieldCheck },
+      { href: '/tax', label: 'Tax Dashboard', icon: LayoutGrid },
+      { href: '/tax/tax-planning', label: 'Tax Planning', icon: FileText },
+      { href: '/tax/tax-filings', label: 'Tax Filings', icon: FileStack },
+      { href: '/tax/compliance', label: 'Compliance', icon: ShieldCheck },
     ],
   },
   {
