@@ -65,7 +65,7 @@ export const navLinks: NavLink[] = [
   },
   {
     label: 'Accountant Portal',
-    icon: FileText,
+    icon: Briefcase,
     href: '/accountant-portal',
     items: [
       { href: '/accountant-portal', label: 'Portal Dashboard', icon: LayoutGrid },
@@ -97,29 +97,32 @@ export const navLinks: NavLink[] = [
   {
     label: 'Accounting',
     icon: BookOpen,
+    href: '/accounting',
     items: [
-      { href: '#', label: 'Accounting Dashboard', icon: LayoutGrid },
-      { href: '#', label: 'Chart of Accounts', icon: FileStack },
-      { href: '#', label: 'Journal Entries', icon: FileText },
+      { href: '/accounting', label: 'Accounting Dashboard', icon: LayoutGrid },
+      { href: '/accounting/chart-of-accounts', label: 'Chart of Accounts', icon: FileStack },
+      { href: '/accounting/journal-entries', label: 'Journal Entries', icon: FileText },
       {
         label: 'Accounts Receivable',
         icon: CreditCard,
+        href: '/accounting/accounts-receivable/dashboard',
         items: [
-          { href: '#', label: 'A/R Dashboard', icon: LayoutGrid },
-          { href: '#', label: 'Customers', icon: Users },
+          { href: '/accounting/accounts-receivable/dashboard', label: 'A/R Dashboard', icon: LayoutGrid },
+          { href: '/accounting/accounts-receivable/customers', label: 'Customers', icon: Users },
         ],
       },
       {
         label: 'Accounts Payable',
         icon: Banknote,
+        href: '/accounting/accounts-payable/dashboard',
         items: [
-          { href: '#', label: 'AP Dashboard', icon: LayoutGrid },
-          { href: '#', label: 'Bills', icon: Receipt },
-          { href: '#', label: 'Vendors', icon: Users },
+          { href: '/accounting/accounts-payable/dashboard', label: 'A/P Dashboard', icon: LayoutGrid },
+          { href: '/accounting/accounts-payable/bills', label: 'Bills', icon: Receipt },
+          { href: '/accounting/accounts-payable/vendors', label: 'Vendors', icon: Users },
         ],
       },
-      { href: '#', label: 'General Ledger', icon: Book },
-      { href: '#', label: 'Financial Statements', icon: FileBarChart },
+      { href: '/accounting/general-ledger', label: 'General Ledger', icon: Book },
+      { href: '/accounting/financial-statements', label: 'Financial Statements', icon: FileBarChart },
     ],
   },
   {
