@@ -41,6 +41,7 @@ import {
   Palette,
   Plug,
   Wand2,
+  Calculator,
 } from 'lucide-react';
 
 export type NavLink = {
@@ -72,7 +73,7 @@ export const navLinks: NavLink[] = [
   },
   {
     label: 'Payroll System',
-    icon: DollarSign,
+    icon: Receipt,
     href: '/payroll',
     items: [
       { href: '#', label: 'Payroll Dashboard', icon: LayoutGrid },
@@ -117,7 +118,7 @@ export const navLinks: NavLink[] = [
   },
   {
     label: 'Intelligent Tax',
-    icon: Landmark,
+    icon: Calculator,
     href: '/tax',
     items: [
       { href: '#', label: 'Tax Dashboard', icon: LayoutGrid },
