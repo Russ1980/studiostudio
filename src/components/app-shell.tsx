@@ -102,16 +102,18 @@ function renderNavLinks(
             <SidebarMenuButton
               tooltip={link.label}
               size={level > 1 ? "sm" : "default"}
-              className="w-full justify-between"
+              className="w-full"
               variant="ghost"
             >
-              <span className="flex items-center gap-2">
-                {link.icon && <link.icon />}
-                <span className="flex-1 text-left">{link.label}</span>
+              <span className="flex w-full items-center justify-between">
+                <span className="flex items-center gap-2">
+                  {link.icon && <link.icon />}
+                  <span className="flex-1 text-left">{link.label}</span>
+                </span>
+                {!isCollapsed && (
+                    <ChevronRight className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-90" />
+                )}
               </span>
-              {!isCollapsed && (
-                  <ChevronRight className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-90" />
-              )}
             </SidebarMenuButton>
           </CollapsibleTrigger>
           <CollapsibleContent>
@@ -126,15 +128,17 @@ function renderNavLinks(
           isActive={pathname === link.href}
           tooltip={link.label}
           size={level > 1 ? "sm" : "default"}
-          className={cn(level > 1 && "h-8", "justify-between")}
+          className={cn(level > 1 && "h-8")}
           variant="ghost"
         >
           <Link href={link.href || "#"}>
-             <span className="flex items-center gap-2">
-              {link.icon && <link.icon />}
-              <span>{link.label}</span>
+            <span className="flex w-full items-center justify-between">
+              <span className="flex items-center gap-2">
+                {link.icon && <link.icon />}
+                <span>{link.label}</span>
+              </span>
+              {level === 1 && <ChevronRight className="h-4 w-4" />}
             </span>
-            {level === 1 && <ChevronRight className="h-4 w-4" />}
           </Link>
         </SidebarMenuButton>
       )}
@@ -161,7 +165,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 </span>
                 <Badge
                   variant="outline"
-                  className="ml-2 border-sidebar-accent bg-sidebar-accent text-sidebar-foreground/80"
+                  className="ml-2 border-sidebar-border bg-sidebar-accent text-sidebar-foreground/80"
                 >
                   SUITE
                 </Badge>
@@ -169,9 +173,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </Link>
           <SidebarTrigger asChild className="ml-auto group-data-[collapsible=icon]:hidden">
             <Button
-                variant="ghost"
                 size="icon"
-                className="rounded-full text-sidebar-foreground bg-sidebar-accent hover:bg-sidebar-accent/80 hover:text-sidebar-accent-foreground"
+                className="rounded-full bg-sidebar-border text-sidebar-foreground hover:bg-sidebar-border/90"
             >
               <ChevronsLeft />
             </Button>
