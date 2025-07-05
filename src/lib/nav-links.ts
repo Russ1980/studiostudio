@@ -1,5 +1,5 @@
 import {
-  LayoutDashboard,
+  LayoutGrid,
   Users,
   Briefcase,
   FilePlus,
@@ -53,15 +53,15 @@ export type NavLink = {
 export const navLinks: NavLink[] = [
   {
     label: 'Dashboard',
-    icon: LayoutDashboard,
+    icon: LayoutGrid,
     href: '/dashboard',
   },
   {
     label: 'Accountant Portal',
-    icon: Briefcase,
+    icon: FileText,
     href: '/accountant-portal',
     items: [
-      { href: '/accountant-portal', label: 'Portal Dashboard', icon: LayoutDashboard },
+      { href: '/accountant-portal', label: 'Portal Dashboard', icon: LayoutGrid },
       { href: '#', label: 'Client List', icon: Users },
       { href: '#', label: 'Add New Client', icon: FilePlus },
       { href: '#', label: 'Client Onboarding', icon: ClipboardList },
@@ -75,7 +75,7 @@ export const navLinks: NavLink[] = [
     icon: DollarSign,
     href: '/payroll',
     items: [
-      { href: '#', label: 'Payroll Dashboard', icon: LayoutDashboard },
+      { href: '#', label: 'Payroll Dashboard', icon: LayoutGrid },
       { href: '#', label: 'Employee Management', icon: Users },
       { href: '#', label: 'Time & Attendance', icon: Clock },
       { href: '#', label: 'Payroll Processing', icon: CircleDollarSign },
@@ -91,14 +91,14 @@ export const navLinks: NavLink[] = [
     label: 'Accounting',
     icon: BookOpen,
     items: [
-      { href: '#', label: 'Accounting Dashboard', icon: LayoutDashboard },
+      { href: '#', label: 'Accounting Dashboard', icon: LayoutGrid },
       { href: '#', label: 'Chart of Accounts', icon: FileStack },
       { href: '#', label: 'Journal Entries', icon: FileText },
       {
         label: 'Accounts Receivable',
         icon: CreditCard,
         items: [
-          { href: '#', label: 'A/R Dashboard', icon: LayoutDashboard },
+          { href: '#', label: 'A/R Dashboard', icon: LayoutGrid },
           { href: '#', label: 'Customers', icon: Users },
         ],
       },
@@ -106,7 +106,7 @@ export const navLinks: NavLink[] = [
         label: 'Accounts Payable',
         icon: Banknote,
         items: [
-          { href: '#', label: 'AP Dashboard', icon: LayoutDashboard },
+          { href: '#', label: 'AP Dashboard', icon: LayoutGrid },
           { href: '#', label: 'Bills', icon: Receipt },
           { href: '#', label: 'Vendors', icon: Users },
         ],
@@ -120,7 +120,7 @@ export const navLinks: NavLink[] = [
     icon: Landmark,
     href: '/tax',
     items: [
-      { href: '#', label: 'Tax Dashboard', icon: LayoutDashboard },
+      { href: '#', label: 'Tax Dashboard', icon: LayoutGrid },
       { href: '#', label: 'Tax Planning', icon: FileText },
       { href: '#', label: 'Tax Filings', icon: FileStack },
       { href: '#', label: 'Compliance', icon: ShieldCheck },
@@ -130,7 +130,7 @@ export const navLinks: NavLink[] = [
     label: 'Operations',
     icon: Wrench,
     items: [
-      { href: '#', label: 'Dashboard', icon: LayoutDashboard },
+      { href: '#', label: 'Dashboard', icon: LayoutGrid },
       {
         label: 'Production',
         icon: Building,
@@ -158,7 +158,7 @@ export const navLinks: NavLink[] = [
     icon: Receipt,
     href: '/invoicing',
     items: [
-      { href: '#', label: 'Dashboard', icon: LayoutDashboard },
+      { href: '#', label: 'Dashboard', icon: LayoutGrid },
       { href: '#', label: 'Create Invoice', icon: FilePlus },
       { href: '#', label: 'Invoice Management', icon: FileStack },
       { href: '#', label: 'Recurring Invoices', icon: History },
@@ -175,7 +175,7 @@ export const navLinks: NavLink[] = [
     icon: Banknote,
     href: '/banking',
     items: [
-      { href: '#', label: 'Dashboard', icon: LayoutDashboard },
+      { href: '#', label: 'Dashboard', icon: LayoutGrid },
       { href: '#', label: 'Bank Connections', icon: Landmark },
       { href: '#', label: 'Review Transactions', icon: FileCheck },
       { href: '#', label: 'Reconciliation', icon: ShieldCheck },
@@ -204,7 +204,7 @@ export const navLinks: NavLink[] = [
     icon: Database,
     href: '/data',
     items: [
-      { href: '#', label: 'Data Dashboard', icon: LayoutDashboard },
+      { href: '#', label: 'Data Dashboard', icon: LayoutGrid },
       { href: '#', label: 'Data Import', icon: FileDown },
       { href: '#', label: 'Data Export', icon: FileUp },
       { href: '#', label: 'Backup & Restore', icon: History },
