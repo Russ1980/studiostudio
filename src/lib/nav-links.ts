@@ -52,6 +52,11 @@ export type NavLink = {
 
 export const navLinks: NavLink[] = [
   {
+    label: 'Dashboard',
+    icon: LayoutDashboard,
+    href: '/dashboard',
+  },
+  {
     label: 'Accountant Portal',
     icon: Briefcase,
     href: '/accountant-portal',
