@@ -1,3 +1,4 @@
+
 import {
   LayoutGrid,
   Users,
@@ -42,6 +43,11 @@ import {
   Plug,
   Wand2,
   Calculator,
+  Shield,
+  Calendar,
+  AlertTriangle,
+  Zap,
+  Eye
 } from 'lucide-react';
 
 export type NavLink = {
@@ -76,16 +82,16 @@ export const navLinks: NavLink[] = [
     icon: Receipt,
     href: '/payroll',
     items: [
-      { href: '#', label: 'Payroll Dashboard', icon: LayoutGrid },
-      { href: '#', label: 'Employee Management', icon: Users },
-      { href: '#', label: 'Time & Attendance', icon: Clock },
-      { href: '#', label: 'Payroll Processing', icon: CircleDollarSign },
-      { href: '#', label: 'Pay Runs', icon: History },
-      { href: '#', label: 'Pay Slips', icon: Receipt },
-      { href: '#', label: 'Tax Management', icon: Landmark },
-      { href: '#', label: 'Benefits Administration', icon: ShieldCheck },
-      { href: '#', label: 'Reports', icon: FileBarChart },
-      { href: '#', label: 'Compliance', icon: ShieldCheck },
+      { href: '/payroll', label: 'Payroll Dashboard', icon: LayoutGrid },
+      { href: '/payroll/employee-management', label: 'Employee Management', icon: Users },
+      { href: '/payroll/time-attendance', label: 'Time & Attendance', icon: Clock },
+      { href: '/payroll/payroll-processing', label: 'Payroll Processing', icon: CircleDollarSign },
+      { href: '/payroll/pay-runs', label: 'Pay Runs', icon: History },
+      { href: '/payroll/pay-slips', label: 'Pay Slips', icon: Receipt },
+      { href: '/payroll/tax-management', label: 'Tax Management', icon: Landmark },
+      { href: '/payroll/benefits-administration', label: 'Benefits Administration', icon: ShieldCheck },
+      { href: '/payroll/reports', label: 'Reports', icon: FileBarChart },
+      { href: '/payroll/compliance', label: 'Compliance', icon: ShieldCheck },
     ],
   },
   {

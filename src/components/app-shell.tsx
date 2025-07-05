@@ -55,39 +55,31 @@ function Breadcrumb() {
   const pathname = usePathname();
   const segments = pathname.split('/').filter(Boolean);
 
-  // Always start with Dashboard as the root.
-  const breadcrumbPath = [{ name: 'Dashboard', href: '/dashboard' }];
+  const breadcrumbPath: { name: string; href: string }[] = [];
   let accumulatedPath = '';
 
   segments.forEach(segment => {
     accumulatedPath += `/${segment}`;
-    if (segment !== 'dashboard') {
-      const name = segment.replace(/-/g, ' ');
-      breadcrumbPath.push({ name, href: accumulatedPath });
-    }
+    const name = segment.replace(/-/g, ' ');
+    breadcrumbPath.push({ name, href: accumulatedPath });
   });
-
-  // If we are on the dashboard page, only show "Dashboard"
-  if (pathname === '/dashboard') {
-    return (
-      <nav aria-label="Breadcrumb" className="hidden md:flex items-center gap-2 text-sm text-muted-foreground">
-        <span className="font-medium text-foreground capitalize">Dashboard</span>
-      </nav>
-    );
-  }
 
   return (
     <nav aria-label="Breadcrumb" className="hidden md:flex items-center gap-2 text-sm text-muted-foreground">
-      {breadcrumbPath.map((crumb, index) => (
-        <React.Fragment key={crumb.href}>
-          {index > 0 && <ChevronRight className="h-4 w-4" />}
-          {index < breadcrumbPath.length - 1 ? (
-             <Link href={crumb.href} className="hover:text-foreground capitalize">{crumb.name}</Link>
-          ) : (
-            <span className="font-medium text-foreground capitalize">{crumb.name}</span>
-          )}
-        </React.Fragment>
-      ))}
+       <Link href="/dashboard" className="hover:text-foreground capitalize">Dashboard</Link>
+      {breadcrumbPath.map((crumb, index) => {
+        if (crumb.name === 'dashboard') return null;
+        return (
+            <React.Fragment key={crumb.href}>
+              <ChevronRight className="h-4 w-4" />
+              {index < breadcrumbPath.length -1 && segments.length > 2 ? (
+                 <Link href={crumb.href} className="hover:text-foreground capitalize">{crumb.name}</Link>
+              ) : (
+                <span className="font-medium text-foreground capitalize">{crumb.name}</span>
+              )}
+            </React.Fragment>
+        )
+      })}
     </nav>
   );
 }
@@ -110,15 +102,15 @@ function renderNavLinks(
               className="w-full"
               variant="ghost"
             >
-              <span className="flex w-full items-center justify-between">
-                <span className="flex items-center gap-2">
-                  {link.icon && <link.icon />}
-                  <span className="flex-1 text-left">{link.label}</span>
+                <span className="flex w-full items-center justify-between">
+                  <span className="flex items-center gap-2">
+                    {link.icon && <link.icon />}
+                    <span className="flex-1 text-left">{link.label}</span>
+                  </span>
+                  {!isCollapsed && (
+                      <ChevronRight className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-90" />
+                  )}
                 </span>
-                {!isCollapsed && (
-                    <ChevronRight className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-90" />
-                )}
-              </span>
             </SidebarMenuButton>
           </CollapsibleTrigger>
           <CollapsibleContent>
@@ -138,12 +130,11 @@ function renderNavLinks(
         >
           <Link href={link.href || "#"}>
              <span className="flex w-full items-center justify-between">
-              <span className="flex items-center gap-2">
-                {link.icon && <link.icon />}
-                <span>{link.label}</span>
+                <span className="flex items-center gap-2">
+                  {link.icon && <link.icon />}
+                  <span>{link.label}</span>
+                </span>
               </span>
-              {level === 1 && !isCollapsed && <ChevronRight className="h-4 w-4" />}
-            </span>
           </Link>
         </SidebarMenuButton>
       )}
@@ -162,9 +153,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     >
       <Sidebar variant="sidebar" collapsible="icon" className="border-r bg-sidebar">
         <SidebarHeader className="h-16 flex items-center justify-between p-4 pr-2">
-           <Link href="/dashboard" className="flex items-center gap-2">
+           <div className="flex items-center gap-2">
               <Logo className="size-8 text-primary" />
-              <div className="flex items-center group-data-[collapsible=icon]:hidden">
+              <Link href="/dashboard" className="flex items-center group-data-[collapsible=icon]:hidden">
                 <span className="text-lg font-semibold text-sidebar-foreground">
                   Mardisen
                 </span>
@@ -174,16 +165,16 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 >
                   SUITE
                 </Badge>
-              </div>
-            </Link>
+              </Link>
+            </div>
           <SidebarTrigger asChild className="ml-auto group-data-[collapsible=icon]:hidden">
-            <Button
+             <Button
                 size="icon"
                 variant="ghost"
                 className="rounded-full bg-sidebar-accent text-sidebar-foreground hover:bg-sidebar-accent"
-            >
-              <ChevronsLeft />
-            </Button>
+              >
+                <ChevronsLeft />
+              </Button>
           </SidebarTrigger>
         </SidebarHeader>
 
@@ -221,7 +212,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="ghost" size="sm" className="gap-1">
-                            File <ChevronDown className="h-4 w-4" />
+                          <span>File</span>
+                          <ChevronDown className="h-4 w-4" />
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="start">
@@ -235,7 +227,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                  <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="ghost" size="sm" className="gap-1">
-                            Action <ChevronDown className="h-4 w-4" />
+                            <span>Action</span>
+                            <ChevronDown className="h-4 w-4" />
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="start">
@@ -313,11 +306,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <main className="flex-1 flex flex-col">
             <div className="flex items-center justify-between border-b bg-background p-4 md:px-6">
                 <Breadcrumb />
-                <Button variant="outline" size="sm" className="bg-accent text-accent-foreground border-accent-foreground/20 hover:bg-accent/90">
-                    <Wand2 className="mr-2 h-4 w-4" />
-                    <span>Serva AI • Enterprise Task Assistant •</span>
-                    <span className="text-accent-foreground/70 ml-1">Ask Serva AI...</span>
-                </Button>
+                {pathname === '/dashboard' && (
+                  <Button variant="outline" size="sm" className="bg-accent text-accent-foreground border-accent-foreground/20 hover:bg-accent/90">
+                      <Wand2 className="mr-2 h-4 w-4" />
+                      <span>Serva AI • Enterprise Task Assistant •</span>
+                      <span className="text-accent-foreground/70 ml-1">Ask Serva AI...</span>
+                  </Button>
+                )}
             </div>
             <div className="flex-1 overflow-auto p-4 md:p-6">
                 {children}
