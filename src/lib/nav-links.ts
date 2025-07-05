@@ -63,12 +63,12 @@ export const navLinks: NavLink[] = [
     href: '/accountant-portal',
     items: [
       { href: '/accountant-portal', label: 'Portal Dashboard', icon: LayoutGrid },
-      { href: '#', label: 'Client List', icon: Users },
-      { href: '#', label: 'Add New Client', icon: FilePlus },
-      { href: '#', label: 'Client Onboarding', icon: ClipboardList },
-      { href: '#', label: 'Task Management', icon: FileCheck },
-      { href: '#', label: 'Document Management', icon: FileStack },
-      { href: '#', label: 'Reporting', icon: FileBarChart },
+      { href: '/accountant-portal/client-list', label: 'Client List', icon: Users },
+      { href: '/accountant-portal/add-new-client', label: 'Add New Client', icon: FilePlus },
+      { href: '/accountant-portal/client-onboarding', label: 'Client Onboarding', icon: ClipboardList },
+      { href: '/accountant-portal/task-management', label: 'Task Management', icon: FileCheck },
+      { href: '/accountant-portal/document-management', label: 'Document Management', icon: FileStack },
+      { href: '/accountant-portal/reporting', label: 'Reporting', icon: FileBarChart },
     ],
   },
   {
