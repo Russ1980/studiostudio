@@ -1,4 +1,3 @@
-
 "use client";
 
 import {
@@ -16,14 +15,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
-import { ArrowUp, ArrowDown, TrendingUp } from "lucide-react";
+import { ArrowUp, TrendingUp } from "lucide-react";
 
 const portfolioData = {
   totalValue: 125384.52,
@@ -60,7 +58,7 @@ const chartConfig = {
 export default function PortfolioPage() {
   return (
     <div className="grid gap-6">
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Portfolio Value</CardTitle>
@@ -73,10 +71,10 @@ export default function PortfolioPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">24h Change</CardTitle>
-            <ArrowUp className="h-4 w-4 text-green-500" />
+            <ArrowUp className="h-4 w-4 text-success" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-500">+${portfolioData.change24h.toLocaleString()}</div>
+            <div className="text-2xl font-bold text-success">+${portfolioData.change24h.toLocaleString()}</div>
             <p className="text-xs text-muted-foreground">(+{portfolioData.change24hPercent}%)</p>
           </CardContent>
         </Card>
@@ -86,7 +84,7 @@ export default function PortfolioPage() {
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-500">+${portfolioData.totalGainLoss.toLocaleString()}</div>
+            <div className="text-2xl font-bold text-success">+${portfolioData.totalGainLoss.toLocaleString()}</div>
             <p className="text-xs text-muted-foreground">(+{portfolioData.totalGainLossPercent}%)</p>
           </CardContent>
         </Card>
@@ -149,7 +147,7 @@ export default function PortfolioPage() {
                   <TableCell>{asset.quantity.toLocaleString()}</TableCell>
                   <TableCell>${asset.price.toLocaleString()}</TableCell>
                   <TableCell>
-                    <span className={asset.changePercent >= 0 ? 'text-green-500' : 'text-red-500'}>
+                    <span className={asset.changePercent >= 0 ? 'text-success' : 'text-destructive'}>
                       {asset.changePercent >= 0 ? '+' : ''}{asset.changePercent}%
                     </span>
                   </TableCell>

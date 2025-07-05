@@ -47,7 +47,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <Sidebar
         variant="inset"
         collapsible="icon"
-        className="border-none shadow-none dark:bg-sidebar"
+        className="border-none shadow-none bg-sidebar"
       >
         <SidebarHeader className="h-16 justify-center p-2 group-data-[collapsible=icon]:p-0">
           <Link
@@ -56,7 +56,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           >
             <Logo className="size-8 text-primary" />
             <span className="text-lg font-semibold group-data-[collapsible=icon]:hidden">
-              FinView
+              Mardisen
             </span>
           </Link>
         </SidebarHeader>

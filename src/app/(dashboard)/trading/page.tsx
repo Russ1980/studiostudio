@@ -57,7 +57,7 @@ export default function TradingPage() {
             </div>
           </CardContent>
           <CardFooter className="flex justify-between">
-            <Button className="w-full bg-green-600 hover:bg-green-700 dark:text-white">Buy</Button>
+            <Button variant="success" className="w-full">Buy</Button>
             <div className="w-4"></div>
             <Button variant="destructive" className="w-full">Sell</Button>
           </CardFooter>
@@ -92,7 +92,7 @@ export default function TradingPage() {
                         <TableCell>{pos.shares}</TableCell>
                         <TableCell>${pos.avgPrice.toFixed(2)}</TableCell>
                         <TableCell>${pos.currentPrice.toFixed(2)}</TableCell>
-                        <TableCell className={`text-right ${pos.gainLoss >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                        <TableCell className={`text-right ${pos.gainLoss >= 0 ? 'text-success' : 'text-destructive'}`}>
                           ${pos.gainLoss.toFixed(2)}
                         </TableCell>
                       </TableRow>
@@ -122,7 +122,7 @@ export default function TradingPage() {
                     {tradeHistory.map((trade) => (
                       <TableRow key={trade.id}>
                         <TableCell>
-                          <Badge variant={trade.type === 'Buy' ? 'default' : 'destructive'} className={trade.type === 'Buy' ? 'bg-green-500/20 text-green-700' : 'bg-red-500/20 text-red-700'}>{trade.type}</Badge>
+                          <Badge variant={trade.type === 'Buy' ? 'success' : 'destructive'}>{trade.type}</Badge>
                         </TableCell>
                         <TableCell className="font-medium">{trade.ticker}</TableCell>
                         <TableCell>{trade.shares}</TableCell>

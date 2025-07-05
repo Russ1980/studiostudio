@@ -1,4 +1,3 @@
-
 "use client";
 
 import {
@@ -18,7 +17,6 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
-import { Badge } from "@/components/ui/badge";
 
 const stockData = {
   name: "Apple Inc.",
@@ -87,7 +85,7 @@ export default function SearchPage() {
               <CardTitle>{stockData.name} ({stockData.ticker})</CardTitle>
               <div className="flex items-baseline gap-2">
                 <p className="text-2xl font-bold">${stockData.price}</p>
-                <p className="text-lg font-semibold text-green-500">
+                <p className="text-lg font-semibold text-success">
                   {stockData.change} ({stockData.changePercent}%)
                 </p>
               </div>

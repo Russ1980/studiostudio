@@ -1,4 +1,3 @@
-
 "use client";
 
 import {
@@ -23,8 +22,15 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
-import { ArrowUp, ArrowDown } from "lucide-react";
+import { ArrowUp, ArrowDown, TrendingUp, TrendingDown } from "lucide-react";
 import Image from "next/image";
+
+const keyMetrics = [
+  { name: 'S&P 500', value: '4,512.76', change: '+0.82%', changeType: 'up' },
+  { name: 'Dow Jones', value: '35,459.21', change: '+0.56%', changeType: 'up' },
+  { name: 'NASDAQ', value: '14,034.12', change: '+1.14%', changeType: 'up' },
+  { name: 'Russell 2000', value: '1,987.45', change: '-0.23%', changeType: 'down' },
+];
 
 const trendingStocks = [
   { name: "Apple Inc.", ticker: "AAPL", price: "172.25", change: "+1.5%", changeType: "up" },
@@ -59,14 +65,35 @@ const chartConfig = {
 export default function DashboardPage() {
   return (
     <div className="grid gap-6">
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        <Card>
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {keyMetrics.map((metric) => (
+          <Card key={metric.name}>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">{metric.name}</CardTitle>
+              {metric.changeType === 'up' ? (
+                <TrendingUp className="h-4 w-4 text-success" />
+              ) : (
+                <TrendingDown className="h-4 w-4 text-destructive" />
+              )}
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{metric.value}</div>
+              <p className={`text-xs ${metric.changeType === 'up' ? 'text-success' : 'text-destructive'}`}>
+                {metric.change} today
+              </p>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-5">
+        <Card className="lg:col-span-3">
           <CardHeader>
-            <CardTitle>S&P 500</CardTitle>
-            <CardDescription>Last 6 Months</CardDescription>
+            <CardTitle>Market Performance</CardTitle>
+            <CardDescription>Last 6 Months Overview</CardDescription>
           </CardHeader>
           <CardContent>
-            <ChartContainer config={chartConfig} className="h-48 w-full">
+            <ChartContainer config={chartConfig} className="h-72 w-full">
               <AreaChart data={chartData}>
                 <defs>
                   <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
@@ -86,35 +113,6 @@ export default function DashboardPage() {
             </ChartContainer>
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>NASDAQ Composite</CardTitle>
-            <CardDescription>Last 6 Months</CardDescription>
-          </CardHeader>
-          <CardContent>
-             <ChartContainer config={chartConfig} className="h-48 w-full">
-              <AreaChart data={chartData.map(d => ({...d, value: d.value * 1.5}))}>
-                 <defs>
-                  <linearGradient id="colorValue2" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="var(--color-accent)" stopOpacity={0.8}/>
-                    <stop offset="95%" stopColor="var(--color-accent)" stopOpacity={0}/>
-                  </linearGradient>
-                </defs>
-                <CartesianGrid vertical={false} strokeDasharray="3 3" />
-                <XAxis dataKey="month" tickLine={false} axisLine={false} />
-                <YAxis hide />
-                <ChartTooltip
-                  cursor={false}
-                  content={<ChartTooltipContent indicator="line" />}
-                />
-                <Area type="monotone" dataKey="value" stroke="hsl(var(--accent))" fillOpacity={1} fill="url(#colorValue2)" />
-              </AreaChart>
-            </ChartContainer>
-          </CardContent>
-        </Card>
-      </div>
-
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <Card className="lg:col-span-2">
           <CardHeader>
             <CardTitle>Trending Stocks</CardTitle>
@@ -137,7 +135,7 @@ export default function DashboardPage() {
                     </TableCell>
                     <TableCell>${stock.price}</TableCell>
                     <TableCell className="text-right">
-                       <Badge variant={stock.changeType === 'up' ? 'default' : 'destructive'} className={stock.changeType === 'up' ? 'bg-green-500/20 text-green-700 dark:bg-green-500/20 dark:text-green-400' : 'bg-red-500/20 text-red-700 dark:bg-red-500/20 dark:text-red-400'}>
+                       <Badge variant={stock.changeType === 'up' ? 'success' : 'destructive'}>
                         {stock.changeType === 'up' ? <ArrowUp className="mr-1 h-4 w-4" /> : <ArrowDown className="mr-1 h-4 w-4" />}
                         {stock.change}
                       </Badge>
@@ -148,35 +146,33 @@ export default function DashboardPage() {
             </Table>
           </CardContent>
         </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Market News</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {marketNews.map((news) => (
-                <div key={news.id} className="flex items-start gap-4">
-                  <Image
-                    src={news.image}
-                    alt={news.title}
-                    width={80}
-                    height={80}
-                    className="aspect-square rounded-md object-cover"
-                    data-ai-hint={news.hint}
-                  />
-                  <div className="space-y-1">
-                    <p className="font-medium leading-tight">{news.title}</p>
-                    <div className="text-sm text-muted-foreground">
-                      {news.source} &middot; {news.time}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
       </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Market News</CardTitle>
+        </CardHeader>
+        <CardContent className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {marketNews.map((news) => (
+            <div key={news.id} className="flex items-start gap-4">
+              <Image
+                src={news.image}
+                alt={news.title}
+                width={80}
+                height={80}
+                className="aspect-square rounded-md object-cover"
+                data-ai-hint={news.hint}
+              />
+              <div className="space-y-1">
+                <p className="font-medium leading-tight">{news.title}</p>
+                <div className="text-sm text-muted-foreground">
+                  {news.source} &middot; {news.time}
+                </div>
+              </div>
+            </div>
+          ))}
+        </CardContent>
+      </Card>
     </div>
   );
 }

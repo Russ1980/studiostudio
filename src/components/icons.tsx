@@ -5,15 +5,10 @@ export function Logo(props: SVGProps<SVGSVGElement>) {
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
+      fill="currentColor"
       {...props}
     >
-      <path d="M3 3v18h18" />
-      <path d="M7 15l4-4 4 4 5-5" />
+      <path d="M4 20V4h2l6 8 6-8h2v16h-2V8l-6 8-6-8v12H4z"/>
     </svg>
   );
 }
