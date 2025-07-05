@@ -1,3 +1,4 @@
+
 "use client";
 
 import * as React from "react";
@@ -53,23 +54,27 @@ import { cn } from "@/lib/utils";
 function Breadcrumb() {
   const pathname = usePathname();
   const segments = pathname.split('/').filter(Boolean);
-  
-  const breadcrumbPath = [{ name: 'Home', href: '/dashboard' }];
-  let currentPath = '';
+
+  // Always start with Dashboard as the root.
+  const breadcrumbPath = [{ name: 'Dashboard', href: '/dashboard' }];
+  let accumulatedPath = '';
 
   segments.forEach(segment => {
-    currentPath += `/${segment}`;
-    const name = segment.replace(/-/g, ' ');
-    // Avoid adding "dashboard" to breadcrumb if it's the only segment
-    if (name !== 'dashboard' || segments.length > 1) {
-      breadcrumbPath.push({ name: name, href: currentPath });
+    accumulatedPath += `/${segment}`;
+    if (segment !== 'dashboard') {
+      const name = segment.replace(/-/g, ' ');
+      breadcrumbPath.push({ name, href: accumulatedPath });
     }
   });
-  
-  if (breadcrumbPath.length === 1 && breadcrumbPath[0].name === 'Home') {
-      breadcrumbPath[0] = { name: 'Dashboard', href: '/dashboard' };
-  }
 
+  // If we are on the dashboard page, only show "Dashboard"
+  if (pathname === '/dashboard') {
+    return (
+      <nav aria-label="Breadcrumb" className="hidden md:flex items-center gap-2 text-sm text-muted-foreground">
+        <span className="font-medium text-foreground capitalize">Dashboard</span>
+      </nav>
+    );
+  }
 
   return (
     <nav aria-label="Breadcrumb" className="hidden md:flex items-center gap-2 text-sm text-muted-foreground">
@@ -132,12 +137,12 @@ function renderNavLinks(
           variant="ghost"
         >
           <Link href={link.href || "#"}>
-            <span className="flex w-full items-center justify-between">
+             <span className="flex w-full items-center justify-between">
               <span className="flex items-center gap-2">
                 {link.icon && <link.icon />}
                 <span>{link.label}</span>
               </span>
-              {level === 1 && <ChevronRight className="h-4 w-4" />}
+              {level === 1 && !isCollapsed && <ChevronRight className="h-4 w-4" />}
             </span>
           </Link>
         </SidebarMenuButton>
@@ -165,7 +170,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 </span>
                 <Badge
                   variant="outline"
-                  className="ml-2 border-sidebar-border bg-sidebar-accent text-sidebar-foreground/80"
+                  className="ml-2 border-sidebar-border bg-sidebar-accent text-sidebar-accent-foreground"
                 >
                   SUITE
                 </Badge>
@@ -174,7 +179,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <SidebarTrigger asChild className="ml-auto group-data-[collapsible=icon]:hidden">
             <Button
                 size="icon"
-                className="rounded-full bg-sidebar-border text-sidebar-foreground hover:bg-sidebar-border/90"
+                variant="ghost"
+                className="rounded-full bg-sidebar-accent text-sidebar-foreground hover:bg-sidebar-accent"
             >
               <ChevronsLeft />
             </Button>
