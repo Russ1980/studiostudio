@@ -72,6 +72,7 @@ import {
   FolderOpen,
   MapPin,
   BarChart3,
+  Pencil,
 } from 'lucide-react';
 
 export type NavLink = {
@@ -226,6 +227,7 @@ export const navLinks: NavLink[] = [
         items: [
           { href: '/operations/inventory/stock-management', label: 'Stock Management', icon: Package },
           { href: '/operations/inventory/purchase-orders', label: 'Purchase Orders', icon: ShoppingCart },
+          { href: '/operations/inventory/adjust-stock', label: 'Stock Adjustments', icon: Pencil },
         ],
       },
       { href: '/operations/maintenance', label: 'Maintenance', icon: Wrench },

@@ -1,3 +1,4 @@
+
 "use client";
 
 import {
@@ -23,6 +24,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal, PlusCircle, Pencil, Upload, DollarSign, Package, AlertCircle } from "lucide-react";
+import Link from "next/link";
 
 const kpiData = [
   { title: "Total Inventory Value", value: "$1,234,567.89", icon: DollarSign },
@@ -74,7 +76,7 @@ export default function StockManagementPage() {
           <CardTitle>Inventory List</CardTitle>
           <div className="flex gap-2">
             <Button variant="outline"><Upload className="mr-2"/> Import</Button>
-            <Button variant="outline"><Pencil className="mr-2"/> Adjust Stock</Button>
+            <Button variant="outline" asChild><Link href="/operations/inventory/adjust-stock"><Pencil className="mr-2"/> Adjust Stock</Link></Button>
             <Button><PlusCircle className="mr-2"/> Add New Item</Button>
           </div>
         </CardHeader>
