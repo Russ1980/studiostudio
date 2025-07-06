@@ -3,8 +3,8 @@ import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
-  title: 'FinView Reimagined',
-  description: 'FinView Reimagined',
+  title: 'Mardisen Suite',
+  description: 'Mardisen Suite',
 };
 
 export default function RootLayout({

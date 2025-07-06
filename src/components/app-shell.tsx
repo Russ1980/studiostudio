@@ -73,7 +73,8 @@ import {
   BarChart3,
   Download,
   CreditCard,
-  DollarSign
+  DollarSign,
+  ChevronsLeft
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -226,20 +227,26 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     >
       <Sidebar variant="sidebar" collapsible="icon" className="border-r bg-sidebar">
         <SidebarHeader className="h-14 flex items-center p-3">
-          <div className="flex flex-1 items-center gap-2">
-            <Logo className="size-8 text-primary" />
-            <Link href="/dashboard" className="flex items-center group-data-[collapsible=icon]:hidden">
-              <span className="text-lg font-semibold text-sidebar-foreground">
-                FinView
-              </span>
-              <Badge
-                variant="outline"
-                className="ml-2 border-sidebar-border bg-sidebar-accent text-sidebar-accent-foreground"
-              >
-                R
-              </Badge>
-            </Link>
-          </div>
+            <div className="flex w-full items-center justify-between">
+                <div className="flex flex-1 items-center gap-2">
+                    <Logo className="size-8 text-primary" />
+                    <Link href="/dashboard" className="flex items-center group-data-[collapsible=icon]:hidden">
+                    <span className="font-semibold text-sidebar-foreground">
+                        Mardisen
+                    </span>
+                    <Badge
+                        variant="outline"
+                        className="ml-2 border-sidebar-border bg-sidebar-accent text-sidebar-accent-foreground"
+                    >
+                        SUITE
+                    </Badge>
+                    </Link>
+                </div>
+                <SidebarTrigger className="group-data-[collapsible=icon]:flex hidden" />
+                 <SidebarTrigger className="group-data-[collapsible=icon]:hidden size-7 flex items-center justify-center rounded-md bg-sidebar-accent text-sidebar-accent-foreground">
+                    <ChevronsLeft className="size-4" />
+                </SidebarTrigger>
+            </div>
         </SidebarHeader>
 
         <SidebarContent className="p-2">

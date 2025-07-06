@@ -157,37 +157,6 @@ const SidebarProvider = React.forwardRef<
 )
 SidebarProvider.displayName = "SidebarProvider"
 
-const SidebarCollapseButton = React.forwardRef<
-  React.ElementRef<typeof Button>,
-  React.ComponentProps<typeof Button>
->(({ className, ...props }, ref) => {
-  const { toggleSidebar, state } = useSidebar();
-  return (
-    <Button
-      ref={ref}
-      variant="ghost"
-      size="icon"
-      className={cn(
-        "absolute top-1/2 z-20 h-8 w-8 -translate-y-1/2 rounded-full bg-background text-foreground shadow-md hover:bg-muted",
-        "group-data-[side=left]:-right-4 group-data-[side=left]:border",
-        "group-data-[side=right]:-left-4 group-data-[side=right]:border",
-        className
-      )}
-      onClick={toggleSidebar}
-      {...props}
-    >
-      <ChevronsLeft
-        className={cn(
-          "h-5 w-5 transition-transform ease-in-out",
-          "group-data-[state=collapsed]:rotate-180"
-        )}
-      />
-    </Button>
-  );
-});
-SidebarCollapseButton.displayName = "SidebarCollapseButton";
-
-
 const Sidebar = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<"div"> & {
@@ -283,7 +252,6 @@ const Sidebar = React.forwardRef<
             className="relative flex h-full w-full flex-col bg-sidebar group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:shadow"
           >
             {children}
-            <SidebarCollapseButton />
           </div>
         </div>
       </div>
@@ -774,7 +742,6 @@ SidebarMenuSubButton.displayName = "SidebarMenuSubButton"
 
 export {
   Sidebar,
-  SidebarCollapseButton,
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
