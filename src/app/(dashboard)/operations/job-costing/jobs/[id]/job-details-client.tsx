@@ -21,6 +21,7 @@ import {
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { DollarSign, Percent, Clock, PlusCircle, FilePlus, Receipt } from "lucide-react";
+import Link from "next/link";
 
 export function JobDetailsClientPage({ job }: { job: any }) {
   const profitability = job.profitability;
@@ -106,7 +107,11 @@ export function JobDetailsClientPage({ job }: { job: any }) {
                     </CardHeader>
                     <CardContent className="grid gap-2">
                         <Button variant="outline"><Clock className="mr-2"/> Log Time</Button>
-                        <Button variant="outline"><Receipt className="mr-2"/> Enter Bill</Button>
+                        <Button variant="outline" asChild>
+                            <Link href="/operations/job-costing/enter-bill">
+                                <Receipt className="mr-2"/> Enter Bill
+                            </Link>
+                        </Button>
                         <Button variant="outline"><FilePlus className="mr-2"/> Create Invoice</Button>
                     </CardContent>
                </Card>
