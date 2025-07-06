@@ -87,14 +87,17 @@ export const navLinks: NavLink[] = [
     href: '/dashboard',
   },
   {
-    label: 'Projects',
+    label: 'Accountant Portal',
     icon: Briefcase,
-    href: '/projects',
+    href: '/accountant-portal',
     items: [
-      { href: '/projects/dashboard', label: 'Projects Dashboard', icon: LayoutGrid },
-      { href: '/projects/all-projects', label: 'All Projects', icon: ListChecks },
-      { href: '/projects/time-tracking', label: 'Time Tracking', icon: Timer },
-      { href: '/projects/project-reports', label: 'Reports', icon: FileBarChart },
+      { href: '/accountant-portal', label: 'Portal Dashboard', icon: LayoutGrid },
+      { href: '/accountant-portal/client-list', label: 'Client List', icon: Users },
+      { href: '/accountant-portal/add-new-client', label: 'Add New Client', icon: FilePlus },
+      { href: '/accountant-portal/client-onboarding', label: 'Client Onboarding', icon: ClipboardList },
+      { href: '/accountant-portal/task-management', label: 'Task Management', icon: FileCheck },
+      { href: '/accountant-portal/document-management', label: 'Document Management', icon: FileStack },
+      { href: '/accountant-portal/reporting', label: 'Reporting', icon: FileBarChart },
     ],
   },
   {
@@ -159,7 +162,7 @@ export const navLinks: NavLink[] = [
         href: '/accounting/financial-statements',
         items: [
           { href: '/accounting/financial-statements', label: 'Statements Hub', icon: LayoutGrid },
-          { href: '/accounting/financial-statements/profit-and-loss', label: 'Profit & Loss', icon: FileText },
+          { href: '/accounting/financial-statements/profit-and-loss', label: 'Profit &amp; Loss', icon: FileText },
           { href: '/accounting/financial-statements/balance-sheet', label: 'Balance Sheet', icon: FileText },
           { href: '/accounting/financial-statements/cash-flow', label: 'Cash Flow', icon: FileText },
         ],
@@ -208,20 +211,6 @@ export const navLinks: NavLink[] = [
       { href: '/operations/maintenance', label: 'Maintenance', icon: Wrench },
       { href: '/operations/logistics', label: 'Logistics', icon: Truck },
       { href: '/operations/analytics', label: 'Analytics', icon: LineChart },
-    ],
-  },
-   {
-    label: 'Accountant Portal',
-    icon: Briefcase,
-    href: '/accountant-portal',
-    items: [
-      { href: '/accountant-portal', label: 'Portal Dashboard', icon: LayoutGrid },
-      { href: '/accountant-portal/client-list', label: 'Client List', icon: Users },
-      { href: '/accountant-portal/add-new-client', label: 'Add New Client', icon: FilePlus },
-      { href: '/accountant-portal/client-onboarding', label: 'Client Onboarding', icon: ClipboardList },
-      { href: '/accountant-portal/task-management', label: 'Task Management', icon: FileCheck },
-      { href: '/accountant-portal/document-management', label: 'Document Management', icon: FileStack },
-      { href: '/accountant-portal/reporting', label: 'Reporting', icon: FileBarChart },
     ],
   },
   {
@@ -276,6 +265,17 @@ export const navLinks: NavLink[] = [
       { href: '/reports-insights/builder', label: 'Report Builder', icon: SlidersHorizontal },
       { href: '/reports-insights/forecasting', label: 'Forecasting', icon: Zap },
       { href: '/reports-insights/scheduled-reports', label: 'Scheduled Reports', icon: CalendarClock },
+    ],
+  },
+  {
+    label: 'Projects',
+    icon: Briefcase,
+    href: '/projects',
+    items: [
+      { href: '/projects/dashboard', label: 'Projects Dashboard', icon: LayoutGrid },
+      { href: '/projects/all-projects', label: 'All Projects', icon: ListChecks },
+      { href: '/projects/time-tracking', label: 'Time Tracking', icon: Timer },
+      { href: '/projects/project-reports', label: 'Reports', icon: FileBarChart },
     ],
   },
   {
