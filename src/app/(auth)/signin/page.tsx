@@ -39,7 +39,7 @@ export default function SignInPage() {
         <CardContent className="grid gap-4">
           <div className="grid gap-2">
             <Label htmlFor="email">Email</Label>
-            <Input id="email" type="email" placeholder="m@example.com" defaultValue="sarah.j@example.com" required />
+            <Input id="email" type="email" placeholder="m@example.com" defaultValue="loanbox55@gmail.com" required />
           </div>
           <div className="grid gap-2">
             <div className="flex items-center">
@@ -48,7 +48,7 @@ export default function SignInPage() {
                 Forgot your password?
               </a>
             </div>
-            <Input id="password" type="password" defaultValue="password" required />
+            <Input id="password" type="password" defaultValue="admin123" required />
           </div>
           <Button type="submit" className="w-full">
             Sign In
