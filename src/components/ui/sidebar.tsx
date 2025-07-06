@@ -4,8 +4,20 @@
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { VariantProps, cva } from "class-variance-authority"
-import { ChevronsLeft, PanelLeft } from "lucide-react"
-
+import { ChevronsLeft, PanelLeft, ChevronDown } from "lucide-react"
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuGroup,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuPortal,
+    DropdownMenuSeparator,
+    DropdownMenuSub,
+    DropdownMenuSubContent,
+    DropdownMenuSubTrigger,
+    DropdownMenuTrigger,
+  } from "@/components/ui/dropdown-menu"
 import { useIsMobile } from "@/hooks/use-mobile"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -18,13 +30,18 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
+  TooltipPortal
 } from "@/components/ui/tooltip"
+
+import type { NavLink } from "@/lib/nav-links"
+import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible"
+
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state"
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
 const SIDEBAR_WIDTH = "16rem"
 const SIDEBAR_WIDTH_MOBILE = "18rem"
-const SIDEBAR_WIDTH_ICON = "3rem"
+const SIDEBAR_WIDTH_ICON = "3.5rem"
 const SIDEBAR_KEYBOARD_SHORTCUT = "b"
 
 type SidebarContext = {
@@ -157,6 +174,125 @@ const SidebarProvider = React.forwardRef<
 )
 SidebarProvider.displayName = "SidebarProvider"
 
+const renderDropdownItems = (links: NavLink[]): React.ReactNode => {
+    return links.map((link) => (
+      <React.Fragment key={link.href || link.label}>
+        {link.items && link.items.length > 0 ? (
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger>
+              {link.icon && <link.icon className="mr-2 size-4" />}
+              <span>{link.label}</span>
+            </DropdownMenuSubTrigger>
+            <DropdownMenuPortal>
+              <DropdownMenuSubContent
+                sideOffset={8}
+                alignOffset={-4}
+                className="bg-sidebar border-sidebar-border text-sidebar-foreground"
+              >
+                {renderDropdownItems(link.items)}
+              </DropdownMenuSubContent>
+            </DropdownMenuPortal>
+          </DropdownMenuSub>
+        ) : (
+          <DropdownMenuItem asChild>
+            <a href={link.href || "#"}>
+              {link.icon && <link.icon className="mr-2 size-4" />}
+              <span>{link.label}</span>
+            </a>
+          </DropdownMenuItem>
+        )}
+      </React.Fragment>
+    ));
+  };
+  
+  function renderNavLinks(
+    links: NavLink[],
+    pathname: string,
+    isCollapsed: boolean,
+    level = 1
+  ) {
+    return links.map((link) => (
+      <SidebarMenuItem key={link.href || link.label}>
+        {link.items && link.items.length > 0 ? (
+          isCollapsed && level === 1 ? (
+            <DropdownMenu>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <DropdownMenuTrigger asChild>
+                    <SidebarMenuButton
+                      size="lg"
+                      className="w-full justify-center"
+                      variant="default"
+                    >
+                      {link.icon && <link.icon className="size-5" />}
+                    </SidebarMenuButton>
+                  </DropdownMenuTrigger>
+                </TooltipTrigger>
+                <TooltipContent side="right" align="center">
+                  <p>{link.label}</p>
+                </TooltipContent>
+              </Tooltip>
+              <DropdownMenuContent
+                side="right"
+                align="start"
+                sideOffset={12}
+                alignOffset={-8}
+                className="bg-sidebar border-sidebar-border text-sidebar-foreground w-56"
+              >
+                <DropdownMenuLabel>{link.label}</DropdownMenuLabel>
+                <DropdownMenuSeparator className="bg-sidebar-border" />
+                <DropdownMenuGroup>
+                  {renderDropdownItems(link.items)}
+                </DropdownMenuGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <Collapsible className="group">
+              <CollapsibleTrigger asChild>
+                <SidebarMenuButton
+                  tooltip={link.label}
+                  size={level > 1 ? "sm" : "lg"}
+                  className={cn("w-full", level > 1 && "h-8")}
+                  variant="default"
+                >
+                    <span className="flex w-full items-center justify-between">
+                      <span className="flex items-center gap-2">
+                        {link.icon && <link.icon className="size-4" />}
+                        <span className="flex-1 text-left">{link.label}</span>
+                      </span>
+                      <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200 group-data-[state=open]:rotate-180" />
+                    </span>
+                </SidebarMenuButton>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <SidebarMenuSub>
+                  {renderNavLinks(link.items, pathname, isCollapsed, level + 1)}
+                </SidebarMenuSub>
+              </CollapsibleContent>
+            </Collapsible>
+          )
+        ) : (
+          <SidebarMenuButton
+            asChild
+            isActive={pathname === link.href}
+            tooltip={link.label}
+            size={level > 1 ? "sm" : "lg"}
+            className={cn(level > 1 && "h-8")}
+            variant="default"
+          >
+            <a href={link.href || "#"}>
+               <span className="flex w-full items-center gap-2">
+                  {link.icon && <link.icon className={cn("size-4", isCollapsed && level === 1 && "size-5")} />}
+                  <span className={cn((isCollapsed && level === 1) && "hidden")}>{link.label}</span>
+                </span>
+            </a>
+          </SidebarMenuButton>
+        )}
+      </SidebarMenuItem>
+    ));
+  }
+
+
 const Sidebar = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<"div"> & {
@@ -216,7 +352,7 @@ const Sidebar = React.forwardRef<
     return (
       <div
         ref={ref}
-        className="group peer hidden md:block relative text-sidebar-foreground"
+        className="group peer hidden md:block relative text-sidebar-foreground z-50"
         data-state={state}
         data-collapsible={state === "collapsed" ? collapsible : ""}
         data-variant={variant}
@@ -267,25 +403,33 @@ const SidebarTrigger = React.forwardRef<
   const { toggleSidebar } = useSidebar()
 
   return (
-    <Button
-      ref={ref}
-      data-sidebar="trigger"
-      variant="ghost"
-      size="icon"
-      className={cn("h-7 w-7", className)}
-      onClick={(event) => {
-        onClick?.(event)
-        toggleSidebar()
-      }}
-      {...props}
-    >
-      {children ?? (
-        <span>
-          <PanelLeft />
-          <span className="sr-only">Toggle Sidebar</span>
-        </span>
-      )}
-    </Button>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Button
+          ref={ref}
+          data-sidebar="trigger"
+          variant="ghost"
+          size="icon"
+          className={cn("h-7 w-7", className)}
+          onClick={(event) => {
+            onClick?.(event)
+            toggleSidebar()
+          }}
+          {...props}
+        >
+          {children ?? (
+            <span>
+              <PanelLeft />
+              <span className="sr-only">Toggle Sidebar</span>
+            </span>
+          )}
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent side="bottom">
+          <p>Toggle Sidebar</p>
+      </TooltipContent>
+    </Tooltip>
+
   )
 })
 SidebarTrigger.displayName = "SidebarTrigger"
@@ -488,12 +632,12 @@ const SidebarMenuItem = React.forwardRef<
 SidebarMenuItem.displayName = "SidebarMenuItem"
 
 const sidebarMenuButtonVariants = cva(
-  "peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-md py-3 pr-3 pl-2 border-l-4 text-left text-sm outline-none ring-sidebar-ring transition-colors focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 group-has-[[data-sidebar=menu-action]]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-primary data-[active=true]:font-semibold data-[active=true]:text-sidebar-primary-foreground data-[active=true]:border-sidebar-primary-active-border hover:bg-sidebar-accent data-[state=open]:bg-sidebar-primary data-[state=open]:text-sidebar-primary-foreground data-[state=open]:border-sidebar-primary-active-border group-data-[collapsible=icon]:!size-8 group-data-[collapsible=icon]:!p-2 [&>span:last-child]:truncate [&_svg]:size-3.5",
+  "peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-md py-3 pr-3 pl-2 border-l-4 text-left text-sm outline-none ring-sidebar-ring transition-colors focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 group-has-[[data-sidebar=menu-action]]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-primary data-[active=true]:font-semibold data-[active=true]:text-sidebar-primary-foreground data-[active=true]:border-sidebar-primary-active-border hover:bg-sidebar-accent data-[state=open]:bg-sidebar-primary data-[state=open]:text-sidebar-primary-foreground data-[state=open]:border-sidebar-primary-active-border group-data-[collapsible=icon]:!size-10 group-data-[collapsible=icon]:!p-2 [&>span:last-child]:truncate [&_svg]:size-3.5",
   {
     variants: {
       variant: {
         default:
-          "text-sidebar-foreground/70 hover:text-sidebar-foreground/70 border-transparent",
+          "text-sidebar-foreground/70 hover:text-sidebar-foreground border-transparent",
         outline:
           "bg-background shadow-[0_0_0_1px_hsl(var(--sidebar-border))] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:shadow-[0_0_0_1px_hsl(var(--sidebar-accent))]",
       },
@@ -557,12 +701,14 @@ const SidebarMenuButton = React.forwardRef<
     return (
       <Tooltip>
         <TooltipTrigger asChild>{button}</TooltipTrigger>
-        <TooltipContent
-          side="right"
-          align="center"
-          hidden={state !== "collapsed" || isMobile}
-          {...tooltip}
-        />
+        <TooltipPortal>
+            <TooltipContent
+            side="right"
+            align="center"
+            hidden={state !== "collapsed" || isMobile}
+            {...tooltip}
+            />
+        </TooltipPortal>
       </Tooltip>
     )
   }
