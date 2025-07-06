@@ -48,6 +48,10 @@ import {
   Link as LinkIcon,
   RefreshCw,
   ArrowLeftRight,
+  PieChart,
+  SlidersHorizontal,
+  Zap,
+  CalendarClock
 } from 'lucide-react';
 
 export type NavLink = {
@@ -198,8 +202,17 @@ export const navLinks: NavLink[] = [
   },
   {
     label: 'Reports & Insights',
-    icon: FileBarChart,
-    href: '/insights',
+    icon: BarChart4,
+    href: '/reports-insights/dashboard',
+    items: [
+      { href: '/reports-insights/dashboard', label: 'Dashboard', icon: LayoutGrid },
+      { href: '/reports-insights/financial-reports', label: 'Financial Reports', icon: FileBarChart },
+      { href: '/reports-insights/sales-analytics', label: 'Sales Analytics', icon: LineChart },
+      { href: '/reports-insights/expense-analytics', label: 'Expense Analytics', icon: PieChart },
+      { href: '/reports-insights/builder', label: 'Report Builder', icon: SlidersHorizontal },
+      { href: '/reports-insights/forecasting', label: 'Forecasting', icon: Zap },
+      { href: '/reports-insights/scheduled-reports', label: 'Scheduled Reports', icon: CalendarClock },
+    ],
   },
   {
     label: 'Communications',
