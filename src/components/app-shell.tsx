@@ -226,30 +226,30 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       onOpenChange={(open) => setIsCollapsed(!open)}
     >
       <Sidebar variant="sidebar" collapsible="icon" className="border-r bg-sidebar">
-        <SidebarHeader className="h-14 flex items-center justify-between p-3 pr-2">
-           <div className="flex items-center gap-2">
-              <Logo className="size-8 text-primary" />
-              <Link href="/dashboard" className="flex items-center group-data-[collapsible=icon]:hidden">
-                <span className="text-lg font-semibold text-sidebar-foreground">
-                  Mardisen
-                </span>
-                <Badge
-                  variant="outline"
-                  className="ml-2 border-sidebar-border bg-sidebar-accent text-sidebar-accent-foreground"
-                >
-                  SUITE
-                </Badge>
-              </Link>
-            </div>
-          <SidebarTrigger asChild className="ml-auto group-data-[collapsible=icon]:hidden">
-             <Button
+        <SidebarHeader className="h-14 flex items-center p-3">
+          <div className="flex flex-1 items-center gap-2">
+            <Logo className="size-8 text-primary" />
+            <Link href="/dashboard" className="flex items-center group-data-[collapsible=icon]:hidden">
+              <span className="text-lg font-semibold text-sidebar-foreground">
+                Mardisen
+              </span>
+              <Badge
+                variant="outline"
+                className="ml-2 border-sidebar-border bg-sidebar-accent text-sidebar-accent-foreground"
+              >
+                SUITE
+              </Badge>
+            </Link>
+            <SidebarTrigger asChild className="ml-auto group-data-[collapsible=icon]:hidden">
+              <Button
                 size="icon"
                 variant="ghost"
                 className="rounded-full bg-sidebar-accent text-sidebar-foreground hover:bg-sidebar-accent"
               >
                 <ChevronsLeft />
               </Button>
-          </SidebarTrigger>
+            </SidebarTrigger>
+          </div>
         </SidebarHeader>
 
         <SidebarContent className="p-2">
