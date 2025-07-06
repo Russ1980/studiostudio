@@ -32,16 +32,50 @@ import {
 } from "@/components/ui/collapsible";
 import { Badge } from "@/components/ui/badge";
 import { PlusCircle, MoreHorizontal, ChevronDown, Download, Upload } from "lucide-react";
+import React from "react";
 
 const accountsData = {
-  assets: [
-    { name: "Main Checking Account", code: "1001", type: "Bank", detailType: "Checking", status: "Active", balance: "1,250,320.50", ytd: "5,400,000.00" },
-    { name: "Accounts Receivable", code: "1200", type: "Accounts Receivable", detailType: "Accounts Receivable (A/R)", status: "Active", balance: "245,800.00", ytd: "1,200,500.00" },
-  ],
-  liabilities: [
-    { name: "Accounts Payable", code: "2000", type: "Accounts Payable", detailType: "Accounts Payable (A/P)", status: "Active", balance: "88,450.00", ytd: "750,000.00" },
-    { name: "Business Credit Card", code: "2100", type: "Credit Card", detailType: "Credit Card", status: "Active", balance: "12,500.00", ytd: "150,000.00" },
-  ],
+  assets: {
+    name: "Assets",
+    balance: "1,584,570.50",
+    accounts: [
+      { 
+        name: "Current Assets", code: "1000", type: "Bank", balance: "1,510,320.50",
+        subAccounts: [
+          { name: "Main Checking Account", code: "1001", type: "Bank", detailType: "Checking", status: "Active", balance: "1,250,320.50", ytd: "5,400,000.00" },
+          { name: "Accounts Receivable", code: "1200", type: "Accounts Receivable", detailType: "Accounts Receivable (A/R)", status: "Active", balance: "245,800.00", ytd: "1,200,500.00" },
+          { name: "Prepaid Expenses", code: "1300", type: "Other Current Asset", detailType: "Prepaid Expenses", status: "Active", balance: "14,200.00", ytd: "50,000.00" },
+        ]
+      },
+       { 
+        name: "Fixed Assets", code: "1500", type: "Fixed Asset", balance: "74,250.00",
+        subAccounts: [
+          { name: "Machinery & Equipment", code: "1510", type: "Fixed Asset", detailType: "Machinery & Equipment", status: "Active", balance: "150,000.00", ytd: "150,000.00" },
+          { name: "Accumulated Depreciation", code: "1520", type: "Fixed Asset", detailType: "Accumulated Depreciation", status: "Active", balance: "-75,750.00", ytd: "-75,750.00" },
+        ]
+      },
+    ]
+  },
+  liabilities: {
+    name: "Liabilities & Equity",
+    balance: "1,584,570.50",
+    accounts: [
+       { 
+        name: "Liabilities", code: "2000", type: "Liability", balance: "100,950.00",
+        subAccounts: [
+          { name: "Accounts Payable", code: "2010", type: "Accounts Payable", detailType: "Accounts Payable (A/P)", status: "Active", balance: "88,450.00", ytd: "750,000.00" },
+          { name: "Business Credit Card", code: "2100", type: "Credit Card", detailType: "Credit Card", status: "Active", balance: "12,500.00", ytd: "150,000.00" },
+        ]
+      },
+       { 
+        name: "Equity", code: "3000", type: "Equity", balance: "1,483,620.50",
+        subAccounts: [
+          { name: "Owner's Equity", code: "3100", type: "Equity", detailType: "Owner's Equity", status: "Active", balance: "1,053,520.50", ytd: "1,053,520.50" },
+          { name: "Retained Earnings", code: "3200", type: "Equity", detailType: "Retained Earnings", status: "Active", balance: "430,100.00", ytd: "430,100.00" },
+        ]
+      },
+    ]
+  },
 };
 
 export default function ChartOfAccountsPage() {
@@ -93,52 +127,41 @@ export default function ChartOfAccountsPage() {
                 <TableHead>Type</TableHead>
                 <TableHead>Detail Type</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead>Balance</TableHead>
-                <TableHead>YTD Activity</TableHead>
+                <TableHead className="text-right">Balance</TableHead>
+                <TableHead className="text-right">YTD Activity</TableHead>
                 <TableHead className="w-16 text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {/* Assets */}
-              <Collapsible asChild defaultOpen>
-                <>
-                <TableRow className="bg-muted/50 hover:bg-muted/50">
-                  <TableCell colSpan={7}>
-                    <CollapsibleTrigger className="flex w-full items-center justify-between font-semibold">
-                      Assets
-                      <ChevronDown className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
-                    </CollapsibleTrigger>
-                  </TableCell>
-                </TableRow>
-                <CollapsibleContent asChild>
+              {Object.values(accountsData).map((category, i) => (
+                <Collapsible asChild defaultOpen key={i}>
                   <>
-                    {accountsData.assets.map((account, i) => (
-                      <AccountRow key={`asset-${i}`} account={account} />
-                    ))}
+                    <TableRow className="bg-muted/50 hover:bg-muted/50 font-bold">
+                      <TableCell colSpan={4}>
+                         <CollapsibleTrigger className="flex w-full items-center gap-2">
+                           {category.name}
+                          <ChevronDown className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
+                        </CollapsibleTrigger>
+                      </TableCell>
+                       <TableCell className="text-right">${Number(category.balance).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</TableCell>
+                       <TableCell></TableCell>
+                       <TableCell></TableCell>
+                    </TableRow>
+                    <CollapsibleContent asChild>
+                      <>
+                        {category.accounts.map((account, j) => (
+                           <React.Fragment key={j}>
+                             <AccountRow account={account} isSubAccount={false} />
+                             {account.subAccounts?.map((sub, k) => (
+                               <AccountRow key={k} account={sub} isSubAccount={true} />
+                             ))}
+                           </React.Fragment>
+                        ))}
+                      </>
+                    </CollapsibleContent>
                   </>
-                </CollapsibleContent>
-                </>
-              </Collapsible>
-              {/* Liabilities */}
-              <Collapsible asChild defaultOpen>
-                 <>
-                <TableRow className="bg-muted/50 hover:bg-muted/50">
-                  <TableCell colSpan={7}>
-                     <CollapsibleTrigger className="flex w-full items-center justify-between font-semibold">
-                      Liabilities
-                      <ChevronDown className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
-                    </CollapsibleTrigger>
-                  </TableCell>
-                </TableRow>
-                 <CollapsibleContent asChild>
-                    <>
-                    {accountsData.liabilities.map((account, i) => (
-                        <AccountRow key={`liability-${i}`} account={account} />
-                    ))}
-                    </>
-                </CollapsibleContent>
-                </>
-              </Collapsible>
+                </Collapsible>
+              ))}
             </TableBody>
           </Table>
         </CardContent>
@@ -147,30 +170,32 @@ export default function ChartOfAccountsPage() {
   );
 }
 
-const AccountRow = ({ account }: { account: any }) => (
-  <TableRow>
-    <TableCell>
-      <div className="font-medium">{account.name}</div>
+const AccountRow = ({ account, isSubAccount }: { account: any, isSubAccount: boolean }) => (
+  <TableRow className={cn(!account.detailType && "font-semibold")}>
+    <TableCell className={cn(isSubAccount && "pl-12")}>
+      <div>{account.name}</div>
       <div className="text-xs text-muted-foreground">{account.code}</div>
     </TableCell>
     <TableCell>{account.type}</TableCell>
     <TableCell>{account.detailType}</TableCell>
     <TableCell><Badge variant={account.status === "Active" ? "success" : "secondary"}>{account.status}</Badge></TableCell>
-    <TableCell>${account.balance}</TableCell>
-    <TableCell>${account.ytd}</TableCell>
+    <TableCell className="text-right">${Number(account.balance).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</TableCell>
+    <TableCell className="text-right">{account.ytd ? `$${Number(account.ytd).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}` : ''}</TableCell>
     <TableCell className="text-right">
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon"><MoreHorizontal /></Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem>View/Edit Details</DropdownMenuItem>
-          <DropdownMenuItem>View Register</DropdownMenuItem>
-          <DropdownMenuItem>Run Report</DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem className="text-destructive focus:text-destructive">Make Inactive</DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      {account.detailType && (
+         <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon"><MoreHorizontal /></Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem>View/Edit Details</DropdownMenuItem>
+            <DropdownMenuItem>View Register</DropdownMenuItem>
+            <DropdownMenuItem>Run Report</DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem className="text-destructive focus:text-destructive">Make Inactive</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )}
     </TableCell>
   </TableRow>
 );
