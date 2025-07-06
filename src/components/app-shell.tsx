@@ -29,6 +29,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  DropdownMenuGroup,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { navLinks, type NavLink } from "@/lib/nav-links";
@@ -37,6 +38,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { useToast } from "@/hooks/use-toast";
 import {
   Bell,
   LogOut,
@@ -48,6 +50,24 @@ import {
   RefreshCw,
   ChevronDown,
   Wand2,
+  FilePlus,
+  FileBarChart,
+  Sheet as FileSpreadsheet,
+  TrendingUp,
+  FolderOpen,
+  Save,
+  FileCheck,
+  FileUp as FileOutput,
+  FileText,
+  Table as TableIcon,
+  FileDown as FileInput,
+  Database,
+  Printer,
+  Mail,
+  Share2,
+  Shield,
+  Settings,
+  BookOpen,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -145,6 +165,50 @@ function renderNavLinks(
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [isCollapsed, setIsCollapsed] = React.useState(false);
+  const { toast } = useToast();
+
+  const handleActionClick = (action: string) => {
+    let description = "Action triggered.";
+    switch (action) {
+      case "save":
+        description = "Your document has been saved successfully.";
+        break;
+      case "saveAsTemplate":
+        description = "Coming soon: Save as template functionality.";
+        break;
+      case "exportPdf":
+        description = "Exporting to PDF...";
+        break;
+      case "exportExcel":
+        description = "Exporting to Excel...";
+        break;
+      case "shareEmail":
+        description = "Preparing to share via email...";
+        break;
+      case "shareLink":
+        description = "Coming soon: Share via link functionality.";
+        break;
+      case "signOut":
+        description = "Signing you out...";
+        break;
+      case "newBudget":
+        description = "Coming soon: New budget creation.";
+        break;
+      case "newGoal":
+        description = "Coming soon: New financial goal creation.";
+        break;
+      case "openRecent":
+        description = "Coming soon: Open recent documents.";
+        break;
+      default:
+        description = "This feature is coming soon.";
+        break;
+    }
+    toast({
+      title: "Action",
+      description: description,
+    });
+  };
 
   return (
     <SidebarProvider
@@ -217,11 +281,70 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="start">
-                        <DropdownMenuItem>New</DropdownMenuItem>
-                        <DropdownMenuItem>Open</DropdownMenuItem>
-                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>Save</DropdownMenuItem>
-                        <DropdownMenuItem>Save As...</DropdownMenuItem>
+                        <DropdownMenuGroup>
+                          <DropdownMenuLabel>Create New</DropdownMenuLabel>
+                          <DropdownMenuItem asChild>
+                              <Link href="/accounting/journal-entries/new"><FilePlus />New Transaction</Link>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem asChild>
+                            <Link href="/reports-insights/builder"><FileBarChart />New Report</Link>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleActionClick("newBudget")}><FileSpreadsheet />New Budget</DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleActionClick("newGoal")}><TrendingUp />New Financial Goal</DropdownMenuItem>
+                        </DropdownMenuGroup>
+
+                        <DropdownMenuSeparator />
+                        <DropdownMenuGroup>
+                            <DropdownMenuLabel>Current Document</DropdownMenuLabel>
+                            <DropdownMenuItem onClick={() => handleActionClick("openRecent")}><FolderOpen />Open Recent</DropdownMenuItem>
+                            <DropdownMenuItem asChild>
+                                <Link href="/communications/templates"><BookOpen />Open Templates</Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleActionClick("save")}><Save />Save Current</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleActionClick("saveAsTemplate")}><FileCheck />Save As Template</DropdownMenuItem>
+                        </DropdownMenuGroup>
+                        
+                        <DropdownMenuSeparator />
+                        <DropdownMenuGroup>
+                          <DropdownMenuLabel>Export</DropdownMenuLabel>
+                           <DropdownMenuItem asChild>
+                                <Link href="/data-management/data-export"><FileOutput />Export Center</Link>
+                            </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleActionClick("exportPdf")}><FileText />Export to PDF</DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleActionClick("exportExcel")}><TableIcon />Export to Excel</DropdownMenuItem>
+                        </DropdownMenuGroup>
+
+                        <DropdownMenuSeparator />
+                        <DropdownMenuGroup>
+                            <DropdownMenuLabel>Import Data</DropdownMenuLabel>
+                            <DropdownMenuItem asChild>
+                                <Link href="/data-management/data-import"><FileInput />Import Wizard</Link>
+                            </DropdownMenuItem>
+                             <DropdownMenuItem asChild>
+                                <Link href="/banking/connections"><Database />Import Bank Data</Link>
+                            </DropdownMenuItem>
+                        </DropdownMenuGroup>
+
+                        <DropdownMenuSeparator />
+                        <DropdownMenuGroup>
+                          <DropdownMenuLabel>Print & Share</DropdownMenuLabel>
+                          <DropdownMenuItem onClick={() => window.print()}><Printer />Print Document</DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleActionClick("shareEmail")}><Mail />Share via Email</DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleActionClick("shareLink")}><Share2 />Share via Link</DropdownMenuItem>
+                        </DropdownMenuGroup>
+
+                        <DropdownMenuSeparator />
+                         <DropdownMenuGroup>
+                            <DropdownMenuLabel>Settings</DropdownMenuLabel>
+                            <DropdownMenuItem asChild>
+                                <Link href="/settings/security"><Shield />Security Settings</Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem asChild>
+                                <Link href="/settings"><Settings />File Settings</Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem onClick={() => handleActionClick("signOut")}><LogOut />Sign Out</DropdownMenuItem>
+                         </DropdownMenuGroup>
                     </DropdownMenuContent>
                 </DropdownMenu>
                  <DropdownMenu>
