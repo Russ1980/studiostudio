@@ -226,7 +226,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       onOpenChange={(open) => setIsCollapsed(!open)}
     >
       <Sidebar variant="sidebar" collapsible="icon" className="border-r bg-sidebar">
-        <SidebarHeader className="h-16 flex items-center justify-between p-4 pr-2">
+        <SidebarHeader className="h-14 flex items-center justify-between p-3 pr-2">
            <div className="flex items-center gap-2">
               <Logo className="size-8 text-primary" />
               <Link href="/dashboard" className="flex items-center group-data-[collapsible=icon]:hidden">

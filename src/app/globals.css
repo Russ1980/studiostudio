@@ -16,8 +16,8 @@
     --secondary-foreground: 220.9 39.3% 11%;
     --muted: 220 14.3% 95.9%;
     --muted-foreground: 220 8.9% 46.1%;
-    --accent: 220 50% 95%;
-    --accent-foreground: 231 50% 48%;
+    --accent: 231 50% 55%;
+    --accent-foreground: 210 20% 98%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
     --success: 142.1 76.2% 36.3%;
@@ -94,5 +94,26 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .sidebar-scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  .sidebar-scrollbar::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+  .sidebar-scrollbar::-webkit-scrollbar-thumb {
+    background-color: transparent;
+    border-radius: 4px;
+  }
+  .sidebar-scrollbar:hover::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--sidebar-border));
+  }
+  .sidebar-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--sidebar-border)) transparent;
   }
 }
