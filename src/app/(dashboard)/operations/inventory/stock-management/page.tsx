@@ -31,10 +31,10 @@ const kpiData = [
 ];
 
 const inventory = [
-  { sku: "RM-001", name: "Raw Material A", category: "Raw Materials", cost: 12.50, quantity: 1500, reorderPoint: 500, status: "In Stock" },
-  { sku: "COMP-034", name: "Component B", category: "Components", cost: 5.75, quantity: 250, reorderPoint: 200, status: "Low Stock" },
-  { sku: "FG-009", name: "Finished Good C", category: "Finished Goods", cost: 89.99, quantity: 500, reorderPoint: 100, status: "In Stock" },
-  { sku: "RM-002", name: "Raw Material D", category: "Raw Materials", cost: 25.00, quantity: 10, reorderPoint: 50, status: "Out of Stock" },
+  { sku: "RM-001", name: "Raw Material A", category: "Raw Materials", location: "Warehouse A", cost: 12.50, quantity: 1500, reorderPoint: 500, status: "In Stock" },
+  { sku: "COMP-034", name: "Component B", category: "Components", location: "Assembly Line 1", cost: 5.75, quantity: 250, reorderPoint: 200, status: "Low Stock" },
+  { sku: "FG-009", name: "Finished Good C", category: "Finished Goods", location: "Warehouse B", cost: 89.99, quantity: 500, reorderPoint: 100, status: "In Stock" },
+  { sku: "RM-002", name: "Raw Material D", category: "Raw Materials", location: "Warehouse A", cost: 25.00, quantity: 10, reorderPoint: 50, status: "Out of Stock" },
 ];
 
 const statusVariant: { [key: string]: "success" | "default" | "destructive" } = {
@@ -85,6 +85,7 @@ export default function StockManagementPage() {
                 <TableHead>SKU</TableHead>
                 <TableHead>Item Name</TableHead>
                 <TableHead>Category</TableHead>
+                <TableHead>Location</TableHead>
                 <TableHead>Unit Cost</TableHead>
                 <TableHead>Quantity</TableHead>
                 <TableHead>Reorder Point</TableHead>
@@ -98,6 +99,7 @@ export default function StockManagementPage() {
                   <TableCell className="font-mono">{item.sku}</TableCell>
                   <TableCell className="font-medium">{item.name}</TableCell>
                   <TableCell>{item.category}</TableCell>
+                  <TableCell>{item.location}</TableCell>
                   <TableCell>${item.cost.toFixed(2)}</TableCell>
                   <TableCell>{item.quantity}</TableCell>
                   <TableCell>{item.reorderPoint}</TableCell>

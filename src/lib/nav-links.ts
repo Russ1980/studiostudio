@@ -66,7 +66,11 @@ import {
   AlertTriangle,
   Timer,
   ListChecks,
-  FileBarChart2
+  FileBarChart2,
+  TrendingUp,
+  Search,
+  FolderOpen,
+  MapPin,
 } from 'lucide-react';
 
 export type NavLink = {
@@ -238,6 +242,18 @@ export const navLinks: NavLink[] = [
     ],
   },
   {
+    label: 'Investments',
+    icon: TrendingUp,
+    href: '/portfolio',
+    items: [
+      { href: '/portfolio/overview', label: 'Portfolio Overview', icon: LayoutGrid },
+      { href: '/portfolio/asset-classes', label: 'Asset Classes', icon: PieChart },
+      { href: '/trading', label: 'Paper Trading', icon: LineChart },
+      { href: '/search', label: 'Stock Search', icon: Search },
+      { href: '/learn', label: 'Learn', icon: GraduationCap },
+    ],
+  },
+  {
     label: 'Intelligent Tax',
     icon: Calculator,
     href: '/tax',
@@ -272,6 +288,14 @@ export const navLinks: NavLink[] = [
       { href: '/communications/templates', label: 'Templates', icon: FileText },
       { href: '/communications/automation', label: 'Automation', icon: Wrench },
     ],
+  },
+  {
+    label: 'Asset Management',
+    icon: FolderOpen,
+    href: '/asset-management',
+    items: [
+        { href: '/asset-management/locations', label: 'Asset Locations', icon: MapPin },
+    ]
   },
   {
     label: 'Data Management',
