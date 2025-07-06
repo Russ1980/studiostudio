@@ -230,12 +230,12 @@ export const navLinks: NavLink[] = [
   {
     label: 'Data Management',
     icon: Database,
-    href: '/data',
+    href: '/data-management',
     items: [
-      { href: '#', label: 'Data Dashboard', icon: LayoutGrid },
-      { href: '#', label: 'Data Import', icon: FileDown },
-      { href: '#', label: 'Data Export', icon: FileUp },
-      { href: '#', label: 'Backup & Restore', icon: History },
+      { href: '/data-management', label: 'Dashboard', icon: LayoutGrid },
+      { href: '/data-management/data-import', label: 'Data Import', icon: FileDown },
+      { href: '/data-management/data-export', label: 'Data Export', icon: FileUp },
+      { href: '/data-management/backup-restore', label: 'Backup & Restore', icon: History },
     ],
   },
   {
