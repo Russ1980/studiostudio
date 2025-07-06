@@ -3,6 +3,7 @@
 import React, { createContext, useState, useEffect, useCallback, useMemo } from 'react';
 import { OnboardingStep, businessOwnerSteps, accountantSteps, bookkeeperSteps } from '@/lib/onboarding-steps';
 import { OnboardingTip } from './onboarding-tip';
+import { useOnboarding } from '@/hooks/use-onboarding';
 
 type OnboardingContextType = {
     steps: OnboardingStep[];
