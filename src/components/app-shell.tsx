@@ -233,7 +233,7 @@ function renderNavLinks(
           className={cn(level > 1 && "h-8")}
           variant="default"
         >
-          <Link href={link.href || "#"}>
+          <Link href={link.href || "#"} data-onboarding={link.onboardingId}>
              <span className="flex w-full items-center gap-2">
                 {link.icon && <link.icon className={cn("size-4", isCollapsed && level === 1 && "size-5")} />}
                 <span className={cn((isCollapsed && level === 1) && "hidden")}>{link.label}</span>

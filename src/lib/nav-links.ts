@@ -80,6 +80,7 @@ export type NavLink = {
   label: string;
   icon: LucideIcon;
   items?: NavLink[];
+  onboardingId?: string;
 };
 
 export const navLinks: NavLink[] = [
@@ -106,6 +107,7 @@ export const navLinks: NavLink[] = [
     label: 'Invoicing',
     icon: Receipt,
     href: '/invoicing/dashboard',
+    onboardingId: 'invoicing-link',
     items: [
       { href: '/invoicing/dashboard', label: 'Dashboard', icon: LayoutGrid },
       { href: '/invoicing/new', label: 'Create Invoice', icon: FilePlus },
@@ -174,6 +176,7 @@ export const navLinks: NavLink[] = [
     label: 'Banking',
     icon: Landmark,
     href: '/banking',
+    onboardingId: 'banking-link',
     items: [
       { href: '/banking/dashboard', label: 'Dashboard', icon: LayoutGrid },
       { href: '/banking/connections', label: 'Bank Connections', icon: LinkIcon },
@@ -279,6 +282,7 @@ export const navLinks: NavLink[] = [
     label: 'Reports & Insights',
     icon: BarChart4,
     href: '/reports-insights/dashboard',
+    onboardingId: 'reports-link',
     items: [
       { href: '/reports-insights/dashboard', label: 'Dashboard', icon: LayoutGrid },
       { href: '/reports-insights/financial-reports', label: 'Financial Reports', icon: FileBarChart },

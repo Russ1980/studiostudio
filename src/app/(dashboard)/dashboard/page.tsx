@@ -1,3 +1,5 @@
+"use client"; // Needs to be client for the demo button and controller
+
 import {
   Card,
   CardContent,
@@ -12,14 +14,43 @@ import {
   Settings,
 } from "lucide-react";
 import { getMockUser } from "@/lib/auth";
+import { OnboardingController } from "@/components/onboarding/onboarding-controller";
+import { DevTools } from "@/components/development/dev-tools";
+import { useOnboarding } from "@/hooks/use-onboarding";
+import { useEffect, useState } from "react";
+import type { User } from "@/lib/auth";
 
 
-export default async function DashboardPage() {
-  const user = await getMockUser();
+// Onboarding Demo Component as requested
+const OnboardingDemo = () => {
+    const { startOnboarding } = useOnboarding();
+    return (
+        <div data-onboarding="start-tour">
+             <Button onClick={() => startOnboarding('business_owner')}>
+                Start Tour
+            </Button>
+        </div>
+    )
+}
+
+
+export default function DashboardPage() {
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    getMockUser().then(setUser);
+  }, []);
+
+  if (!user) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="flex flex-col gap-6">
-      <Card>
+      <OnboardingController userRole={user.role.toLowerCase()} />
+      <DevTools />
+
+      <Card data-onboarding="dashboard-kpis">
         <CardContent className="p-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div className="flex items-center gap-4">
@@ -66,6 +97,7 @@ export default async function DashboardPage() {
                <Button variant="outline">Run Payroll</Button>
                <Button variant="outline">Add a Bill</Button>
                <Button variant="outline">View Reports</Button>
+               <OnboardingDemo />
             </div>
           </CardContent>
         </Card>

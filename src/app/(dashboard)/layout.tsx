@@ -1,4 +1,5 @@
 import { AppShell } from '@/components/app-shell';
+import { OnboardingProvider } from '@/components/onboarding/onboarding-controller';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { getMockUser } from '@/lib/auth';
 
@@ -11,7 +12,9 @@ export default async function DashboardLayout({
 
   return (
     <SidebarProvider>
-      <AppShell user={user}>{children}</AppShell>
+      <OnboardingProvider>
+        <AppShell user={user}>{children}</AppShell>
+      </OnboardingProvider>
     </SidebarProvider>
   );
 }
