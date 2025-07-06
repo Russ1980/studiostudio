@@ -68,6 +68,13 @@ import {
   Shield,
   Settings,
   BookOpen,
+  Upload,
+  Calculator,
+  Clock,
+  BarChart3,
+  Download,
+  CreditCard,
+  DollarSign
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -355,12 +362,40 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="start">
-                        <DropdownMenuItem>Undo</DropdownMenuItem>
-                        <DropdownMenuItem>Redo</DropdownMenuItem>
-                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>Cut</DropdownMenuItem>
-                        <DropdownMenuItem>Copy</DropdownMenuItem>
-                        <DropdownMenuItem>Paste</DropdownMenuItem>
+                      <DropdownMenuGroup>
+                        <DropdownMenuLabel>Banking Operations</DropdownMenuLabel>
+                        <DropdownMenuItem onClick={() => handleActionClick('importBank')} className="text-primary focus:text-primary"><Upload />Import Bank Transactions</DropdownMenuItem>
+                        <DropdownMenuItem asChild><Link href="/banking/reconciliation"><Calculator />Run Bank Reconciliation</Link></DropdownMenuItem>
+                        <DropdownMenuItem asChild><Link href="/banking/dashboard"><RefreshCw />Update Account Balances</Link></DropdownMenuItem>
+                      </DropdownMenuGroup>
+                      <DropdownMenuSeparator />
+                       <DropdownMenuGroup>
+                        <DropdownMenuLabel>Period Management</DropdownMenuLabel>
+                        <DropdownMenuItem onClick={() => handleActionClick('closePeriod')} className="text-destructive/80 focus:text-destructive/80"><Clock />Close Accounting Period</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleActionClick('reopenPeriod')}><RefreshCw />Reopen Period</DropdownMenuItem>
+                      </DropdownMenuGroup>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuGroup>
+                        <DropdownMenuLabel>Financial Reporting</DropdownMenuLabel>
+                        <DropdownMenuItem asChild className="text-primary focus:text-primary"><Link href="/reports-insights/financial-reports"><BarChart3 />Generate Financial Statements</Link></DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleActionClick('exportTrial')}><Download />Export Trial Balance</DropdownMenuItem>
+                        <DropdownMenuItem asChild className="text-success focus:text-success"><Link href="/reports-insights/dashboard"><TrendingUp />Performance Analytics</Link></DropdownMenuItem>
+                      </DropdownMenuGroup>
+                       <DropdownMenuSeparator />
+                       <DropdownMenuGroup>
+                        <DropdownMenuLabel>Client Operations</DropdownMenuLabel>
+                        <DropdownMenuItem onClick={() => handleActionClick('sendInvoices')} className="text-success focus:text-success"><Mail />Send Monthly Invoices</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleActionClick('processPayments')}><CreditCard />Process Payments</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleActionClick('updateBilling')}><DollarSign />Update Client Billing</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleActionClick('complianceCheck')} className="text-destructive/80 focus:text-destructive/80"><Shield />Client Compliance Check</DropdownMenuItem>
+                      </DropdownMenuGroup>
+                       <DropdownMenuSeparator />
+                      <DropdownMenuGroup>
+                        <DropdownMenuLabel>Data Management</DropdownMenuLabel>
+                        <DropdownMenuItem asChild><Link href="/data-management/backup-restore"><Database />Backup Database</Link></DropdownMenuItem>
+                        <DropdownMenuItem asChild className="text-primary focus:text-primary"><Link href="/data-management/data-import"><Upload />Import Chart of Accounts</Link></DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleActionClick('validationReport')}><FileText />Data Validation Report</DropdownMenuItem>
+                      </DropdownMenuGroup>
                     </DropdownMenuContent>
                 </DropdownMenu>
           </div>
