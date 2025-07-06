@@ -16,7 +16,6 @@ import {
   SidebarInset,
   SidebarMenuSub,
   useSidebar,
-  SidebarRail,
 } from "@/components/ui/sidebar";
 import {
   Collapsible,
@@ -74,11 +73,9 @@ import {
   Download,
   CreditCard,
   DollarSign,
-  ChevronsLeft,
   Activity,
   File as FileIcon,
   User,
-  ChevronsRight,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { User as UserType } from "@/lib/auth";
@@ -200,7 +197,7 @@ const StyledDropdownMenuItem = ({ href, icon: Icon, title, description, special 
 
 export function AppShell({ children, user }: { children: React.ReactNode, user: UserType }) {
   const pathname = usePathname();
-  const { state, toggleSidebar } = useSidebar();
+  const { state } = useSidebar();
   const isCollapsed = state === "collapsed";
  
   return (
@@ -224,8 +221,6 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
             </div>
           </div>
         </SidebarHeader>
-
-        <SidebarRail />
 
         <SidebarContent className="p-2">
           <SidebarMenu>{renderNavLinks(navLinks, pathname, isCollapsed)}</SidebarMenu>
@@ -251,10 +246,6 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
-          <Separator className="my-1 bg-sidebar-border" />
-          <SidebarTrigger className="h-9 w-9 mx-auto rounded-full bg-sidebar-accent hover:bg-sidebar-primary text-sidebar-accent-foreground">
-            {isCollapsed ? <ChevronsRight className="size-5" /> : <ChevronsLeft className="size-5" />}
-          </SidebarTrigger>
         </SidebarFooter>
       </Sidebar>
 
