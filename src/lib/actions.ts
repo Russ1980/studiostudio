@@ -1,3 +1,4 @@
+
 'use server';
 
 // This file contains server actions that simulate fetching data from a backend.
@@ -52,7 +53,9 @@ import {
   mockPortfolioOverview,
   mockStockData,
   mockLearningResources,
-  mockTradingData
+  mockTradingData,
+  mockJobs,
+  mockJobCostingDashboard
 } from './data';
 
 const simulateDelay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
@@ -209,6 +212,15 @@ export async function getSchedulingData() {
     await simulateDelay(50);
     return mockScheduling;
 }
+export async function getJobs() {
+  await simulateDelay(50);
+  return mockJobs;
+}
+export async function getJobCostingDashboardData() {
+  await simulateDelay(50);
+  return mockJobCostingDashboard;
+}
+
 
 // Payroll
 export async function getPayrollDashboardData() {

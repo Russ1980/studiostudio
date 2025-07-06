@@ -187,7 +187,16 @@ export const navLinks: NavLink[] = [
     href: '/operations',
     items: [
       { href: '/operations', label: 'Dashboard', icon: LayoutGrid },
-      { href: '/accounting/job-costing', label: 'Job Costing', icon: CircleDollarSign },
+      {
+        label: 'Job Costing',
+        icon: CircleDollarSign,
+        href: '/operations/job-costing/dashboard',
+        items: [
+           { href: '/operations/job-costing/dashboard', label: 'Dashboard', icon: LayoutGrid },
+           { href: '/operations/job-costing/jobs', label: 'All Jobs', icon: Briefcase },
+           { href: '/operations/job-costing/reports', label: 'Reports', icon: FileBarChart },
+        ]
+      },
       {
         label: 'Production',
         icon: Building,

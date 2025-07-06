@@ -1,3 +1,4 @@
+
 // This file contains mock data for the entire application.
 // In a real application, this data would be fetched from a database.
 
@@ -590,6 +591,29 @@ export const mockTradingData = {
     { id: 1, type: "Buy", ticker: "AAPL", shares: 50, price: 150.00, date: "2023-10-01" },
     { id: 2, type: "Buy", ticker: "NVDA", shares: 25, price: 800.00, date: "2024-02-15" },
     { id: 3, type: "Sell", ticker: "TSLA", shares: 10, price: 200.00, date: "2024-04-20" },
+  ]
+};
+
+// Job Costing
+export const mockJobs = [
+  { id: "JOB-001", name: "Retail Store Renovation", customer: "QuantumLeap Co.", status: "In Progress", budget: 55000, spent: 30000, profitability: 25000 },
+  { id: "JOB-002", name: "Office Building Construction", customer: "Innovate Inc.", status: "Completed", budget: 1200000, spent: 1150000, profitability: 50000 },
+  { id: "JOB-003", name: "Custom Machinery Build", customer: "Apex Solutions", status: "On Hold", budget: 250000, spent: 100000, profitability: 150000 },
+  { id: "JOB-004", name: "Consulting Engagement", customer: "Stellar Goods", status: "In Progress", budget: 75000, spent: 80000, profitability: -5000 },
+];
+
+export const mockJobCostingDashboard = {
+  kpiData: [
+    { title: "Active Jobs", value: "3" },
+    { title: "Total Budget", value: "$1,580,000" },
+    { title: "Total Spent", value: "$1,360,000" },
+    { title: "Overall Profitability", value: "$220,000" },
+  ],
+  budgetVsActualData: mockJobs.map(j => ({ name: j.name, budget: j.budget, actual: j.spent })).slice(0, 3), // Limit for cleaner chart
+  recentCostEntries: [
+    { job: "Retail Store Renovation", type: "Materials", amount: "5,000.00", date: "2024-07-22" },
+    { job: "Office Building Construction", type: "Labor", amount: "12,000.00", date: "2024-07-22" },
+    { job: "Consulting Engagement", type: "Subcontractor", amount: "10,000.00", date: "2024-07-21" },
   ]
 };
 

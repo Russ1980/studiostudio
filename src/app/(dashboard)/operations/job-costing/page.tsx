@@ -1,6 +1,6 @@
 
 import { redirect } from 'next/navigation';
 
-export default function JobCostingRedirectPage() {
+export default function JobCostingRootPage() {
   redirect('/operations/job-costing/dashboard');
 }
