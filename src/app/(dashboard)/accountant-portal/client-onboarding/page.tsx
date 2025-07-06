@@ -1,6 +1,8 @@
+
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
+import { useDropzone } from 'react-dropzone';
 import {
   Card,
   CardContent,
@@ -20,8 +22,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Progress } from "@/components/ui/progress";
-import { Upload, Check, FileText } from "lucide-react";
+import { Upload, Check, FileText, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const steps = [
@@ -31,9 +32,43 @@ const steps = [
   { id: 4, name: "Configuration & Access" },
 ];
 
+type ClientUser = {
+    email: string;
+    role: string;
+}
+
+type OnboardingData = {
+    legalName: string;
+    ein: string;
+    address: string;
+    fiscalYear: string;
+    subscriptionTier: string;
+    payrollAddon: boolean;
+    taxAddon: boolean;
+    advisoryAddon: boolean;
+    uploadedFile: File | null;
+    chartOfAccountsSetup: string;
+    clientUsers: ClientUser[];
+}
+
 export default function ClientOnboardingPage() {
   const [currentStep, setCurrentStep] = useState(1);
-  const progress = ((currentStep - 1) / (steps.length - 1)) * 100;
+  const [formData, setFormData] = useState<OnboardingData>({
+      legalName: '',
+      ein: '',
+      address: '',
+      fiscalYear: '',
+      subscriptionTier: '',
+      payrollAddon: false,
+      taxAddon: false,
+      advisoryAddon: false,
+      uploadedFile: null,
+      chartOfAccountsSetup: '',
+      clientUsers: [],
+  });
+  
+  const [newUserEmail, setNewUserEmail] = useState('');
+  const [newUserRole, setNewUserRole] = useState('');
 
   const handleNext = () => {
     if (currentStep < steps.length) {
@@ -46,6 +81,47 @@ export default function ClientOnboardingPage() {
       setCurrentStep(currentStep - 1);
     }
   };
+
+  const updateFormData = (updates: Partial<OnboardingData>) => {
+      setFormData(prev => ({...prev, ...updates}));
+  }
+
+  const handleAddUser = () => {
+      if(newUserEmail && newUserRole) {
+          updateFormData({
+              clientUsers: [...formData.clientUsers, {email: newUserEmail, role: newUserRole}]
+          });
+          setNewUserEmail('');
+          setNewUserRole('');
+      }
+  }
+
+  const handleRemoveUser = (emailToRemove: string) => {
+      updateFormData({
+          clientUsers: formData.clientUsers.filter(user => user.email !== emailToRemove)
+      });
+  }
+
+  const CurrentStepComponent = () => {
+    switch(currentStep) {
+        case 1: return <Step1Content formData={formData} updateFormData={updateFormData} />;
+        case 2: return <Step2Content formData={formData} updateFormData={updateFormData} />;
+        case 3: return <Step3Content formData={formData} updateFormData={updateFormData} />;
+        case 4: return (
+            <Step4Content 
+                formData={formData} 
+                updateFormData={updateFormData} 
+                newUserEmail={newUserEmail}
+                setNewUserEmail={setNewUserEmail}
+                newUserRole={newUserRole}
+                setNewUserRole={setNewUserRole}
+                handleAddUser={handleAddUser}
+                handleRemoveUser={handleRemoveUser}
+            />
+        );
+        default: return null;
+    }
+  }
 
   return (
     <div className="grid gap-6">
@@ -72,10 +148,7 @@ export default function ClientOnboardingPage() {
           <CardTitle>{steps[currentStep-1].name}</CardTitle>
         </CardHeader>
         <CardContent>
-          {currentStep === 1 && <Step1Content />}
-          {currentStep === 2 && <Step2Content />}
-          {currentStep === 3 && <Step3Content />}
-          {currentStep === 4 && <Step4Content />}
+          <CurrentStepComponent />
         </CardContent>
         <CardFooter className="flex justify-between border-t px-6 py-4">
           <Button variant="outline" onClick={handlePrevious} disabled={currentStep === 1}>
@@ -92,23 +165,23 @@ export default function ClientOnboardingPage() {
   );
 }
 
-const Step1Content = () => (
+const Step1Content = ({ formData, updateFormData }: { formData: OnboardingData, updateFormData: (d: Partial<OnboardingData>) => void }) => (
   <div className="grid gap-4 md:grid-cols-2">
     <div className="grid gap-2">
       <Label htmlFor="legal-name">Legal Business Name</Label>
-      <Input id="legal-name" placeholder="Innovate Inc." />
+      <Input id="legal-name" placeholder="Innovate Inc." value={formData.legalName} onChange={e => updateFormData({ legalName: e.target.value })} />
     </div>
     <div className="grid gap-2">
       <Label htmlFor="ein">EIN</Label>
-      <Input id="ein" placeholder="12-3456789" />
+      <Input id="ein" placeholder="12-3456789" value={formData.ein} onChange={e => updateFormData({ ein: e.target.value })} />
     </div>
     <div className="grid gap-2 md:col-span-2">
       <Label htmlFor="address">Business Address</Label>
-      <Input id="address" placeholder="123 Main St, San Francisco, CA 94103" />
+      <Input id="address" placeholder="123 Main St, San Francisco, CA 94103" value={formData.address} onChange={e => updateFormData({ address: e.target.value })} />
     </div>
     <div className="grid gap-2">
       <Label htmlFor="fiscal-year">Fiscal Year End</Label>
-       <Select>
+       <Select value={formData.fiscalYear} onValueChange={value => updateFormData({ fiscalYear: value })}>
           <SelectTrigger id="fiscal-year">
             <SelectValue placeholder="Select month" />
           </SelectTrigger>
@@ -123,11 +196,11 @@ const Step1Content = () => (
   </div>
 );
 
-const Step2Content = () => (
+const Step2Content = ({ formData, updateFormData }: { formData: OnboardingData, updateFormData: (d: Partial<OnboardingData>) => void }) => (
     <div className="grid gap-6">
         <div className="grid gap-2">
             <Label htmlFor="subscription-tier">Subscription Tier</Label>
-            <Select>
+            <Select value={formData.subscriptionTier} onValueChange={value => updateFormData({ subscriptionTier: value })}>
                 <SelectTrigger id="subscription-tier">
                     <SelectValue placeholder="Select a tier" />
                 </SelectTrigger>
@@ -142,15 +215,15 @@ const Step2Content = () => (
             <Label className="font-medium">Optional Add-ons</Label>
             <div className="mt-2 space-y-2">
                 <div className="flex items-center gap-2">
-                    <Checkbox id="payroll" />
+                    <Checkbox id="payroll" checked={formData.payrollAddon} onCheckedChange={checked => updateFormData({ payrollAddon: !!checked })} />
                     <Label htmlFor="payroll" className="font-normal">Payroll Processing</Label>
                 </div>
                  <div className="flex items-center gap-2">
-                    <Checkbox id="tax" />
+                    <Checkbox id="tax" checked={formData.taxAddon} onCheckedChange={checked => updateFormData({ taxAddon: !!checked })} />
                     <Label htmlFor="tax" className="font-normal">Intelligent Tax Filing</Label>
                 </div>
                  <div className="flex items-center gap-2">
-                    <Checkbox id="advisory" />
+                    <Checkbox id="advisory" checked={formData.advisoryAddon} onCheckedChange={checked => updateFormData({ advisoryAddon: !!checked })} />
                     <Label htmlFor="advisory" className="font-normal">Advanced Advisory Services</Label>
                 </div>
             </div>
@@ -158,31 +231,63 @@ const Step2Content = () => (
     </div>
 );
 
-const Step3Content = () => (
-    <div className="grid gap-4">
-        <p className="text-muted-foreground">Upload the client's historical financial data. Supported formats: CSV, XLSX, QBO.</p>
-        <div className="flex items-center justify-center w-full">
-            <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-lg cursor-pointer bg-secondary hover:bg-muted">
-                <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                    <Upload className="w-10 h-10 mb-3 text-muted-foreground" />
-                    <p className="mb-2 text-sm text-muted-foreground"><span className="font-semibold">Click to upload</span> or drag and drop</p>
-                    <p className="text-xs text-muted-foreground">CSV, XLSX, QBO (MAX. 50MB)</p>
-                </div>
-                <input id="dropzone-file" type="file" className="hidden" />
-            </label>
-        </div> 
-    </div>
-);
+const Step3Content = ({ formData, updateFormData }: { formData: OnboardingData, updateFormData: (d: Partial<OnboardingData>) => void }) => {
+    const onDrop = useCallback((acceptedFiles: File[]) => {
+        if (acceptedFiles.length > 0) {
+            updateFormData({ uploadedFile: acceptedFiles[0] });
+        }
+    }, [updateFormData]);
 
-const Step4Content = () => (
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, maxFiles: 1 });
+
+    return (
+        <div className="grid gap-4">
+            <p className="text-muted-foreground">Upload the client's historical financial data. Supported formats: CSV, XLSX, QBO.</p>
+            <div
+                {...getRootProps()}
+                className={cn(
+                    "flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-lg cursor-pointer bg-secondary transition-colors",
+                    isDragActive ? "border-primary bg-primary/10" : "hover:bg-muted"
+                )}
+            >
+                <input {...getInputProps()} />
+                {formData.uploadedFile ? (
+                     <div className="text-center">
+                        <FileText className="w-12 h-12 mx-auto mb-4 text-success" />
+                        <p className="font-semibold">{formData.uploadedFile.name}</p>
+                        <p className="text-sm text-muted-foreground">File uploaded successfully.</p>
+                        <Button variant="link" className="text-destructive text-xs" onClick={(e) => {e.stopPropagation(); updateFormData({ uploadedFile: null })}}>Remove file</Button>
+                    </div>
+                ) : (
+                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                        <Upload className="w-10 h-10 mb-3 text-muted-foreground" />
+                        <p className="mb-2 text-sm text-muted-foreground"><span className="font-semibold">Click to upload</span> or drag and drop</p>
+                        <p className="text-xs text-muted-foreground">CSV, XLSX, QBO (MAX. 50MB)</p>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+};
+
+const Step4Content = ({ formData, updateFormData, newUserEmail, setNewUserEmail, newUserRole, setNewUserRole, handleAddUser, handleRemoveUser }: { 
+    formData: OnboardingData, 
+    updateFormData: (d: Partial<OnboardingData>) => void,
+    newUserEmail: string,
+    setNewUserEmail: (v: string) => void,
+    newUserRole: string,
+    setNewUserRole: (v: string) => void,
+    handleAddUser: () => void,
+    handleRemoveUser: (email: string) => void,
+}) => (
     <div className="grid gap-6">
         <div>
             <h3 className="font-medium">Chart of Accounts Setup</h3>
             <p className="text-sm text-muted-foreground">Choose how to set up the client's chart of accounts.</p>
             <div className="mt-4 flex flex-wrap gap-2">
-                <Button variant="outline">Use Standard Template</Button>
-                <Button variant="outline">Import from File</Button>
-                <Button variant="outline">Configure Manually</Button>
+                <Button variant={formData.chartOfAccountsSetup === 'standard' ? 'default' : 'outline'} onClick={() => updateFormData({ chartOfAccountsSetup: 'standard' })}>Use Standard Template</Button>
+                <Button variant={formData.chartOfAccountsSetup === 'import' ? 'default' : 'outline'} onClick={() => updateFormData({ chartOfAccountsSetup: 'import' })}>Import from File</Button>
+                <Button variant={formData.chartOfAccountsSetup === 'manual' ? 'default' : 'outline'} onClick={() => updateFormData({ chartOfAccountsSetup: 'manual' })}>Configure Manually</Button>
             </div>
         </div>
          <div>
@@ -191,11 +296,11 @@ const Step4Content = () => (
             <div className="mt-4 flex items-end gap-2">
                  <div className="grid gap-2 flex-1">
                     <Label htmlFor="client-email">User Email</Label>
-                    <Input id="client-email" type="email" placeholder="client@example.com" />
+                    <Input id="client-email" type="email" placeholder="client@example.com" value={newUserEmail} onChange={e => setNewUserEmail(e.target.value)} />
                 </div>
                  <div className="grid gap-2">
                     <Label htmlFor="client-role">Role</Label>
-                    <Select>
+                    <Select value={newUserRole} onValueChange={setNewUserRole}>
                         <SelectTrigger id="client-role" className="w-40">
                             <SelectValue placeholder="Select role" />
                         </SelectTrigger>
@@ -206,7 +311,18 @@ const Step4Content = () => (
                         </SelectContent>
                     </Select>
                 </div>
-                <Button>Add User</Button>
+                <Button onClick={handleAddUser}>Add User</Button>
+            </div>
+            <div className="mt-4 space-y-2">
+                {formData.clientUsers.map(user => (
+                    <div key={user.email} className="flex items-center justify-between p-2 border rounded-lg">
+                        <div>
+                            <p className="text-sm font-medium">{user.email}</p>
+                            <p className="text-xs text-muted-foreground">{user.role}</p>
+                        </div>
+                        <Button variant="ghost" size="icon" onClick={() => handleRemoveUser(user.email)}><Trash2 className="h-4 w-4 text-destructive"/></Button>
+                    </div>
+                ))}
             </div>
         </div>
     </div>
