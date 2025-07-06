@@ -617,4 +617,31 @@ export const mockJobCostingDashboard = {
   ]
 };
 
+export const mockJobsWithDetails = mockJobs.map(job => ({
+  ...job,
+  details: {
+    manager: 'Sarah Johnson',
+    type: 'Fixed-Price',
+    location: 'San Francisco, CA',
+    description: 'A detailed description of the project goes here, outlining the scope, objectives, and key deliverables.',
+  },
+  costEntries: [
+    { id: uuidv4(), date: '2024-07-15', type: 'Materials', description: 'Concrete and rebar', amount: 12000 },
+    { id: uuidv4(), date: '2024-07-18', type: 'Labor', description: 'Carpentry team - 40 hours', amount: 4500 },
+    { id: uuidv4(), date: '2024-07-20', type: 'Subcontractor', description: 'Electrical work - Phase 1', amount: 8000 },
+    { id: uuidv4(), date: '2024-07-21', type: 'Overhead', description: 'Equipment rental', amount: 2500 },
+  ],
+  changeOrders: [
+      { id: 'CO-001', date: '2024-07-19', description: 'Additional wiring for new office outlets.', amount: 1500, status: 'Approved' }
+  ]
+}));
+
+export const mockTimeLogs = [
+    { id: 1, employee: "Liam Johnson", project: "Website Redesign", task: "Frontend Development", hours: 8, date: "2024-07-22" },
+    { id: 2, employee: "Emma Brown", project: "Hardware Prototype", task: "CAD Design", hours: 6, date: "2024-07-22" },
+    { id: 3, employee: "Olivia Smith", project: "Marketing Campaign", task: "Content Creation", hours: 4, date: "2024-07-21" },
+    { id: 4, employee: "Noah Williams", project: "Website Redesign", task: "Client Meeting", hours: 1.5, date: "2024-07-21" },
+];
+
+
 // ... and so on for all other pages

@@ -68,7 +68,11 @@ export default async function AllJobsPage() {
             <TableBody>
               {jobs.map((job) => (
                 <TableRow key={job.id}>
-                  <TableCell className="font-medium">{job.name}</TableCell>
+                  <TableCell className="font-medium">
+                    <Link href={`/operations/job-costing/jobs/${job.id}`} className="hover:underline">
+                      {job.name}
+                    </Link>
+                  </TableCell>
                   <TableCell>{job.customer}</TableCell>
                   <TableCell>
                     <Badge variant={statusVariant[job.status as keyof typeof statusVariant]}>{job.status}</Badge>

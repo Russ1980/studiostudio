@@ -55,7 +55,9 @@ import {
   mockLearningResources,
   mockTradingData,
   mockJobs,
-  mockJobCostingDashboard
+  mockJobCostingDashboard,
+  mockJobsWithDetails,
+  mockTimeLogs,
 } from './data';
 
 const simulateDelay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
@@ -219,6 +221,14 @@ export async function getJobs() {
 export async function getJobCostingDashboardData() {
   await simulateDelay(50);
   return mockJobCostingDashboard;
+}
+export async function getJobDetails(id: string) {
+  await simulateDelay(50);
+  return mockJobsWithDetails.find(job => job.id === id) || null;
+}
+export async function getTimeLogs() {
+    await simulateDelay(50);
+    return mockTimeLogs;
 }
 
 
