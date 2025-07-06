@@ -47,7 +47,7 @@ export default function RecurringInvoicesPage() {
           </p>
         </div>
         <Button asChild>
-          <Link href="#"><PlusCircle className="mr-2"/> Create Recurring Invoice</Link>
+          <Link href="/invoicing/recurring/new"><PlusCircle className="mr-2"/> Create Recurring Invoice</Link>
         </Button>
       </div>
 
