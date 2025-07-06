@@ -8,7 +8,8 @@ const mockFinancialData = {
       { month: "Jan", revenue: 680000 },
       { month: "Feb", revenue: 720000 },
       { month: "Mar", revenue: 810000 },
-      { month: "Apr", revenue: 790000 },
+      // Anomaly introduced for demonstration
+      { month: "Apr", revenue: 450000 }, 
       { month: "May", revenue: 850000 },
       { month: "Jun", revenue: 920000 },
     ],
@@ -22,7 +23,8 @@ const mockFinancialData = {
 };
 
 const fallbackInsights = [
-    { type: "Trend Analysis", summary: "Your revenue shows a consistent upward trend over the past six months, indicating strong growth." },
+    { type: "Anomaly Detection", summary: "A significant revenue dip was detected in April, which is inconsistent with the overall growth trend. This warrants further investigation." },
+    { type: "Trend Analysis", summary: "Excluding the anomaly in April, your revenue shows a consistent upward trend over the past six months, indicating strong growth." },
     { type: "Key Highlight", summary: "Cost of Goods Sold (COGS) and Salaries are your two largest expense categories, representing a significant portion of your total operating costs." },
 ];
 

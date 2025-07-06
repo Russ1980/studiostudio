@@ -35,9 +35,9 @@ const generateDashboardInsightsPrompt = ai.definePrompt({
   name: 'generateDashboardInsightsPrompt',
   input: { schema: GenerateDashboardInsightsInputSchema },
   output: { schema: GenerateDashboardInsightsOutputSchema },
-  prompt: `You are an expert financial analyst AI. Your task is to analyze the provided revenue and expense data and generate 2-3 high-level, actionable insights for a business owner's dashboard.
+  prompt: `You are an expert financial analyst AI specializing in **anomaly detection**. Your primary task is to scrutinize the provided revenue and expense data for any unusual patterns, outliers, or deviations from the trend. Also, identify one key trend.
 
-Focus on identifying significant trends, anomalies, or key takeaways. Be concise and professional.
+Generate 2-3 high-level, actionable insights for a business owner's dashboard. One of these insights **must** be an "Anomaly Detection" type if an anomaly is found. Be concise and professional.
 
 Revenue Data (by month):
 {{#each revenueData}}
