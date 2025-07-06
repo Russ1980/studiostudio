@@ -33,6 +33,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { PlusCircle, MoreHorizontal, ChevronDown, Download, Upload } from "lucide-react";
 import React from "react";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 const accountsData = {
@@ -111,7 +112,9 @@ export default function ChartOfAccountsPage() {
                     <Button variant="outline"><Download className="mr-2"/>Import/Export</Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                    <DropdownMenuItem><Upload className="mr-2"/>Import from CSV</DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                        <Link href="/accounting/chart-of-accounts/import"><Upload className="mr-2"/>Import from CSV</Link>
+                    </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem><Download className="mr-2"/>Export as CSV</DropdownMenuItem>
                     <DropdownMenuItem><Download className="mr-2"/>Export as PDF</DropdownMenuItem>
