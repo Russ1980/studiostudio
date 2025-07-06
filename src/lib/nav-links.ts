@@ -66,6 +66,7 @@ import {
   AlertTriangle,
   Timer,
   ListChecks,
+  FileBarChart2
 } from 'lucide-react';
 
 export type NavLink = {
@@ -218,7 +219,17 @@ export const navLinks: NavLink[] = [
       { href: '/invoicing/estimates', label: 'Estimates & Proposals', icon: FileSignature },
       { href: '/invoicing/credit-notes', label: 'Credit Notes', icon: FileDown },
       { href: '/invoicing/statements', label: 'Customer Statements', icon: FileText },
-      { href: '/invoicing/reports', label: 'Reports', icon: FileBarChart },
+      {
+        label: 'Reports',
+        icon: FileBarChart,
+        href: '/invoicing/reports',
+        items: [
+          { href: '/invoicing/reports/ar-aging', label: 'A/R Aging', icon: FileText },
+          { href: '/invoicing/reports/sales-by-customer', label: 'Sales by Customer', icon: Users },
+          { href: '/invoicing/reports/sales-by-item', label: 'Sales by Item', icon: PieChart },
+          { href: '/invoicing/reports/tax-summary', label: 'Sales Tax Summary', icon: FileBarChart2 },
+        ],
+      },
       { href: '/invoicing/templates', label: 'Templates & Branding', icon: Palette },
       { href: '/invoicing/settings', label: 'Settings', icon: Settings },
     ],
