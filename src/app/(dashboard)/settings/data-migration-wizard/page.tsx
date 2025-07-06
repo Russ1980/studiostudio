@@ -60,7 +60,8 @@ function DataMigrationWizardContent() {
         return !migrationData.backupConfirmed;
       case 5:
         return !migrationData.uploadedFile;
-      // Add other step-specific validation here
+      case 6:
+        return !migrationData.validationResults || migrationData.validationResults.errors > 0;
       default:
         return false;
     }

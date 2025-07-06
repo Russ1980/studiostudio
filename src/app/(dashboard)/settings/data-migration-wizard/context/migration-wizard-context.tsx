@@ -3,10 +3,17 @@
 
 import React, { createContext, useState, useContext, useMemo } from 'react';
 
+type ValidationResult = {
+  valid: number;
+  warnings: number;
+  errors: number;
+};
+
 type MigrationData = {
   sourceSystem: string | null;
   backupConfirmed: boolean;
   uploadedFile: File | null;
+  validationResults: ValidationResult | null;
   // Add other state properties here as needed
 };
 
@@ -25,6 +32,7 @@ export function MigrationWizardProvider({ children }: { children: React.ReactNod
     sourceSystem: null,
     backupConfirmed: false,
     uploadedFile: null,
+    validationResults: null,
   });
 
   const updateMigrationData = (updates: Partial<MigrationData>) => {
