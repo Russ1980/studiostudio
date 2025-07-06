@@ -39,6 +39,11 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
   Bell,
   LogOut,
   Moon,
@@ -76,6 +81,8 @@ import {
   Activity,
   File as FileIcon,
   User,
+  ChevronsLeft,
+  ChevronsRight,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { User as UserType } from "@/lib/auth";
@@ -197,7 +204,7 @@ const StyledDropdownMenuItem = ({ href, icon: Icon, title, description, special 
 
 export function AppShell({ children, user }: { children: React.ReactNode, user: UserType }) {
   const pathname = usePathname();
-  const { state } = useSidebar();
+  const { state, setOpen } = useSidebar();
   const isCollapsed = state === "collapsed";
  
   return (
@@ -227,30 +234,24 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
         </SidebarContent>
 
         <SidebarFooter className="p-2 mt-auto border-t border-sidebar-border">
-          <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton
-                tooltip="User Profile"
-                variant="default"
-                className="justify-start"
+                  tooltip="Collapse Sidebar"
+                  variant="default"
+                  className="justify-center"
+                  onClick={() => setOpen(!isCollapsed)}
               >
-                <span className="flex w-full items-center gap-2">
-                  <Avatar className="h-7 w-7">
-                    <AvatarFallback className="bg-primary text-primary-foreground">
-                      {user.initials}
-                    </AvatarFallback>
-                  </Avatar>
-                  <span className="group-data-[collapsible=icon]:hidden">{user.name}</span>
-                </span>
-                <LogOut className="ml-auto group-data-[collapsible=icon]:hidden h-3.5 w-3.5" />
+                  <span className="group-data-[collapsible=icon]:hidden flex items-center gap-2">
+                      <ChevronsLeft className="size-4" /> Collapse
+                  </span>
+                  <ChevronsRight className="hidden group-data-[collapsible=icon]:block size-4" />
               </SidebarMenuButton>
             </SidebarMenuItem>
-          </SidebarMenu>
         </SidebarFooter>
       </Sidebar>
 
       <SidebarInset>
-        <header className="sticky top-0 flex h-16 items-center justify-between gap-4 border-b bg-background/80 px-4 backdrop-blur-sm md:px-6">
+        <header className="sticky top-0 flex h-16 items-center justify-between gap-4 border-b bg-background/80 px-4 backdrop-blur-sm md:px-6 z-40">
           <div className="flex items-center gap-2">
             <SidebarTrigger className="md:hidden" />
               <DropdownMenu>
@@ -416,7 +417,14 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
         <main className="flex-1 flex flex-col">
             <div className="flex items-center justify-between border-b bg-background p-4 md:px-6">
                 <div className="flex items-center gap-2">
-                    <SidebarTrigger className="hidden md:flex" />
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <SidebarTrigger className="hidden md:flex" />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Toggle Sidebar</p>
+                      </TooltipContent>
+                    </Tooltip>
                     <Breadcrumb />
                 </div>
                 {pathname === '/dashboard' && (
