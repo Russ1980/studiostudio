@@ -47,7 +47,71 @@ export interface OnboardingStep {
     },
   ];
   
-  // For now, all roles will use the same onboarding flow.
-  // These can be customized with different steps in the future.
-  export const accountantSteps: OnboardingStep[] = businessOwnerSteps;
-  export const bookkeeperSteps: OnboardingStep[] = businessOwnerSteps;
+  export const accountantSteps: OnboardingStep[] = [
+    {
+      id: 'welcome-accountant',
+      title: 'Welcome, Accountant!',
+      content: 'This tour highlights features designed for accounting professionals.',
+      targetElement: '[data-onboarding="user-profile"]',
+      placement: 'bottom',
+    },
+    {
+      id: 'chart-of-accounts',
+      title: 'Professional Chart of Accounts',
+      content: 'Manage complex account structures, codes, and classifications with ease.',
+      targetElement: '[data-onboarding="chart-of-accounts-link"]',
+      placement: 'right',
+    },
+    {
+      id: 'financial-reports',
+      title: 'Advanced Financial Reports',
+      content: 'Generate detailed financial statements like P&L, Balance Sheets, and Cash Flow statements.',
+      targetElement: '[data-onboarding="financial-reports-link"]',
+      placement: 'right',
+    },
+    {
+      id: 'journal-entries',
+      title: 'Complex Journal Entries',
+      content: 'Make manual adjustments, accruals, and other non-standard entries with full control.',
+      targetElement: '[data-onboarding="journal-entries-link"]',
+      placement: 'right',
+    },
+    {
+      id: 'audit-trail',
+      title: 'Complete Audit Trail',
+      content: 'Manage user roles and permissions to ensure a complete audit trail for all financial activities.',
+      targetElement: '[data-onboarding="team-settings-link"]',
+      placement: 'right',
+    },
+  ];
+
+  export const bookkeeperSteps: OnboardingStep[] = [
+    {
+      id: 'welcome-bookkeeper',
+      title: 'Welcome, Bookkeeper!',
+      content: 'This tour will show you the key tools for your daily tasks.',
+      targetElement: '[data-onboarding="user-profile"]',
+      placement: 'bottom',
+    },
+    {
+      id: 'daily-transactions',
+      title: 'Daily Transaction Entry',
+      content: 'Quickly record new transactions like journal entries right from the file menu.',
+      targetElement: '[data-onboarding="new-transaction-link"]',
+      placement: 'bottom',
+    },
+    {
+      id: 'bank-reconciliation',
+      title: 'Bank Reconciliation',
+      content: 'Match bank transactions to your books and ensure everything is accurate.',
+      targetElement: '[data-onboarding="bank-reconciliation-link"]',
+      placement: 'right',
+    },
+    {
+      id: 'client-reports',
+      title: 'Client-Ready Reports',
+      content: 'Generate professional reports for your clients or management team.',
+      targetElement: '[data-onboarding="reports-link"]',
+      placement: 'right',
+    },
+  ];

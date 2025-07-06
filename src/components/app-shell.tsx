@@ -245,7 +245,7 @@ function renderNavLinks(
   ));
 }
 
-const StyledDropdownMenuItem = ({ href, icon: Icon, title, description, special = false }) => (
+const StyledDropdownMenuItem = ({ href, icon: Icon, title, description, special = false, ...props }: any) => (
   <DropdownMenuItem asChild className="p-0 focus:bg-transparent">
     <Link
       href={href}
@@ -253,6 +253,7 @@ const StyledDropdownMenuItem = ({ href, icon: Icon, title, description, special 
         "flex w-full items-center gap-3 rounded-lg border bg-card p-2.5 text-card-foreground transition-colors hover:border-primary hover:bg-primary/5 focus:outline-none focus:ring-2 focus:ring-ring",
         special && "border-orange-500/50 bg-orange-500/10 hover:border-orange-500 hover:bg-orange-500/20"
       )}
+      {...props}
     >
       <div className={cn(
           "flex h-8 w-8 shrink-0 items-center justify-center rounded-md",
@@ -335,7 +336,7 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
                       <ScrollArea className="h-96">
                         <div className="p-2 space-y-1">
                           <p className="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Create New</p>
-                          <StyledDropdownMenuItem href="/accounting/journal-entries/new" icon={FilePlus} title="New Transaction" description="Record a new journal entry." />
+                          <StyledDropdownMenuItem href="/accounting/journal-entries/new" icon={FilePlus} title="New Transaction" description="Record a new journal entry." data-onboarding="new-transaction-link" />
                           <StyledDropdownMenuItem href="/reports-insights/builder" icon={FileBarChart} title="New Report" description="Build a custom report from scratch." />
                           
                           <p className="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Export</p>

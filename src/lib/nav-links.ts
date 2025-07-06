@@ -137,8 +137,8 @@ export const navLinks: NavLink[] = [
     href: '/accounting',
     items: [
       { href: '/accounting', label: 'Accounting Dashboard', icon: LayoutGrid },
-      { href: '/accounting/chart-of-accounts', label: 'Chart of Accounts', icon: FileStack },
-      { href: '/accounting/journal-entries', label: 'Journal Entries', icon: FileText },
+      { href: '/accounting/chart-of-accounts', label: 'Chart of Accounts', icon: FileStack, onboardingId: 'chart-of-accounts-link' },
+      { href: '/accounting/journal-entries', label: 'Journal Entries', icon: FileText, onboardingId: 'journal-entries-link' },
       {
         label: 'Accounts Receivable',
         icon: CreditCard,
@@ -181,7 +181,7 @@ export const navLinks: NavLink[] = [
       { href: '/banking/dashboard', label: 'Dashboard', icon: LayoutGrid },
       { href: '/banking/connections', label: 'Bank Connections', icon: LinkIcon },
       { href: '/banking/review-transactions', label: 'Review Transactions', icon: FileCheck },
-      { href: '/banking/reconciliation', label: 'Reconciliation', icon: RefreshCw },
+      { href: '/banking/reconciliation', label: 'Reconciliation', icon: RefreshCw, onboardingId: 'bank-reconciliation-link' },
       { href: '/banking/transfers', label: 'Transfers', icon: ArrowLeftRight },
       { href: '/banking/rules', label: 'Transaction Rules', icon: FileText },
     ],
@@ -285,7 +285,7 @@ export const navLinks: NavLink[] = [
     onboardingId: 'reports-link',
     items: [
       { href: '/reports-insights/dashboard', label: 'Dashboard', icon: LayoutGrid },
-      { href: '/reports-insights/financial-reports', label: 'Financial Reports', icon: FileBarChart },
+      { href: '/reports-insights/financial-reports', label: 'Financial Reports', icon: FileBarChart, onboardingId: 'financial-reports-link' },
       { href: '/reports-insights/sales-analytics', label: 'Sales Analytics', icon: LineChart },
       { href: '/reports-insights/expense-analytics', label: 'Expense Analytics', icon: PieChart },
       { href: '/reports-insights/builder', label: 'Report Builder', icon: SlidersHorizontal },
@@ -341,7 +341,7 @@ export const navLinks: NavLink[] = [
     items: [
       { href: '/settings', label: 'Account', icon: User },
       { href: '/settings/company', label: 'Company', icon: Building },
-      { href: '/settings/team', label: 'Team Management', icon: Users },
+      { href: '/settings/team', label: 'Team Management', icon: Users, onboardingId: 'team-settings-link' },
       { href: '/settings/security', label: 'Security', icon: ShieldCheck },
       { href: '/settings/integrations', label: 'Integrations', icon: Plug },
       { href: '/settings/billing', label: 'Billing & Subscription', icon: CreditCard },
