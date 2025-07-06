@@ -94,8 +94,8 @@ import {
 import { cn } from "@/lib/utils";
 import type { User as UserType } from "@/lib/auth";
 import { Separator } from "@/components/ui/separator";
-import { useServaAI } from "@/hooks/use-serva-ai";
-import { ServaAIWidget } from "../serva-ai/serva-ai-widget";
+import { useServaAI } from "@/hooks/use-serva-ai.tsx";
+import { ServaAIWidget } from "@/components/serva-ai/serva-ai-widget";
 
 function Breadcrumb() {
   const pathname = usePathname();
