@@ -1,3 +1,4 @@
+
 "use client";
 
 import {
@@ -26,7 +27,7 @@ export default function CustomerStatementsPage() {
             <div>
                 <h1 className="text-3xl font-bold">Customer Statements</h1>
                 <p className="text-muted-foreground">
-                    Generate and send a statement of account to a customer.
+                    Generate and send a statement of account to a customer, summarizing their invoices and payments.
                 </p>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -43,6 +44,7 @@ export default function CustomerStatementsPage() {
                                     <SelectContent>
                                         <SelectItem value="innovate">Innovate Inc.</SelectItem>
                                         <SelectItem value="apex">Apex Solutions</SelectItem>
+                                        <SelectItem value="quantum">QuantumLeap Co.</SelectItem>
                                     </SelectContent>
                                 </Select>
                             </div>
@@ -53,17 +55,18 @@ export default function CustomerStatementsPage() {
                                     <SelectContent>
                                         <SelectItem value="balance">Balance Forward</SelectItem>
                                         <SelectItem value="open">Open Item</SelectItem>
+                                        <SelectItem value="transaction">Transaction Statement</SelectItem>
                                     </SelectContent>
                                 </Select>
                             </div>
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="grid gap-2">
                                     <Label>Start Date</Label>
-                                    <Input type="date"/>
+                                    <Input type="date" defaultValue="2024-07-01"/>
                                 </div>
                                 <div className="grid gap-2">
                                     <Label>End Date</Label>
-                                    <Input type="date"/>
+                                    <Input type="date" defaultValue={new Date().toISOString().substring(0, 10)}/>
                                 </div>
                             </div>
                              <Separator />
@@ -78,10 +81,11 @@ export default function CustomerStatementsPage() {
                      <Card className="min-h-[600px]">
                         <CardHeader>
                             <CardTitle>Preview</CardTitle>
+                            <CardDescription>A preview of the generated statement will appear here.</CardDescription>
                         </CardHeader>
                         <CardContent className="h-full">
                            <div className="w-full h-full rounded-lg border border-dashed flex items-center justify-center">
-                                <p className="text-muted-foreground">Statement preview will appear here.</p>
+                                <p className="text-muted-foreground">Select options to generate a preview.</p>
                            </div>
                         </CardContent>
                     </Card>
