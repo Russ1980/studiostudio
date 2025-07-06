@@ -1,3 +1,4 @@
+
 "use client";
 
 import {
@@ -23,20 +24,38 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal, PlusCircle } from "lucide-react";
+import { getPurchaseOrders } from "@/lib/actions";
+import { useEffect, useState } from "react";
+import Link from "next/link";
 
-const purchaseOrders = [
-  { poNumber: "PO-00125", vendor: "Component Suppliers Inc.", status: "Fulfilled", total: 15200.00, orderDate: "2024-06-10", expectedDelivery: "2024-06-20" },
-  { poNumber: "PO-00126", vendor: "Raw Materials Co.", status: "Sent", total: 8500.00, orderDate: "2024-06-25", expectedDelivery: "2024-07-05" },
-  { poNumber: "PO-00127", vendor: "Packaging Solutions", status: "Draft", total: 2300.00, orderDate: "2024-07-01", expectedDelivery: "2024-07-10" },
-];
+type PurchaseOrder = {
+  poNumber: string;
+  vendor: string;
+  status: string;
+  total: number;
+  orderDate: string;
+  expectedDelivery: string;
+};
 
-const statusVariant: { [key: string]: "success" | "default" | "secondary" } = {
+const statusVariant: { [key: string]: "success" | "default" | "secondary" | "destructive" } = {
   Fulfilled: "success",
   Sent: "default",
   Draft: "secondary",
+  "Partially Received": "default",
+  Closed: "success"
 };
 
 export default function PurchaseOrdersPage() {
+  const [purchaseOrders, setPurchaseOrders] = useState<PurchaseOrder[]>([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      const data = await getPurchaseOrders();
+      setPurchaseOrders(data);
+    }
+    fetchData();
+  }, []);
+
   return (
     <div className="grid gap-6">
       <div className="flex items-center justify-between">
@@ -46,7 +65,11 @@ export default function PurchaseOrdersPage() {
             Create and track orders for new inventory from vendors.
           </p>
         </div>
-        <Button><PlusCircle className="mr-2"/> Create Purchase Order</Button>
+        <Button asChild>
+          <Link href="/operations/inventory/purchase-orders/new">
+            <PlusCircle className="mr-2"/> Create Purchase Order
+          </Link>
+        </Button>
       </div>
 
       <Card>
@@ -74,7 +97,7 @@ export default function PurchaseOrdersPage() {
                   <TableCell>
                     <Badge variant={statusVariant[po.status]}>{po.status}</Badge>
                   </TableCell>
-                  <TableCell>${po.total.toFixed(2)}</TableCell>
+                  <TableCell>${po.total.toLocaleString('en-US', {minimumFractionDigits: 2})}</TableCell>
                   <TableCell>{po.orderDate}</TableCell>
                   <TableCell>{po.expectedDelivery}</TableCell>
                   <TableCell className="text-right">

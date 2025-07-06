@@ -325,6 +325,7 @@ export const mockPurchaseOrders = [
   { poNumber: "PO-00125", vendor: "Component Suppliers Inc.", status: "Fulfilled", total: 15200.00, orderDate: "2024-06-10", expectedDelivery: "2024-06-20" },
   { poNumber: "PO-00126", vendor: "Raw Materials Co.", status: "Sent", total: 8500.00, orderDate: "2024-06-25", expectedDelivery: "2024-07-05" },
   { poNumber: "PO-00127", vendor: "Packaging Solutions", status: "Draft", total: 2300.00, orderDate: "2024-07-01", expectedDelivery: "2024-07-10" },
+  { poNumber: "PO-00128", vendor: "Component Suppliers Inc.", status: "Partially Received", total: 5000.00, orderDate: "2024-07-05", expectedDelivery: "2024-07-15" },
 ];
 
 export const mockInventory = {
