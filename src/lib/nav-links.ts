@@ -347,6 +347,7 @@ export const navLinks: NavLink[] = [
       { href: '/settings/billing', label: 'Billing & Subscription', icon: CreditCard },
       { href: '/settings/appearance', label: 'Appearance', icon: Palette },
       { href: '/settings/payroll-wizard', label: 'Payroll Wizard', icon: Wand2 },
+      { href: '/settings/onboarding', label: 'Onboarding', icon: Rocket },
     ],
   },
   {
