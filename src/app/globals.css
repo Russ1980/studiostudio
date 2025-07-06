@@ -37,6 +37,7 @@
     
     --sidebar-primary: 231 50% 48%;
     --sidebar-primary-foreground: 210 40% 98%;
+    --sidebar-primary-active-border: 231 50% 65%;
 
     --sidebar-accent: 231 31% 25%;
     --sidebar-accent-foreground: 210 20% 98%;
@@ -77,6 +78,7 @@
     
     --sidebar-primary: 231 50% 48%;
     --sidebar-primary-foreground: 210 40% 98%;
+    --sidebar-primary-active-border: 231 50% 65%;
 
     --sidebar-accent: 231 31% 25%;
     --sidebar-accent-foreground: 210 20% 98%;
