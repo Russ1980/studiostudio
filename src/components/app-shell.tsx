@@ -30,6 +30,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
   DropdownMenuGroup,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuPortal,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { navLinks, type NavLink } from "@/lib/nav-links";
@@ -42,6 +46,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
+  TooltipPortal,
 } from "@/components/ui/tooltip";
 import {
   Bell,
@@ -83,6 +88,7 @@ import {
   User,
   ChevronsLeft,
   ChevronsRight,
+  PanelLeft,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { User as UserType } from "@/lib/auth";
@@ -121,6 +127,36 @@ function Breadcrumb() {
   );
 }
 
+const renderDropdownItems = (links: NavLink[]): React.ReactNode => {
+  return links.map((link) => (
+    <React.Fragment key={link.href || link.label}>
+      {link.items && link.items.length > 0 ? (
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger>
+            {link.icon && <link.icon className="mr-2 size-4" />}
+            <span>{link.label}</span>
+          </DropdownMenuSubTrigger>
+          <DropdownMenuPortal>
+            <DropdownMenuSubContent
+              sideOffset={8}
+              alignOffset={-4}
+              className="bg-sidebar border-sidebar-border text-sidebar-foreground"
+            >
+              {renderDropdownItems(link.items)}
+            </DropdownMenuSubContent>
+          </DropdownMenuPortal>
+        </DropdownMenuSub>
+      ) : (
+        <DropdownMenuItem asChild>
+          <Link href={link.href || "#"}>
+            {link.icon && <link.icon className="mr-2 size-4" />}
+            <span>{link.label}</span>
+          </Link>
+        </DropdownMenuItem>
+      )}
+    </React.Fragment>
+  ));
+};
 
 function renderNavLinks(
   links: NavLink[],
@@ -131,31 +167,63 @@ function renderNavLinks(
   return links.map((link) => (
     <SidebarMenuItem key={link.href || link.label}>
       {link.items && link.items.length > 0 ? (
-        <Collapsible>
-          <CollapsibleTrigger asChild>
-            <SidebarMenuButton
-              tooltip={link.label}
-              size="lg"
-              className="w-full"
-              variant="default"
+        isCollapsed && level === 1 ? (
+          <DropdownMenu>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <DropdownMenuTrigger asChild>
+                  <SidebarMenuButton
+                    size="lg"
+                    className="w-full justify-center"
+                    variant="default"
+                  >
+                    {link.icon && <link.icon className="size-5" />}
+                  </SidebarMenuButton>
+                </DropdownMenuTrigger>
+              </TooltipTrigger>
+              <TooltipContent side="right" align="center">
+                <p>{link.label}</p>
+              </TooltipContent>
+            </Tooltip>
+            <DropdownMenuContent
+              side="right"
+              align="start"
+              sideOffset={12}
+              alignOffset={-8}
+              className="bg-sidebar border-sidebar-border text-sidebar-foreground w-56"
             >
-                <span className="flex w-full items-center justify-between">
-                  <span className="flex items-center gap-2">
-                    {(isCollapsed || ['Settings', 'Help'].includes(link.label)) && link.icon && <link.icon className="size-3.5" />}
-                    <span className="flex-1 text-left">{link.label}</span>
+              <DropdownMenuLabel>{link.label}</DropdownMenuLabel>
+              <DropdownMenuSeparator className="bg-sidebar-border" />
+              <DropdownMenuGroup>
+                {renderDropdownItems(link.items)}
+              </DropdownMenuGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : (
+          <Collapsible>
+            <CollapsibleTrigger asChild>
+              <SidebarMenuButton
+                tooltip={link.label}
+                size={level > 1 ? "sm" : "lg"}
+                className={cn("w-full", level > 1 && "h-8")}
+                variant="default"
+              >
+                  <span className="flex w-full items-center justify-between">
+                    <span className="flex items-center gap-2">
+                      {link.icon && <link.icon className="size-4" />}
+                      <span className="flex-1 text-left">{link.label}</span>
+                    </span>
+                    <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200 group-data-[state=open]:rotate-180" />
                   </span>
-                  {!isCollapsed && (
-                      <ChevronRight className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-90" />
-                  )}
-                </span>
-            </SidebarMenuButton>
-          </CollapsibleTrigger>
-          <CollapsibleContent>
-            <SidebarMenuSub>
-              {renderNavLinks(link.items, pathname, isCollapsed, level + 1)}
-            </SidebarMenuSub>
-          </CollapsibleContent>
-        </Collapsible>
+              </SidebarMenuButton>
+            </CollapsibleTrigger>
+            <CollapsibleContent>
+              <SidebarMenuSub>
+                {renderNavLinks(link.items, pathname, isCollapsed, level + 1)}
+              </SidebarMenuSub>
+            </CollapsibleContent>
+          </Collapsible>
+        )
       ) : (
         <SidebarMenuButton
           asChild
@@ -166,11 +234,9 @@ function renderNavLinks(
           variant="default"
         >
           <Link href={link.href || "#"}>
-             <span className="flex w-full items-center justify-between">
-                <span className="flex items-center gap-2">
-                  {(!isCollapsed || ['Settings', 'Help'].includes(link.label)) && link.icon && <link.icon className="size-3.5" />}
-                  <span>{link.label}</span>
-                </span>
+             <span className="flex w-full items-center gap-2">
+                {link.icon && <link.icon className={cn("size-4", isCollapsed && level === 1 && "size-5")} />}
+                <span className={cn((isCollapsed && level === 1) && "hidden")}>{link.label}</span>
               </span>
           </Link>
         </SidebarMenuButton>
@@ -209,7 +275,7 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
  
   return (
     <>
-      <Sidebar variant="sidebar" collapsible="icon" className="border-r bg-sidebar">
+      <Sidebar variant="sidebar" collapsible="icon" className="border-r bg-sidebar z-50">
         <SidebarHeader className="h-16 flex items-center p-3 border-b border-sidebar-border">
           <div className="flex w-full items-center justify-between">
             <div className="flex flex-1 items-center gap-2">
@@ -234,26 +300,21 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
         </SidebarContent>
 
         <SidebarFooter className="p-2 mt-auto border-t border-sidebar-border">
-            <SidebarMenuItem>
-              <SidebarMenuButton
-                  tooltip="Collapse Sidebar"
-                  variant="default"
-                  className="justify-center"
-                  onClick={() => setOpen(!isCollapsed)}
-              >
-                  <span className="group-data-[collapsible=icon]:hidden flex items-center gap-2">
-                      <ChevronsLeft className="size-4" /> Collapse
-                  </span>
-                  <ChevronsRight className="hidden group-data-[collapsible=icon]:block size-4" />
-              </SidebarMenuButton>
-            </SidebarMenuItem>
+          {/* Footer content can go here if needed */}
         </SidebarFooter>
       </Sidebar>
 
       <SidebarInset>
         <header className="sticky top-0 flex h-16 items-center justify-between gap-4 border-b bg-background/80 px-4 backdrop-blur-sm md:px-6 z-40">
           <div className="flex items-center gap-2">
-            <SidebarTrigger className="md:hidden" />
+             <Tooltip>
+              <TooltipTrigger asChild>
+                <SidebarTrigger />
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Toggle Sidebar</p>
+              </TooltipContent>
+            </Tooltip>
               <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="ghost" size="sm" className="gap-1">
@@ -417,14 +478,6 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
         <main className="flex-1 flex flex-col">
             <div className="flex items-center justify-between border-b bg-background p-4 md:px-6">
                 <div className="flex items-center gap-2">
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <SidebarTrigger className="hidden md:flex" />
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Toggle Sidebar</p>
-                      </TooltipContent>
-                    </Tooltip>
                     <Breadcrumb />
                 </div>
                 {pathname === '/dashboard' && (
