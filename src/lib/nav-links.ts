@@ -203,6 +203,7 @@ export const navLinks: NavLink[] = [
              items: [
                 { href: '/operations/job-costing/reports/profitability', label: 'Profitability Report', icon: BarChart3 },
                 { href: '/operations/job-costing/reports/budget-vs-actual', label: 'Budget vs. Actual', icon: FileBarChart2 },
+                { href: '/operations/job-costing/reports/wip', label: 'WIP Report', icon: Users },
              ]
            },
         ]

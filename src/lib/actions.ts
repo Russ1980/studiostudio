@@ -59,6 +59,7 @@ import {
   mockJobsWithDetails,
   mockTimeLogs,
   mockJobProfitabilityData,
+  mockWipReportData,
 } from './data';
 
 const simulateDelay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
@@ -234,6 +235,10 @@ export async function getTimeLogs() {
 export async function getJobProfitabilityData() {
     await simulateDelay(50);
     return mockJobProfitabilityData;
+}
+export async function getWipReportData() {
+  await simulateDelay(50);
+  return mockWipReportData;
 }
 
 

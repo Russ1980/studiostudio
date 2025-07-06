@@ -1,4 +1,3 @@
-
 "use client";
 
 import {
@@ -16,7 +15,7 @@ import { cn } from "@/lib/utils";
 const reports = [
     { title: "Job Profitability", description: "Shows revenue, costs, and profit margins for each job.", icon: BarChart3, href: "/operations/job-costing/reports/profitability" },
     { title: "Budget vs. Actuals", description: "Compares your budgeted amounts to your actual financial performance.", icon: FileBarChart2, href: "/operations/job-costing/reports/budget-vs-actual" },
-    { title: "Work In Progress (WIP)", description: "Tracks ongoing jobs, showing costs incurred and revenue billed.", icon: Users, href: "#", disabled: true },
+    { title: "Work In Progress (WIP)", description: "Tracks ongoing jobs, showing costs incurred and revenue billed.", icon: Users, href: "/operations/job-costing/reports/wip", disabled: false },
     { title: "Cost to Complete", description: "Forecasts the remaining costs to complete a job based on current spending.", icon: PieChart, href: "#", disabled: true },
 ];
 

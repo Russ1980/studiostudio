@@ -646,11 +646,58 @@ export const mockTimeLogs = [
 
 export const mockJobProfitabilityData = mockJobs.map(job => ({
     id: job.id,
-    name: job.name,
+    jobName: job.name,
     customer: job.customer,
     revenue: job.budget + job.profitability, // simplified logic for revenue
     costs: job.spent,
 }));
+
+export const mockWipReportData = [
+  {
+    id: "JOB-001",
+    jobName: "Retail Store Renovation",
+    contractAmount: 65000,
+    estimatedCost: 55000,
+    costToDate: 30000,
+    percentComplete: 54.5, // (30000 / 55000) * 100
+    revenueEarned: 35425, // 65000 * 0.545
+    billedToDate: 25000,
+    overUnderBilling: 10425, // 35425 - 25000 (overbilled)
+  },
+  {
+    id: "JOB-002",
+    jobName: "Office Building Construction",
+    contractAmount: 1250000,
+    estimatedCost: 1150000,
+    costToDate: 1150000,
+    percentComplete: 100, 
+    revenueEarned: 1250000, 
+    billedToDate: 1250000,
+    overUnderBilling: 0,
+  },
+  {
+    id: "JOB-004",
+    jobName: "Consulting Engagement",
+    contractAmount: 80000,
+    estimatedCost: 75000,
+    costToDate: 78000,
+    percentComplete: 100, // Costs exceeded estimate, assume 100% complete
+    revenueEarned: 80000, // Capped at contract amount
+    billedToDate: 80000,
+    overUnderBilling: 0,
+  },
+  {
+    id: "JOB-003",
+    jobName: "Custom Machinery Build",
+    contractAmount: 250000,
+    estimatedCost: 180000,
+    costToDate: 100000,
+    percentComplete: 55.6, // (100000 / 180000) * 100
+    revenueEarned: 139000, // 250000 * 0.556
+    billedToDate: 150000,
+    overUnderBilling: -11000, // (underbilled)
+  }
+];
 
 
 // ... and so on for all other pages
