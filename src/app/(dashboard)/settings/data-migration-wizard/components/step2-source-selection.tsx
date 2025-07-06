@@ -3,9 +3,11 @@
 
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Zap } from "lucide-react";
 import { useMigrationWizard } from "../context/migration-wizard-context";
 import { cn } from "@/lib/utils";
+import { Zap } from "lucide-react";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const UploadIcon = (props: React.SVGProps<SVGSVGElement>) => (
     <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" {...props}>
@@ -36,13 +38,57 @@ export function Step2SourceSelection() {
       <div className="grid md:grid-cols-2 gap-6 w-full max-w-3xl">
         <Card 
             className={cn("p-6 flex flex-col items-center justify-center text-center cursor-pointer transition-all",
-                migrationData.sourceSystem === 'FileUpload' ? "border-primary ring-2 ring-primary" : "hover:shadow-md"
+                (migrationData.sourceSystem === 'FileUpload') ? "border-primary ring-2 ring-primary" : "hover:shadow-md"
             )}
             onClick={() => handleSelectSource('FileUpload')}
         >
             <UploadIcon className="w-10 h-10 text-primary mb-4"/>
             <h3 className="text-lg font-semibold">File Upload</h3>
             <p className="text-sm text-muted-foreground">Migrate data from files exported from QuickBooks Desktop, or other CSV/XLSX files.</p>
+            
+            <Dialog>
+                <DialogTrigger asChild>
+                    <Button variant="link" className="text-xs mt-2" onClick={(e) => e.stopPropagation()}>
+                        View QuickBooks Desktop export options
+                    </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-3xl">
+                    <DialogHeader>
+                        <DialogTitle>QuickBooks Desktop Exporting Options</DialogTitle>
+                        <DialogDescription>
+                            Here is a summary of common ways to export your data from QuickBooks Desktop.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <ScrollArea className="h-96 pr-6">
+                        <div className="space-y-6 text-left text-sm">
+                            <div>
+                                <h4 className="font-semibold text-base mb-2">✅ Excel / CSV Export</h4>
+                                <p className="text-muted-foreground">Use the <span className="font-semibold">Report Center</span> to export reports like P&L, Balance Sheet, Chart of Accounts, Customer/Vendor lists, and transaction details.</p>
+                            </div>
+                             <div>
+                                <h4 className="font-semibold text-base mb-2">📦 IIF (Intuit Interchange Format) Export</h4>
+                                <p className="text-muted-foreground">Use <span className="font-semibold">File {'>'} Utilities {'>'} Export</span> for lists like Chart of Accounts, Customers, Vendors, and Items. Note: This format is not recommended for detailed transactions.</p>
+                            </div>
+                             <div>
+                                <h4 className="font-semibold text-base mb-2">🧾 General Ledger & Transaction Export</h4>
+                                <p className="text-muted-foreground">Run a <span className="font-semibold">Custom Transaction Detail Report</span> and export to Excel to get your General Ledger, Transaction Journal, or Audit Trail.</p>
+                            </div>
+                             <div>
+                                <h4 className="font-semibold text-base mb-2">🔄 Accountant's Copy / Portable File</h4>
+                                <p className="text-muted-foreground">Use <span className="font-semibold">File {'>'} Send Company File</span> to create a `.QBX`, `.QBA`, or `.QBM` file for transfer.</p>
+                            </div>
+                             <div>
+                                <h4 className="font-semibold text-base mb-2">📝 Full Company Backup (.QBB)</h4>
+                                <p className="text-muted-foreground">A full backup includes all transactions, templates, and attachments.</p>
+                            </div>
+                            <div className="p-4 bg-secondary rounded-lg">
+                                <h4 className="font-semibold text-base mb-2">Accepted File Formats</h4>
+                                <p className="text-muted-foreground">For direct upload, this wizard accepts files with the following extensions: <span className="font-semibold text-foreground">.XLS, .XLSX, .CSV, .IIF, .QBB</span></p>
+                            </div>
+                        </div>
+                    </ScrollArea>
+                </DialogContent>
+            </Dialog>
         </Card>
         <Card 
             className={cn("p-6 flex flex-col items-center justify-center text-center cursor-pointer transition-all",
@@ -83,7 +129,6 @@ export function Step2SourceSelection() {
                 ))}
             </div>
         </div>
-
     </div>
   );
 }
