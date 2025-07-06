@@ -45,6 +45,9 @@ import {
   Calculator,
   CalendarDays,
   BarChart4,
+  Link as LinkIcon,
+  RefreshCw,
+  ArrowLeftRight,
 } from 'lucide-react';
 
 export type NavLink = {
@@ -182,15 +185,15 @@ export const navLinks: NavLink[] = [
   },
   {
     label: 'Banking',
-    icon: Banknote,
+    icon: Landmark,
     href: '/banking',
     items: [
-      { href: '#', label: 'Dashboard', icon: LayoutGrid },
-      { href: '#', label: 'Bank Connections', icon: Landmark },
-      { href: '#', label: 'Review Transactions', icon: FileCheck },
-      { href: '#', label: 'Reconciliation', icon: ShieldCheck },
-      { href: '#', label: 'Transfers', icon: History },
-      { href: '#', label: 'Transaction Rules', icon: FileText },
+      { href: '/banking/dashboard', label: 'Dashboard', icon: LayoutGrid },
+      { href: '/banking/connections', label: 'Bank Connections', icon: LinkIcon },
+      { href: '/banking/review-transactions', label: 'Review Transactions', icon: FileCheck },
+      { href: '/banking/reconciliation', label: 'Reconciliation', icon: RefreshCw },
+      { href: '/banking/transfers', label: 'Transfers', icon: ArrowLeftRight },
+      { href: '/banking/rules', label: 'Transaction Rules', icon: FileText },
     ],
   },
   {
