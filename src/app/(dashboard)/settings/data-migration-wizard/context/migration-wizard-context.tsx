@@ -1,7 +1,7 @@
 
 "use client";
 
-import React, { createContext, useState, useContext, useMemo } from 'react';
+import React, { createContext, useState, useContext, useMemo, useCallback } from 'react';
 
 type ValidationResult = {
   valid: number;
@@ -35,16 +35,16 @@ export function MigrationWizardProvider({ children }: { children: React.ReactNod
     validationResults: null,
   });
 
-  const updateMigrationData = (updates: Partial<MigrationData>) => {
+  const updateMigrationData = useCallback((updates: Partial<MigrationData>) => {
     setMigrationData(prev => ({ ...prev, ...updates }));
-  };
+  }, []);
 
   const value = useMemo(() => ({
     currentStep,
     setCurrentStep,
     migrationData,
     updateMigrationData,
-  }), [currentStep, migrationData]);
+  }), [currentStep, migrationData, updateMigrationData]);
 
   return (
     <MigrationWizardContext.Provider value={value}>
