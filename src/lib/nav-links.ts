@@ -128,6 +128,7 @@ export const navLinks: NavLink[] = [
       { href: '/accounting', label: 'Accounting Dashboard', icon: LayoutGrid },
       { href: '/accounting/chart-of-accounts', label: 'Chart of Accounts', icon: FileStack },
       { href: '/accounting/journal-entries', label: 'Journal Entries', icon: FileText },
+      { href: '/accounting/job-costing', label: 'Job Costing', icon: CircleDollarSign },
       {
         label: 'Accounts Receivable',
         icon: CreditCard,
