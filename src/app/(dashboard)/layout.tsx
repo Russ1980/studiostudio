@@ -1,14 +1,17 @@
 import { AppShell } from '@/components/app-shell';
 import { SidebarProvider } from '@/components/ui/sidebar';
+import { getMockUser } from '@/lib/auth';
 
-export default function DashboardLayout({
+export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const user = await getMockUser();
+
   return (
     <SidebarProvider>
-      <AppShell>{children}</AppShell>
+      <AppShell user={user}>{children}</AppShell>
     </SidebarProvider>
   );
 }

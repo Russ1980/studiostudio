@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import {
   Card,
@@ -18,14 +16,12 @@ import {
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FileBarChart, PlusCircle } from "lucide-react";
+import { getRecentReports, getClients } from "@/lib/actions";
 
-const recentReports = [
-  { client: "Innovate Inc.", type: "Profit & Loss", period: "Last Quarter", generated: "2 days ago" },
-  { client: "Apex Solutions", type: "Balance Sheet", period: "YTD", generated: "1 week ago" },
-  { client: "QuantumLeap Co.", type: "Cash Flow Statement", period: "This Month", generated: "2 weeks ago" },
-];
+export default async function ReportingPage() {
+  const recentReports = await getRecentReports();
+  const clients = await getClients();
 
-export default function ReportingPage() {
   return (
     <div className="grid gap-6">
       <div className="flex items-center justify-between">
@@ -58,9 +54,9 @@ export default function ReportingPage() {
                         <Select>
                             <SelectTrigger><SelectValue placeholder="Select a client"/></SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="innovate">Innovate Inc.</SelectItem>
-                                <SelectItem value="apex">Apex Solutions</SelectItem>
-                                <SelectItem value="quantum">QuantumLeap Co.</SelectItem>
+                                {clients.map(client => (
+                                    <SelectItem key={client.id} value={client.id}>{client.businessName}</SelectItem>
+                                ))}
                             </SelectContent>
                         </Select>
                     </div>

@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import * as React from "react";
@@ -77,9 +78,11 @@ import {
   DollarSign,
   ChevronsLeft,
   Activity,
-  File as FileIcon
+  File as FileIcon,
+  User,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import type { User as UserType } from "@/lib/auth";
 
 function Breadcrumb() {
   const pathname = usePathname();
@@ -198,7 +201,7 @@ const StyledDropdownMenuItem = ({ href, icon: Icon, title, description, special 
   </DropdownMenuItem>
 );
 
-export function AppShell({ children }: { children: React.ReactNode }) {
+export function AppShell({ children, user }: { children: React.ReactNode, user: UserType }) {
   const pathname = usePathname();
   const { state, toggleSidebar } = useSidebar();
   const isCollapsed = state === "collapsed";
@@ -206,7 +209,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <>
       <Sidebar variant="sidebar" collapsible="icon" className="border-r bg-sidebar">
-        <SidebarHeader className="h-16 flex items-center p-3">
+        <SidebarHeader className="h-16 flex items-center p-3 border-b border-sidebar-border">
           <div className="flex w-full items-center justify-between">
             <div className="flex flex-1 items-center gap-2">
               <Logo className="size-8 text-primary" />
@@ -222,6 +225,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 </Badge>
               </Link>
             </div>
+             <SidebarTrigger className="group-data-[collapsible=icon]:hidden size-7 flex items-center justify-center rounded-full bg-sidebar-accent text-sidebar-accent-foreground">
+                <ChevronsLeft className="size-4" />
+            </SidebarTrigger>
           </div>
         </SidebarHeader>
 
@@ -242,10 +248,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 <span className="flex w-full items-center gap-2">
                   <Avatar className="h-7 w-7">
                     <AvatarFallback className="bg-primary text-primary-foreground">
-                      N
+                      {user.initials}
                     </AvatarFallback>
                   </Avatar>
-                  <span className="group-data-[collapsible=icon]:hidden">User</span>
+                  <span className="group-data-[collapsible=icon]:hidden">{user.name}</span>
                 </span>
                 <LogOut className="ml-auto group-data-[collapsible=icon]:hidden" />
               </SidebarMenuButton>
@@ -396,12 +402,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                     <DropdownMenuTrigger asChild>
                         <Button variant="secondary" className="flex items-center gap-2 p-1 pr-2 rounded-full h-auto">
                              <Avatar className="h-8 w-8 relative">
-                                <AvatarFallback className="bg-primary text-primary-foreground">SJ</AvatarFallback>
+                                <AvatarFallback className="bg-primary text-primary-foreground">{user.initials}</AvatarFallback>
                                 <div className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-green-500 border-2 border-background" />
                              </Avatar>
                              <div className="text-left hidden lg:block">
-                                <p className="text-sm font-medium leading-none">Sarah</p>
-                                <p className="text-xs text-muted-foreground">Admin</p>
+                                <p className="text-sm font-medium leading-none">{user.name.split(' ')[0]}</p>
+                                <p className="text-xs text-muted-foreground">{user.role}</p>
                              </div>
                         </Button>
                     </DropdownMenuTrigger>

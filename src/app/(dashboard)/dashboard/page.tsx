@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Card,
   CardContent,
@@ -13,8 +11,12 @@ import {
   Share2,
   Settings,
 } from "lucide-react";
+import { getMockUser } from "@/lib/auth";
 
-export default function DashboardPage() {
+
+export default async function DashboardPage() {
+  const user = await getMockUser();
+
   return (
     <div className="flex flex-col gap-6">
       <Card>
@@ -27,8 +29,8 @@ export default function DashboardPage() {
                 </AvatarFallback>
               </Avatar>
               <div>
-                <h2 className="text-xl font-bold">Sarah Johnson</h2>
-                <p className="text-muted-foreground">Financial Controller</p>
+                <h2 className="text-xl font-bold">{user.name}</h2>
+                <p className="text-muted-foreground">{user.title}</p>
               </div>
             </div>
             <div className="flex items-center gap-4 sm:gap-6">

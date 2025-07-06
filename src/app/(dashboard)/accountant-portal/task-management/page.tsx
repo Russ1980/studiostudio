@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import {
   Card,
@@ -19,14 +17,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PlusCircle } from "lucide-react";
-
-const tasks = [
-  { task: "Q2 Tax Filing", client: "Innovate Inc.", due: "2024-07-31", priority: "High", status: "In Progress" },
-  { task: "Monthly Bookkeeping", client: "Apex Solutions", due: "2024-07-25", priority: "Medium", status: "In Progress" },
-  { task: "Review Financials", client: "QuantumLeap Co.", due: "2024-07-28", priority: "Medium", status: "Done" },
-  { task: "Onboard New Client", client: "Momentum LLC", due: "2024-08-05", priority: "High", status: "Not Started" },
-  { task: "Follow up on Invoice #1024", client: "Stellar Goods", due: "2024-07-22", priority: "Low", status: "Done" },
-];
+import { getTasks } from "@/lib/actions";
 
 const priorityVariant: { [key: string]: "destructive" | "default" | "secondary" } = {
   High: "destructive",
@@ -40,7 +31,9 @@ const statusVariant: { [key: string]: "default" | "success" | "secondary" } = {
     "Not Started": "secondary",
 };
 
-export default function TaskManagementPage() {
+export default async function TaskManagementPage() {
+  const tasks = await getTasks();
+
   return (
     <div className="grid gap-6">
        <div className="flex items-center justify-between">
@@ -65,7 +58,7 @@ export default function TaskManagementPage() {
               <CardTitle>My Tasks</CardTitle>
             </CardHeader>
             <CardContent>
-              <TaskTable />
+              <TaskTable tasks={tasks}/>
             </CardContent>
           </Card>
         </TabsContent>
@@ -75,7 +68,7 @@ export default function TaskManagementPage() {
               <CardTitle>Team Tasks</CardTitle>
             </CardHeader>
             <CardContent>
-              <TaskTable />
+              <TaskTable tasks={tasks} />
             </CardContent>
           </Card>
         </TabsContent>
@@ -85,7 +78,7 @@ export default function TaskManagementPage() {
 }
 
 
-const TaskTable = () => (
+const TaskTable = ({ tasks }: { tasks: any[] }) => (
     <Table>
         <TableHeader>
         <TableRow>
@@ -103,10 +96,10 @@ const TaskTable = () => (
             <TableCell>{task.client}</TableCell>
             <TableCell>{task.due}</TableCell>
             <TableCell>
-                <Badge variant={priorityVariant[task.priority]}>{task.priority}</Badge>
+                <Badge variant={priorityVariant[task.priority as keyof typeof priorityVariant]}>{task.priority}</Badge>
             </TableCell>
             <TableCell>
-                <Badge variant={statusVariant[task.status]}>{task.status}</Badge>
+                <Badge variant={statusVariant[task.status as keyof typeof statusVariant]}>{task.status}</Badge>
             </TableCell>
             </TableRow>
         ))}
