@@ -44,6 +44,7 @@ import {
   Wand2,
   Calculator,
   CalendarDays,
+  BarChart4,
 } from 'lucide-react';
 
 export type NavLink = {
@@ -141,10 +142,11 @@ export const navLinks: NavLink[] = [
       {
         label: 'Production',
         icon: Building,
-        href: '/operations/production/work-orders',
+        href: '/operations/production/plans',
         items: [
-          { href: '/operations/production/work-orders', label: 'Work Orders', icon: FileText },
+          { href: '/operations/production/plans', label: 'Planning', icon: FileText },
           { href: '/operations/production/scheduling', label: 'Scheduling', icon: CalendarDays },
+          { href: '/operations/production/tracking', label: 'Tracking', icon: BarChart4 },
         ],
       },
       {
