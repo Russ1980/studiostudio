@@ -1,4 +1,5 @@
-"use client"; // Needs to be client for the demo button and controller
+
+"use client";
 
 import {
   Card,
@@ -16,22 +17,8 @@ import {
 import { getMockUser } from "@/lib/auth";
 import { OnboardingController } from "@/components/onboarding/onboarding-controller";
 import { DevTools } from "@/components/development/dev-tools";
-import { useOnboarding } from "@/hooks/use-onboarding";
 import { useEffect, useState } from "react";
 import type { User } from "@/lib/auth";
-
-
-// Onboarding Demo Component as requested
-const OnboardingDemo = () => {
-    const { startOnboarding } = useOnboarding();
-    return (
-        <div data-onboarding="start-tour">
-             <Button onClick={() => startOnboarding('business_owner')}>
-                Start Tour
-            </Button>
-        </div>
-    )
-}
 
 
 export default function DashboardPage() {
@@ -97,7 +84,6 @@ export default function DashboardPage() {
                <Button variant="outline">Run Payroll</Button>
                <Button variant="outline">Add a Bill</Button>
                <Button variant="outline">View Reports</Button>
-               <OnboardingDemo />
             </div>
           </CardContent>
         </Card>

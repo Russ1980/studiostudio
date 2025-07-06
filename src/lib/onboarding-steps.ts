@@ -1,3 +1,4 @@
+
 export interface OnboardingStep {
     id: string;
     title: string;
@@ -13,7 +14,7 @@ export interface OnboardingStep {
       id: 'welcome',
       title: 'Welcome to Mardisen Suite!',
       content: 'This short tour will guide you through the key features for your business.',
-      targetElement: '[data-onboarding="start-tour"]',
+      targetElement: '[data-onboarding="user-profile"]',
       placement: 'bottom',
     },
     {

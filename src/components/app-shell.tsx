@@ -451,7 +451,7 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
                 </Button>
                  <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button variant="secondary" className="flex items-center gap-2 p-1 pr-2 rounded-full h-auto">
+                        <Button variant="secondary" className="flex items-center gap-2 p-1 pr-2 rounded-full h-auto" data-onboarding="user-profile">
                              <Avatar className="h-8 w-8 relative">
                                 <AvatarFallback className="bg-primary text-primary-foreground">{user.initials}</AvatarFallback>
                                 <div className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-green-500 border-2 border-background" />
