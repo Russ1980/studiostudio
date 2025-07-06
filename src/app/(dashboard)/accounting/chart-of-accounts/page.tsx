@@ -137,7 +137,7 @@ export default function ChartOfAccountsPage() {
               </TableRow>
             </TableHeader>
             {Object.values(accountsData).map((category, i) => (
-                <Collapsible asChild defaultOpen key={i} tagName="tbody">
+                <Collapsible asChild defaultOpen key={i}>
                   <tbody>
                     <TableRow className="bg-muted/50 hover:bg-muted/50 font-bold">
                         <TableCell colSpan={4}>
