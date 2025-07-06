@@ -3,7 +3,7 @@
 
 import React, { createContext, useState, useContext, useMemo, useCallback } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { servaAIFlow } from '@/ai/flows/serva-flow';
+import { runServaAIFlow, type ServaAIOutput } from '@/ai/flows/serva-flow';
 
 export interface ConversationMessage {
   id: string;
@@ -12,7 +12,7 @@ export interface ConversationMessage {
   timestamp: Date;
   metadata?: {
     type?: 'text' | 'chart' | 'table';
-    data?: any;
+    payload?: any;
   };
 }
 
@@ -60,12 +60,14 @@ export function ServaAIProvider({ children }: { children: React.ReactNode }) {
     setIsProcessing(true);
 
     try {
-      const response = await servaAIFlow(query);
+      const response: ServaAIOutput = await runServaAIFlow(query);
+      
       const assistantMessage: ConversationMessage = {
         id: uuidv4(),
         role: 'assistant',
-        content: response,
+        content: response.response,
         timestamp: new Date(),
+        metadata: response.data ? { type: response.data.type, payload: response.data.payload } : undefined,
       };
       setMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
