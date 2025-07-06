@@ -30,6 +30,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
   DropdownMenuGroup,
+  DropdownMenuClose
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { navLinks, type NavLink } from "@/lib/nav-links";
@@ -38,7 +39,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { useToast } from "@/hooks/use-toast";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Bell,
   LogOut,
@@ -74,7 +75,9 @@ import {
   Download,
   CreditCard,
   DollarSign,
-  ChevronsLeft
+  ChevronsLeft,
+  Activity,
+  File as FileIcon
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -172,54 +175,33 @@ function renderNavLinks(
   ));
 }
 
+const StyledDropdownMenuItem = ({ href, icon: Icon, title, description, special = false }) => (
+  <DropdownMenuItem asChild className="p-0 focus:bg-transparent">
+    <Link
+      href={href}
+      className={cn(
+        "flex w-full items-center gap-3 rounded-lg border bg-card p-2.5 text-card-foreground transition-colors hover:border-primary hover:bg-primary/5 focus:outline-none focus:ring-2 focus:ring-ring",
+        special && "border-orange-500/50 bg-orange-500/10 hover:border-orange-500 hover:bg-orange-500/20"
+      )}
+    >
+      <div className={cn(
+          "flex h-8 w-8 shrink-0 items-center justify-center rounded-md",
+          special ? "bg-orange-500/20 text-orange-600" : "bg-primary/10 text-primary"
+      )}>
+        <Icon className="h-4 w-4" />
+      </div>
+      <div className="flex-1">
+        <p className="font-semibold text-sm">{title}</p>
+        <p className="text-xs text-muted-foreground truncate">{description}</p>
+      </div>
+    </Link>
+  </DropdownMenuItem>
+);
+
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [isCollapsed, setIsCollapsed] = React.useState(false);
-  const { toast } = useToast();
-
-  const handleActionClick = (action: string) => {
-    let description = "Action triggered.";
-    switch (action) {
-      case "save":
-        description = "Your document has been saved successfully.";
-        break;
-      case "saveAsTemplate":
-        description = "Coming soon: Save as template functionality.";
-        break;
-      case "exportPdf":
-        description = "Exporting to PDF...";
-        break;
-      case "exportExcel":
-        description = "Exporting to Excel...";
-        break;
-      case "shareEmail":
-        description = "Preparing to share via email...";
-        break;
-      case "shareLink":
-        description = "Coming soon: Share via link functionality.";
-        break;
-      case "signOut":
-        description = "Signing you out...";
-        break;
-      case "newBudget":
-        description = "Coming soon: New budget creation.";
-        break;
-      case "newGoal":
-        description = "Coming soon: New financial goal creation.";
-        break;
-      case "openRecent":
-        description = "Coming soon: Open recent documents.";
-        break;
-      default:
-        description = "This feature is coming soon.";
-        break;
-    }
-    toast({
-      title: "Action",
-      description: description,
-    });
-  };
-
+ 
   return (
     <SidebarProvider
       open={!isCollapsed}
@@ -286,71 +268,45 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                           <ChevronDown className="h-4 w-4" />
                         </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="start">
-                        <DropdownMenuGroup>
-                          <DropdownMenuLabel>Create New</DropdownMenuLabel>
-                          <DropdownMenuItem asChild>
-                              <Link href="/accounting/journal-entries/new"><FilePlus />New Transaction</Link>
-                          </DropdownMenuItem>
-                          <DropdownMenuItem asChild>
-                            <Link href="/reports-insights/builder"><FileBarChart />New Report</Link>
-                          </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => handleActionClick("newBudget")}><FileSpreadsheet />New Budget</DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => handleActionClick("newGoal")}><TrendingUp />New Financial Goal</DropdownMenuItem>
-                        </DropdownMenuGroup>
+                     <DropdownMenuContent align="start" className="w-80 p-0">
+                      <div className="flex items-center gap-3 p-3 border-b">
+                         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary">
+                            <FileIcon className="h-5 w-5" />
+                          </div>
+                          <div>
+                            <p className="font-semibold">File Menu</p>
+                            <p className="text-xs text-muted-foreground">Create, save, export, and import data</p>
+                          </div>
+                      </div>
+                      <ScrollArea className="h-96">
+                        <div className="p-2 space-y-1">
+                          <p className="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Create New</p>
+                          <StyledDropdownMenuItem href="/accounting/journal-entries/new" icon={FilePlus} title="New Transaction" description="Record a new journal entry." />
+                          <StyledDropdownMenuItem href="/reports-insights/builder" icon={FileBarChart} title="New Report" description="Build a custom report from scratch." />
+                          
+                          <p className="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Export</p>
+                          <StyledDropdownMenuItem href="/data-management/data-export" icon={FileOutput} title="Export Center" description="Export data to CSV, PDF, or Excel." />
+                         
+                          <p className="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Import Data</p>
+                           <StyledDropdownMenuItem href="/data-management/data-import" icon={FileInput} title="Import Wizard" description="Import data from external sources." />
+                           <StyledDropdownMenuItem href="/banking/connections" icon={Database} title="Connect Bank Data" description="Sync with your financial institutions." />
 
-                        <DropdownMenuSeparator />
-                        <DropdownMenuGroup>
-                            <DropdownMenuLabel>Current Document</DropdownMenuLabel>
-                            <DropdownMenuItem onClick={() => handleActionClick("openRecent")}><FolderOpen />Open Recent</DropdownMenuItem>
-                            <DropdownMenuItem asChild>
-                                <Link href="/communications/templates"><BookOpen />Open Templates</Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => handleActionClick("save")}><Save />Save Current</DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => handleActionClick("saveAsTemplate")}><FileCheck />Save As Template</DropdownMenuItem>
-                        </DropdownMenuGroup>
-                        
-                        <DropdownMenuSeparator />
-                        <DropdownMenuGroup>
-                          <DropdownMenuLabel>Export</DropdownMenuLabel>
-                           <DropdownMenuItem asChild>
-                                <Link href="/data-management/data-export"><FileOutput />Export Center</Link>
-                            </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => handleActionClick("exportPdf")}><FileText />Export to PDF</DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => handleActionClick("exportExcel")}><TableIcon />Export to Excel</DropdownMenuItem>
-                        </DropdownMenuGroup>
+                           <p className="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Print & Share</p>
+                           <DropdownMenuItem asChild className="p-0 focus:bg-transparent">
+                             <button onClick={() => window.print()} className="flex w-full items-center gap-3 rounded-lg border bg-card p-2.5 text-card-foreground transition-colors hover:border-primary hover:bg-primary/5 focus:outline-none focus:ring-2 focus:ring-ring">
+                                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"><Printer className="h-4 w-4" /></div>
+                                <div className="flex-1 text-left"><p className="font-semibold text-sm">Print Document</p><p className="text-xs text-muted-foreground truncate">Print the current view.</p></div>
+                             </button>
+                           </DropdownMenuItem>
 
-                        <DropdownMenuSeparator />
-                        <DropdownMenuGroup>
-                            <DropdownMenuLabel>Import Data</DropdownMenuLabel>
-                            <DropdownMenuItem asChild>
-                                <Link href="/data-management/data-import"><FileInput />Import Wizard</Link>
-                            </DropdownMenuItem>
-                             <DropdownMenuItem asChild>
-                                <Link href="/banking/connections"><Database />Import Bank Data</Link>
-                            </DropdownMenuItem>
-                        </DropdownMenuGroup>
-
-                        <DropdownMenuSeparator />
-                        <DropdownMenuGroup>
-                          <DropdownMenuLabel>Print & Share</DropdownMenuLabel>
-                          <DropdownMenuItem onClick={() => window.print()}><Printer />Print Document</DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => handleActionClick("shareEmail")}><Mail />Share via Email</DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => handleActionClick("shareLink")}><Share2 />Share via Link</DropdownMenuItem>
-                        </DropdownMenuGroup>
-
-                        <DropdownMenuSeparator />
-                         <DropdownMenuGroup>
-                            <DropdownMenuLabel>Settings</DropdownMenuLabel>
-                            <DropdownMenuItem asChild>
-                                <Link href="/settings/security"><Shield />Security Settings</Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem asChild>
-                                <Link href="/settings"><Settings />File Settings</Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem onClick={() => handleActionClick("signOut")}><LogOut />Sign Out</DropdownMenuItem>
-                         </DropdownMenuGroup>
+                           <p className="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Settings</p>
+                            <StyledDropdownMenuItem href="/settings" icon={Settings} title="File Settings" description="Adjust application-wide settings." />
+                        </div>
+                      </ScrollArea>
+                      <div className="p-2 border-t flex items-center justify-between text-xs text-muted-foreground">
+                        <span>10 actions available</span>
+                        <DropdownMenuClose asChild><button className="hover:text-foreground">Close</button></DropdownMenuClose>
+                      </div>
                     </DropdownMenuContent>
                 </DropdownMenu>
                  <DropdownMenu>
@@ -360,41 +316,48 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                             <ChevronDown className="h-4 w-4" />
                         </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="start">
-                      <DropdownMenuGroup>
-                        <DropdownMenuLabel>Banking Operations</DropdownMenuLabel>
-                        <DropdownMenuItem asChild><Link href="/banking/import-transactions"><Upload />Import Bank Transactions</Link></DropdownMenuItem>
-                        <DropdownMenuItem asChild><Link href="/banking/reconciliation"><Calculator />Run Bank Reconciliation</Link></DropdownMenuItem>
-                        <DropdownMenuItem asChild><Link href="/banking/accounts"><RefreshCw />Update Account Balances</Link></DropdownMenuItem>
-                      </DropdownMenuGroup>
-                      <DropdownMenuSeparator />
-                       <DropdownMenuGroup>
-                        <DropdownMenuLabel>Period Management</DropdownMenuLabel>
-                        <DropdownMenuItem asChild><Link href="/accounting/periods/close"><Clock />Close Accounting Period</Link></DropdownMenuItem>
-                        <DropdownMenuItem asChild><Link href="/accounting/periods/reopen"><RefreshCw />Reopen Period</Link></DropdownMenuItem>
-                      </DropdownMenuGroup>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuGroup>
-                        <DropdownMenuLabel>Financial Reporting</DropdownMenuLabel>
-                        <DropdownMenuItem asChild><Link href="/reports-insights/financial-reports"><BarChart3 />Generate Financial Statements</Link></DropdownMenuItem>
-                        <DropdownMenuItem asChild><Link href="/reports/trial-balance"><Download />Export Trial Balance</Link></DropdownMenuItem>
-                        <DropdownMenuItem asChild><Link href="/reports-insights/dashboard"><TrendingUp />Performance Analytics</Link></DropdownMenuItem>
-                      </DropdownMenuGroup>
-                       <DropdownMenuSeparator />
-                       <DropdownMenuGroup>
-                        <DropdownMenuLabel>Client Operations</DropdownMenuLabel>
-                        <DropdownMenuItem asChild><Link href="/client-management/invoicing/batch"><Mail />Send Monthly Invoices</Link></DropdownMenuItem>
-                        <DropdownMenuItem asChild><Link href="/payments/process"><CreditCard />Process Payments</Link></DropdownMenuItem>
-                        <DropdownMenuItem asChild><Link href="/client-management/billing"><DollarSign />Update Client Billing</Link></DropdownMenuItem>
-                        <DropdownMenuItem asChild><Link href="/compliance/clients"><Shield />Client Compliance Check</Link></DropdownMenuItem>
-                      </DropdownMenuGroup>
-                       <DropdownMenuSeparator />
-                      <DropdownMenuGroup>
-                        <DropdownMenuLabel>Data Management</DropdownMenuLabel>
-                        <DropdownMenuItem asChild><Link href="/data-management/backup-restore"><Database />Backup Database</Link></DropdownMenuItem>
-                        <DropdownMenuItem asChild><Link href="/accounting/chart-of-accounts/import"><Upload />Import Chart of Accounts</Link></DropdownMenuItem>
-                        <DropdownMenuItem asChild><Link href="/reports/validation"><FileText />Data Validation Report</Link></DropdownMenuItem>
-                      </DropdownMenuGroup>
+                     <DropdownMenuContent align="start" className="w-80 p-0">
+                      <div className="flex items-center gap-3 p-3 border-b">
+                         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary">
+                            <Activity className="h-5 w-5" />
+                          </div>
+                          <div>
+                            <p className="font-semibold">Quick Actions</p>
+                            <p className="text-xs text-muted-foreground">Common business operations</p>
+                          </div>
+                      </div>
+                      <ScrollArea className="h-96">
+                        <div className="p-2 space-y-1">
+                          <p className="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Banking Operations</p>
+                          <StyledDropdownMenuItem href="/banking/import-transactions" icon={Upload} title="Import Bank Transactions" description="Import and categorize bank..." />
+                          <StyledDropdownMenuItem href="/banking/reconciliation" icon={Calculator} title="Run Bank Reconciliation" description="Reconcile bank accounts and..." />
+                          <StyledDropdownMenuItem href="/banking/accounts" icon={RefreshCw} title="Update Account Balances" description="Refresh all account balance..." />
+
+                          <p className="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Period Management</p>
+                          <StyledDropdownMenuItem href="/accounting/periods/close" icon={Clock} title="Close Accounting Period" description="Close current period and finalize..." special />
+                          <StyledDropdownMenuItem href="/accounting/periods/reopen" icon={RefreshCw} title="Reopen Period" description="Reopen previously closed period" />
+                          
+                          <p className="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Financial Reporting</p>
+                          <StyledDropdownMenuItem href="/reports-insights/financial-reports" icon={BarChart3} title="Generate Financial Statements" description="Create P&L, Balance Sheets, etc." />
+                          <StyledDropdownMenuItem href="/reports/trial-balance" icon={Download} title="Export Trial Balance" description="Download the current trial balance." />
+                          <StyledDropdownMenuItem href="/reports-insights/dashboard" icon={TrendingUp} title="Performance Analytics" description="View financial performance." />
+
+                          <p className="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Client Operations</p>
+                          <StyledDropdownMenuItem href="/client-management/invoicing/batch" icon={Mail} title="Send Monthly Invoices" description="Batch send invoices to clients." />
+                          <StyledDropdownMenuItem href="/payments/process" icon={CreditCard} title="Process Payments" description="Process incoming client payments." />
+                          <StyledDropdownMenuItem href="/client-management/billing" icon={DollarSign} title="Update Client Billing" description="Manage client subscriptions." />
+                          <StyledDropdownMenuItem href="/compliance/clients" icon={Shield} title="Client Compliance Check" description="Verify client compliance status." />
+
+                           <p className="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Data Management</p>
+                          <StyledDropdownMenuItem href="/data-management/backup-restore" icon={Database} title="Backup Database" description="Create a new system backup." />
+                          <StyledDropdownMenuItem href="/accounting/chart-of-accounts/import" icon={Upload} title="Import Chart of Accounts" description="Import from a file." />
+                          <StyledDropdownMenuItem href="/reports/validation" icon={FileText} title="Data Validation Report" description="Check for data inconsistencies." />
+                        </div>
+                      </ScrollArea>
+                      <div className="p-2 border-t flex items-center justify-between text-xs text-muted-foreground">
+                        <span>15 actions available</span>
+                        <DropdownMenuClose asChild><button className="hover:text-foreground">Close</button></DropdownMenuClose>
+                      </div>
                     </DropdownMenuContent>
                 </DropdownMenu>
           </div>
