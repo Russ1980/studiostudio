@@ -51,7 +51,8 @@ import {
   PieChart,
   SlidersHorizontal,
   Zap,
-  CalendarClock
+  CalendarClock,
+  MessageSquare,
 } from 'lucide-react';
 
 export type NavLink = {
@@ -154,6 +155,7 @@ export const navLinks: NavLink[] = [
           { href: '/operations/production/plans', label: 'Planning', icon: FileText },
           { href: '/operations/production/scheduling', label: 'Scheduling', icon: CalendarDays },
           { href: '/operations/production/tracking', label: 'Tracking', icon: BarChart4 },
+          { href: '/operations/production/work-orders', label: 'Work Orders', icon: ClipboardList },
         ],
       },
       {
@@ -216,13 +218,13 @@ export const navLinks: NavLink[] = [
   },
   {
     label: 'Communications',
-    icon: Mail,
+    icon: MessageSquare,
     href: '/communications',
     items: [
-      { href: '#', label: 'Email Center', icon: Mail },
-      { href: '#', label: 'Notifications', icon: Bell },
-      { href: '#', label: 'Templates', icon: FileStack },
-      { href: '#', label: 'Automation', icon: Wrench },
+      { href: '/communications/email-center', label: 'Email Center', icon: Mail },
+      { href: '/communications/notifications', label: 'Notifications', icon: Bell },
+      { href: '/communications/templates', label: 'Templates', icon: FileText },
+      { href: '/communications/automation', label: 'Automation', icon: Wrench },
     ],
   },
   {
