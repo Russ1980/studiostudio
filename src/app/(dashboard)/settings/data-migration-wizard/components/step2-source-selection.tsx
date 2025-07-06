@@ -1,4 +1,6 @@
 
+"use client";
+
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Database, FileUp, Zap } from "lucide-react";
@@ -8,6 +10,7 @@ import { cn } from "@/lib/utils";
 
 const sources = [
     { name: "QuickBooks Online", logo: "https://placehold.co/40x40.png", hint: "quickbooks logo" },
+    { name: "QuickBooks Desktop", logo: "https://placehold.co/40x40.png", hint: "quickbooks logo" },
     { name: "Xero", logo: "https://placehold.co/40x40.png", hint: "xero logo" },
     { name: "FreshBooks", logo: "https://placehold.co/40x40.png", hint: "freshbooks logo" },
 ];
@@ -49,9 +52,9 @@ export function Step2SourceSelection() {
         </Card>
       </div>
 
-       <div className="w-full max-w-3xl mt-8">
+       <div className="w-full max-w-5xl mt-8">
             <h3 className="font-semibold text-center mb-4 text-muted-foreground">Or connect to a cloud accounting platform:</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                  {sources.map(source => (
                     <Card 
                         key={source.name} 

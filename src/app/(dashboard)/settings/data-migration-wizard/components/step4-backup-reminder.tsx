@@ -20,7 +20,17 @@ const backupInstructions = {
         image: "https://placehold.co/600x300.png",
         hint: "quickbooks screenshot"
     },
-    "Xero": {
+    "QuickBooks Desktop": {
+        steps: [
+            "1. In QuickBooks Desktop, go to the File menu and select 'Back Up Company'.",
+            "2. Choose 'Create Local Backup' and follow the prompts.",
+            "3. Save the backup file (.qbb) in a secure location.",
+            "4. You will also need to use the Web Connector or an exporter tool to get data files (.iif, .csv)."
+        ],
+        image: "https://placehold.co/600x300.png",
+        hint: "quickbooks desktop screenshot"
+    },
+     "Xero": {
         steps: [
             "1. Log in to your Xero account.",
             "2. Go to Accounting > Advanced > Export accounting data.",

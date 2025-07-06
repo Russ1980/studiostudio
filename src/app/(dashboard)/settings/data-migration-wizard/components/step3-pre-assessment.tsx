@@ -14,6 +14,11 @@ export function Step3PreAssessment() {
       volume: "~15,800 records",
       issues: ["Custom fields will not be migrated."],
     },
+    "QuickBooks Desktop": {
+      connection: "Via File Upload",
+      volume: "Depends on company file size",
+      issues: ["Requires QuickBooks Desktop Exporter tool.", "Only list and transaction data supported."],
+    },
     "Xero": {
         connection: "Success",
         volume: "~8,200 records",
