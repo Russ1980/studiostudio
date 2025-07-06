@@ -7,7 +7,15 @@ import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Wand2, User } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import {
   ChartContainer,
   ChartTooltip,
@@ -57,6 +65,42 @@ function ServaChart({ payload }: { payload: any }) {
     );
 }
 
+function ServaTable({ payload }: { payload: any }) {
+    if (!payload?.headers || !payload?.rows) {
+        return <p className="text-xs text-destructive">Table data is missing or invalid.</p>
+    }
+
+    return (
+        <Card className="mt-2 bg-card/80">
+            {payload.title && (
+                <CardHeader className="p-2">
+                    <CardTitle className="text-sm">{payload.title}</CardTitle>
+                </CardHeader>
+            )}
+            <CardContent className="p-0">
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            {payload.headers.map((header: string, index: number) => (
+                                <TableHead key={index} className="h-8">{header}</TableHead>
+                            ))}
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {payload.rows.map((row: string[], rowIndex: number) => (
+                            <TableRow key={rowIndex}>
+                                {row.map((cell: string, cellIndex: number) => (
+                                    <TableCell key={cellIndex} className="py-1">{cell}</TableCell>
+                                ))}
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </CardContent>
+        </Card>
+    );
+}
+
 function Message({ message }: { message: ConversationMessage }) {
   const isAssistant = message.role === 'assistant';
   return (
@@ -85,6 +129,7 @@ function Message({ message }: { message: ConversationMessage }) {
       >
         <p className="whitespace-pre-wrap">{message.content}</p>
         {message.metadata?.type === 'chart' && <ServaChart payload={message.metadata.payload} />}
+        {message.metadata?.type === 'table' && <ServaTable payload={message.metadata.payload} />}
       </div>
        {!isAssistant && (
         <Avatar className="h-10 w-10 shrink-0 border bg-secondary">

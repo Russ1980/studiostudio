@@ -10,6 +10,7 @@
 import { ai } from '@/ai/genkit';
 import { z } from 'genkit';
 import { getStockPrice } from '../tools/get-stock-price';
+import { generateSalesReport } from '../tools/generate-sales-report';
 
 // Mock chart data for demonstration
 const mockRevenueChartData = {
@@ -49,8 +50,8 @@ const servaAIFlow = ai.defineFlow(
     outputSchema: ServaAIOutputSchema,
   },
   async (query) => {
-    // Simple logic to demonstrate rich media response.
-    // In a real app, this would involve more sophisticated intent detection and data fetching.
+    // This is a simple intent detection for demonstration.
+    // A more advanced system would use the LLM to route to different tools or chains.
     if (query.toLowerCase().includes('revenue trends')) {
         return {
             response: "Here are the revenue trends for the last six months. As you can see, there's a steady upward trend.",
@@ -59,15 +60,19 @@ const servaAIFlow = ai.defineFlow(
     }
 
     const llmResponse = await ai.generate({
-      prompt: `You are Serva AI, an expert financial assistant integrated into the Mardisen Suite. Your tone is professional, helpful, and concise. You can analyze data and provide insights.
+      prompt: `You are Serva AI, an expert financial assistant integrated into the Mardisen Suite. Your tone is professional, helpful, and concise. You can analyze data, provide insights, and generate reports.
       
       User query: "${query}"
       
-      If the user's question asks about a public company's stock price, use the getStockPrice tool to get the current price and include it in your answer.`,
-      tools: [getStockPrice]
+      Instructions:
+      - If the user's question asks about a public company's stock price, use the getStockPrice tool to get the current price and include it in your answer.
+      - If the user asks for a sales report, use the generateSalesReport tool. When you use this tool, place its full output into the 'data.payload' field and set 'data.type' to 'table'. Your text 'response' should be a brief confirmation, like "Here is the sales report you requested."
+      - For all other queries, provide a text-based response.`,
+      tools: [getStockPrice, generateSalesReport],
+      output: { schema: ServaAIOutputSchema, format: 'json' },
     });
 
-    return { response: llmResponse.text };
+    return llmResponse.output!;
   }
 );
 
