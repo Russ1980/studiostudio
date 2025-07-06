@@ -63,6 +63,7 @@ import {
   mockSalesByItemData,
   mockTaxSummaryData,
   mockExpenseAnalyticsData,
+  mockProjectsDashboardData,
 } from './data';
 
 const simulateDelay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
@@ -233,10 +234,6 @@ export async function getSchedulingData() {
     await simulateDelay(50);
     return mockScheduling;
 }
-export async function getJobs() {
-  await simulateDelay(50);
-  return mockJobs;
-}
 export async function getJobCostingDashboardData() {
   await simulateDelay(50);
   return mockJobCostingDashboard;
@@ -244,10 +241,6 @@ export async function getJobCostingDashboardData() {
 export async function getJobDetails(id: string) {
   await simulateDelay(50);
   return mockJobsWithDetails.find(job => job.id === id) || null;
-}
-export async function getTimeLogs() {
-    await simulateDelay(50);
-    return mockTimeLogs;
 }
 export async function getJobProfitabilityData() {
     await simulateDelay(50);
@@ -313,4 +306,18 @@ export async function getLearningResources() {
 export async function getTradingData() {
     await simulateDelay(50);
     return mockTradingData;
+}
+
+// Projects
+export async function getProjectsDashboardData() {
+  await simulateDelay(50);
+  return mockProjectsDashboardData;
+}
+export async function getJobs() {
+  await simulateDelay(50);
+  return mockJobs;
+}
+export async function getTimeLogs() {
+    await simulateDelay(50);
+    return mockTimeLogs;
 }

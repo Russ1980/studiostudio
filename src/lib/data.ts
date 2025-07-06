@@ -2,7 +2,7 @@
 // This file contains mock data for the entire application.
 // In a real application, this data would be fetched from a database.
 
-import { v4 as uuidv4 } from 'uuid';
+import { Activity, Clock, DollarSign, ListChecks, LucideIcon, v4 as uuidv4 } from 'uuid';
 
 // Accountant Portal
 export const mockClients = [
@@ -636,6 +636,26 @@ export const mockTradingData = {
     { id: 1, type: "Buy", ticker: "AAPL", shares: 50, price: 150.00, date: "2023-10-01" },
     { id: 2, type: "Buy", ticker: "NVDA", shares: 25, price: 800.00, date: "2024-02-15" },
     { id: 3, type: "Sell", ticker: "TSLA", shares: 10, price: 200.00, date: "2024-04-20" },
+  ]
+};
+
+// Projects
+export const mockProjectsDashboardData = {
+  kpiData: [
+    { title: "Active Projects", value: "3", icon: Activity },
+    { title: "Overall Profitability", value: "$4,000", icon: DollarSign, isPositive: true },
+    { title: "Total Billable Hours", value: "1,240", icon: Clock },
+    { title: "Tasks Overdue", value: "2", icon: ListChecks, isPositive: false },
+  ],
+  projectBudgetData: [
+    { name: "Website Redesign", budget: 25000, actual: 18000 },
+    { name: "Marketing Campaign", budget: 50000, actual: 20000 },
+    { name: "Hardware Prototype", budget: 75000, actual: 78000 },
+  ],
+  recentTimeLogs: [
+    { employee: "Liam Johnson", project: "Website Redesign", hours: 8, date: "2024-07-22" },
+    { employee: "Emma Brown", project: "Hardware Prototype", hours: 6, date: "2024-07-22" },
+    { employee: "Olivia Smith", project: "Marketing Campaign", hours: 4, date: "2024-07-21" },
   ]
 };
 

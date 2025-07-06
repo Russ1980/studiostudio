@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Card,
   CardContent,
@@ -25,13 +23,7 @@ import {
 import { MoreHorizontal, PlusCircle } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import Link from "next/link";
-
-const projects = [
-  { id: "PROJ-001", name: "Website Redesign", client: "Innovate Inc.", status: "In Progress", budget: 25000, spent: 18000, profitability: 7000 },
-  { id: "PROJ-002", name: "Q3 Marketing Campaign", client: "Apex Solutions", status: "On Hold", budget: 50000, spent: 20000, profitability: 30000 },
-  { id: "PROJ-003", name: "Mobile App Development", client: "QuantumLeap Co.", status: "Completed", budget: 120000, spent: 115000, profitability: 5000 },
-  { id: "PROJ-004", name: "Hardware Prototyping", client: "Stellar Goods", status: "In Progress", budget: 75000, spent: 78000, profitability: -3000 },
-];
+import { getJobs } from "@/lib/actions";
 
 const statusVariant: { [key: string]: "success" | "default" | "secondary" } = {
   "In Progress": "default",
@@ -39,7 +31,9 @@ const statusVariant: { [key: string]: "success" | "default" | "secondary" } = {
   "Completed": "success",
 };
 
-export default function AllProjectsPage() {
+export default async function AllProjectsPage() {
+  const projects = await getJobs();
+
   return (
     <div className="grid gap-6">
       <div className="flex items-center justify-between">
@@ -74,9 +68,9 @@ export default function AllProjectsPage() {
               {projects.map((project) => (
                 <TableRow key={project.id}>
                   <TableCell className="font-medium">{project.name}</TableCell>
-                  <TableCell>{project.client}</TableCell>
+                  <TableCell>{project.customer}</TableCell>
                   <TableCell>
-                    <Badge variant={statusVariant[project.status]}>{project.status}</Badge>
+                    <Badge variant={statusVariant[project.status as keyof typeof statusVariant]}>{project.status}</Badge>
                   </TableCell>
                   <TableCell>
                     <div className="flex flex-col gap-1">
@@ -86,7 +80,7 @@ export default function AllProjectsPage() {
                       </span>
                     </div>
                   </TableCell>
-                  <TableCell className={project.profitability > 0 ? 'text-success' : 'text-destructive'}>
+                  <TableCell className={project.profitability >= 0 ? 'text-success' : 'text-destructive'}>
                     ${project.profitability.toLocaleString()}
                   </TableCell>
                   <TableCell className="text-right">
