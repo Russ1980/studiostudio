@@ -33,6 +33,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { PlusCircle, MoreHorizontal, ChevronDown, Download, Upload } from "lucide-react";
 import React from "react";
+import { cn } from "@/lib/utils";
 
 const accountsData = {
   assets: {
@@ -132,23 +133,22 @@ export default function ChartOfAccountsPage() {
                 <TableHead className="w-16 text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
-            <TableBody>
-              {Object.values(accountsData).map((category, i) => (
-                <Collapsible asChild defaultOpen key={i}>
-                  <>
+            {Object.values(accountsData).map((category, i) => (
+                <Collapsible asChild defaultOpen key={i} tagName="tbody">
+                  <tbody>
                     <TableRow className="bg-muted/50 hover:bg-muted/50 font-bold">
-                      <TableCell colSpan={4}>
-                         <CollapsibleTrigger className="flex w-full items-center gap-2">
-                           {category.name}
-                          <ChevronDown className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
-                        </CollapsibleTrigger>
-                      </TableCell>
-                       <TableCell className="text-right">${Number(category.balance).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</TableCell>
-                       <TableCell></TableCell>
-                       <TableCell></TableCell>
+                        <TableCell colSpan={4}>
+                            <CollapsibleTrigger className="flex w-full items-center gap-2">
+                                {category.name}
+                                <ChevronDown className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
+                            </CollapsibleTrigger>
+                        </TableCell>
+                        <TableCell className="text-right">${Number(category.balance).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
                     </TableRow>
                     <CollapsibleContent asChild>
-                      <>
+                      <React.Fragment>
                         {category.accounts.map((account, j) => (
                            <React.Fragment key={j}>
                              <AccountRow account={account} isSubAccount={false} />
@@ -157,12 +157,11 @@ export default function ChartOfAccountsPage() {
                              ))}
                            </React.Fragment>
                         ))}
-                      </>
+                      </React.Fragment>
                     </CollapsibleContent>
-                  </>
+                  </tbody>
                 </Collapsible>
               ))}
-            </TableBody>
           </Table>
         </CardContent>
       </Card>
