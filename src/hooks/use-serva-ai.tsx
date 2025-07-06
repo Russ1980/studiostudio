@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { createContext, useState, useContext, useMemo, useCallback } from 'react';
@@ -19,6 +20,7 @@ interface ServaAIContextType {
   isOpen: boolean;
   messages: ConversationMessage[];
   isProcessing: boolean;
+  recentTasks: string[];
   openServaAI: () => void;
   closeServaAI: () => void;
   processQuery: (query: string) => Promise<void>;
@@ -27,15 +29,24 @@ interface ServaAIContextType {
 
 const ServaAIContext = createContext<ServaAIContextType | null>(null);
 
+const initialMessage: ConversationMessage = {
+    id: uuidv4(),
+    role: 'assistant',
+    content: "Hello! I'm Serva AI. How can I help you today? You can ask me to summarize reports, analyze trends, or find information.",
+    timestamp: new Date(),
+};
+
+
 export function ServaAIProvider({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<ConversationMessage[]>([]);
+  const [messages, setMessages] = useState<ConversationMessage[]>([initialMessage]);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [recentTasks, setRecentTasks] = useState<string[]>([]);
 
   const openServaAI = () => setIsOpen(true);
   const closeServaAI = () => setIsOpen(false);
 
-  const clearConversation = () => setMessages([]);
+  const clearConversation = () => setMessages([initialMessage]);
 
   const processQuery = useCallback(async (query: string) => {
     const userMessage: ConversationMessage = {
@@ -45,6 +56,7 @@ export function ServaAIProvider({ children }: { children: React.ReactNode }) {
       timestamp: new Date(),
     };
     setMessages(prev => [...prev, userMessage]);
+    setRecentTasks(prev => [query, ...prev].slice(0, 5));
     setIsProcessing(true);
 
     try {
@@ -74,11 +86,12 @@ export function ServaAIProvider({ children }: { children: React.ReactNode }) {
     isOpen,
     messages,
     isProcessing,
+    recentTasks,
     openServaAI,
     closeServaAI,
     processQuery,
     clearConversation,
-  }), [isOpen, messages, isProcessing, processQuery]);
+  }), [isOpen, messages, isProcessing, recentTasks, processQuery]);
 
   return (
     <ServaAIContext.Provider value={value}>
