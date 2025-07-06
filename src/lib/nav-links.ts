@@ -288,6 +288,7 @@ export const navLinks: NavLink[] = [
       { href: '/reports-insights/financial-reports', label: 'Financial Reports', icon: FileBarChart, onboardingId: 'financial-reports-link' },
       { href: '/reports-insights/sales-analytics', label: 'Sales Analytics', icon: LineChart },
       { href: '/reports-insights/expense-analytics', label: 'Expense Analytics', icon: PieChart },
+      { href: '/reports-insights/summarization-tools', label: 'AI Summarization', icon: Wand2 },
       { href: '/reports-insights/builder', label: 'Report Builder', icon: SlidersHorizontal },
       { href: '/reports-insights/forecasting', label: 'Forecasting', icon: Zap },
       { href: '/reports-insights/scheduled-reports', label: 'Scheduled Reports', icon: CalendarClock },
