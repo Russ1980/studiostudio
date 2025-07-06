@@ -468,7 +468,12 @@ export const mockPayrollDashboard = {
       { title: "Run Payroll: June 16-30", deadline: "Due in 3 days", priority: "High" },
       { title: "Approve Timesheets", deadline: "Due in 2 days", priority: "High" },
       { title: "Submit Federal Tax Deposit", deadline: "Due in 1 week", priority: "Medium" },
-  ]
+  ],
+  currentPayRun: {
+      progress: 25,
+      nextStep: "Review Calculations",
+      employees: 73,
+  }
 };
 
 export const mockEmployees = [
