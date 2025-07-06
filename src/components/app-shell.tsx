@@ -89,6 +89,7 @@ import {
   ChevronsLeft,
   ChevronsRight,
   PanelLeft,
+  Copy,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { User as UserType } from "@/lib/auth";
@@ -431,10 +432,22 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
                   <UserPlus className="h-5 w-5" />
                   <span className="sr-only">Add User</span>
                 </Button>
-                <Button variant="ghost" size="icon" className="rounded-full">
-                  <RefreshCw className="h-5 w-5" />
-                  <span className="sr-only">Refresh</span>
-                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon" className="rounded-full">
+                      <Copy className="h-5 w-5" />
+                      <span className="sr-only">Open new window</span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem onClick={() => window.open(window.location.origin, '_blank')}>
+                      New Window
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => window.open(window.location.href, '_blank')}>
+                      Duplicate Window
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
                 <Separator orientation="vertical" className="h-6 mx-1" />
                 <Button variant="ghost" size="icon" className="rounded-full">
                   <Moon className="h-5 w-5" />
