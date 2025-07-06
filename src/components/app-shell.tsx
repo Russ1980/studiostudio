@@ -5,7 +5,6 @@ import * as React from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import {
-  SidebarProvider,
   Sidebar,
   SidebarHeader,
   SidebarContent,
@@ -16,6 +15,7 @@ import {
   SidebarTrigger,
   SidebarInset,
   SidebarMenuSub,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import {
   Collapsible,
@@ -199,13 +199,11 @@ const StyledDropdownMenuItem = ({ href, icon: Icon, title, description, special 
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const [isCollapsed, setIsCollapsed] = React.useState(false);
+  const { state, toggleSidebar } = useSidebar();
+  const isCollapsed = state === "collapsed";
  
   return (
-    <SidebarProvider
-      open={!isCollapsed}
-      onOpenChange={(open) => setIsCollapsed(!open)}
-    >
+    <>
       <Sidebar variant="sidebar" collapsible="icon" className="border-r bg-sidebar">
         <SidebarHeader className="h-16 flex items-center p-3 border-b border-sidebar-border">
             <div className="flex w-full items-center justify-between">
@@ -213,13 +211,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                     <Logo className="size-8 text-primary" />
                     <Link href="/dashboard" className="flex items-center group-data-[collapsible=icon]:hidden">
                     <span className="font-semibold text-sidebar-foreground">
-                        FinView
+                        Mardisen
                     </span>
                     <Badge
                         variant="outline"
                         className="ml-2 border-sidebar-border bg-sidebar-accent text-sidebar-accent-foreground"
                     >
-                        Reimagined
+                        SUITE
                     </Badge>
                     </Link>
                 </div>
@@ -436,6 +434,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </div>
         </main>
       </SidebarInset>
-    </SidebarProvider>
+    </>
   );
 }

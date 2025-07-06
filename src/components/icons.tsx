@@ -5,7 +5,7 @@ export function Logo(props: SVGProps<SVGSVGElement>) {
     <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" {...props}>
       <rect width="40" height="40" rx="8" fill="currentColor" />
       <path
-        d="M12 28V12H17.2L22.4 20L27.6 12H32.8V28H28.4V17L22.4 25L16.4 17V28H12Z"
+        d="M13 28V12h6l5 10 5-10h6v16h-4.5V17.5L25 27l-5.5-9.5V28H13z"
         fill="white"
       />
     </svg>
