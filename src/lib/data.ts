@@ -171,6 +171,61 @@ export const mockExpenseAnalyticsData = {
     ]
 };
 
+export const mockTrialBalanceData = {
+    accounts: [
+      { name: "Cash", debit: 1250320.50, credit: 0 },
+      { name: "Accounts Receivable", debit: 245800.00, credit: 0 },
+      { name: "Inventory", debit: 1234567.89, credit: 0 },
+      { name: "Fixed Assets", debit: 74250.00, credit: 0 },
+      { name: "Accounts Payable", debit: 0, credit: 88450.00 },
+      { name: "Credit Card Payable", debit: 0, credit: 12500.00 },
+      { name: "Owner's Equity", debit: 0, credit: 1053520.50 },
+      { name: "Retained Earnings", debit: 0, credit: 430100.00 },
+      { name: "Sales Revenue", debit: 0, credit: 1200500.00 },
+      { name: "Cost of Goods Sold", debit: 450000.00, credit: 0 },
+      { name: "Operating Expenses", debit: 320400.00, credit: 0 },
+    ],
+    get totals() {
+      return this.accounts.reduce(
+        (acc, account) => {
+          acc.debit += account.debit;
+          acc.credit += account.credit;
+          return acc;
+        },
+        { debit: 0, credit: 0 }
+      );
+    },
+};
+
+export const mockSalesAnalyticsData = {
+    kpiData: [
+        { title: "Total Sales (YTD)", value: "$4.2M", change: "+12.5%" },
+        { title: "Avg. Deal Size", value: "$12,850", change: "+3.2%" },
+        { title: "Conversion Rate", value: "28%", change: "-1.1%" },
+        { title: "Sales Cycle", value: "42 Days", change: "-5 days" },
+    ],
+    salesOverTime: [
+        { month: 'Jan', sales: 350000 },
+        { month: 'Feb', sales: 380000 },
+        { month: 'Mar', sales: 410000 },
+        { month: 'Apr', sales: 400000 },
+        { month: 'May', sales: 450000 },
+        { month: 'Jun', sales: 480000 },
+    ],
+    topPerformers: [
+        { name: "Olivia Smith", sales: 850000, avatar: "OS" },
+        { name: "Noah Williams", sales: 720000, avatar: "NW" },
+        { name: "Liam Johnson", sales: 680000, avatar: "LJ" },
+    ]
+};
+
+export const mockDataValidationResults = [
+    { id: 'V001', category: 'General Ledger', issue: 'Unbalanced Journal Entry #JE-003', severity: 'Error', details: 'Debits do not equal credits.' },
+    { id: 'V002', category: 'Invoicing', issue: 'Invoice #INV-2024-049 is 32 days overdue', severity: 'Warning', details: 'Customer: Momentum LLC' },
+    { id: 'V003', category: 'Bills', issue: 'Bill from Marketing Agency Co. is 15 days overdue', severity: 'Warning', details: 'Amount: $10,500.00' },
+    { id: 'V004', category: 'Data Integrity', issue: '5 transactions are missing a category', severity: 'Error', details: 'These transactions cannot be included in financial reports.' },
+];
+
 
 // Accounting
 export const mockAccountingDashboard = {
@@ -447,6 +502,16 @@ export const mockScheduling = {
       { name: "Peter Jones", role: "Assembly Lead", avatar: "PJ"},
   ]
 };
+export const mockShipments = [
+    { id: "SH-001", orderId: "SO-1234", carrier: "FedEx", tracking: "784512345678", status: "In Transit", origin: "San Francisco, CA", destination: "New York, NY", estDelivery: "2024-07-25" },
+    { id: "SH-002", orderId: "SO-1235", carrier: "UPS", tracking: "1Z9876543210", status: "Delivered", origin: "San Francisco, CA", destination: "Chicago, IL", estDelivery: "2024-07-21" },
+    { id: "SH-003", orderId: "PO-00125", carrier: "Freight", tracking: "FR-9876", status: "Out for Delivery", origin: "Los Angeles, CA", destination: "San Francisco, CA", estDelivery: "2024-07-23" },
+];
+export const mockMaintenanceTasks = [
+    { id: 'M-001', asset: 'CNC Mill', type: 'Preventive', status: 'Completed', scheduledDate: '2024-07-15', completedDate: '2024-07-15' },
+    { id: 'M-002', asset: 'Forklift', type: 'Corrective', status: 'In Progress', scheduledDate: '2024-07-22', completedDate: null },
+    { id: 'M-003', asset: 'Laser Cutter', type: 'Preventive', status: 'Scheduled', scheduledDate: '2024-08-01', completedDate: null },
+];
 
 // Payroll
 export const mockPayrollDashboard = {
@@ -763,5 +828,33 @@ export const mockWipReportData = [
   }
 ];
 
+// Client Management
+export const mockClientBillingData = [
+    { id: "1", clientName: "Innovate Inc.", plan: "Professional", status: "Active", nextBilling: "2024-08-01", amount: 99.00 },
+    { id: "2", clientName: "Apex Solutions", plan: "Enterprise", status: "Active", nextBilling: "2024-08-01", amount: 299.00 },
+    { id: "3", clientName: "QuantumLeap Co.", plan: "Standard", status: "Past Due", nextBilling: "2024-07-15", amount: 49.00 },
+    { id: "4", clientName: "Stellar Goods", plan: "Standard", status: "Canceled", nextBilling: "N/A", amount: 0 },
+];
+export const mockClientComplianceData = [
+    { id: "1", clientName: "Innovate Inc.", overallStatus: "Compliant", engagementLetter: "Signed", w9: "On File", bankStatements: "Up to Date" },
+    { id: "2", clientName: "Apex Solutions", overallStatus: "Needs Attention", engagementLetter: "Pending", w9: "On File", bankStatements: "Up to Date" },
+    { id: "3", clientName: "QuantumLeap Co.", overallStatus: "Compliant", engagementLetter: "Signed", w9: "On File", bankStatements: "Up to Date" },
+    { id: "4", clientName: "Stellar Goods", overallStatus: "Missing Documents", engagementLetter: "Signed", w9: "Missing", bankStatements: "Missing" },
+];
 
-// ... and so on for all other pages
+// Payments
+export const mockPaymentsToProcess = [
+    { id: 'PAY-001', customer: 'Innovate Inc.', date: '2024-07-22', amount: 5000.00, method: 'ACH', reference: 'Invoice #INV-2024-055' },
+    { id: 'PAY-002', customer: 'Apex Solutions', date: '2024-07-21', amount: 1250.00, method: 'Credit Card', reference: 'Invoice #INV-2024-056' },
+    { id: 'PAY-003', customer: 'QuantumLeap Co.', date: '2024-07-21', amount: 750.00, method: 'ACH', reference: 'Retainer' },
+];
+
+// Help
+export const mockKeyboardShortcuts = [
+    { section: 'Global', shortcut: '⌘ + B', action: 'Toggle Sidebar' },
+    { section: 'Global', shortcut: '⌘ + K', action: 'Open Command Palette (coming soon)' },
+    { section: 'Navigation', shortcut: 'G then D', action: 'Go to Dashboard' },
+    { section: 'Navigation', shortcut: 'G then I', action: 'Go to Invoicing' },
+    { section: 'Actions', shortcut: 'C', action: 'Create New (Invoice, Bill, etc.)' },
+    { section: 'Actions', shortcut: 'S', action: 'Save Current Form' },
+];

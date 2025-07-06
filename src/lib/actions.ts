@@ -64,6 +64,15 @@ import {
   mockTaxSummaryData,
   mockExpenseAnalyticsData,
   mockProjectsDashboardData,
+  mockTrialBalanceData,
+  mockSalesAnalyticsData,
+  mockClientBillingData,
+  mockClientComplianceData,
+  mockShipments,
+  mockMaintenanceTasks,
+  mockPaymentsToProcess,
+  mockDataValidationResults,
+  mockKeyboardShortcuts
 } from './data';
 
 const simulateDelay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
@@ -138,6 +147,18 @@ export async function getTaxSummaryData() {
 export async function getExpenseAnalyticsData() {
     await simulateDelay(50);
     return mockExpenseAnalyticsData;
+}
+export async function getTrialBalanceData() {
+    await simulateDelay(50);
+    return mockTrialBalanceData;
+}
+export async function getSalesAnalyticsData() {
+    await simulateDelay(50);
+    return mockSalesAnalyticsData;
+}
+export async function getDataValidationResults() {
+    await simulateDelay(50);
+    return mockDataValidationResults;
 }
 
 
@@ -250,7 +271,14 @@ export async function getWipReportData() {
   await simulateDelay(50);
   return mockWipReportData;
 }
-
+export async function getLogisticsData() {
+  await simulateDelay(50);
+  return { shipments: mockShipments };
+}
+export async function getMaintenanceData() {
+  await simulateDelay(50);
+  return { tasks: mockMaintenanceTasks };
+}
 
 // Payroll
 export async function getPayrollDashboardData() {
@@ -320,4 +348,26 @@ export async function getJobs() {
 export async function getTimeLogs() {
     await simulateDelay(50);
     return mockTimeLogs;
+}
+
+// Client Management
+export async function getClientBillingData() {
+    await simulateDelay(50);
+    return mockClientBillingData;
+}
+export async function getClientComplianceData() {
+    await simulateDelay(50);
+    return mockClientComplianceData;
+}
+
+// Payments
+export async function getPaymentsToProcess() {
+    await simulateDelay(50);
+    return mockPaymentsToProcess;
+}
+
+// Help
+export async function getKeyboardShortcuts() {
+    await simulateDelay(50);
+    return mockKeyboardShortcuts;
 }

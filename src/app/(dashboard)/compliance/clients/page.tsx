@@ -1,29 +1,110 @@
 
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Shield } from "lucide-react";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { getClientComplianceData } from "@/lib/actions";
+import { CheckCircle2, AlertCircle, XCircle } from "lucide-react";
 
-export default function ClientCompliancePage() {
-  return (
-    <div className="flex flex-col gap-6">
-      <div>
-        <h1 className="text-3xl font-bold">Client Compliance Check</h1>
-        <p className="text-muted-foreground">
-          Review and manage the compliance status of all clients.
-        </p>
-      </div>
-      <Card className="flex flex-col items-center justify-center min-h-[400px]">
-        <CardHeader className="items-center">
-            <div className="bg-secondary p-4 rounded-full mb-4">
-                <Shield className="h-12 w-12 text-secondary-foreground" />
+const statusIcons: { [key: string]: React.ElementType } = {
+  "Signed": CheckCircle2,
+  "On File": CheckCircle2,
+  "Up to Date": CheckCircle2,
+  "Pending": AlertCircle,
+  "Missing": XCircle,
+};
+
+const statusColors: { [key: string]: string } = {
+    "Signed": "text-success",
+    "On File": "text-success",
+    "Up to Date": "text-success",
+    "Pending": "text-yellow-500",
+    "Missing": "text-destructive",
+};
+
+const overallStatusVariant: { [key: string]: "success" | "destructive" | "default" } = {
+    "Compliant": "success",
+    "Needs Attention": "default",
+    "Missing Documents": "destructive",
+  };
+
+export default async function ClientCompliancePage() {
+    const complianceData = await getClientComplianceData();
+
+    return (
+        <div className="grid gap-6">
+            <div>
+                <h1 className="text-3xl font-bold">Client Compliance Check</h1>
+                <p className="text-muted-foreground">
+                    Review and manage the compliance status of all clients to ensure you have the required documentation.
+                </p>
             </div>
-            <CardTitle>Client Compliance</CardTitle>
-        </CardHeader>
-        <CardContent className="text-center">
-          <p className="text-muted-foreground">
-            This feature is coming soon.
-          </p>
-        </CardContent>
-      </Card>
-    </div>
-  );
+            <Card>
+                <CardHeader>
+                    <CardTitle>Compliance Overview</CardTitle>
+                    <CardDescription>
+                        A summary of key compliance documents for each active client.
+                    </CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Client</TableHead>
+                                <TableHead>Overall Status</TableHead>
+                                <TableHead>Engagement Letter</TableHead>
+                                <TableHead>W-9</TableHead>
+                                <TableHead>Bank Statements</TableHead>
+                                <TableHead className="text-right">Actions</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {complianceData.map((client) => {
+                                const IconLetter = statusIcons[client.engagementLetter];
+                                const IconW9 = statusIcons[client.w9];
+                                const IconBank = statusIcons[client.bankStatements];
+                                
+                                return (
+                                    <TableRow key={client.id}>
+                                        <TableCell className="font-medium">{client.clientName}</TableCell>
+                                        <TableCell>
+                                            <Badge variant={overallStatusVariant[client.overallStatus]}>{client.overallStatus}</Badge>
+                                        </TableCell>
+                                        <TableCell className="flex items-center gap-2">
+                                            <IconLetter className={`h-4 w-4 ${statusColors[client.engagementLetter]}`} />
+                                            {client.engagementLetter}
+                                        </TableCell>
+                                        <TableCell className="flex items-center gap-2">
+                                            <IconW9 className={`h-4 w-4 ${statusColors[client.w9]}`} />
+                                            {client.w9}
+                                        </TableCell>
+                                        <TableCell className="flex items-center gap-2">
+                                            <IconBank className={`h-4 w-4 ${statusColors[client.bankStatements]}`} />
+                                            {client.bankStatements}
+                                        </TableCell>
+                                        <TableCell className="text-right">
+                                            <Button variant="outline" size="sm">Request Documents</Button>
+                                        </TableCell>
+                                    </TableRow>
+                                );
+                            })}
+                        </TableBody>
+                    </Table>
+                </CardContent>
+            </Card>
+        </div>
+    );
 }

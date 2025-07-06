@@ -1,8 +1,23 @@
 
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Keyboard } from "lucide-react";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { getKeyboardShortcuts } from "@/lib/actions";
 
-export default function KeyboardShortcutsPage() {
+export default async function KeyboardShortcutsPage() {
+    const shortcuts = await getKeyboardShortcuts();
+    
+    const groupedShortcuts = shortcuts.reduce((acc, shortcut) => {
+        (acc[shortcut.section] = acc[shortcut.section] || []).push(shortcut);
+        return acc;
+    }, {} as Record<string, typeof shortcuts>);
+
   return (
     <div className="flex flex-col gap-6">
       <div>
@@ -11,19 +26,37 @@ export default function KeyboardShortcutsPage() {
           A reference for all available keyboard shortcuts to improve your workflow.
         </p>
       </div>
-      <Card className="flex flex-col items-center justify-center min-h-[400px]">
-        <CardHeader className="items-center">
-            <div className="bg-secondary p-4 rounded-full mb-4">
-                <Keyboard className="h-12 w-12 text-secondary-foreground" />
-            </div>
-            <CardTitle>Keyboard Shortcuts</CardTitle>
-        </CardHeader>
-        <CardContent className="text-center">
-          <p className="text-muted-foreground">
-            This feature is coming soon.
-          </p>
-        </CardContent>
-      </Card>
+      
+      {Object.entries(groupedShortcuts).map(([section, items]) => (
+        <Card key={section}>
+            <CardHeader>
+                <CardTitle>{section}</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead className="w-1/3">Action</TableHead>
+                            <TableHead>Shortcut</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                       {items.map(item => (
+                         <TableRow key={item.action}>
+                            <TableCell className="font-medium">{item.action}</TableCell>
+                            <TableCell>
+                                <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
+                                    {item.shortcut}
+                                </kbd>
+                            </TableCell>
+                        </TableRow>
+                       ))}
+                    </TableBody>
+                </Table>
+            </CardContent>
+        </Card>
+      ))}
+      
     </div>
   );
 }

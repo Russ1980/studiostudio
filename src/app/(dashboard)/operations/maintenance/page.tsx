@@ -1,28 +1,121 @@
+
 "use client";
 
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Wrench } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { Wrench, CircleHelp, AlertTriangle, PlusCircle } from "lucide-react";
+import { getMaintenanceData } from "@/lib/actions";
+import { useState, useEffect } from "react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
+
+const statusVariant: { [key: string]: "success" | "destructive" | "default" } = {
+  "Completed": "success",
+  "Overdue": "destructive",
+  "In Progress": "default",
+  "Scheduled": "secondary"
+};
 
 export default function MaintenancePage() {
+    const [tasks, setTasks] = useState<any[]>([]);
+
+    useEffect(() => {
+        getMaintenanceData().then(data => setTasks(data.tasks));
+    }, []);
+
+    const kpiData = [
+        { title: "Scheduled Tasks", value: tasks.filter(t => t.status === "Scheduled").length, icon: Wrench },
+        { title: "Tasks In Progress", value: tasks.filter(t => t.status === "In Progress").length, icon: Wrench },
+        { title: "Overdue Tasks", value: tasks.filter(t => t.status === "Overdue").length, icon: AlertTriangle },
+    ];
+
   return (
-    <div className="flex flex-col gap-6">
+    <div className="grid gap-6">
        <div>
-        <h1 className="text-3xl font-bold">Maintenance</h1>
+        <h1 className="text-3xl font-bold">Maintenance Management</h1>
         <p className="text-muted-foreground">
           Schedule, track, and log all preventive and reactive maintenance for machinery.
         </p>
       </div>
-      <Card className="flex flex-col items-center justify-center min-h-[400px]">
-        <CardHeader className="items-center">
-            <div className="bg-secondary p-4 rounded-full mb-4">
-                <Wrench className="h-12 w-12 text-secondary-foreground" />
-            </div>
-            <CardTitle>Maintenance Management</CardTitle>
+
+       <div className="grid gap-6 md:grid-cols-3">
+        {kpiData.map((kpi) => (
+          <Card key={kpi.title}>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">{kpi.title}</CardTitle>
+              <kpi.icon className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{kpi.value}</div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between">
+            <CardTitle>Maintenance Log</CardTitle>
+            <Button><PlusCircle className="mr-2"/> Schedule Maintenance</Button>
         </CardHeader>
-        <CardContent className="text-center">
-          <p className="text-muted-foreground">
-            This feature is coming soon.
-          </p>
+        <CardContent>
+            <TooltipProvider>
+            <Table>
+                <TableHeader>
+                    <TableRow>
+                        <TableHead>Asset</TableHead>
+                        <TableHead>Type</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead>Scheduled Date</TableHead>
+                        <TableHead>Completed Date</TableHead>
+                        <TableHead className="text-right">Actions</TableHead>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    {tasks.map((task) => (
+                        <TableRow key={task.id}>
+                            <TableCell className="font-medium">{task.asset}</TableCell>
+                            <TableCell className="flex items-center gap-2">
+                                {task.type}
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <CircleHelp className="h-4 w-4 text-muted-foreground"/>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        <p>{task.type === "Preventive" ? "Routine check-up" : "Repairing a fault"}</p>
+                                    </TooltipContent>
+                                </Tooltip>
+                            </TableCell>
+                            <TableCell><Badge variant={statusVariant[task.status]}>{task.status}</Badge></TableCell>
+                            <TableCell>{task.scheduledDate}</TableCell>
+                            <TableCell>{task.completedDate || 'N/A'}</TableCell>
+                            <TableCell className="text-right">
+                                <Button variant="outline" size="sm">View Details</Button>
+                            </TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
+            </TooltipProvider>
         </CardContent>
       </Card>
     </div>
