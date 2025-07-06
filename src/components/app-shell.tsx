@@ -1,5 +1,4 @@
 
-
 "use client";
 
 import * as React from "react";
@@ -137,7 +136,7 @@ function renderNavLinks(
             >
                 <span className="flex w-full items-center justify-between">
                   <span className="flex items-center gap-2">
-                    {link.icon && <link.icon />}
+                    {(isCollapsed || ['Settings', 'Help'].includes(link.label)) && link.icon && <link.icon />}
                     <span className="flex-1 text-left">{link.label}</span>
                   </span>
                   {!isCollapsed && (
@@ -164,7 +163,7 @@ function renderNavLinks(
           <Link href={link.href || "#"}>
              <span className="flex w-full items-center justify-between">
                 <span className="flex items-center gap-2">
-                  {link.icon && <link.icon />}
+                  {(isCollapsed || ['Settings', 'Help'].includes(link.label)) && link.icon && <link.icon />}
                   <span>{link.label}</span>
                 </span>
                 {!isCollapsed && level === 1 && (
@@ -294,7 +293,7 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
                            <StyledDropdownMenuItem href="/data-management/data-import" icon={FileInput} title="Import Wizard" description="Import data from external sources." />
                            <StyledDropdownMenuItem href="/banking/connections" icon={Database} title="Connect Bank Data" description="Sync with your financial institutions." />
 
-                           <p className="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Print & Share</p>
+                           <p className="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Print &amp; Share</p>
                            <DropdownMenuItem asChild className="p-0 focus:bg-transparent">
                              <button onClick={() => window.print()} className="flex w-full items-center gap-3 rounded-lg border bg-card p-2.5 text-card-foreground transition-colors hover:border-primary hover:bg-primary/5 focus:outline-none focus:ring-2 focus:ring-ring">
                                 <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"><Printer className="h-4 w-4" /></div>
@@ -340,7 +339,7 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
                           <StyledDropdownMenuItem href="/accounting/periods/reopen" icon={RefreshCw} title="Reopen Period" description="Reopen previously closed period" />
                           
                           <p className="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Financial Reporting</p>
-                          <StyledDropdownMenuItem href="/reports-insights/financial-reports" icon={BarChart3} title="Generate Financial Statements" description="Create P&L, Balance Sheets, etc." />
+                          <StyledDropdownMenuItem href="/reports-insights/financial-reports" icon={BarChart3} title="Generate Financial Statements" description="Create P&amp;L, Balance Sheets, etc." />
                           <StyledDropdownMenuItem href="/reports/trial-balance" icon={Download} title="Export Trial Balance" description="Download the current trial balance." />
                           <StyledDropdownMenuItem href="/reports-insights/dashboard" icon={TrendingUp} title="Performance Analytics" description="View financial performance." />
 
