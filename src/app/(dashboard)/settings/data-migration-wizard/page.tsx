@@ -58,6 +58,8 @@ function DataMigrationWizardContent() {
         return !migrationData.sourceSystem;
       case 4:
         return !migrationData.backupConfirmed;
+      case 5:
+        return !migrationData.uploadedFile;
       // Add other step-specific validation here
       default:
         return false;

@@ -6,6 +6,7 @@ import React, { createContext, useState, useContext, useMemo } from 'react';
 type MigrationData = {
   sourceSystem: string | null;
   backupConfirmed: boolean;
+  uploadedFile: File | null;
   // Add other state properties here as needed
 };
 
@@ -23,6 +24,7 @@ export function MigrationWizardProvider({ children }: { children: React.ReactNod
   const [migrationData, setMigrationData] = useState<MigrationData>({
     sourceSystem: null,
     backupConfirmed: false,
+    uploadedFile: null,
   });
 
   const updateMigrationData = (updates: Partial<MigrationData>) => {
