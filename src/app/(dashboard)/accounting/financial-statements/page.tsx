@@ -13,8 +13,8 @@ import { FileBarChart } from "lucide-react";
 
 const reports = [
     { title: "Profit & Loss", description: "Shows revenues and expenses over a period of time.", href: "/accounting/financial-statements/profit-and-loss" },
-    { title: "Balance Sheet", description: "A snapshot of your assets, liabilities, and equity.", href: "#" },
-    { title: "Statement of Cash Flows", description: "Tracks the movement of cash from operating, investing, and financing activities.", href: "#" },
+    { title: "Balance Sheet", description: "A snapshot of your assets, liabilities, and equity.", href: "/accounting/financial-statements/balance-sheet" },
+    { title: "Statement of Cash Flows", description: "Tracks the movement of cash from operating, investing, and financing activities.", href: "/accounting/financial-statements/cash-flow" },
     { title: "Statement of Changes in Equity", description: "Details the changes in a company's equity over time.", href: "#" },
     { title: "General Ledger", description: "A complete record of all financial transactions.", href: "/accounting/general-ledger" },
 ];
@@ -50,4 +50,3 @@ export default function FinancialStatementsPage() {
         </div>
     )
 }
-

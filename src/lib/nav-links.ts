@@ -140,7 +140,17 @@ export const navLinks: NavLink[] = [
         ],
       },
       { href: '/accounting/general-ledger', label: 'General Ledger', icon: Book },
-      { href: '/accounting/financial-statements', label: 'Financial Statements', icon: FileBarChart },
+      {
+        label: 'Financial Statements',
+        icon: FileBarChart,
+        href: '/accounting/financial-statements',
+        items: [
+          { href: '/accounting/financial-statements', label: 'Statements Hub', icon: LayoutGrid },
+          { href: '/accounting/financial-statements/profit-and-loss', label: 'Profit & Loss', icon: FileText },
+          { href: '/accounting/financial-statements/balance-sheet', label: 'Balance Sheet', icon: FileText },
+          { href: '/accounting/financial-statements/cash-flow', label: 'Cash Flow', icon: FileText },
+        ],
+      },
     ],
   },
   {
