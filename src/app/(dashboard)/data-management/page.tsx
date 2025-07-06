@@ -13,6 +13,7 @@ import { Progress } from "@/components/ui/progress";
 import Link from 'next/link';
 
 import { FileDown, FileUp, History, ShieldQuestion, Database, CheckSquare, HardDrive } from "lucide-react";
+import { MigrationCard } from "./migration-card";
 
 const kpiData = [
   { title: "Data Quality Score", value: "92%", icon: CheckSquare, progress: 92 },
@@ -82,6 +83,7 @@ export default function DataManagementDashboard() {
                 </CardContent>
             </Card>
        </div>
+       <MigrationCard />
     </div>
   );
 }
