@@ -1,29 +1,53 @@
 
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { BarChart3 } from "lucide-react";
+"use client";
+
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { FileBarChart2, Users, PieChart, BarChart3 } from "lucide-react";
+import Link from "next/link";
+
+const reports = [
+    { title: "Job Profitability", description: "Shows revenue, costs, and profit margins for each job.", icon: BarChart3, href: "/operations/job-costing/reports/profitability" },
+    { title: "Budget vs. Actuals", description: "Compares your budgeted amounts to your actual financial performance.", icon: FileBarChart2, href: "#" },
+    { title: "Work In Progress (WIP)", description: "Tracks ongoing jobs, showing costs incurred and revenue billed.", icon: Users, href: "#" },
+    { title: "Cost to Complete", description: "Forecasts the remaining costs to complete a job based on current spending.", icon: PieChart, href: "#" },
+];
 
 export default function JobCostingReportsPage() {
-  return (
-    <div className="flex flex-col gap-6">
-      <div>
-        <h1 className="text-3xl font-bold">Job Costing Reports</h1>
-        <p className="text-muted-foreground">
-          Analyze job performance, profitability, and cost details.
-        </p>
-      </div>
-      <Card className="flex flex-col items-center justify-center min-h-[400px]">
-        <CardHeader className="items-center">
-            <div className="bg-secondary p-4 rounded-full mb-4">
-                <BarChart3 className="h-12 w-12 text-secondary-foreground" />
+    return (
+        <div className="flex flex-col gap-6">
+            <div>
+                <h1 className="text-3xl font-bold">Job Costing Reports</h1>
+                <p className="text-muted-foreground">
+                    Analyze job performance, profitability, and cost details.
+                </p>
             </div>
-            <CardTitle>Job Costing Reports</CardTitle>
-        </CardHeader>
-        <CardContent className="text-center">
-          <p className="text-muted-foreground">
-            This feature is coming soon. Detailed reports on job profitability, budget vs. actuals, and WIP will be available here.
-          </p>
-        </CardContent>
-      </Card>
-    </div>
-  );
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {reports.map((report, index) => (
+                    <Link href={report.href} key={index}>
+                        <Card className="h-full hover:bg-muted/50 transition-colors">
+                            <CardHeader className="flex flex-row items-center gap-4">
+                                <div className="bg-secondary p-3 rounded-lg">
+                                    <report.icon className="h-6 w-6 text-secondary-foreground" />
+                                </div>
+                                <div>
+                                    <CardTitle>{report.title}</CardTitle>
+                                    <CardDescription>{report.description}</CardDescription>
+                                </div>
+                            </CardHeader>
+                            <CardContent>
+                                <Button variant="outline">View Report</Button>
+                            </CardContent>
+                        </Card>
+                    </Link>
+                ))}
+            </div>
+        </div>
+    )
 }

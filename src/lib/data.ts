@@ -643,5 +643,13 @@ export const mockTimeLogs = [
     { id: 4, employee: "Noah Williams", project: "Website Redesign", task: "Client Meeting", hours: 1.5, date: "2024-07-21" },
 ];
 
+export const mockJobProfitabilityData = mockJobs.map(job => ({
+    id: job.id,
+    name: job.name,
+    customer: job.customer,
+    revenue: job.budget + job.profitability, // simplified logic for revenue
+    costs: job.spent,
+}));
+
 
 // ... and so on for all other pages

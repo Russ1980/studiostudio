@@ -71,6 +71,7 @@ import {
   Search,
   FolderOpen,
   MapPin,
+  BarChart3,
 } from 'lucide-react';
 
 export type NavLink = {
@@ -195,7 +196,14 @@ export const navLinks: NavLink[] = [
            { href: '/operations/job-costing/dashboard', label: 'Dashboard', icon: LayoutGrid },
            { href: '/operations/job-costing/jobs', label: 'All Jobs', icon: Briefcase },
            { href: '/operations/job-costing/enter-bill', label: 'Enter Bill', icon: Receipt },
-           { href: '/operations/job-costing/reports', label: 'Reports', icon: FileBarChart },
+           { 
+             href: '/operations/job-costing/reports', 
+             label: 'Reports', 
+             icon: FileBarChart,
+             items: [
+                { href: '/operations/job-costing/reports/profitability', label: 'Profitability Report', icon: BarChart3 },
+             ]
+           },
         ]
       },
       {
