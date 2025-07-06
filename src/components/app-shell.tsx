@@ -127,7 +127,7 @@ function renderNavLinks(
               tooltip={link.label}
               size={level > 1 ? "sm" : "default"}
               className="w-full"
-              variant="ghost"
+              variant="default"
             >
                 <span className="flex w-full items-center justify-between">
                   <span className="flex items-center gap-2">
@@ -153,7 +153,7 @@ function renderNavLinks(
           tooltip={link.label}
           size={level > 1 ? "sm" : "default"}
           className={cn(level > 1 && "h-8")}
-          variant="ghost"
+          variant="default"
         >
           <Link href={link.href || "#"}>
              <span className="flex w-full items-center justify-between">
@@ -161,6 +161,9 @@ function renderNavLinks(
                   {link.icon && <link.icon />}
                   <span>{link.label}</span>
                 </span>
+                {!isCollapsed && level === 1 && (
+                  <ChevronRight className="h-4 w-4" />
+                )}
               </span>
           </Link>
         </SidebarMenuButton>
@@ -258,7 +261,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <SidebarMenuItem>
               <SidebarMenuButton
                 tooltip="User Profile"
-                variant="ghost"
+                variant="default"
                 className="justify-start"
               >
                 <span className="flex w-full items-center gap-2">
@@ -364,37 +367,37 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                     <DropdownMenuContent align="start">
                       <DropdownMenuGroup>
                         <DropdownMenuLabel>Banking Operations</DropdownMenuLabel>
-                        <DropdownMenuItem onClick={() => handleActionClick('importBank')} className="text-primary focus:text-primary"><Upload />Import Bank Transactions</DropdownMenuItem>
+                        <DropdownMenuItem asChild className="text-primary focus:text-primary"><Link href="/banking/import-transactions"><Upload />Import Bank Transactions</Link></DropdownMenuItem>
                         <DropdownMenuItem asChild><Link href="/banking/reconciliation"><Calculator />Run Bank Reconciliation</Link></DropdownMenuItem>
-                        <DropdownMenuItem asChild><Link href="/banking/dashboard"><RefreshCw />Update Account Balances</Link></DropdownMenuItem>
+                        <DropdownMenuItem asChild><Link href="/banking/accounts"><RefreshCw />Update Account Balances</Link></DropdownMenuItem>
                       </DropdownMenuGroup>
                       <DropdownMenuSeparator />
                        <DropdownMenuGroup>
                         <DropdownMenuLabel>Period Management</DropdownMenuLabel>
-                        <DropdownMenuItem onClick={() => handleActionClick('closePeriod')} className="text-destructive/80 focus:text-destructive/80"><Clock />Close Accounting Period</DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleActionClick('reopenPeriod')}><RefreshCw />Reopen Period</DropdownMenuItem>
+                        <DropdownMenuItem asChild className="text-destructive/80 focus:text-destructive/80"><Link href="/accounting/periods/close"><Clock />Close Accounting Period</Link></DropdownMenuItem>
+                        <DropdownMenuItem asChild><Link href="/accounting/periods/reopen"><RefreshCw />Reopen Period</Link></DropdownMenuItem>
                       </DropdownMenuGroup>
                       <DropdownMenuSeparator />
                       <DropdownMenuGroup>
                         <DropdownMenuLabel>Financial Reporting</DropdownMenuLabel>
                         <DropdownMenuItem asChild className="text-primary focus:text-primary"><Link href="/reports-insights/financial-reports"><BarChart3 />Generate Financial Statements</Link></DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleActionClick('exportTrial')}><Download />Export Trial Balance</DropdownMenuItem>
+                        <DropdownMenuItem asChild><Link href="/reports/trial-balance"><Download />Export Trial Balance</Link></DropdownMenuItem>
                         <DropdownMenuItem asChild className="text-success focus:text-success"><Link href="/reports-insights/dashboard"><TrendingUp />Performance Analytics</Link></DropdownMenuItem>
                       </DropdownMenuGroup>
                        <DropdownMenuSeparator />
                        <DropdownMenuGroup>
                         <DropdownMenuLabel>Client Operations</DropdownMenuLabel>
-                        <DropdownMenuItem onClick={() => handleActionClick('sendInvoices')} className="text-success focus:text-success"><Mail />Send Monthly Invoices</DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleActionClick('processPayments')}><CreditCard />Process Payments</DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleActionClick('updateBilling')}><DollarSign />Update Client Billing</DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleActionClick('complianceCheck')} className="text-destructive/80 focus:text-destructive/80"><Shield />Client Compliance Check</DropdownMenuItem>
+                        <DropdownMenuItem asChild className="text-success focus:text-success"><Link href="/client-management/invoicing/batch"><Mail />Send Monthly Invoices</Link></DropdownMenuItem>
+                        <DropdownMenuItem asChild><Link href="/payments/process"><CreditCard />Process Payments</Link></DropdownMenuItem>
+                        <DropdownMenuItem asChild><Link href="/client-management/billing"><DollarSign />Update Client Billing</Link></DropdownMenuItem>
+                        <DropdownMenuItem asChild className="text-destructive/80 focus:text-destructive/80"><Link href="/compliance/clients"><Shield />Client Compliance Check</Link></DropdownMenuItem>
                       </DropdownMenuGroup>
                        <DropdownMenuSeparator />
                       <DropdownMenuGroup>
                         <DropdownMenuLabel>Data Management</DropdownMenuLabel>
                         <DropdownMenuItem asChild><Link href="/data-management/backup-restore"><Database />Backup Database</Link></DropdownMenuItem>
-                        <DropdownMenuItem asChild className="text-primary focus:text-primary"><Link href="/data-management/data-import"><Upload />Import Chart of Accounts</Link></DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleActionClick('validationReport')}><FileText />Data Validation Report</DropdownMenuItem>
+                        <DropdownMenuItem asChild className="text-primary focus:text-primary"><Link href="/accounting/chart-of-accounts/import"><Upload />Import Chart of Accounts</Link></DropdownMenuItem>
+                        <DropdownMenuItem asChild><Link href="/reports/validation"><FileText />Data Validation Report</Link></DropdownMenuItem>
                       </DropdownMenuGroup>
                     </DropdownMenuContent>
                 </DropdownMenu>
