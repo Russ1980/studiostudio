@@ -30,7 +30,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
   DropdownMenuGroup,
-  DropdownMenuClose
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { navLinks, type NavLink } from "@/lib/nav-links";
@@ -214,13 +213,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                     <Logo className="size-8 text-primary" />
                     <Link href="/dashboard" className="flex items-center group-data-[collapsible=icon]:hidden">
                     <span className="font-semibold text-sidebar-foreground">
-                        Mardisen
+                        FinView
                     </span>
                     <Badge
                         variant="outline"
                         className="ml-2 border-sidebar-border bg-sidebar-accent text-sidebar-accent-foreground"
                     >
-                        SUITE
+                        Reimagined
                     </Badge>
                     </Link>
                 </div>
@@ -305,7 +304,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                       </ScrollArea>
                       <div className="p-2 border-t flex items-center justify-between text-xs text-muted-foreground">
                         <span>10 actions available</span>
-                        <DropdownMenuClose asChild><button className="hover:text-foreground">Close</button></DropdownMenuClose>
                       </div>
                     </DropdownMenuContent>
                 </DropdownMenu>
@@ -356,7 +354,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                       </ScrollArea>
                       <div className="p-2 border-t flex items-center justify-between text-xs text-muted-foreground">
                         <span>15 actions available</span>
-                        <DropdownMenuClose asChild><button className="hover:text-foreground">Close</button></DropdownMenuClose>
                       </div>
                     </DropdownMenuContent>
                 </DropdownMenu>
