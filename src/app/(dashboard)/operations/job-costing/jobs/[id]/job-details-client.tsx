@@ -1,6 +1,7 @@
 
 "use client";
 
+import React from "react";
 import {
   Card,
   CardContent,
@@ -23,10 +24,26 @@ import { Badge } from "@/components/ui/badge";
 import { DollarSign, Percent, Clock, PlusCircle, FilePlus, Receipt } from "lucide-react";
 import Link from "next/link";
 
-export function JobDetailsClientPage({ job }: { job: any }) {
+export function JobDetailsClientPage({ job: initialJob }: { job: any }) {
+  const [job, setJob] = React.useState(initialJob);
+
+  const handleAddChangeOrder = () => {
+    const newChangeOrder = {
+        id: `CO-00${job.changeOrders.length + 2}`,
+        date: new Date().toISOString().split('T')[0],
+        description: 'Client requested scope change',
+        amount: 2500,
+        status: 'Pending'
+    };
+    setJob((prevJob: any) => ({
+        ...prevJob,
+        changeOrders: [...prevJob.changeOrders, newChangeOrder]
+    }));
+  };
+  
   const profitability = job.profitability;
   const budgetVsActualProgress = (job.spent / job.budget) * 100;
-  const grossMargin = ((profitability / (job.budget + profitability)) * 100).toFixed(1);
+  const grossMargin = job.budget > 0 ? ((profitability / job.budget) * 100).toFixed(1) : "0.0";
 
   const kpiData = [
     { title: "Budget", value: `$${job.budget.toLocaleString()}`, icon: DollarSign },
@@ -126,9 +143,12 @@ export function JobDetailsClientPage({ job }: { job: any }) {
                                 <p className="text-sm font-medium">+${co.amount.toLocaleString()}</p>
                             </div>
                         ))}
+                         {job.changeOrders.length === 0 && (
+                            <p className="text-sm text-muted-foreground">No change orders yet.</p>
+                        )}
                     </CardContent>
                     <CardFooter>
-                         <Button variant="secondary" className="w-full"><PlusCircle className="mr-2"/> Add Change Order</Button>
+                         <Button variant="secondary" className="w-full" onClick={handleAddChangeOrder}><PlusCircle className="mr-2"/> Add Change Order</Button>
                     </CardFooter>
                </Card>
           </div>

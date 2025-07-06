@@ -107,7 +107,11 @@ export default function PurchaseOrdersPage() {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem>View PO</DropdownMenuItem>
-                        <DropdownMenuItem>Receive Items</DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                            <Link href={`/operations/inventory/purchase-orders/receive?po=${po.poNumber}`}>
+                                Receive Items
+                            </Link>
+                        </DropdownMenuItem>
                         <DropdownMenuItem>Convert to Bill</DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
