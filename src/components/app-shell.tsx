@@ -415,7 +415,10 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
         </header>
         <main className="flex-1 flex flex-col">
             <div className="flex items-center justify-between border-b bg-background p-4 md:px-6">
-                <Breadcrumb />
+                <div className="flex items-center gap-2">
+                    <SidebarTrigger className="hidden md:flex" />
+                    <Breadcrumb />
+                </div>
                 {pathname === '/dashboard' && (
                   <Button variant="outline" size="sm" className="bg-accent text-accent-foreground border-accent-foreground/20 hover:bg-accent/90">
                       <Wand2 className="mr-2 h-4 w-4" />
