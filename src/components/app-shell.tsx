@@ -226,7 +226,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       onOpenChange={(open) => setIsCollapsed(!open)}
     >
       <Sidebar variant="sidebar" collapsible="icon" className="border-r bg-sidebar">
-        <SidebarHeader className="h-14 flex items-center p-3">
+        <SidebarHeader className="h-16 flex items-center p-3 border-b border-sidebar-border">
             <div className="flex w-full items-center justify-between">
                 <div className="flex flex-1 items-center gap-2">
                     <Logo className="size-8 text-primary" />
@@ -242,8 +242,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                     </Badge>
                     </Link>
                 </div>
-                <SidebarTrigger className="group-data-[collapsible=icon]:flex hidden" />
-                 <SidebarTrigger className="group-data-[collapsible=icon]:hidden size-7 flex items-center justify-center rounded-md bg-sidebar-accent text-sidebar-accent-foreground">
+                 <SidebarTrigger className="group-data-[collapsible=icon]:hidden size-7 flex items-center justify-center rounded-full bg-sidebar-accent text-sidebar-accent-foreground">
                     <ChevronsLeft className="size-4" />
                 </SidebarTrigger>
             </div>
@@ -364,36 +363,36 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                     <DropdownMenuContent align="start">
                       <DropdownMenuGroup>
                         <DropdownMenuLabel>Banking Operations</DropdownMenuLabel>
-                        <DropdownMenuItem asChild className="text-primary focus:text-primary"><Link href="/banking/import-transactions"><Upload />Import Bank Transactions</Link></DropdownMenuItem>
+                        <DropdownMenuItem asChild><Link href="/banking/import-transactions"><Upload />Import Bank Transactions</Link></DropdownMenuItem>
                         <DropdownMenuItem asChild><Link href="/banking/reconciliation"><Calculator />Run Bank Reconciliation</Link></DropdownMenuItem>
                         <DropdownMenuItem asChild><Link href="/banking/accounts"><RefreshCw />Update Account Balances</Link></DropdownMenuItem>
                       </DropdownMenuGroup>
                       <DropdownMenuSeparator />
                        <DropdownMenuGroup>
                         <DropdownMenuLabel>Period Management</DropdownMenuLabel>
-                        <DropdownMenuItem asChild className="text-destructive/80 focus:text-destructive/80"><Link href="/accounting/periods/close"><Clock />Close Accounting Period</Link></DropdownMenuItem>
+                        <DropdownMenuItem asChild><Link href="/accounting/periods/close"><Clock />Close Accounting Period</Link></DropdownMenuItem>
                         <DropdownMenuItem asChild><Link href="/accounting/periods/reopen"><RefreshCw />Reopen Period</Link></DropdownMenuItem>
                       </DropdownMenuGroup>
                       <DropdownMenuSeparator />
                       <DropdownMenuGroup>
                         <DropdownMenuLabel>Financial Reporting</DropdownMenuLabel>
-                        <DropdownMenuItem asChild className="text-primary focus:text-primary"><Link href="/reports-insights/financial-reports"><BarChart3 />Generate Financial Statements</Link></DropdownMenuItem>
+                        <DropdownMenuItem asChild><Link href="/reports-insights/financial-reports"><BarChart3 />Generate Financial Statements</Link></DropdownMenuItem>
                         <DropdownMenuItem asChild><Link href="/reports/trial-balance"><Download />Export Trial Balance</Link></DropdownMenuItem>
-                        <DropdownMenuItem asChild className="text-success focus:text-success"><Link href="/reports-insights/dashboard"><TrendingUp />Performance Analytics</Link></DropdownMenuItem>
+                        <DropdownMenuItem asChild><Link href="/reports-insights/dashboard"><TrendingUp />Performance Analytics</Link></DropdownMenuItem>
                       </DropdownMenuGroup>
                        <DropdownMenuSeparator />
                        <DropdownMenuGroup>
                         <DropdownMenuLabel>Client Operations</DropdownMenuLabel>
-                        <DropdownMenuItem asChild className="text-success focus:text-success"><Link href="/client-management/invoicing/batch"><Mail />Send Monthly Invoices</Link></DropdownMenuItem>
+                        <DropdownMenuItem asChild><Link href="/client-management/invoicing/batch"><Mail />Send Monthly Invoices</Link></DropdownMenuItem>
                         <DropdownMenuItem asChild><Link href="/payments/process"><CreditCard />Process Payments</Link></DropdownMenuItem>
                         <DropdownMenuItem asChild><Link href="/client-management/billing"><DollarSign />Update Client Billing</Link></DropdownMenuItem>
-                        <DropdownMenuItem asChild className="text-destructive/80 focus:text-destructive/80"><Link href="/compliance/clients"><Shield />Client Compliance Check</Link></DropdownMenuItem>
+                        <DropdownMenuItem asChild><Link href="/compliance/clients"><Shield />Client Compliance Check</Link></DropdownMenuItem>
                       </DropdownMenuGroup>
                        <DropdownMenuSeparator />
                       <DropdownMenuGroup>
                         <DropdownMenuLabel>Data Management</DropdownMenuLabel>
                         <DropdownMenuItem asChild><Link href="/data-management/backup-restore"><Database />Backup Database</Link></DropdownMenuItem>
-                        <DropdownMenuItem asChild className="text-primary focus:text-primary"><Link href="/accounting/chart-of-accounts/import"><Upload />Import Chart of Accounts</Link></DropdownMenuItem>
+                        <DropdownMenuItem asChild><Link href="/accounting/chart-of-accounts/import"><Upload />Import Chart of Accounts</Link></DropdownMenuItem>
                         <DropdownMenuItem asChild><Link href="/reports/validation"><FileText />Data Validation Report</Link></DropdownMenuItem>
                       </DropdownMenuGroup>
                     </DropdownMenuContent>
