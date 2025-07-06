@@ -4,18 +4,14 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-  CardDescription
 } from "@/components/ui/card";
 import { Banknote, CreditCard, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { getBankAccounts } from "@/lib/actions";
 
-const accounts = [
-    { name: "Business Checking", bank: "Chase Bank", lastFour: "1234", balance: "1,250,320.50", type: "bank" },
-    { name: "Business Credit Card", bank: "American Express", lastFour: "5678", balance: "12,500.00", type: "credit" },
-    { name: "Savings Account", bank: "Chase Bank", lastFour: "4321", balance: "500,000.00", type: "bank" },
-];
+export default async function BankAccountsPage() {
+  const accounts = await getBankAccounts();
 
-export default function BankAccountsPage() {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
