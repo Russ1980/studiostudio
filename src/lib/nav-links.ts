@@ -43,6 +43,7 @@ import {
   Plug,
   Wand2,
   Calculator,
+  CalendarDays,
 } from 'lucide-react';
 
 export type NavLink = {
@@ -100,7 +101,7 @@ export const navLinks: NavLink[] = [
       {
         label: 'Accounts Receivable',
         icon: CreditCard,
-        href: '/accounting/accounts-receivable/dashboard',
+        href: '/accounting/accounts-receivable',
         items: [
           { href: '/accounting/accounts-receivable/dashboard', label: 'A/R Dashboard', icon: LayoutGrid },
           { href: '/accounting/accounts-receivable/customers', label: 'Customers', icon: Users },
@@ -109,7 +110,7 @@ export const navLinks: NavLink[] = [
       {
         label: 'Accounts Payable',
         icon: Banknote,
-        href: '/accounting/accounts-payable/dashboard',
+        href: '/accounting/accounts-payable',
         items: [
           { href: '/accounting/accounts-payable/dashboard', label: 'A/P Dashboard', icon: LayoutGrid },
           { href: '/accounting/accounts-payable/bills', label: 'Bills', icon: Receipt },
@@ -134,28 +135,30 @@ export const navLinks: NavLink[] = [
   {
     label: 'Operations',
     icon: Wrench,
+    href: '/operations',
     items: [
-      { href: '#', label: 'Dashboard', icon: LayoutGrid },
+      { href: '/operations', label: 'Dashboard', icon: LayoutGrid },
       {
         label: 'Production',
         icon: Building,
+        href: '/operations/production/work-orders',
         items: [
-          { href: '#', label: 'Work Orders', icon: FileText },
-          { href: '#', label: 'Scheduling', icon: Clock },
+          { href: '/operations/production/work-orders', label: 'Work Orders', icon: FileText },
+          { href: '/operations/production/scheduling', label: 'Scheduling', icon: CalendarDays },
         ],
       },
       {
         label: 'Inventory',
         icon: Package,
+        href: '/operations/inventory/stock-management',
         items: [
-          { href: '#', label: 'Stock Management', icon: Package },
-          { href: '#', label: 'Purchase Orders', icon: ShoppingCart },
-          { href: '#', label: 'Quality Control', icon: ShieldCheck },
+          { href: '/operations/inventory/stock-management', label: 'Stock Management', icon: Package },
+          { href: '/operations/inventory/purchase-orders', label: 'Purchase Orders', icon: ShoppingCart },
         ],
       },
-      { href: '#', label: 'Maintenance', icon: Wrench },
-      { href: '#', label: 'Logistics', icon: Truck },
-      { href: '#', label: 'Analytics', icon: LineChart },
+      { href: '/operations/maintenance', label: 'Maintenance', icon: Wrench },
+      { href: '/operations/logistics', label: 'Logistics', icon: Truck },
+      { href: '/operations/analytics', label: 'Analytics', icon: LineChart },
     ],
   },
   {
