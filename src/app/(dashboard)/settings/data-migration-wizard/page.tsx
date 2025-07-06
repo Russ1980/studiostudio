@@ -11,34 +11,34 @@ import {
 } from "@/components/ui/card";
 import { Check, ArrowRight, ArrowLeft, Wand } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { MigrationWizardProvider, useMigrationWizard } from "./context/migration-wizard-context";
 
-// Import step components
-import { Step1Welcome } from "./steps/step1-welcome";
-import { Step2SourceSelection } from "./steps/step2-source-selection";
-import { Step3PreAssessment } from "./steps/step3-pre-assessment";
-import { Step4BackupReminder } from "./steps/step4-backup-reminder";
-import { Step5DataUpload } from "./steps/step5-data-upload";
-import { Step6DataValidation } from "./steps/step6-data-validation";
-import { Step7DataMapping } from "./steps/step7-data-mapping";
-import { Step8TestImport } from "./steps/step8-test-import";
-import { Step9FinalImport } from "./steps/step9-final-import";
-import { Step10Completion } from "./steps/step10-completion";
+import { Step1Welcome } from "./components/step1-welcome";
+import { Step2SourceSelection } from "./components/step2-source-selection";
+import { Step3PreAssessment } from "./components/step3-pre-assessment";
+import { Step4BackupReminder } from "./components/step4-backup-reminder";
+import { Step5DataUpload } from "./components/step5-data-upload";
+import { Step6DataValidation } from "./components/step6-data-validation";
+import { Step7DataMapping } from "./components/step7-data-mapping";
+import { Step8TestImport } from "./components/step8-test-import";
+import { Step9FinalImport } from "./components/step9-final-import";
+import { Step10Completion } from "./components/step10-completion";
 
 const wizardSteps = [
-  { id: 1, name: "Welcome" },
-  { id: 2, name: "Source Selection" },
-  { id: 3, name: "Pre-Assessment" },
-  { id: 4, name: "Backup Reminder" },
-  { id: 5, name: "Data Upload" },
-  { id: 6, name: "Data Validation" },
-  { id: 7, name: "Data Mapping" },
-  { id: 8, name: "Test Import" },
-  { id: 9, name: "Final Import" },
-  { id: 10, name: "Completion" },
+  { id: 1, name: "Welcome", component: Step1Welcome },
+  { id: 2, name: "Source Selection", component: Step2SourceSelection },
+  { id: 3, name: "Pre-Assessment", component: Step3PreAssessment },
+  { id: 4, name: "Backup Reminder", component: Step4BackupReminder },
+  { id: 5, name: "Data Upload", component: Step5DataUpload },
+  { id: 6, name: "Data Validation", component: Step6DataValidation },
+  { id: 7, name: "Data Mapping", component: Step7DataMapping },
+  { id: 8, name: "Test Import", component: Step8TestImport },
+  { id: 9, name: "Final Import", component: Step9FinalImport },
+  { id: 10, name: "Completion", component: Step10Completion },
 ];
 
-export default function DataMigrationWizardPage() {
-  const [currentStep, setCurrentStep] = useState(1);
+function DataMigrationWizardContent() {
+  const { currentStep, setCurrentStep, migrationData } = useMigrationWizard();
 
   const handleNext = () => {
     if (currentStep < wizardSteps.length) {
@@ -51,29 +51,22 @@ export default function DataMigrationWizardPage() {
       setCurrentStep(currentStep - 1);
     }
   };
-  
-  const renderStepContent = () => {
+
+  const isNextDisabled = () => {
     switch (currentStep) {
-      case 1: return <Step1Welcome />;
-      case 2: return <Step2SourceSelection />;
-      case 3: return <Step3PreAssessment />;
-      case 4: return <Step4BackupReminder />;
-      case 5: return <Step5DataUpload />;
-      case 6: return <Step6DataValidation />;
-      case 7: return <Step7DataMapping />;
-      case 8: return <Step8TestImport />;
-      case 9: return <Step9FinalImport />;
-      case 10: return <Step10Completion />;
-      default: return <Step1Welcome />;
+      case 2:
+        return !migrationData.sourceSystem;
+      case 4:
+        return !migrationData.backupConfirmed;
+      // Add other step-specific validation here
+      default:
+        return false;
     }
-  }
+  };
+  
+  const CurrentStepComponent = wizardSteps[currentStep-1].component;
 
   return (
-    <div className="grid gap-6">
-      <div>
-        <h1 className="text-3xl font-bold flex items-center gap-2"><Wand/> Data Migration Wizard</h1>
-        <p className="text-muted-foreground">A guided experience to ensure a seamless data transition.</p>
-      </div>
       <Card>
         <CardHeader>
           <ol className="flex items-center w-full">
@@ -103,19 +96,33 @@ export default function DataMigrationWizardPage() {
           </ol>
         </CardHeader>
         <CardContent className="min-h-[400px]">
-            {renderStepContent()}
+            <CurrentStepComponent />
         </CardContent>
         <CardFooter className="flex justify-between border-t pt-6">
           <Button variant="outline" onClick={handlePrevious} disabled={currentStep === 1}>
             <ArrowLeft className="mr-2"/> Previous
           </Button>
           {currentStep < wizardSteps.length ? (
-            <Button onClick={handleNext}>Next <ArrowRight className="ml-2"/></Button>
+            <Button onClick={handleNext} disabled={isNextDisabled()}>Next <ArrowRight className="ml-2"/></Button>
           ) : (
             <Button>Finish Migration</Button>
           )}
         </CardFooter>
       </Card>
-    </div>
+  )
+}
+
+
+export default function DataMigrationWizardPage() {
+  return (
+    <MigrationWizardProvider>
+      <div className="grid gap-6">
+        <div>
+          <h1 className="text-3xl font-bold flex items-center gap-2"><Wand/> Data Migration Wizard</h1>
+          <p className="text-muted-foreground">A guided experience to ensure a seamless data transition.</p>
+        </div>
+        <DataMigrationWizardContent />
+      </div>
+    </MigrationWizardProvider>
   );
 }

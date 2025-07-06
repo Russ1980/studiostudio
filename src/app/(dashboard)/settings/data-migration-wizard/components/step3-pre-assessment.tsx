@@ -1,12 +1,14 @@
 
 import { CheckCircle, AlertTriangle } from "lucide-react";
+import { useMigrationWizard } from "../context/migration-wizard-context";
 
 export function Step3PreAssessment() {
+  const { migrationData } = useMigrationWizard();
   return (
     <div className="text-center flex flex-col items-center">
         <h2 className="text-2xl font-bold mb-2">Pre-Assessment</h2>
         <p className="text-muted-foreground max-w-2xl mb-8">
-            We're analyzing your data source. This is a placeholder for the results.
+            Analyzing your selected source: <span className="font-semibold text-primary">{migrationData.sourceSystem}</span>. This is a placeholder for the results.
         </p>
 
         <ul className="space-y-3 text-left w-full max-w-md">

@@ -1,5 +1,5 @@
 
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Check, Clock, Shield } from "lucide-react";
 
 export function Step1Welcome() {

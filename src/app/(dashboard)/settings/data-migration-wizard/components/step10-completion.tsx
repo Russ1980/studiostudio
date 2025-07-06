@@ -1,5 +1,5 @@
 
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { CheckCircle2, FileText, LifeBuoy } from "lucide-react";
 
 export function Step10Completion() {
