@@ -38,7 +38,6 @@ import { Logo } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Bell,
@@ -79,9 +78,11 @@ import {
   Activity,
   File as FileIcon,
   User,
+  ChevronsRight,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { User as UserType } from "@/lib/auth";
+import { Separator } from "@/components/ui/separator";
 
 function Breadcrumb() {
   const pathname = usePathname();
@@ -130,13 +131,13 @@ function renderNavLinks(
           <CollapsibleTrigger asChild>
             <SidebarMenuButton
               tooltip={link.label}
-              size={level > 1 ? "sm" : "default"}
+              size="lg"
               className="w-full"
               variant="default"
             >
                 <span className="flex w-full items-center justify-between">
                   <span className="flex items-center gap-2">
-                    {(isCollapsed || ['Settings', 'Help'].includes(link.label)) && link.icon && <link.icon />}
+                    {(isCollapsed || ['Settings', 'Help'].includes(link.label)) && link.icon && <link.icon className="size-3.5" />}
                     <span className="flex-1 text-left">{link.label}</span>
                   </span>
                   {!isCollapsed && (
@@ -156,19 +157,16 @@ function renderNavLinks(
           asChild
           isActive={pathname === link.href}
           tooltip={link.label}
-          size={level > 1 ? "sm" : "default"}
+          size={level > 1 ? "sm" : "lg"}
           className={cn(level > 1 && "h-8")}
           variant="default"
         >
           <Link href={link.href || "#"}>
              <span className="flex w-full items-center justify-between">
                 <span className="flex items-center gap-2">
-                  {(isCollapsed || ['Settings', 'Help'].includes(link.label)) && link.icon && <link.icon />}
+                  {(!isCollapsed || ['Settings', 'Help'].includes(link.label)) && link.icon && <link.icon className="size-3.5" />}
                   <span>{link.label}</span>
                 </span>
-                {!isCollapsed && level === 1 && (
-                  <ChevronRight className="h-4 w-4" />
-                )}
               </span>
           </Link>
         </SidebarMenuButton>
@@ -224,9 +222,6 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
                 </Badge>
               </Link>
             </div>
-             <SidebarTrigger className="group-data-[collapsible=icon]:hidden size-7 flex items-center justify-center rounded-full bg-sidebar-accent text-sidebar-accent-foreground">
-                <ChevronsLeft className="size-4" />
-            </SidebarTrigger>
           </div>
         </SidebarHeader>
 
@@ -236,7 +231,7 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
           <SidebarMenu>{renderNavLinks(navLinks, pathname, isCollapsed)}</SidebarMenu>
         </SidebarContent>
 
-        <SidebarFooter className="p-2">
+        <SidebarFooter className="p-2 mt-auto border-t border-sidebar-border">
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton
@@ -252,10 +247,14 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
                   </Avatar>
                   <span className="group-data-[collapsible=icon]:hidden">{user.name}</span>
                 </span>
-                <LogOut className="ml-auto group-data-[collapsible=icon]:hidden" />
+                <LogOut className="ml-auto group-data-[collapsible=icon]:hidden h-3.5 w-3.5" />
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
+          <Separator className="my-1 bg-sidebar-border" />
+          <SidebarTrigger className="h-9 w-9 mx-auto rounded-full bg-sidebar-accent hover:bg-sidebar-primary text-sidebar-accent-foreground">
+            {isCollapsed ? <ChevronsRight className="size-5" /> : <ChevronsLeft className="size-5" />}
+          </SidebarTrigger>
         </SidebarFooter>
       </Sidebar>
 
