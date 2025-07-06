@@ -1,31 +1,60 @@
+import {
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
+import { getExpenseAnalyticsData } from "@/lib/actions";
+import { ExpenseAnalyticsClient } from "./expense-analytics-client";
 
-"use client";
 
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { PieChart } from "lucide-react";
+export default async function ExpenseAnalyticsPage() {
+    const data = await getExpenseAnalyticsData();
 
-export default function ExpenseAnalyticsPage() {
-  return (
-    <div className="flex flex-col gap-6">
-      <div>
-        <h1 className="text-3xl font-bold">Expense Analytics</h1>
-        <p className="text-muted-foreground">
-          Provide detailed analytics on company spending.
-        </p>
-      </div>
-      <Card className="flex flex-col items-center justify-center min-h-[400px]">
-        <CardHeader className="items-center">
-            <div className="bg-secondary p-4 rounded-full mb-4">
-                <PieChart className="h-12 w-12 text-secondary-foreground" />
+    return (
+        <div className="flex flex-col gap-6">
+            <div>
+                <h1 className="text-3xl font-bold">Expense Analytics</h1>
+                <p className="text-muted-foreground">
+                    Provide detailed analytics on company spending.
+                </p>
             </div>
-            <CardTitle>Detailed Expense Analytics</CardTitle>
-        </CardHeader>
-        <CardContent className="text-center">
-          <p className="text-muted-foreground">
-            This feature is coming soon. Reports on expenses by category, vendor, and employee will be available here.
-          </p>
-        </CardContent>
-      </Card>
-    </div>
-  );
+
+            <ExpenseAnalyticsClient data={data} />
+            
+            <Card>
+                <CardHeader>
+                    <CardTitle>Top Vendors by Spending</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Vendor</TableHead>
+                                <TableHead>Category</TableHead>
+                                <TableHead className="text-right">Amount</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {data.expenseByVendor.map((vendor: any, index: number) => (
+                                <TableRow key={index}>
+                                    <TableCell className="font-medium">{vendor.vendor}</TableCell>
+                                    <TableCell>{vendor.category}</TableCell>
+                                    <TableCell className="text-right">${vendor.amount.toLocaleString('en-US', {minimumFractionDigits: 2})}</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </CardContent>
+            </Card>
+        </div>
+    )
 }

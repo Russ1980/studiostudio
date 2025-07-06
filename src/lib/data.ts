@@ -132,6 +132,45 @@ export const mockSalesByCustomerData = [
   { customer: "Momentum LLC", invoices: 15, sales: "18900" },
 ];
 
+export const mockSalesByItemData = [
+  { item: 'Consulting Services', quantity: 450, sales: 225000, category: 'Services' },
+  { item: 'Software License', quantity: 120, sales: 120000, category: 'Products' },
+  { item: 'Support Retainer', quantity: 50, sales: 75000, category: 'Services' },
+  { item: 'Custom Development', quantity: 80, sales: 64000, category: 'Services' },
+  { item: 'Hardware', quantity: 25, sales: 37500, category: 'Products' },
+];
+
+export const mockTaxSummaryData = [
+    { jurisdiction: 'California', taxableSales: 450000, nonTaxableSales: 75000, taxCollected: 39375.00 },
+    { jurisdiction: 'New York', taxableSales: 120000, nonTaxableSales: 20000, taxCollected: 10650.00 },
+    { jurisdiction: 'Texas', taxableSales: 85000, nonTaxableSales: 15000, taxCollected: 7012.50 },
+];
+
+// Reports & Insights
+export const mockExpenseAnalyticsData = {
+    kpiData: [
+        { title: 'Total Expenses (YTD)', value: '$1.8M' },
+        { title: 'Top Spending Category', value: 'Cost of Goods Sold' },
+        { title: 'Top Vendor', value: 'Raw Materials Co.' },
+        { title: 'Transactions Logged', value: '1,245' },
+    ],
+    expenseByCategory: [
+        { name: 'COGS', value: 600000, fill: 'var(--color-chart-1)' },
+        { name: 'Salaries', value: 450000, fill: 'var(--color-chart-2)' },
+        { name: 'R&D', value: 210000, fill: 'var(--color-chart-3)' },
+        { name: "Marketing", value: 120000, fill: 'var(--color-chart-4)' },
+        { name: 'Overhead', value: 85000, fill: 'var(--color-chart-5)' },
+        { name: 'Other', value: 335000, fill: 'hsl(var(--muted-foreground))' },
+    ],
+    expenseByVendor: [
+        { vendor: 'Raw Materials Co.', amount: 450000, category: 'COGS' },
+        { vendor: 'Cloud Services LLC', amount: 150000, category: 'Overhead' },
+        { vendor: 'Marketing Agency Co.', amount: 120000, category: 'Marketing' },
+        { vendor: 'Component Suppliers Inc.', amount: 95000, category: 'COGS' },
+        { vendor: 'Office Supplies Inc.', amount: 35000, category: 'Overhead' },
+    ]
+};
+
 
 // Accounting
 export const mockAccountingDashboard = {

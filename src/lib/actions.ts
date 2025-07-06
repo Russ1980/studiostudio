@@ -60,6 +60,9 @@ import {
   mockTimeLogs,
   mockJobProfitabilityData,
   mockWipReportData,
+  mockSalesByItemData,
+  mockTaxSummaryData,
+  mockExpenseAnalyticsData,
 } from './data';
 
 const simulateDelay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
@@ -120,6 +123,20 @@ export async function getArAgingData() {
 export async function getSalesByCustomerData() {
     await simulateDelay(50);
     return mockSalesByCustomerData;
+}
+export async function getSalesByItemData() {
+    await simulateDelay(50);
+    return mockSalesByItemData;
+}
+export async function getTaxSummaryData() {
+    await simulateDelay(50);
+    return mockTaxSummaryData;
+}
+
+// Reports & Insights
+export async function getExpenseAnalyticsData() {
+    await simulateDelay(50);
+    return mockExpenseAnalyticsData;
 }
 
 
