@@ -216,7 +216,7 @@ const Sidebar = React.forwardRef<
     return (
       <div
         ref={ref}
-        className="group peer hidden md:block text-sidebar-foreground"
+        className="group peer hidden md:block text-sidebar-foreground z-50"
         data-state={state}
         data-collapsible={state === "collapsed" ? collapsible : ""}
         data-variant={variant}
@@ -255,7 +255,7 @@ const Sidebar = React.forwardRef<
              <Button
               variant="ghost"
               size="icon"
-              className="absolute top-8 right-0 z-50 h-8 w-8 -translate-y-1/2 translate-x-1/2 rounded-full bg-sidebar-primary text-sidebar-primary-foreground ring-1 ring-sidebar-border hover:bg-sidebar-accent hover:text-sidebar-accent-foreground group-data-[state=collapsed]:rotate-180"
+              className="absolute top-8 right-0 z-50 h-8 w-8 -translate-y-1/2 translate-x-1/2 rounded-full bg-sidebar-primary text-sidebar-primary-foreground shadow-lg hover:bg-sidebar-accent hover:text-sidebar-accent-foreground group-data-[state=collapsed]:rotate-180"
               onClick={toggleSidebar}
             >
               <ChevronsLeft className="size-4" />
@@ -496,12 +496,12 @@ const SidebarMenuItem = React.forwardRef<
 SidebarMenuItem.displayName = "SidebarMenuItem"
 
 const sidebarMenuButtonVariants = cva(
-  "peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-md py-3 pr-3 pl-2 border-l-4 border-transparent text-left text-sm outline-none ring-sidebar-ring transition-colors focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 group-has-[[data-sidebar=menu-action]]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-primary data-[active=true]:font-semibold data-[active=true]:text-sidebar-primary-foreground data-[active=true]:border-sidebar-primary-active-border hover:bg-sidebar-accent data-[state=open]:bg-sidebar-primary data-[state=open]:text-sidebar-primary-foreground data-[state=open]:border-sidebar-primary-active-border group-data-[collapsible=icon]:!size-8 group-data-[collapsible=icon]:!p-2 [&>span:last-child]:truncate [&_svg]:size-3.5",
+  "peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-md py-3 pr-3 pl-2 border-l-4 text-left text-sm outline-none ring-sidebar-ring transition-colors focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 group-has-[[data-sidebar=menu-action]]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-primary data-[active=true]:font-semibold data-[active=true]:text-sidebar-primary-foreground data-[active=true]:border-sidebar-primary-active-border hover:bg-sidebar-accent data-[state=open]:bg-sidebar-primary data-[state=open]:text-sidebar-primary-foreground data-[state=open]:border-sidebar-primary-active-border group-data-[collapsible=icon]:!size-8 group-data-[collapsible=icon]:!p-2 [&>span:last-child]:truncate [&_svg]:size-3.5",
   {
     variants: {
       variant: {
         default:
-          "text-sidebar-foreground/70 hover:text-sidebar-foreground/70",
+          "text-sidebar-foreground/70 hover:text-sidebar-foreground/70 border-transparent",
         outline:
           "bg-background shadow-[0_0_0_1px_hsl(var(--sidebar-border))] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:shadow-[0_0_0_1px_hsl(var(--sidebar-accent))]",
       },
