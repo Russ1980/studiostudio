@@ -15,7 +15,6 @@ const UploadIcon = (props: React.SVGProps<SVGSVGElement>) => (
 
 const sources = [
     { name: "QuickBooks Online", icon: UploadIcon },
-    { name: "QuickBooks Desktop", icon: UploadIcon },
     { name: "Xero", icon: UploadIcon },
     { name: "FreshBooks", icon: UploadIcon },
 ];
@@ -43,7 +42,7 @@ export function Step2SourceSelection() {
         >
             <UploadIcon className="w-10 h-10 text-primary mb-4"/>
             <h3 className="text-lg font-semibold">File Upload</h3>
-            <p className="text-sm text-muted-foreground">Migrate data from CSV, XLSX, or XML files.</p>
+            <p className="text-sm text-muted-foreground">Migrate data from files exported from QuickBooks Desktop, or other CSV/XLSX files.</p>
         </Card>
         <Card 
             className={cn("p-6 flex flex-col items-center justify-center text-center cursor-pointer transition-all",
@@ -59,7 +58,7 @@ export function Step2SourceSelection() {
 
        <div className="w-full max-w-5xl mt-8">
             <h3 className="font-semibold text-center mb-4 text-muted-foreground">Or connect to a cloud accounting platform:</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                  {sources.map(source => (
                     <Card 
                         key={source.name} 
