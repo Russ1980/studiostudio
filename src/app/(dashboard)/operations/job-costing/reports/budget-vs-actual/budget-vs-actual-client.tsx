@@ -13,7 +13,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid } from "recharts";
+import { BarChart, Bar, XAxis, YAxis } from "recharts";
 
 type Job = {
   id: string;
@@ -45,13 +45,20 @@ export function BudgetVsActualClient({ jobs }: { jobs: Job[] }) {
       </CardHeader>
       <CardContent>
           <ChartContainer config={chartConfig} className="h-80 w-full">
-              <BarChart data={chartData} layout="vertical" margin={{ left: 20 }}>
-                  <CartesianGrid horizontal={false} />
-                  <XAxis type="number" dataKey="value" tickFormatter={(value) => `$${Number(value)/1000}k`} />
-                  <YAxis dataKey="name" type="category" tickLine={false} axisLine={false} tickMargin={10} width={120} />
-                  <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
-                  <Bar dataKey="budget" fill="var(--color-budget)" radius={4} name="Budget" />
-                  <Bar dataKey="actual" fill="var(--color-actual)" radius={4} name="Actual" />
+              <BarChart data={chartData} layout="vertical" margin={{ left: 0, top: 5, right: 20, bottom: 5 }}>
+                  <XAxis type="number" hide />
+                  <YAxis 
+                    dataKey="name" 
+                    type="category" 
+                    tickLine={false} 
+                    axisLine={true} 
+                    tickMargin={10} 
+                    width={140}
+                    interval={0}
+                  />
+                  <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+                  <Bar dataKey="budget" fill="var(--color-budget)" radius={[0, 4, 4, 0]} name="Budget" />
+                  <Bar dataKey="actual" fill="var(--color-actual)" radius={[0, 4, 4, 0]} name="Actual" />
               </BarChart>
           </ChartContainer>
       </CardContent>
