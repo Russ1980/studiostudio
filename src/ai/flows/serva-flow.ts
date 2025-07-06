@@ -9,6 +9,7 @@
 
 import { ai } from '@/ai/genkit';
 import { z } from 'genkit';
+import { getStockPrice } from '../tools/get-stock-price';
 
 // Mock chart data for demonstration
 const mockRevenueChartData = {
@@ -60,7 +61,10 @@ const servaAIFlow = ai.defineFlow(
     const llmResponse = await ai.generate({
       prompt: `You are Serva AI, an expert financial assistant integrated into the Mardisen Suite. Your tone is professional, helpful, and concise. You can analyze data and provide insights.
       
-      User query: "${query}"`,
+      User query: "${query}"
+      
+      If the user's question asks about a public company's stock price, use the getStockPrice tool to get the current price and include it in your answer.`,
+      tools: [getStockPrice]
     });
 
     return { response: llmResponse.text };
