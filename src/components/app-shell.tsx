@@ -44,7 +44,6 @@ import {
   LogOut,
   Moon,
   Search,
-  ChevronsLeft,
   ChevronRight,
   UserPlus,
   RefreshCw,
@@ -231,24 +230,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <Logo className="size-8 text-primary" />
             <Link href="/dashboard" className="flex items-center group-data-[collapsible=icon]:hidden">
               <span className="text-lg font-semibold text-sidebar-foreground">
-                Mardisen
+                FinView
               </span>
               <Badge
                 variant="outline"
                 className="ml-2 border-sidebar-border bg-sidebar-accent text-sidebar-accent-foreground"
               >
-                SUITE
+                R
               </Badge>
             </Link>
-            <SidebarTrigger asChild className="ml-auto group-data-[collapsible=icon]:hidden">
-              <Button
-                size="icon"
-                variant="ghost"
-                className="rounded-full bg-sidebar-accent text-sidebar-foreground hover:bg-sidebar-accent"
-              >
-                <ChevronsLeft />
-              </Button>
-            </SidebarTrigger>
           </div>
         </SidebarHeader>
 
