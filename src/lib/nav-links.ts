@@ -64,6 +64,8 @@ import {
   Keyboard,
   Languages,
   AlertTriangle,
+  Timer,
+  ListChecks,
 } from 'lucide-react';
 
 export type NavLink = {
@@ -181,6 +183,17 @@ export const navLinks: NavLink[] = [
       { href: '/operations/maintenance', label: 'Maintenance', icon: Wrench },
       { href: '/operations/logistics', label: 'Logistics', icon: Truck },
       { href: '/operations/analytics', label: 'Analytics', icon: LineChart },
+    ],
+  },
+   {
+    label: 'Projects',
+    icon: Briefcase,
+    href: '/projects',
+    items: [
+      { href: '/projects/dashboard', label: 'Projects Dashboard', icon: LayoutGrid },
+      { href: '/projects/all-projects', label: 'All Projects', icon: ListChecks },
+      { href: '/projects/time-tracking', label: 'Time Tracking', icon: Timer },
+      { href: '/projects/project-reports', label: 'Reports', icon: FileBarChart },
     ],
   },
   {
