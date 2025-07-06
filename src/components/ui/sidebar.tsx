@@ -235,7 +235,7 @@ const Sidebar = React.forwardRef<
         />
         <div
           className={cn(
-            "duration-200 fixed inset-y-0 z-10 hidden h-svh w-[--sidebar-width] transition-[left,right,width] ease-linear md:flex",
+            "duration-200 fixed inset-y-0 z-40 hidden h-svh w-[--sidebar-width] transition-[left,right,width] ease-linear md:flex",
             side === "left"
               ? "left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]"
               : "right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]",
@@ -255,7 +255,7 @@ const Sidebar = React.forwardRef<
              <Button
               variant="ghost"
               size="icon"
-              className="absolute top-14 right-0 z-20 h-8 w-8 -translate-y-1/2 translate-x-1/2 rounded-full bg-sidebar-primary text-sidebar-primary-foreground ring-1 ring-sidebar-border hover:bg-sidebar-accent hover:text-sidebar-accent-foreground group-data-[state=collapsed]:rotate-180"
+              className="absolute top-8 right-0 z-20 h-8 w-8 -translate-y-1/2 translate-x-1/2 rounded-full bg-sidebar-primary text-sidebar-primary-foreground ring-1 ring-sidebar-border hover:bg-sidebar-accent hover:text-sidebar-accent-foreground group-data-[state=collapsed]:rotate-180"
               onClick={toggleSidebar}
             >
               <ChevronsLeft className="size-4" />
