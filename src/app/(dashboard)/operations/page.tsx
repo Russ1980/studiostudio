@@ -17,13 +17,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Zap, TimerCheck, Award, UsersCog, FileText, AlertCircle, PlusCircle, Wrench, BarChart4 } from "lucide-react";
+import { Zap, Timer, Award, UserCog, FileText, AlertCircle, PlusCircle, Wrench, BarChart4 } from "lucide-react";
 
 const kpiData = [
   { title: "Production Efficiency (OEE)", value: "85%", icon: Zap },
-  { title: "On-Time Delivery", value: "98.2%", icon: TimerCheck },
+  { title: "On-Time Delivery", value: "98.2%", icon: Timer },
   { title: "Quality Rate", value: "99.5%", icon: Award },
-  { title: "Resource Utilization", value: "78%", icon: UsersCog },
+  { title: "Resource Utilization", value: "78%", icon: UserCog },
 ];
 
 const workOrders = [
