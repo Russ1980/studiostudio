@@ -94,6 +94,8 @@ import {
 import { cn } from "@/lib/utils";
 import type { User as UserType } from "@/lib/auth";
 import { Separator } from "@/components/ui/separator";
+import { useServaAI } from "@/hooks/use-serva-ai";
+import { ServaAIWidget } from "../serva-ai/serva-ai-widget";
 
 function Breadcrumb() {
   const pathname = usePathname();
@@ -272,7 +274,8 @@ const StyledDropdownMenuItem = ({ href, icon: Icon, title, description, special 
 
 export function AppShell({ children, user }: { children: React.ReactNode, user: UserType }) {
   const pathname = usePathname();
-  const { state, setOpen } = useSidebar();
+  const { state } = useSidebar();
+  const { openServaAI } = useServaAI();
   const isCollapsed = state === "collapsed";
  
   return (
@@ -425,7 +428,7 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
               <Wand2 className="mr-2" />
               Serva AI Ready
             </Button>
-            <Button variant="secondary" size="sm">Ask Serva AI...</Button>
+            <Button variant="secondary" size="sm" onClick={openServaAI}>Ask Serva AI...</Button>
             
             <div className="flex items-center gap-1">
                 <Button variant="ghost" size="icon" className="rounded-full">
@@ -495,7 +498,7 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
                     <Breadcrumb />
                 </div>
                 {pathname === '/dashboard' && (
-                  <Button variant="outline" size="sm" className="bg-accent text-accent-foreground border-accent-foreground/20 hover:bg-accent/90">
+                  <Button variant="outline" size="sm" className="bg-accent text-accent-foreground border-accent-foreground/20 hover:bg-accent/90" onClick={openServaAI}>
                       <Wand2 className="mr-2 h-4 w-4" />
                       <span>Serva AI • Enterprise Task Assistant •</span>
                       <span className="text-accent-foreground/70 ml-1">Ask Serva AI...</span>
@@ -507,6 +510,7 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
             </div>
         </main>
       </SidebarInset>
+      <ServaAIWidget />
     </>
   );
 }

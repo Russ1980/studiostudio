@@ -1,6 +1,7 @@
 
 import { AppShell } from '@/components/app-shell';
 import { FloatingHelpButton, OnboardingProvider } from '@/components/onboarding';
+import { ServaAIProvider } from '@/hooks/use-serva-ai';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { getMockUser } from '@/lib/auth';
 
@@ -14,8 +15,10 @@ export default async function DashboardLayout({
   return (
     <SidebarProvider>
       <OnboardingProvider>
-        <AppShell user={user}>{children}</AppShell>
-        <FloatingHelpButton />
+        <ServaAIProvider>
+          <AppShell user={user}>{children}</AppShell>
+          <FloatingHelpButton />
+        </ServaAIProvider>
       </OnboardingProvider>
     </SidebarProvider>
   );
