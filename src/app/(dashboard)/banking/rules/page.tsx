@@ -1,4 +1,3 @@
-
 "use client";
 
 import {
@@ -23,14 +22,27 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal, PlusCircle } from "lucide-react";
+import { getTransactionRules } from "@/lib/actions";
+import React, { useState, useEffect } from "react";
 
-const rules = [
-    { name: "Google Workspace Subscription", condition: "Description contains 'Google Workspace'", action: "Categorize as 'Software & Subscriptions'" },
-    { name: "Stripe Payouts", condition: "Description contains 'STRIPE PAYOUT'", action: "Categorize as 'Sales Revenue'" },
-    { name: "Amazon Web Services", condition: "Description contains 'AMAZON WEB SERVICES'", action: "Categorize as 'Cloud Hosting'" },
-];
+type Rule = {
+  name: string;
+  condition: string;
+  action: string;
+};
+
 
 export default function TransactionRulesPage() {
+  const [rules, setRules] = useState<Rule[]>([]);
+
+  useEffect(() => {
+    const fetchRules = async () => {
+      const data = await getTransactionRules();
+      setRules(data);
+    };
+    fetchRules();
+  }, []);
+
   return (
     <div className="grid gap-6">
       <div className="flex items-center justify-between">
