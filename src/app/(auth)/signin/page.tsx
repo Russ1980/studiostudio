@@ -44,12 +44,11 @@ export default function SignInPage() {
     <div className="flex flex-col items-center gap-6">
         <Card className="w-full max-w-sm">
           <form onSubmit={handleSignIn}>
-            <CardHeader className="text-center">
+            <CardHeader className="text-center pt-8 pb-4">
                 <div className="flex justify-center items-center gap-2 mb-4">
                     <Logo className="h-8 w-8"/>
                     <span className="text-2xl font-bold">Mardisen Suite</span>
                 </div>
-              <CardTitle className="text-2xl">Log In</CardTitle>
             </CardHeader>
             <CardContent className="grid gap-4">
               <div className="grid gap-2">
