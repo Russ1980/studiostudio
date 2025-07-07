@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -93,14 +94,18 @@ export default function PricingPage() {
           Simple, transparent pricing. All plans come with a 14-day free trial.
         </p>
         <div className="flex items-center justify-center gap-4 mt-8">
-            <span className={cn("font-medium text-sm", !isAnnual && "text-primary")}>Monthly (50% Off)</span>
+            <span className={cn("font-medium text-sm", !isAnnual && "text-primary")}>Monthly</span>
             <Switch id="billing-cycle" checked={isAnnual} onCheckedChange={setIsAnnual} aria-label="Toggle billing cycle" />
-            <span className={cn("font-medium text-sm", isAnnual && "text-primary")}>Annually (70% Off)</span>
+            <span className={cn("font-medium text-sm", isAnnual && "text-primary")}>Annually (Save 70%)</span>
         </div>
       </div>
 
       <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mt-16 items-start">
-        {plans.map((plan) => (
+        {plans.map((plan) => {
+            const price = isAnnual ? plan.annualPrice * 12 : plan.monthlyPrice;
+            const displayPrice = isAnnual ? plan.annualPrice : plan.monthlyPrice;
+
+            return (
             <Card key={plan.name} className={cn("flex flex-col", plan.popular && "border-primary ring-2 ring-primary")}>
                 <CardHeader>
                     {plan.popular && <Badge className="w-fit mb-2">Most Popular</Badge>}
@@ -108,7 +113,7 @@ export default function PricingPage() {
                     <CardDescription>{plan.description}</CardDescription>
                     <div className="pt-4">
                         <span className="text-4xl font-bold">
-                            ${isAnnual ? plan.annualPrice.toFixed(2) : (plan.monthlyPrice * 0.5).toFixed(2)}
+                            ${displayPrice.toFixed(2)}
                         </span>
                         <span className="text-muted-foreground">/month</span>
                         <p className="text-xs text-muted-foreground">{isAnnual ? "Billed annually" : "Billed monthly"}</p>
@@ -126,12 +131,19 @@ export default function PricingPage() {
                 </CardContent>
                 <CardFooter className="flex-col gap-2">
                     <Button className="w-full" asChild>
-                        <Link href="/payment">Get Started</Link>
+                        <Link href={{
+                            pathname: '/payment',
+                            query: { 
+                                plan: plan.name, 
+                                price: Math.round(price * 100), // pass price in cents
+                                cycle: isAnnual ? 'yearly' : 'monthly'
+                            }
+                        }}>Get Started</Link>
                     </Button>
                     <p className="text-xs text-muted-foreground">{plan.userLimit}</p>
                 </CardFooter>
             </Card>
-        ))}
+        )})}
       </div>
     </div>
   );
