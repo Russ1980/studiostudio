@@ -2,7 +2,7 @@
 "use client";
 
 import * as React from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import {
   Sidebar,
@@ -280,6 +280,7 @@ const StyledDropdownMenuItem = ({ href, icon: Icon, title, description, special 
 
 export function AppShell({ children, user }: { children: React.ReactNode, user: UserType }) {
   const pathname = usePathname();
+  const router = useRouter();
   const { state } = useSidebar();
   const { openServaAI } = useServaAI();
   const isCollapsed = state === "collapsed";
@@ -348,6 +349,9 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
                           <p className="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Create New</p>
                           <StyledDropdownMenuItem href="/accounting/journal-entries/new" icon={FilePlus} title="New Transaction" description="Record a new journal entry." data-onboarding="new-transaction-link" />
                           <StyledDropdownMenuItem href="/reports-insights/builder" icon={FileBarChart} title="New Report" description="Build a custom report from scratch." />
+                          <StyledDropdownMenuItem href="/operations/inventory/purchase-orders/new" icon={ShoppingCart} title="New Purchase Order" description="Create an order for new inventory." />
+                          <StyledDropdownMenuItem href="/operations/job-costing/jobs/new" icon={Briefcase} title="New Job" description="Set up a new job to track costs." />
+                          <StyledDropdownMenuItem href="/payroll/employee-management/new" icon={UserPlus} title="New Employee" description="Add a new employee to payroll." />
                           
                           <p className="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Export</p>
                           <StyledDropdownMenuItem href="/data-management/data-export" icon={FileOutput} title="Export Center" description="Export data to CSV, PDF, or Excel." />
@@ -356,7 +360,7 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
                            <StyledDropdownMenuItem href="/data-management/data-import" icon={FileInput} title="Import Wizard" description="Import data from external sources." />
                            <StyledDropdownMenuItem href="/banking/connections" icon={Database} title="Connect Bank Data" description="Sync with your financial institutions." />
 
-                           <p className="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Print &amp; Share</p>
+                           <p className="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Print & Share</p>
                            <DropdownMenuItem asChild className="p-0 focus:bg-transparent">
                              <button onClick={() => window.print()} className="flex w-full items-center gap-3 rounded-lg border bg-card p-2.5 text-card-foreground transition-colors hover:border-primary hover:bg-primary/5 focus:outline-none focus:ring-2 focus:ring-ring">
                                 <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"><Printer className="h-4 w-4" /></div>
@@ -484,14 +488,28 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
                              </div>
                         </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
+                    <DropdownMenuContent align="end" className="w-56">
                         <DropdownMenuLabel>My Account</DropdownMenuLabel>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>Profile</DropdownMenuItem>
-                        <DropdownMenuItem>Billing</DropdownMenuItem>
-                        <DropdownMenuItem>Settings</DropdownMenuItem>
+                        <DropdownMenuGroup>
+                          <DropdownMenuItem onSelect={() => router.push('/settings')}>
+                            <User className="mr-2 h-4 w-4" />
+                            <span>Profile</span>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onSelect={() => router.push('/settings/billing')}>
+                            <CreditCard className="mr-2 h-4 w-4" />
+                            <span>Billing</span>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onSelect={() => router.push('/settings')}>
+                            <Settings className="mr-2 h-4 w-4" />
+                            <span>Settings</span>
+                          </DropdownMenuItem>
+                        </DropdownMenuGroup>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>Log out</DropdownMenuItem>
+                        <DropdownMenuItem onSelect={() => router.push('/signin')}>
+                          <LogOut className="mr-2 h-4 w-4" />
+                          <span>Log out</span>
+                        </DropdownMenuItem>
                     </DropdownMenuContent>
                  </DropdownMenu>
             </div>
@@ -502,13 +520,6 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
               <div className="flex items-center gap-2">
                 <Breadcrumb />
               </div>
-              {pathname === '/dashboard' && (
-                <Button variant="accent" size="sm" onClick={openServaAI}>
-                    <Wand2 className="mr-2 h-4 w-4" />
-                    <span>Serva AI • Enterprise Task Assistant •</span>
-                    <span className="text-accent-foreground/70 ml-1">Ask Serva AI...</span>
-                </Button>
-              )}
             </div>
             {children}
         </main>
