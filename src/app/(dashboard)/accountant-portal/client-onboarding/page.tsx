@@ -1,7 +1,8 @@
 
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { useDropzone } from 'react-dropzone';
 import {
   Card,
@@ -22,8 +23,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Upload, Check, FileText, Trash2 } from "lucide-react";
+import { Upload, Check, FileText, Trash2, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
+import { onboardNewClient } from "@/lib/actions";
 
 const steps = [
   { id: 1, name: "Client Profile" },
@@ -69,6 +72,10 @@ export default function ClientOnboardingPage() {
   
   const [newUserEmail, setNewUserEmail] = useState('');
   const [newUserRole, setNewUserRole] = useState('');
+  
+  const [isSaving, startTransition] = useTransition();
+  const router = useRouter();
+  const { toast } = useToast();
 
   const handleNext = () => {
     if (currentStep < steps.length) {
@@ -80,6 +87,18 @@ export default function ClientOnboardingPage() {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
     }
+  };
+
+  const handleFinish = async () => {
+    startTransition(async () => {
+      const result = await onboardNewClient(formData);
+      if (result.success) {
+        toast({ title: "Client Onboarded", description: `${formData.legalName} has been successfully added.` });
+        router.push('/accountant-portal/client-list');
+      } else {
+        toast({ title: "Error", description: result.error || "Failed to onboard client.", variant: "destructive" });
+      }
+    });
   };
 
   const updateFormData = (updates: Partial<OnboardingData>) => {
@@ -151,13 +170,16 @@ export default function ClientOnboardingPage() {
           <CurrentStepComponent />
         </CardContent>
         <CardFooter className="flex justify-between border-t px-6 py-4">
-          <Button variant="outline" onClick={handlePrevious} disabled={currentStep === 1}>
+          <Button variant="outline" onClick={handlePrevious} disabled={currentStep === 1 || isSaving}>
             Previous
           </Button>
           {currentStep < steps.length ? (
-            <Button onClick={handleNext}>Next</Button>
+            <Button onClick={handleNext} disabled={isSaving}>Next</Button>
           ) : (
-            <Button>Finish Onboarding</Button>
+            <Button onClick={handleFinish} disabled={isSaving}>
+                {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Finish Onboarding
+            </Button>
           )}
         </CardFooter>
       </Card>
@@ -205,9 +227,9 @@ const Step2Content = ({ formData, updateFormData }: { formData: OnboardingData, 
                     <SelectValue placeholder="Select a tier" />
                 </SelectTrigger>
                 <SelectContent>
-                    <SelectItem value="standard">Standard</SelectItem>
-                    <SelectItem value="professional">Professional</SelectItem>
-                    <SelectItem value="enterprise">Enterprise</SelectItem>
+                    <SelectItem value="Standard">Standard</SelectItem>
+                    <SelectItem value="Professional">Professional</SelectItem>
+                    <SelectItem value="Enterprise">Enterprise</SelectItem>
                 </SelectContent>
             </Select>
         </div>
@@ -305,9 +327,9 @@ const Step4Content = ({ formData, updateFormData, newUserEmail, setNewUserEmail,
                             <SelectValue placeholder="Select role" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="admin">Admin</SelectItem>
-                            <SelectItem value="editor">Editor</SelectItem>
-                            <SelectItem value="viewer">Viewer</SelectItem>
+                            <SelectItem value="Admin">Admin</SelectItem>
+                            <SelectItem value="Editor">Editor</SelectItem>
+                            <SelectItem value="Viewer">Viewer</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>

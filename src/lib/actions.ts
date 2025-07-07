@@ -75,6 +75,7 @@ import {
 } from './data';
 import { getMockUser } from './auth';
 import { getRevenueDataTool } from '@/ai/tools/get-revenue-data';
+import { revalidatePath } from 'next/cache';
 
 const simulateDelay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -178,6 +179,52 @@ export async function getClients() {
     console.error("Error fetching clients from Firestore:", error);
     // Fallback to mock data in case of error
     return mockClients;
+  }
+}
+
+export async function onboardNewClient(formData: any) {
+  if (!firestore) {
+    return { success: false, error: 'Firestore not initialized' };
+  }
+
+  try {
+    const primaryContactUser = formData.clientUsers?.find((u: any) => u.role === 'Admin') || formData.clientUsers?.[0];
+
+    const newClientData = {
+      businessName: formData.legalName || 'Unnamed Client',
+      ein: formData.ein || '',
+      address: formData.address || '',
+      tier: formData.subscriptionTier || 'Standard',
+      status: 'Onboarding',
+      onboarded: new Date().toISOString().split('T')[0],
+      contact: primaryContactUser ? primaryContactUser.email : 'N/A',
+      // Store other fields as well for completeness
+      fiscalYearEnd: formData.fiscalYear || '',
+      addons: {
+        payroll: formData.payrollAddon || false,
+        tax: formData.taxAddon || false,
+        advisory: formData.advisoryAddon || false,
+      },
+      chartOfAccountsSetup: formData.chartOfAccountsSetup || '',
+    };
+
+    const clientRef = await firestore.collection('clients').add(newClientData);
+    
+    // Also save users to a subcollection if they exist
+    if (formData.clientUsers && formData.clientUsers.length > 0) {
+      const usersBatch = firestore.batch();
+      formData.clientUsers.forEach((user: any) => {
+        const userRef = clientRef.collection('users').doc();
+        usersBatch.set(userRef, user);
+      });
+      await usersBatch.commit();
+    }
+
+    revalidatePath('/accountant-portal/client-list');
+    return { success: true, clientId: clientRef.id };
+  } catch (error: any) {
+    console.error("Error onboarding new client:", error);
+    return { success: false, error: error.message };
   }
 }
 
