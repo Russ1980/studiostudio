@@ -4,7 +4,7 @@
 // In a real application, this data would be fetched from a database.
 
 import { v4 as uuidv4 } from 'uuid';
-import { Activity, Clock, DollarSign, ListChecks, type LucideIcon, FilePlus, Receipt, BarChart3, PlusCircle } from 'lucide-react';
+import { Activity, Clock, DollarSign, ListChecks, type LucideIcon, FilePlus, Receipt, BarChart3, PlusCircle, TrendingUp, BarChart, Users, Eye, Briefcase, SlidersHorizontal, Wand2 } from 'lucide-react';
 
 // Accountant Portal
 export const mockClients = [
@@ -898,49 +898,29 @@ export const mockDashboardPageData = {
       title: "Financial Controller",
       role: "Admin",
     },
-    chartData: [
-        { month: 'Jan', income: 186000, expenses: 80000 },
-        { month: 'Feb', income: 305000, expenses: 200000 },
-        { month: 'Mar', income: 237000, expenses: 120000 },
-        { month: 'Apr', income: 273000, expenses: 190000 },
-        { month: 'May', income: 209000, expenses: 130000 },
-        { month: 'Jun', income: 214000, expenses: 140000 },
-    ],
-    recentActivity: [
-        { description: "Invoice #1024 paid by Apex Solutions.", time: "2m ago" },
-        { description: "Payroll for June 2024 processed successfully.", time: "1h ago" },
-        { description: "New client 'Stellar Goods' added.", time: "3h ago" },
-        { description: "Q2 Financial Report generated.", time: "1d ago" },
-    ],
-    quickActions: [
-        { label: "New Transaction", icon: PlusCircle },
-        { label: "Create Invoice", icon: Receipt },
-        { label: "Record Payment", icon: DollarSign },
-        { label: "Run Report", icon: BarChart3 }
-    ],
-    performanceMetrics: {
-      profitLoss: {
-        ytd: "$430.1k",
-        change: "+5.2%",
-        changeType: "up",
-      },
-      cashFlow: {
-        incoming: "$175k",
-        outgoing: "$115k",
-        net: "+$60k",
-      },
-      accountsReceivable: {
-        outstanding: "$245.8k",
-        overdue: "$35.2k",
-      }
+    mainKpis: {
+        netRevenue: "$2.1M",
+        growth: "+12.4%",
+        healthScore: "94%",
     },
-    alerts: [
-      { id: 1, type: 'critical', message: 'Invoice #INV-2024-049 is 32 days overdue.' },
-      { id: 2, type: 'critical', message: 'Bank connection for Savings Account needs to be re-authenticated.' },
-      { id: 3, type: 'reminder', message: 'Federal Tax Deposit due in 5 days.' },
+    navItems: [
+        { title: "Executive Overview", description: "Comprehensive business summary", icon: 'BarChart', active: true },
+        { title: "Financial Health", description: "Financial metrics and analysis", icon: 'DollarSign', active: false },
+        { title: "Serva AI Insights", description: "AI-powered business intelligence", icon: 'Wand2', active: false },
+        { title: "Workflow Hub", description: "Team productivity and tasks", icon: 'Users', active: false },
+        { title: "Process Visibility", description: "Operations monitoring", icon: 'Eye', active: false },
+        { title: "Business Context", description: "Industry benchmarks and insights", icon: 'Briefcase', active: false },
+        { title: "Customize Dashboard", description: "Personalize your workspace", icon: 'SlidersHorizontal', active: false },
+    ],
+    metricCards: [
+        { title: "Monthly Expenses", value: "$1,939,079", change: "+5.0%", changeType: "increase", icon: 'TrendingUp', details: null },
+        { title: "Net Profit", value: "$2,060,189", details: "Income: $6,538,013\nExpenses: $4,477,824", icon: 'DollarSign', change: null, changeType: null },
+        { title: "Sales (30 Days)", value: "$1,803,232", change: "+8.4%", changeType: "increase", icon: 'BarChart3', details: null },
+        { title: "A/R Total", value: "$5,753,934", details: "Overdue: $1,812,434", icon: 'Receipt', change: null, changeType: null },
     ]
   };
     
+
 
 
 
