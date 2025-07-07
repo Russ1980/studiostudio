@@ -11,24 +11,7 @@ import { ai } from '@/ai/genkit';
 import { z } from 'genkit';
 import { getStockPrice } from '../tools/get-stock-price';
 import { generateSalesReport } from '../tools/generate-sales-report';
-
-// Mock chart data for demonstration
-const mockRevenueChartData = {
-    type: 'chart',
-    payload: {
-        config: {
-            revenue: { label: "Revenue", color: "hsl(var(--primary))" },
-        },
-        data: [
-            { month: "Jan", revenue: 680000 },
-            { month: "Feb", revenue: 720000 },
-            { month: "Mar", revenue: 810000 },
-            { month: "Apr", revenue: 790000 },
-            { month: "May", revenue: 850000 },
-            { month: "Jun", revenue: 920000 },
-        ],
-    }
-};
+import { getRevenueDataTool } from '../tools/get-revenue-data';
 
 
 const ServaAIOutputSchema = z.object({
@@ -50,15 +33,6 @@ const servaAIFlow = ai.defineFlow(
     outputSchema: ServaAIOutputSchema,
   },
   async (query) => {
-    // This is a simple intent detection for demonstration.
-    // A more advanced system would use the LLM to route to different tools or chains.
-    if (query.toLowerCase().includes('revenue trends')) {
-        return {
-            response: "Here are the revenue trends for the last six months. As you can see, there's a steady upward trend.",
-            data: mockRevenueChartData
-        };
-    }
-
     const llmResponse = await ai.generate({
       prompt: `You are Serva AI, an expert financial assistant integrated into the Mardisen Suite. Your tone is professional, helpful, and concise. You can analyze data, provide insights, and generate reports.
       
@@ -67,8 +41,9 @@ const servaAIFlow = ai.defineFlow(
       Instructions:
       - If the user's question asks about a public company's stock price, use the getStockPrice tool to get the current price and include it in your answer.
       - If the user asks for a sales report, use the generateSalesReport tool. When you use this tool, place its full output into the 'data.payload' field and set 'data.type' to 'table'. Your text 'response' should be a brief confirmation, like "Here is the sales report you requested."
+      - If the user asks about revenue trends or monthly revenue, use the getRevenueDataTool. When you use this tool, place its full output into the 'data.payload' field and set 'data.type' to 'chart'. Your text 'response' should be a brief summary of the trend.
       - For all other queries, provide a text-based response.`,
-      tools: [getStockPrice, generateSalesReport],
+      tools: [getStockPrice, generateSalesReport, getRevenueDataTool],
       output: { schema: ServaAIOutputSchema, format: 'json' },
     });
 
