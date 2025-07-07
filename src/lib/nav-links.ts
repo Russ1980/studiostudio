@@ -180,6 +180,7 @@ export const navLinks: NavLink[] = [
     onboardingId: 'banking-link',
     items: [
       { href: '/banking/dashboard', label: 'Dashboard', icon: LayoutGrid },
+      { href: '/banking/accounts', label: 'Accounts', icon: Banknote },
       { href: '/banking/connections', label: 'Bank Connections', icon: LinkIcon },
       { href: '/banking/review-transactions', label: 'Review Transactions', icon: FileCheck },
       { href: '/banking/reconciliation', label: 'Reconciliation', icon: RefreshCw, onboardingId: 'bank-reconciliation-link' },

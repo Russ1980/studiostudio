@@ -1,9 +1,3 @@
-
-
-
-
-
-
 // This file contains mock data for the entire application.
 // In a real application, this data would be fetched from a database.
 
@@ -324,12 +318,15 @@ export const mockChartOfAccounts = {
   },
 };
 
-export const mockLedgerTransactions = [
-    { date: "2024-06-20", journalNo: "INV-2024-050", description: "Payment from Apex Solutions", debit: "12,500.00", credit: "", balance: "1,250,320.50" },
-    { date: "2024-06-18", journalNo: "BILL-2024-112", description: "Payment to Office Supplies Inc.", debit: "", credit: "1,200.00", balance: "1,237,820.50" },
-    { date: "2024-06-15", journalNo: "JE-001", description: "Monthly depreciation expense", debit: "", credit: "1,500.00", balance: "1,239,020.50" },
-    { date: "2024-06-10", journalNo: "JE-002", description: "Owner withdrawal", debit: "", credit: "5,000.00", balance: "1,240,520.50" },
-];
+export const mockLedgerTransactions = {
+    transactions: [
+        { date: "2024-06-20", journalNo: "INV-2024-050", description: "Payment from Apex Solutions", debit: "12,500.00", credit: "", balance: "1,250,320.50" },
+        { date: "2024-06-18", journalNo: "BILL-2024-112", description: "Payment to Office Supplies Inc.", debit: "", credit: "1,200.00", balance: "1,237,820.50" },
+        { date: "2024-06-15", journalNo: "JE-001", description: "Monthly depreciation expense", debit: "", credit: "1,500.00", balance: "1,239,020.50" },
+        { date: "2024-06-10", journalNo: "JE-002", description: "Owner withdrawal", debit: "", credit: "5,000.00", balance: "1,240,520.50" },
+    ],
+    currentBalance: "1,250,320.50"
+};
 
 export const mockArDashboard = {
   kpis: [
