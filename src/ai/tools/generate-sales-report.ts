@@ -6,6 +6,7 @@
 
 import { ai } from '@/ai/genkit';
 import { z } from 'zod';
+import { firestore } from '@/lib/firebase-admin';
 
 const SalesReportDataSchema = z.object({
   title: z.string(),
@@ -18,22 +19,44 @@ export const generateSalesReport = ai.defineTool(
   {
     name: 'generateSalesReport',
     description: 'Generates a sales report by customer for the current period.',
-    inputSchema: z.object({}), // No input needed for this mock tool
+    inputSchema: z.object({}), // No input needed
     outputSchema: SalesReportDataSchema,
   },
   async () => {
-    console.log('Generating sales report...');
-    // In a real application, this would fetch and process real data.
+    console.log('Generating sales report from Firestore...');
+    if (!firestore) {
+        throw new Error("Firestore not initialized.");
+    }
+
+    const customerSales: { [key: string]: { invoices: number; totalSales: number } } = {};
+
+    const invoicesSnapshot = await firestore.collection('invoices').where('status', '==', 'Paid').get();
+    
+    invoicesSnapshot.forEach(doc => {
+        const invoice = doc.data();
+        const customerName = invoice.customer || 'Unknown Customer';
+        const amount = parseFloat(invoice.amount.replace(/,/g, ''));
+
+        if (!customerSales[customerName]) {
+            customerSales[customerName] = { invoices: 0, totalSales: 0 };
+        }
+        
+        customerSales[customerName].invoices += 1;
+        customerSales[customerName].totalSales += amount;
+    });
+
+    const sortedCustomers = Object.entries(customerSales).sort(([, a], [, b]) => b.totalSales - a.totalSales);
+
+    const rows = sortedCustomers.map(([customer, data]) => [
+        customer,
+        data.invoices.toString(),
+        `$${data.totalSales.toLocaleString('en-US', { minimumFractionDigits: 2 })}`
+    ]);
+
     return {
         title: "Sales Report by Customer (YTD)",
         headers: ["Customer", "# of Invoices", "Total Sales"],
-        rows: [
-            ["Innovate Inc.", "12", "$75,500.00"],
-            ["Apex Solutions", "8", "$62,300.00"],
-            ["QuantumLeap Co.", "25", "$45,800.00"],
-            ["Stellar Goods", "5", "$21,100.00"],
-            ["Momentum LLC", "15", "$18,900.00"],
-        ]
+        rows: rows.length > 0 ? rows : [["No sales data available.", "", ""]],
     };
   }
 );

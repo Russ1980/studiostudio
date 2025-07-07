@@ -1,3 +1,4 @@
+
 import { getAccountantDashboardData } from "@/lib/actions";
 import { AccountantPortalClientPage } from "./page-client";
 

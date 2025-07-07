@@ -1,3 +1,4 @@
+
 import { getJobDetails } from "@/lib/actions";
 import { JobDetailsClientPage } from "./job-details-client";
 import { notFound } from "next/navigation";
