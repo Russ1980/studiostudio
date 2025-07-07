@@ -1,5 +1,4 @@
 
-
 'use server';
 
 import { firestore } from './firebase-admin';
@@ -142,8 +141,65 @@ export async function getDocumentManagementData() {
 
 // Invoicing
 export async function getInvoicingDashboardData() {
-    await simulateDelay(50);
-    return mockInvoicingDashboard;
+    if (!firestore) {
+        console.log("Firestore not initialized, returning mock invoicing dashboard data.");
+        return mockInvoicingDashboard;
+    }
+
+    try {
+        const invoicesSnapshot = await firestore.collection('invoices').get();
+        if (invoicesSnapshot.empty) {
+            console.log("No invoices found in Firestore, returning mock invoicing dashboard data.");
+            return mockInvoicingDashboard;
+        }
+
+        const invoices: any[] = invoicesSnapshot.docs.map(doc => doc.data());
+        const now = new Date();
+        const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+        let outstanding = 0;
+        let overdue = 0;
+        let paidThisMonth = 0;
+
+        invoices.forEach(invoice => {
+            const amount = parseFloat(invoice.amount.replace(/,/g, ''));
+            const dueDate = new Date(invoice.dueDate);
+            
+            if (invoice.status !== 'Paid') {
+                outstanding += amount;
+                if (dueDate < now) {
+                    overdue += amount;
+                }
+            } else {
+                // Assuming a 'paidDate' field would exist on a paid invoice.
+                // For this example, we'll just use the due date.
+                if (dueDate >= startOfMonth && dueDate <= now) {
+                    paidThisMonth += amount;
+                }
+            }
+        });
+
+        // For "Average Days to Pay", a more complex calculation involving paidDate is needed.
+        // We will keep a mock value for this KPI for now.
+        
+        const recentInvoices = invoices
+            .sort((a, b) => new Date(b.dueDate).getTime() - new Date(a.dueDate).getTime())
+            .slice(0, 4);
+
+        return {
+            kpiData: [
+                { title: "Outstanding Invoices", value: `$${outstanding.toLocaleString('en-US', {minimumFractionDigits: 2})}` },
+                { title: "Overdue Invoices", value: `$${overdue.toLocaleString('en-US', {minimumFractionDigits: 2})}` },
+                { title: "Paid This Month", value: `$${paidThisMonth.toLocaleString('en-US', {minimumFractionDigits: 2})}` },
+                { title: "Average Days to Pay", value: "22 Days" }, // Mock value
+            ],
+            recentInvoices: recentInvoices,
+        };
+
+    } catch (error) {
+        console.error("Error fetching invoicing dashboard data from Firestore:", error);
+        return mockInvoicingDashboard; // Fallback to mock data
+    }
 }
 export async function getInvoices() {
   if (!firestore) {
