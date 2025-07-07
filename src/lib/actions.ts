@@ -458,12 +458,85 @@ export async function getCreditNotes() {
     return mockCreditNotes;
 }
 export async function getArAgingData() {
-    await simulateDelay(50);
-    return mockArAgingData;
+    if (!firestore) return mockArAgingData;
+
+    try {
+        const invoicesSnapshot = await firestore.collection('invoices').where('status', '!=', 'Paid').get();
+        if (invoicesSnapshot.empty) return mockArAgingData;
+
+        const agingData: { [key: string]: { current: number; "1-30": number; "31-60": number; "61-90": number; "90+": number; total: number } } = {};
+        const now = new Date();
+
+        invoicesSnapshot.forEach(doc => {
+            const invoice = doc.data();
+            const customer = invoice.customer || 'Unknown Customer';
+            if (!agingData[customer]) {
+                agingData[customer] = { current: 0, "1-30": 0, "31-60": 0, "61-90": 0, "90+": 0, total: 0 };
+            }
+
+            const dueDate = new Date(invoice.dueDate);
+            const amount = parseFloat(invoice.amount.replace(/,/g, ''));
+            const daysOverdue = Math.floor((now.getTime() - dueDate.getTime()) / (1000 * 3600 * 24));
+
+            if (daysOverdue <= 0) {
+                agingData[customer].current += amount;
+            } else if (daysOverdue <= 30) {
+                agingData[customer]["1-30"] += amount;
+            } else if (daysOverdue <= 60) {
+                agingData[customer]["31-60"] += amount;
+            } else if (daysOverdue <= 90) {
+                agingData[customer]["61-90"] += amount;
+            } else {
+                agingData[customer]["90+"] += amount;
+            }
+            agingData[customer].total += amount;
+        });
+
+        return Object.entries(agingData).map(([customer, data]) => ({
+            customer,
+            current: data.current.toFixed(2),
+            "1-30": data["1-30"].toFixed(2),
+            "31-60": data["31-60"].toFixed(2),
+            "61-90": data["61-90"].toFixed(2),
+            "90+": data["90+"].toFixed(2),
+            total: data.total.toFixed(2),
+        }));
+
+    } catch (e) {
+        console.error("Error fetching A/R Aging data:", e);
+        return mockArAgingData;
+    }
 }
+
 export async function getSalesByCustomerData() {
-    await simulateDelay(50);
-    return mockSalesByCustomerData;
+    if (!firestore) return mockSalesByCustomerData;
+    try {
+        const invoicesSnapshot = await firestore.collection('invoices').where('status', '==', 'Paid').get();
+        if (invoicesSnapshot.empty) return mockSalesByCustomerData;
+
+        const salesData: { [key: string]: { invoices: number; sales: number } } = {};
+        invoicesSnapshot.forEach(doc => {
+            const invoice = doc.data();
+            const customer = invoice.customer || 'Unknown Customer';
+            if (!salesData[customer]) {
+                salesData[customer] = { invoices: 0, sales: 0 };
+            }
+            salesData[customer].invoices += 1;
+            salesData[customer].sales += parseFloat(invoice.amount.replace(/,/g, ''));
+        });
+
+        return Object.entries(salesData)
+            .map(([customer, data]) => ({
+                customer,
+                invoices: data.invoices,
+                sales: data.sales.toString(),
+            }))
+            .sort((a, b) => parseFloat(b.sales) - parseFloat(a.sales));
+
+    } catch (e) {
+        console.error("Error fetching Sales by Customer data:", e);
+        return mockSalesByCustomerData;
+    }
 }
 export async function getSalesByItemData() {
     await simulateDelay(50);

@@ -1,6 +1,7 @@
 
 "use client";
 
+import { useState } from "react";
 import {
   Card,
   CardContent,
@@ -41,6 +42,12 @@ const statusVariant: { [key: string]: "success" | "destructive" | "default" } = 
 };
 
 export function InvoiceTable({ invoices }: { invoices: Invoice[] }) {
+    const [searchTerm, setSearchTerm] = useState("");
+
+    const filteredInvoices = invoices.filter(invoice => 
+        invoice.customer.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
     return (
         <Card>
             <CardHeader>
@@ -49,7 +56,12 @@ export function InvoiceTable({ invoices }: { invoices: Invoice[] }) {
                     <div className="flex items-center gap-2">
                         <div className="relative">
                             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                            <Input placeholder="Search by customer..." className="pl-9" />
+                            <Input 
+                                placeholder="Search by customer..." 
+                                className="pl-9"
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                             />
                         </div>
                     </div>
                 </div>
@@ -67,7 +79,7 @@ export function InvoiceTable({ invoices }: { invoices: Invoice[] }) {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {invoices.map((invoice) => (
+                        {filteredInvoices.map((invoice) => (
                             <TableRow key={invoice.invoice}>
                                 <TableCell className="font-mono">{invoice.invoice}</TableCell>
                                 <TableCell className="font-medium">{invoice.customer}</TableCell>

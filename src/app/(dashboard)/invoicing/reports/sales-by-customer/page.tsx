@@ -1,12 +1,9 @@
 
-"use client";
-
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-  CardDescription
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,14 +21,7 @@ import {
 } from "@/components/ui/chart";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import { CalendarIcon, Download, Printer } from "lucide-react";
-
-const salesData = [
-  { customer: "Innovate Inc.", invoices: 12, sales: "75500" },
-  { customer: "Apex Solutions", invoices: 8, sales: "62300" },
-  { customer: "QuantumLeap Co.", invoices: 25, sales: "45800" },
-  { customer: "Stellar Goods", invoices: 5, sales: "21100" },
-  { customer: "Momentum LLC", invoices: 15, sales: "18900" },
-];
+import { getSalesByCustomerData } from '@/lib/actions';
 
 const chartConfig = {
   sales: {
@@ -40,13 +30,16 @@ const chartConfig = {
   },
 };
 
-export default function SalesByCustomerPage() {
+export default async function SalesByCustomerPage() {
+  const salesData = await getSalesByCustomerData();
+  const chartSalesData = salesData.map(d => ({ ...d, sales: parseFloat(d.sales) }));
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Sales by Customer Summary</h1>
-          <p className="text-muted-foreground">For period: Jan 1, 2024 - Jul 22, 2024</p>
+          <p className="text-muted-foreground">For period: Jan 1, 2024 - {new Date().toLocaleDateString()}</p>
         </div>
         <div className="flex gap-2">
             <Button variant="outline"><CalendarIcon /> Date Range</Button>
@@ -62,7 +55,7 @@ export default function SalesByCustomerPage() {
           <CardContent>
             <ChartContainer config={chartConfig} className="h-80 w-full">
               <BarChart
-                data={salesData}
+                data={chartSalesData}
                 layout="vertical"
                 margin={{ left: 10, right: 10 }}
               >
