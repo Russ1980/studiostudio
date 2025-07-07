@@ -1,10 +1,11 @@
 
 
+
 // This file contains mock data for the entire application.
 // In a real application, this data would be fetched from a database.
 
 import { v4 as uuidv4 } from 'uuid';
-import { Activity, Clock, DollarSign, ListChecks, type LucideIcon, FilePlus, Receipt, BarChart3, PlusCircle, TrendingUp, BarChart, Users, Eye, Briefcase, SlidersHorizontal, Wand2 } from 'lucide-react';
+import { Activity, Clock, DollarSign, ListChecks, type LucideIcon, FilePlus, Receipt, BarChart3, PlusCircle, TrendingUp, BarChart, Users, Eye, Briefcase, SlidersHorizontal, Wand2, CreditCard, Landmark } from 'lucide-react';
 
 // Accountant Portal
 export const mockClients = [
@@ -1010,8 +1011,61 @@ export const mockDashboardPageData = {
         profitMargin: { self: 18.9, industry: 16.5 },
       }
     },
+    shortcuts: [
+        { label: "Run payroll", icon: Users, href: "/payroll/pay-runs" },
+        { label: "Get paid online", icon: DollarSign, href: "/payments/process" },
+        { label: "Create invoice", icon: FilePlus, href: "/invoicing/new" },
+        { label: "Record expense", icon: Receipt, href: "/accounting/accounts-payable/bills" },
+    ],
+    expenseChartData: {
+        total: "$1,939,079",
+        change: "+296%",
+        changeType: "increase",
+        breakdown: [
+            { name: "Rent & Lease", value: 400, color: "hsl(var(--chart-1))" },
+            { name: "Job Supplies", value: 300, color: "hsl(var(--chart-2))" },
+            { name: "Consultancy", value: 300, color: "hsl(var(--chart-3))" },
+            { name: "Insurance", value: 200, color: "hsl(var(--chart-4))" },
+            { name: "Other", value: 278, color: "hsl(var(--chart-5))" },
+        ],
+    },
+    salesChartData: {
+        total: "$1,803,232.15",
+        data: [
+            { name: 'Mar 11', Sales: 200000 },
+            { name: 'Mar 17', Sales: 300000 },
+            { name: 'Mar 24', Sales: 800000 },
+            { name: 'Mar 31', Sales: 600000 },
+            { name: 'Apr 07', Sales: 400000 },
+        ],
+    },
+    arChartData: {
+        total: "$5,753,933.55",
+        breakdown: [
+            { name: "Current", value: 1812434.45, color: "hsl(var(--chart-1))" },
+            { name: "1-7 days", value: 1052572.03, color: "hsl(var(--chart-2))" },
+            { name: "8-14 days", value: 179919.00, color: "hsl(var(--chart-3))" },
+            { name: "15+ days", value: 2709008.07, color: "hsl(var(--chart-4))" },
+        ],
+    },
+    apChartData: {
+        total: "$4,357.50",
+        breakdown: [
+            { name: "Current", value: 0.00, color: "hsl(var(--chart-1))" },
+            { name: "1-7 days", value: 100.00, color: "hsl(var(--chart-2))" },
+            { name: "8-14 days", value: 0.00, color: "hsl(var(--chart-3))" },
+            { name: "15+ days", value: 4257.50, color: "hsl(var(--chart-4))" },
+        ],
+    },
+    bankAccountsList: [
+        { name: "(MMA) | Guardian Growth", balance: 782411.38, icon: Landmark },
+        { name: "Amazon Credit", balance: 0.00, icon: CreditCard },
+        { name: "BOI - Business Checking", balance: -52208.00, icon: Landmark },
+        { name: "Checking", balance: -127330.11, icon: Landmark },
+    ],
   };
     
+
 
 
 

@@ -8,9 +8,9 @@ import {
   CardHeader,
   CardTitle,
   CardDescription,
+  CardFooter,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { DevTools } from "@/components/development/dev-tools";
 import {
   DollarSign,
   TrendingUp,
@@ -37,6 +37,9 @@ import {
   Zap,
   GripVertical,
   Upload,
+  FilePlus,
+  Landmark,
+  CreditCard,
 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
@@ -54,11 +57,14 @@ import {
     ChartContainer,
     ChartTooltip,
     ChartTooltipContent,
+    ChartLegend,
+    ChartLegendContent,
 } from "@/components/ui/chart";
-import { Area, AreaChart, Bar as RechartsBar, BarChart as RechartsBarChart, CartesianGrid, XAxis, YAxis, LineChart, Line, PieChart, Pie, Cell } from "recharts";
+import { Area, AreaChart, Bar as RechartsBar, BarChart as RechartsBarChart, CartesianGrid, XAxis, YAxis, LineChart, Line, PieChart, Pie, Cell, Legend } from "recharts";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
+import Link from "next/link";
 
 
 const getIcon = (iconName: string) => {
@@ -84,11 +90,52 @@ const getMetricIcon = (iconName: string) => {
     }
 }
 
+const DonutChartCard = ({ title, total, change, changeType, data }: { title: string, total: string, change?: string, changeType?: string, data: any[] }) => (
+    <Card>
+      <CardHeader>
+        <CardTitle className="text-base font-medium">{title}</CardTitle>
+        <CardDescription>
+          <div className="text-2xl font-bold">{total}</div>
+          {change && (
+            <div className={cn("text-xs", changeType === "increase" ? "text-success" : "text-destructive")}>
+              {changeType === "increase" ? '↑' : '↓'} {change}
+            </div>
+          )}
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <ChartContainer config={{}} className="h-40 w-full">
+            <PieChart>
+                <Pie data={data} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={40} outerRadius={60} paddingAngle={2}>
+                    {data.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                </Pie>
+                <ChartTooltip content={<ChartTooltipContent />} />
+                <Legend layout="vertical" align="right" verticalAlign="middle" iconSize={8} />
+            </PieChart>
+        </ChartContainer>
+      </CardContent>
+    </Card>
+);
+
 const ExecutiveOverviewView = ({ data }: { data: any }) => {
-    const { metricCards, performanceMetrics, alerts } = data;
+    const { 
+        metricCards, 
+        performanceMetrics, 
+        alerts,
+        chartData,
+        shortcuts,
+        expenseChartData,
+        salesChartData,
+        arChartData,
+        apChartData,
+        bankAccountsList
+     } = data;
     const chartConfig = {
         income: { label: "Income", color: "hsl(var(--success))" },
         expenses: { label: "Expenses", color: "hsl(var(--destructive))" },
+        Sales: { label: "Sales", color: "hsl(var(--primary))" },
     };
 
     return (
@@ -121,13 +168,13 @@ const ExecutiveOverviewView = ({ data }: { data: any }) => {
                 })}
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <Card>
+                <Card className="lg:col-span-2">
                     <CardHeader>
                         <CardTitle>Profit & Loss</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <ChartContainer config={chartConfig} className="h-40 w-full">
-                            <AreaChart data={data.chartData} margin={{ left: -20, right: 20 }}>
+                            <AreaChart data={chartData} margin={{ left: -20, right: 20 }}>
                                 <defs>
                                     <linearGradient id="fillIncome" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor="hsl(var(--success))" stopOpacity={0.8} /><stop offset="95%" stopColor="hsl(var(--success))" stopOpacity={0.1} /></linearGradient>
                                     <linearGradient id="fillExpenses" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor="hsl(var(--destructive))" stopOpacity={0.8} /><stop offset="95%" stopColor="hsl(var(--destructive))" stopOpacity={0.1} /></linearGradient>
@@ -141,42 +188,84 @@ const ExecutiveOverviewView = ({ data }: { data: any }) => {
                         </ChartContainer>
                     </CardContent>
                 </Card>
+                 <div className="flex flex-col gap-6">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Cash Flow</CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-2">
+                            <div className="flex justify-between items-baseline"><span className="text-muted-foreground">Incoming</span><span className="font-bold text-lg text-success">{performanceMetrics.cashFlow.incoming}</span></div>
+                            <div className="flex justify-between items-baseline"><span className="text-muted-foreground">Outgoing</span><span className="font-bold text-lg text-destructive">{performanceMetrics.cashFlow.outgoing}</span></div>
+                            <Separator/>
+                            <div className="flex justify-between items-baseline"><span className="text-muted-foreground">Net Cash Flow</span><span className="font-bold text-lg">{performanceMetrics.cashFlow.net}</span></div>
+                        </CardContent>
+                    </Card>
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Alerts & Notifications</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <ul className="space-y-2">
+                                {alerts.slice(0, 2).map((alert: any) => (
+                                    <li key={alert.id} className="flex items-start gap-2">
+                                        <AlertTriangle className="h-4 w-4 text-destructive mt-1 shrink-0"/>
+                                        <p className="text-xs text-muted-foreground">{alert.message}</p>
+                                    </li>
+                                ))}
+                            </ul>
+                        </CardContent>
+                    </Card>
+                </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 <Card>
-                    <CardHeader>
-                        <CardTitle>Cash Flow</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-2">
-                        <div className="flex justify-between items-baseline"><span className="text-muted-foreground">Incoming</span><span className="font-bold text-lg text-success">{performanceMetrics.cashFlow.incoming}</span></div>
-                        <div className="flex justify-between items-baseline"><span className="text-muted-foreground">Outgoing</span><span className="font-bold text-lg text-destructive">{performanceMetrics.cashFlow.outgoing}</span></div>
-                        <Separator/>
-                        <div className="flex justify-between items-baseline"><span className="text-muted-foreground">Net Cash Flow</span><span className="font-bold text-lg">{performanceMetrics.cashFlow.net}</span></div>
+                    <CardHeader><CardTitle className="text-base font-medium">Sales (Last 30 Days)</CardTitle></CardHeader>
+                    <CardContent>
+                        <p className="text-2xl font-bold">{salesChartData.total}</p>
+                        <ChartContainer config={chartConfig} className="h-32 w-full -ml-4">
+                            <LineChart data={salesChartData.data} margin={{ top: 20, right: 20, bottom: 0, left: 0 }}>
+                                <XAxis dataKey="name" hide/>
+                                <YAxis domain={['dataMin - 50000', 'dataMax + 50000']} hide/>
+                                <ChartTooltip content={<ChartTooltipContent />} />
+                                <Line type="monotone" dataKey="Sales" stroke="var(--color-Sales)" strokeWidth={2} dot={false}/>
+                            </LineChart>
+                        </ChartContainer>
                     </CardContent>
                 </Card>
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Accounts Receivable</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-2">
-                        <div className="flex justify-between items-baseline"><span className="text-muted-foreground">Outstanding</span><span className="font-bold text-lg">{performanceMetrics.accountsReceivable.outstanding}</span></div>
-                        <div className="flex justify-between items-baseline"><span className="text-muted-foreground">Overdue</span><span className="font-bold text-lg text-destructive">{performanceMetrics.accountsReceivable.overdue}</span></div>
+                <DonutChartCard title="Accounts Receivable" total={arChartData.total} data={arChartData.breakdown} />
+                <DonutChartCard title="Accounts Payable" total={apChartData.total} data={apChartData.breakdown} />
+                <DonutChartCard title="Expenses" total={expenseChartData.total} change={expenseChartData.change} changeType={expenseChartData.changeType} data={expenseChartData.breakdown} />
+                 <Card>
+                    <CardHeader><CardTitle className="text-base font-medium">Bank Accounts</CardTitle></CardHeader>
+                    <CardContent className="space-y-3">
+                        {bankAccountsList.map((account: any, index: number) => (
+                             <div key={index} className="flex items-center justify-between">
+                                 <div className="flex items-center gap-2">
+                                     <account.icon className="h-4 w-4 text-muted-foreground" />
+                                     <span className="text-sm font-medium">{account.name}</span>
+                                 </div>
+                                 <span className={cn("text-sm font-semibold", account.balance < 0 && "text-destructive")}>${account.balance.toLocaleString()}</span>
+                             </div>
+                        ))}
+                    </CardContent>
+                </Card>
+                 <Card>
+                    <CardHeader><CardTitle className="text-base font-medium">Shortcuts</CardTitle></CardHeader>
+                    <CardContent className="grid grid-cols-2 gap-4">
+                        {shortcuts.map((shortcut: any, index: number) => (
+                            <Link key={index} href={shortcut.href}>
+                                <Button variant="ghost" className="flex flex-col h-auto p-3 items-center gap-2">
+                                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary">
+                                        <shortcut.icon className="h-5 w-5 text-secondary-foreground" />
+                                    </div>
+                                    <span className="text-xs font-medium">{shortcut.label}</span>
+                                </Button>
+                            </Link>
+                        ))}
                     </CardContent>
                 </Card>
             </div>
-            <Card>
-                <CardHeader>
-                    <CardTitle>Alerts & Notifications</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <ul className="space-y-4">
-                        {alerts.map((alert: any) => (
-                            <li key={alert.id} className="flex items-start gap-4">
-                                <AlertTriangle className="h-5 w-5 text-destructive mt-1"/>
-                                <p className="text-sm text-muted-foreground">{alert.message}</p>
-                            </li>
-                        ))}
-                    </ul>
-                </CardContent>
-            </Card>
         </div>
     )
 }
@@ -542,8 +631,6 @@ export function DashboardClientPage({ initialData }: { initialData: any }) {
 
     return (
         <div className="flex flex-col gap-6">
-            <DevTools />
-
             <Card>
                 <CardContent className="p-4">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
