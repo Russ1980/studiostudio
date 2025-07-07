@@ -430,7 +430,7 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input placeholder="Search..." className="pl-9" />
             </div>
-             <Button variant="outline" size="sm" className="bg-accent text-accent-foreground border-accent-foreground/20 hover:bg-accent/90">
+             <Button variant="accent" size="sm">
               <Wand2 className="mr-2" />
               Serva AI Ready
             </Button>
@@ -498,14 +498,13 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
             </div>
           </div>
         </header>
-        <main className="flex-1 flex flex-col">
-          <div className="flex-1 overflow-auto p-4 md:p-6">
+        <main className="flex-1 flex flex-col p-4 md:p-6">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
                 <Breadcrumb />
               </div>
               {pathname === '/dashboard' && (
-                <Button variant="outline" size="sm" className="bg-accent text-accent-foreground border-accent-foreground/20 hover:bg-accent/90" onClick={openServaAI}>
+                <Button variant="accent" size="sm" onClick={openServaAI}>
                     <Wand2 className="mr-2 h-4 w-4" />
                     <span>Serva AI • Enterprise Task Assistant •</span>
                     <span className="text-accent-foreground/70 ml-1">Ask Serva AI...</span>
@@ -513,7 +512,6 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
               )}
             </div>
             {children}
-          </div>
         </main>
       </SidebarInset>
       <ServaAIWidget />
