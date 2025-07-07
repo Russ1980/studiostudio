@@ -390,8 +390,22 @@ export async function getProjectsDashboardData() {
   return mockProjectsDashboardData;
 }
 export async function getJobs() {
-  await simulateDelay(50);
-  return mockJobs;
+  if (!firestore) {
+    console.log("Firestore not initialized, returning mock data for jobs.");
+    return mockJobs;
+  }
+  try {
+    const jobsSnapshot = await firestore.collection('jobs').get();
+    if (jobsSnapshot.empty) {
+      console.log("No jobs found in Firestore, returning mock data as fallback.");
+      return mockJobs;
+    }
+    const jobs = jobsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    return jobs as typeof mockJobs;
+  } catch (error) {
+    console.error("Error fetching jobs from Firestore:", error);
+    return mockJobs;
+  }
 }
 export async function getTimeLogs() {
     await simulateDelay(50);
