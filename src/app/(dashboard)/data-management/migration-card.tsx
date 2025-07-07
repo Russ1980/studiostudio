@@ -1,14 +1,22 @@
 
 'use client';
 
-import React, { useState, useTransition } from 'react';
+import React, { useTransition } from 'react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { migrateTransactionData } from '@/lib/migration';
+import { migrateTransactionData, migrateClientData, migrateInvoiceData } from '@/lib/migration';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 
-export function MigrationCard() {
+function MigrationButton({ 
+    migrationFn, 
+    label,
+    description,
+}: { 
+    migrationFn: () => Promise<{ success: boolean; migrated?: number; error?: string; }>; 
+    label: string;
+    description: string;
+}) {
     const [isPending, startTransition] = useTransition();
     const { toast } = useToast();
 
@@ -16,15 +24,15 @@ export function MigrationCard() {
         startTransition(async () => {
             toast({
                 title: 'Migration Started',
-                description: 'Migrating transaction data from mock data to Firebase...',
+                description: `Migrating ${description}...`,
             });
 
-            const result = await migrateTransactionData();
+            const result = await migrationFn();
 
             if (result.success) {
                 toast({
                     title: 'Migration Successful',
-                    description: `Successfully migrated ${result.migrated} transactions.`,
+                    description: `Successfully migrated ${result.migrated} ${description}.`,
                 });
             } else {
                 toast({
@@ -37,18 +45,26 @@ export function MigrationCard() {
     };
 
     return (
+        <Button onClick={handleMigrate} disabled={isPending}>
+            {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {label}
+        </Button>
+    );
+}
+
+export function MigrationCard() {
+    return (
         <Card>
             <CardHeader>
                 <CardTitle>Data Migration to Firebase</CardTitle>
                 <CardDescription>
-                    Migrate mock data to your live Firebase Firestore database.
+                    Select a data type to migrate from mock data to your live Firebase Firestore database.
                 </CardDescription>
             </CardHeader>
-            <CardContent>
-                <Button onClick={handleMigrate} disabled={isPending}>
-                    {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                    Migrate Transaction Data
-                </Button>
+            <CardContent className="flex flex-wrap gap-4">
+                <MigrationButton migrationFn={migrateTransactionData} label="Migrate Transactions" description="transaction data" />
+                <MigrationButton migrationFn={migrateClientData} label="Migrate Clients" description="client data" />
+                <MigrationButton migrationFn={migrateInvoiceData} label="Migrate Invoices" description="invoice data" />
             </CardContent>
         </Card>
     );

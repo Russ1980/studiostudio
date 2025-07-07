@@ -2,25 +2,26 @@
 'use server';
 
 import { firestore } from './firebase-admin';
-import { mockLedgerTransactions } from './data';
+import { mockLedgerTransactions, mockClients, mockInvoices } from './data';
 
 type TransformFunction<T, U> = (data: T) => U;
 
 interface MigrateOptions<T, U> {
     batchSize?: number;
     transform?: TransformFunction<T, U>;
+    idKey: keyof T;
 }
 
-export async function migrateData<T extends { journalNo: any }, U = T>(
+export async function migrateData<T extends Record<string, any>, U = T>(
     sourceData: T[],
     targetCollection: string,
-    options: MigrateOptions<T, U> = {}
+    options: MigrateOptions<T, U>
 ) {
     if (!firestore) {
         return { success: false, error: "Firebase Admin SDK not initialized. Check your environment variables." };
     }
 
-    const { batchSize = 500, transform } = options;
+    const { batchSize = 500, transform, idKey } = options;
 
     try {
         let migratedCount = 0;
@@ -29,8 +30,11 @@ export async function migrateData<T extends { journalNo: any }, U = T>(
             const batch = firestore.batch();
             
             dataSlice.forEach((item: T) => {
-                // Using journalNo as document ID for transactions
-                const docId = item.journalNo.toString();
+                const docId = String(item[idKey]).replace(/#/g, '');
+                if (!docId) {
+                    console.warn('Skipping item with no ID:', item);
+                    return;
+                }
                 const docRef = firestore.collection(targetCollection).doc(docId);
                 const transformedData = transform ? transform(item) : item;
                 batch.set(docRef, transformedData);
@@ -48,6 +52,13 @@ export async function migrateData<T extends { journalNo: any }, U = T>(
 }
 
 export async function migrateTransactionData() {
-    // We'll use the mockLedgerTransactions as the source data
-    return migrateData(mockLedgerTransactions, 'transactions');
+    return migrateData(mockLedgerTransactions, 'transactions', { idKey: 'journalNo' });
+}
+
+export async function migrateClientData() {
+    return migrateData(mockClients, 'clients', { idKey: 'id' });
+}
+
+export async function migrateInvoiceData() {
+    return migrateData(mockInvoices, 'invoices', { idKey: 'invoice' });
 }
