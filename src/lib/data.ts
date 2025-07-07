@@ -344,9 +344,9 @@ export const mockArDashboard = {
 
 // Banking
 export const mockBankAccounts = [
-    { name: "Business Checking", bank: "Chase Bank", lastFour: "1234", balance: "1,250,320.50", type: "bank" },
-    { name: "Business Credit Card", bank: "American Express", lastFour: "5678", balance: "12,500.00", type: "credit" },
-    { name: "Savings Account", bank: "Chase Bank", lastFour: "4321", balance: "500,000.00", type: "bank" },
+    { id: 'acc_1', name: "Business Checking", bank: "Chase Bank", lastFour: "1234", balance: "1,250,320.50", type: "bank" },
+    { id: 'acc_2', name: "Business Credit Card", bank: "American Express", lastFour: "5678", balance: "12,500.00", type: "credit" },
+    { id: 'acc_3', name: "Savings Account", bank: "Chase Bank", lastFour: "4321", balance: "500,000.00", type: "bank" },
 ];
 
 export const mockBankDashboard = {

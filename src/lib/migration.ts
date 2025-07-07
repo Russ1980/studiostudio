@@ -2,7 +2,7 @@
 'use server';
 
 import { firestore } from './firebase-admin';
-import { mockLedgerTransactions, mockClients, mockInvoices, mockEmployees, mockJobsWithDetails as mockJobs, mockTaxFilings, mockTaxPayments } from './data';
+import { mockClients, mockInvoices, mockEmployees, mockJobsWithDetails as mockJobs, mockTaxFilings, mockTaxPayments, mockBankAccounts } from './data';
 
 type TransformFunction<T, U> = (data: T) => U;
 
@@ -51,10 +51,6 @@ export async function migrateData<T extends Record<string, any>, U = T>(
     }
 }
 
-export async function migrateTransactionData() {
-    return migrateData(mockLedgerTransactions, 'transactions', { idKey: 'journalNo' });
-}
-
 export async function migrateClientData() {
     return migrateData(mockClients, 'clients', { idKey: 'id' });
 }
@@ -77,4 +73,8 @@ export async function migrateTaxFilings() {
 
 export async function migrateTaxPayments() {
     return migrateData(mockTaxPayments, 'taxPayments', { idKey: 'id' });
+}
+
+export async function migrateBankAccounts() {
+    return migrateData(mockBankAccounts, 'bankAccounts', { idKey: 'id' });
 }

@@ -232,8 +232,22 @@ export async function getArDashboardData() {
 
 // Banking
 export async function getBankAccounts() {
-    await simulateDelay(50);
-    return mockBankAccounts;
+    if (!firestore) {
+        console.log("Firestore not initialized, returning mock data for bank accounts.");
+        return mockBankAccounts;
+    }
+    try {
+        const snapshot = await firestore.collection('bankAccounts').get();
+        if (snapshot.empty) {
+            console.log("No bank accounts found in Firestore, returning mock data as fallback.");
+            return mockBankAccounts;
+        }
+        const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        return data as typeof mockBankAccounts;
+    } catch (error) {
+        console.error("Error fetching bank accounts from Firestore:", error);
+        return mockBankAccounts; // Fallback
+    }
 }
 export async function getBankDashboardData() {
     await simulateDelay(50);
