@@ -14,6 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { AlertTriangle, CheckCircle, Info, Settings, Bell } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const notifications = [
     { type: "warning", icon: AlertTriangle, title: "Tax Filing Deadline Approaching", description: "Form 941 is due in 3 days.", time: "1h ago", isNew: true },
