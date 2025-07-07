@@ -70,10 +70,6 @@ import {
   mockMaintenanceTasks,
   mockPaymentsToProcess,
   mockDataValidationResults,
-  mockKeyboardShortcuts,
-  mockDashboardPageData,
-  mockScheduledReports,
-  mockAssetLocationsData,
 } from './data';
 import { getMockUser } from './auth';
 import { getRevenueDataTool } from '@/ai/tools/get-revenue-data';

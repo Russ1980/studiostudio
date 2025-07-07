@@ -15,7 +15,6 @@ import {
   BookOpen,
   FileText,
   CreditCard,
-  Banknote,
   Receipt,
   FileStack,
   Mail,
@@ -73,6 +72,7 @@ import {
   MapPin,
   BarChart3,
   Pencil,
+  Banknote,
 } from 'lucide-react';
 
 export type NavLink = {
@@ -267,6 +267,31 @@ export const navLinks: NavLink[] = [
     ],
   },
   {
+    label: 'Client Management',
+    icon: Users,
+    href: '/client-management/billing',
+    items: [
+        { href: '/client-management/billing', label: 'Billing', icon: CreditCard },
+        { href: '/client-management/invoicing/batch', label: 'Batch Invoicing', icon: Mail },
+    ],
+  },
+  {
+    label: 'Payments',
+    icon: CreditCard,
+    href: '/payments/process',
+    items: [
+        { href: '/payments/process', label: 'Process Payments', icon: CreditCard },
+    ],
+  },
+   {
+    label: 'Compliance',
+    icon: ShieldCheck,
+    href: '/compliance/clients',
+    items: [
+        { href: '/compliance/clients', label: 'Client Compliance', icon: ShieldCheck },
+    ],
+  },
+  {
     label: 'Investments',
     icon: TrendingUp,
     href: '/portfolio',
@@ -344,6 +369,7 @@ export const navLinks: NavLink[] = [
       { href: '/data-management/data-import', label: 'Data Import', icon: FileDown },
       { href: '/data-management/data-export', label: 'Data Export', icon: FileUp },
       { href: '/data-management/backup-restore', label: 'Backup & Restore', icon: History },
+      { href: '/reports/validation', label: 'Validation Reports', icon: FileCheck },
     ],
   },
   {

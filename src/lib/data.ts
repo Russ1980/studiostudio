@@ -1086,3 +1086,22 @@ export const mockDashboardPageData = {
     ],
   };
     
+
+export const mockClientBillingData = [
+    { id: "1", clientName: "Innovate Inc.", plan: "Professional", status: "Active", nextBilling: "2024-08-01", amount: 99.00 },
+    { id: "2", clientName: "Apex Solutions", plan: "Enterprise", status: "Active", nextBilling: "2024-08-01", amount: 299.00 },
+    { id: "3", clientName: "QuantumLeap Co.", plan: "Standard", status: "Past Due", nextBilling: "2024-07-15", amount: 49.00 },
+    { id: "4", clientName: "Stellar Goods", plan: "Standard", status: "Canceled", nextBilling: "N/A", amount: 0 },
+];
+export const mockClientComplianceData = [
+    { id: "1", clientName: "Innovate Inc.", overallStatus: "Compliant", engagementLetter: "Signed", w9: "On File", bankStatements: "Up to Date" },
+    { id: "2", clientName: "Apex Solutions", overallStatus: "Needs Attention", engagementLetter: "Pending", w9: "On File", bankStatements: "Up to Date" },
+    { id: "3", clientName: "QuantumLeap Co.", overallStatus: "Compliant", engagementLetter: "Signed", w9: "On File", bankStatements: "Up to Date" },
+    { id: "4", clientName: "Stellar Goods", overallStatus: "Missing Documents", engagementLetter: "Signed", w9: "Missing", bankStatements: "Missing" },
+];
+
+export const mockPaymentsToProcess = [
+    { id: 'PAY-001', customer: 'Innovate Inc.', date: '2024-07-22', amount: 5000.00, method: 'ACH', reference: 'Invoice #INV-2024-055' },
+    { id: 'PAY-002', customer: 'Apex Solutions', date: '2024-07-21', amount: 1250.00, method: 'Credit Card', reference: 'Invoice #INV-2024-056' },
+    { id: 'PAY-003', customer: 'QuantumLeap Co.', date: '2024-07-21', amount: 750.00, method: 'ACH', reference: 'Retainer' },
+];
