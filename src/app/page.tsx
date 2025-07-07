@@ -3,116 +3,70 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Logo } from '@/components/icons';
 import Image from 'next/image';
-import { ChevronDown, Star, Bot, SlidersHorizontal, BarChart, CheckCircle2, DollarSign, AlertCircle, ArrowUp, Send, TerminalSquare } from 'lucide-react';
+import { ChevronDown, Star, Bot, SlidersHorizontal, BarChart, CheckCircle2, DollarSign, AlertCircle, ArrowUp, Send, TerminalSquare, TrendingUp, Users, FileBarChart, Zap } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
 
 
-const ServaUICard = () => (
-    <Card className="bg-card border text-card-foreground shadow-xl">
-        <CardHeader className="p-4 border-b">
-            <div className="flex justify-between items-center">
-                <div>
-                    <h3 className="font-bold text-lg tracking-wider">SERVA</h3>
-                    <p className="text-xs text-muted-foreground">SOC 2 & HIPAA compliant</p>
-                </div>
-                <div className="text-right">
-                    <p className="text-xs text-muted-foreground">Active Processes</p>
-                    <p className="text-2xl font-bold">24</p>
-                </div>
+const FinancialHealthCard = () => (
+    <Card className="bg-white/10 backdrop-blur-lg text-white shadow-xl rounded-2xl border border-white/20">
+        <CardHeader className="p-4">
+            <div className="flex justify-around items-center text-sm">
+                <Button variant="ghost" className="text-white/70 hover:text-white hover:bg-white/10">
+                    <BarChart className="mr-2 h-4 w-4"/> Executive Overview
+                </Button>
+                <Button variant="ghost" className="text-white hover:text-white bg-white/10 rounded-full">
+                    <DollarSign className="mr-2 h-4 w-4"/> Financial Health
+                </Button>
+                <Button variant="ghost" className="text-white/70 hover:text-white hover:bg-white/10">
+                    <Zap className="mr-2 h-4 w-4"/> Serva AI Insights
+                </Button>
+                <Button variant="ghost" className="text-white/70 hover:text-white hover:bg-white/10">
+                    <Users className="mr-2 h-4 w-4"/> Workflow Hub
+                </Button>
             </div>
         </CardHeader>
         <CardContent className="p-4 space-y-4">
-            <div className="p-3 rounded-lg border bg-muted/50">
-                <div className="flex items-center gap-2 mb-1">
-                    <div className="w-2 h-2 rounded-full bg-primary"></div>
-                    <span className="text-xs font-semibold text-foreground">SERVA</span>
-                    <span className="text-xs text-muted-foreground">2 seconds ago</span>
-                    <Badge variant="destructive" className="ml-auto">High Priority</Badge>
-                </div>
-                <p className="font-semibold text-foreground">Launching Serva AI 🚀</p>
-                <p className="text-sm text-muted-foreground">Your personal AI is analyzing 15 financial reports and identified 3 optimization opportunities worth $12,400.</p>
-                <div className="mt-2 p-2 rounded-md bg-success/10 border border-success/20 flex items-center gap-2 text-sm">
-                    <ArrowUp className="h-4 w-4 text-success"/>
-                    <span className="text-success font-semibold">$12,400</span>
-                    <span className="text-muted-foreground"> +$2,100</span>
-                </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3">
-                <div className="p-3 rounded-lg bg-muted/50 border">
-                    <p className="text-xs text-muted-foreground">Time Saved Today</p>
-                    <div className="flex items-end justify-between">
-                        <p className="text-2xl font-bold">42h</p>
-                        <BarChart className="h-6 w-6 text-muted-foreground"/>
-                    </div>
-                    <p className="text-xs text-success">+12% vs yesterday</p>
-                </div>
-                <div className="p-3 rounded-lg bg-muted/50 border">
-                    <p className="text-xs text-muted-foreground">Tasks Completed</p>
-                    <div className="flex items-end justify-between">
-                        <p className="text-2xl font-bold">156</p>
-                         <CheckCircle2 className="h-6 w-6 text-muted-foreground"/>
-                    </div>
-                    <p className="text-xs text-success">+28 this hour</p>
-                </div>
-                 <div className="p-3 rounded-lg bg-muted/50 border">
-                    <p className="text-xs text-muted-foreground">Savings Generated</p>
-                    <div className="flex items-end justify-between">
-                        <p className="text-2xl font-bold">$12,400</p>
-                         <DollarSign className="h-6 w-6 text-muted-foreground"/>
-                    </div>
-                    <p className="text-xs text-muted-foreground">This month</p>
-                </div>
-                 <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/20">
-                    <p className="text-xs text-destructive">Active Alerts</p>
-                    <div className="flex items-end justify-between">
-                        <p className="text-2xl font-bold text-destructive">3</p>
-                         <AlertCircle className="h-6 w-6 text-destructive"/>
-                    </div>
-                    <p className="text-xs text-destructive">Require attention</p>
-                </div>
-            </div>
-
-            <div>
-                <p className="text-sm font-semibold mb-2">Recent AI Actions</p>
-                <div className="space-y-2">
-                    <div className="flex items-center justify-between text-sm">
-                        <div className="flex items-center gap-2">
-                            <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></div>
-                            <p className="text-foreground">Launching Serva AI 🚀</p>
-                            <span className="text-muted-foreground text-xs">2 seconds ago</span>
+            <div className="p-4 rounded-lg bg-gradient-to-br from-green-400/20 to-green-400/5 border border-green-400/30">
+                <div className="flex justify-between items-center">
+                    <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center">
+                            <CheckCircle2 className="h-6 w-6 text-white"/>
                         </div>
-                        <Badge variant="default">active</Badge>
-                    </div>
-                    <div className="flex items-center justify-between text-sm">
-                         <div className="flex items-center gap-2">
-                            <div className="w-1.5 h-1.5 rounded-full bg-yellow-500 animate-pulse [animation-delay:0.2s]"></div>
-                            <p className="text-foreground">Processing tax optimization strategies...</p>
-                            <span className="text-muted-foreground text-xs">8 seconds ago</span>
+                        <div>
+                            <h4 className="font-semibold">Financial Health Score</h4>
+                            <p className="text-xs text-white/70">Overall financial stability assessment</p>
                         </div>
-                        <Badge variant="secondary">processing</Badge>
                     </div>
-                     <div className="flex items-center justify-between text-sm">
-                         <div className="flex items-center gap-2">
-                            <div className="w-1.5 h-1.5 rounded-full bg-success"></div>
-                            <p className="text-foreground">Cash flow optimization complete ✓</p>
-                            <span className="text-muted-foreground text-xs">15 seconds ago</span>
-                        </div>
-                        <Badge variant="success">completed</Badge>
+                    <div>
+                        <p className="text-4xl font-bold text-green-300">87</p>
+                        <p className="text-xs text-right text-white/70">out of 100</p>
                     </div>
                 </div>
             </div>
-            
-            <div className="flex items-center justify-between pt-3 border-t gap-2">
-                <Button className="w-full">
-                    <Send /> Send Element
-                </Button>
-                <Button variant="ghost" className="w-full">
-                    <TerminalSquare /> Send Console Errors (2)
-                </Button>
+            <div className="grid grid-cols-2 gap-4">
+                 <Card className="bg-white/10 border-white/20">
+                    <CardHeader className="pb-2">
+                        <CardTitle className="text-sm font-medium flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-blue-400"></div>Current Ratio</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <p className="text-3xl font-bold">2.4</p>
+                        <p className="text-xs text-white/70">Liquidity measure</p>
+                        <p className="text-xs font-semibold text-green-400 flex items-center gap-1 mt-1"><TrendingUp className="h-3 w-3"/> Healthy</p>
+                    </CardContent>
+                </Card>
+                 <Card className="bg-white/10 border-white/20">
+                     <CardHeader className="pb-2">
+                        <CardTitle className="text-sm font-medium flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-purple-400 flex items-center justify-center"><BarChart className="h-2 w-2"/></div>Debt-to-Equity</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <p className="text-3xl font-bold">0.32</p>
+                        <p className="text-xs text-white/70">Leverage ratio</p>
+                        <p className="text-xs font-semibold text-green-400 flex items-center gap-1 mt-1"><TrendingUp className="h-3 w-3"/> Conservative</p>
+                    </CardContent>
+                </Card>
             </div>
         </CardContent>
     </Card>
@@ -129,16 +83,22 @@ export default function LandingPage() {
             <header className="h-20 flex items-center">
                 <Link href="/" className="flex items-center justify-center gap-2">
                     <Logo className="h-8 w-8" />
-                    <span className="font-bold text-lg text-white">Mardisen Suite</span>
+                    <span className="font-bold text-lg text-white">FinView</span>
                 </Link>
+                 <nav className="hidden lg:flex items-center gap-6 ml-10 text-sm font-medium text-white/80">
+                    <Link href="#" className="hover:text-white">Product <ChevronDown className="inline-block h-4 w-4"/></Link>
+                    <Link href="#" className="hover:text-white">Solutions <ChevronDown className="inline-block h-4 w-4"/></Link>
+                    <Link href="/pricing" className="hover:text-white">Pricing</Link>
+                    <Link href="/for-accountants" className="hover:text-white">For Accountants</Link>
+                </nav>
                 <div className="ml-auto flex items-center gap-2">
                 <Button variant="ghost" asChild className="text-white hover:bg-white/10 hover:text-white">
                     <Link href="/signin">
                     Log In
                     </Link>
                 </Button>
-                <Button asChild className="bg-slate-50 text-slate-900 hover:bg-slate-200">
-                    <Link href="/signin">Get Started</Link>
+                <Button asChild className="bg-slate-50 text-slate-900 hover:bg-slate-200 shadow-lg">
+                    <Link href="/signin">Start for free</Link>
                 </Button>
                 </div>
             </header>
@@ -148,14 +108,14 @@ export default function LandingPage() {
                   <Star className="h-4 w-4 mr-2 text-yellow-400 fill-yellow-400"/> #1 AI-Powered Financial Suite
                 </Badge>
                 <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
-                  Watch our AI Agents <span className="text-red-400">easily handle</span> your most challenging <span className="text-blue-400">Financial Operations</span>
+                  Automate Your Finances, Amplify Your Growth
                 </h1>
                 <p className="max-w-[600px] text-gray-300 md:text-xl">
-                  Eliminate 80% of manual financial work with AI agents that never sleep. From invoice processing to cash flow optimization, watch Serva AI transform your financial operations in real-time.
+                  FinView leverages cutting-edge AI to streamline your financial operations, from invoicing to forecasting, so you can focus on what matters most: growing your business.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
                     <Button size="lg" className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-lg">Get Started Free →</Button>
-                    <Button size="lg" variant="outline" className="bg-transparent border-slate-600 text-white hover:bg-slate-800 hover:text-white">Schedule a Demo</Button>
+                    <Button size="lg" variant="outline" className="bg-transparent border-slate-600 text-white hover:bg-slate-800 hover:text-white">Contact Sales</Button>
                 </div>
                 <div className="flex items-center gap-6 pt-4 text-sm text-slate-400">
                     <div className="flex items-center gap-1">
@@ -171,7 +131,7 @@ export default function LandingPage() {
                 </div>
               </div>
               <div className="hidden lg:block">
-                <ServaUICard />
+                <FinancialHealthCard />
               </div>
             </div>
           </div>
@@ -224,7 +184,7 @@ export default function LandingPage() {
                                     <p className="text-sm text-muted-foreground">Owner, Smith Accounting</p>
                                 </div>
                             </div>
-                            <p className="text-muted-foreground">"Mardisen Suite has been a game-changer. Serva AI automates our most tedious reconciliation tasks, freeing up my team to focus on high-value advisory services. We've cut our month-end close time by 40%."</p>
+                            <p className="text-muted-foreground">"FinView has been a game-changer. Serva AI automates our most tedious reconciliation tasks, freeing up my team to focus on high-value advisory services. We've cut our month-end close time by 40%."</p>
                         </CardContent>
                     </Card>
                     <Card>
@@ -251,9 +211,9 @@ export default function LandingPage() {
             <div className="col-span-2 md:col-span-1">
                  <Link href="/" className="flex items-center justify-start gap-2 mb-4">
                     <Logo className="h-8 w-8" />
-                    <span className="font-bold text-lg">Mardisen Suite</span>
+                    <span className="font-bold text-lg">FinView</span>
                 </Link>
-                <p className="text-xs text-muted-foreground">&copy; 2024 Mardisen Suite Inc. All rights reserved.</p>
+                <p className="text-xs text-muted-foreground">&copy; 2024 FinView Inc. All rights reserved.</p>
             </div>
             <div>
                 <h4 className="font-semibold mb-2">Product</h4>
