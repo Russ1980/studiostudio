@@ -14,10 +14,9 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
-import { getDashboardPageData } from "@/lib/actions";
+import { mockDashboardPageData } from "@/lib/data";
 import { OnboardingController } from "@/components/onboarding/onboarding-controller";
 import { DevTools } from "@/components/development/dev-tools";
-import { useEffect, useState } from "react";
 import {
   DollarSign,
   TrendingUp,
@@ -34,36 +33,16 @@ import {
 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
-import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function DashboardPage() {
-  const [dashboardData, setDashboardData] = useState<any | null>(null);
-
-  useEffect(() => {
-    getDashboardPageData().then(setDashboardData);
-  }, []);
+  const dashboardData = mockDashboardPageData;
 
   if (!dashboardData) {
-    return (
-        <div className="flex flex-col gap-6">
-            <Card><CardContent className="p-6"><Skeleton className="h-20 w-full" /></CardContent></Card>
-            <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-                <div className="lg:col-span-2"><Skeleton className="h-80 w-full" /></div>
-                <div className="lg:col-span-1 space-y-6">
-                    <Skeleton className="h-40 w-full" />
-                    <Skeleton className="h-40 w-full" />
-                </div>
-            </div>
-             <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-                <Skeleton className="h-32 w-full" />
-                <Skeleton className="h-32 w-full" />
-                <Skeleton className="h-32 w-full" />
-            </div>
-             <Skeleton className="h-48 w-full" />
-        </div>
-    );
+    // This is a fallback that should not be reached with mock data,
+    // but it's good practice to keep it.
+    return <div>Loading...</div>;
   }
 
   const { user, chartData, recentActivity, quickActions, performanceMetrics, alerts } = dashboardData;
