@@ -1,4 +1,5 @@
 
+
 'use server';
 
 import { firestore } from './firebase-admin';
@@ -71,14 +72,78 @@ import {
   mockPaymentsToProcess,
   mockDataValidationResults,
   mockKeyboardShortcuts,
-  mockDashboardPageData
+  mockDashboardPageData,
 } from './data';
+import { getMockUser } from './auth';
+import { getRevenueDataTool } from '@/ai/tools/get-revenue-data';
 
 const simulateDelay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 export async function getDashboardPageData() {
-  await simulateDelay(50);
-  return mockDashboardPageData;
+  const user = await getMockUser();
+  if (!firestore) {
+    console.log("Firestore not initialized, returning mock data.");
+    return mockDashboardPageData;
+  }
+  
+  try {
+    const invoicesSnapshot = await firestore.collection('invoices').get();
+    const invoices = invoicesSnapshot.docs.map(doc => doc.data());
+    
+    let ytdProfit = 0;
+    let outstandingAR = 0;
+    let overdueAR = 0;
+    
+    invoices.forEach(invoice => {
+      const amount = parseFloat(invoice.amount.replace(/,/g, ''));
+      if (invoice.status === 'Paid') {
+        ytdProfit += amount;
+      } else {
+        outstandingAR += amount;
+        if (new Date(invoice.dueDate) < new Date()) {
+          overdueAR += amount;
+        }
+      }
+    });
+
+    const revenueChartData = (await getRevenueDataTool({})).data;
+    const chartData = revenueChartData.map(item => ({
+        ...item,
+        expenses: item.revenue * (Math.random() * 0.4 + 0.3) // Mock expenses as 30-70% of revenue
+    }));
+
+    const alerts = invoices
+      .filter(inv => inv.status === 'Overdue')
+      .slice(0, 2) // Limit to 2 for the UI
+      .map(inv => ({
+        id: inv.invoice,
+        type: 'critical',
+        message: `Invoice #${inv.invoice} for ${inv.customer} is overdue.`
+      }));
+
+    return {
+      user,
+      chartData,
+      recentActivity: mockDashboardPageData.recentActivity, // Keep mock for now
+      quickActions: mockDashboardPageData.quickActions, // Static
+      performanceMetrics: {
+        profitLoss: {
+          ytd: `$${(ytdProfit / 1000).toFixed(1)}k`,
+          change: "+5.2%", // Mock change
+          changeType: "up",
+        },
+        cashFlow: mockDashboardPageData.performanceMetrics.cashFlow, // Keep mock for now
+        accountsReceivable: {
+          outstanding: `$${(outstandingAR / 1000).toFixed(1)}k`,
+          overdue: `$${(overdueAR / 1000).toFixed(1)}k`,
+        },
+      },
+      alerts,
+    };
+  } catch (error) {
+    console.error("Error fetching dashboard data from Firestore:", error);
+    return mockDashboardPageData;
+  }
 }
 
 // Accountant Portal
