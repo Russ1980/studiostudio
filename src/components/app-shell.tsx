@@ -95,7 +95,13 @@ import { cn } from "@/lib/utils";
 import type { User as UserType } from "@/lib/auth";
 import { Separator } from "@/components/ui/separator";
 import { useServaAI } from "@/hooks/use-serva-ai.tsx";
-import { ServaAIWidget } from "@/components/serva-ai/serva-ai-widget";
+import dynamic from "next/dynamic";
+
+const ServaAIWidget = dynamic(
+  () => import('@/components/serva-ai/serva-ai-widget').then((mod) => mod.ServaAIWidget),
+  { ssr: false }
+);
+
 
 function Breadcrumb() {
   const pathname = usePathname();
