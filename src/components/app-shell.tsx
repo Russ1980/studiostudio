@@ -92,6 +92,9 @@ import {
   Copy,
   Briefcase,
   ShoppingCart,
+  AlertTriangle,
+  CheckCircle,
+  Info,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { User as UserType } from "@/lib/auth";
@@ -280,6 +283,12 @@ const StyledDropdownMenuItem = ({ href, icon: Icon, title, description, special 
   </DropdownMenuItem>
 );
 
+const notifications = [
+    { type: "warning", icon: AlertTriangle, title: "Tax Filing Deadline Approaching", description: "Form 941 is due in 3 days.", time: "1h ago" },
+    { type: "success", icon: CheckCircle, title: "Payroll Complete", description: "The payroll for June 16-30 has been successfully processed.", time: "5h ago" },
+    { type: "info", icon: Info, title: "New Client Onboarded", description: "Apex Solutions has completed the onboarding process.", time: "1d ago" },
+];
+
 export function AppShell({ children, user }: { children: React.ReactNode, user: UserType }) {
   const pathname = usePathname();
   const router = useRouter();
@@ -467,16 +476,47 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
                   <Moon className="h-5 w-5" />
                   <span className="sr-only">Toggle Theme</span>
                 </Button>
-                <Button variant="ghost" size="icon" className="rounded-full relative">
-                  <Bell className="h-5 w-5" />
-                  <Badge
-                      className="absolute -top-1 -right-1 h-4 w-4 justify-center p-0"
-                      variant="destructive"
-                  >
-                      3
-                  </Badge>
-                  <span className="sr-only">Notifications</span>
-                </Button>
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon" className="rounded-full relative">
+                        <Bell className="h-5 w-5" />
+                        <Badge
+                            className="absolute -top-1 -right-1 h-4 w-4 justify-center p-0"
+                            variant="destructive"
+                        >
+                            3
+                        </Badge>
+                        <span className="sr-only">Notifications</span>
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-80 md:w-96">
+                        <DropdownMenuLabel className="flex justify-between items-center">
+                            <span>Notifications</span>
+                            <Badge variant="secondary">3 New</Badge>
+                        </DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuGroup>
+                            {notifications.map((notification, index) => (
+                                <DropdownMenuItem key={index} className="p-2 items-start cursor-pointer" onSelect={() => router.push('/communications/notifications')}>
+                                    <notification.icon className={cn("h-5 w-5 mr-3 mt-1 shrink-0", {
+                                        'text-destructive': notification.type === 'warning',
+                                        'text-success': notification.type === 'success',
+                                        'text-primary': notification.type === 'info',
+                                    })} />
+                                    <div className="flex-1">
+                                        <p className="font-semibold text-sm">{notification.title}</p>
+                                        <p className="text-xs text-muted-foreground">{notification.description}</p>
+                                        <p className="text-xs text-muted-foreground/70 mt-1">{notification.time}</p>
+                                    </div>
+                                </DropdownMenuItem>
+                            ))}
+                        </DropdownMenuGroup>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem className="justify-center" onSelect={() => router.push('/communications/notifications')}>
+                            View All Notifications
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
                  <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="secondary" className="flex items-center gap-2 p-1 pr-2 rounded-full h-auto" data-onboarding="user-profile">
