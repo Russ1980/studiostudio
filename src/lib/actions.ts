@@ -465,7 +465,7 @@ export async function getInvoices() {
     return mockInvoices;
   }
   try {
-    const invoicesSnapshot = await firestore.collection('invoices').get();
+    const invoicesSnapshot = await firestore.collection('invoices').orderBy('invoiceNumber', 'desc').get();
     if (invoicesSnapshot.empty) {
       console.log("No invoices found in Firestore, returning mock data as fallback.");
       return mockInvoices;
@@ -477,6 +477,53 @@ export async function getInvoices() {
     return mockInvoices;
   }
 }
+
+const InvoiceFormSchema = z.object({
+  customer: z.string().min(1),
+  invoiceDate: z.string().min(1),
+  dueDate: z.string().min(1),
+  invoiceNumber: z.string().min(1),
+  lineItems: z.array(z.object({
+    description: z.string().min(1),
+    quantity: z.coerce.number().min(0.01),
+    rate: z.coerce.number().min(0),
+  })).min(1),
+  notes: z.string().optional(),
+});
+
+export async function addNewInvoice(values: z.infer<typeof InvoiceFormSchema>) {
+    if (!firestore) {
+        return { success: false, error: "Firestore not initialized." };
+    }
+
+    const validatedFields = InvoiceFormSchema.safeParse(values);
+    if (!validatedFields.success) {
+        return { success: false, error: "Invalid form data." };
+    }
+
+    try {
+        const { lineItems, ...invoiceData } = validatedFields.data;
+
+        const subtotal = lineItems.reduce((acc, item) => acc + item.quantity * item.rate, 0);
+        const tax = subtotal * 0.08; // 8% tax
+        const total = subtotal + tax;
+
+        const newInvoice = {
+            ...invoiceData,
+            invoice: invoiceData.invoiceNumber, // Match field name in data
+            amount: total.toFixed(2),
+            status: 'Sent', // Default status
+        };
+
+        // Use invoiceNumber as the document ID for idempotency
+        await firestore.collection('invoices').doc(newInvoice.invoiceNumber).set(newInvoice);
+        revalidatePath('/invoicing/invoices');
+        return { success: true };
+    } catch (error: any) {
+        return { success: false, error: error.message };
+    }
+}
+
 export async function getRecurringInvoices() {
     await simulateDelay(50);
     return mockRecurringInvoices;
@@ -838,20 +885,55 @@ export async function getOperationsDashboardData() {
     return mockOperationsDashboard;
 }
 export async function getPurchaseOrders() {
-    await simulateDelay(50);
-    return mockPurchaseOrders;
+    if (!firestore) return mockPurchaseOrders;
+    try {
+        const snapshot = await firestore.collection('purchaseOrders').get();
+        if (snapshot.empty) return mockPurchaseOrders;
+        return snapshot.docs.map(doc => doc.data()) as typeof mockPurchaseOrders;
+    } catch (error) {
+        return mockPurchaseOrders;
+    }
 }
 export async function getInventoryData() {
-    await simulateDelay(50);
-    return mockInventory;
+    if (!firestore) return { kpiData: mockInventory.kpiData, inventory: mockInventory.inventory };
+    try {
+        const snapshot = await firestore.collection('inventory').get();
+        const inventory = snapshot.empty ? mockInventory.inventory : snapshot.docs.map(doc => doc.data());
+
+        const totalValue = inventory.reduce((acc, item) => acc + item.cost * item.quantity, 0);
+        const lowStockItems = inventory.filter(item => item.quantity <= item.reorderPoint).length;
+        
+        return {
+            kpiData: [
+                { title: "Total Inventory Value", value: `$${totalValue.toLocaleString('en-US', {minimumFractionDigits: 2})}`, icon: "DollarSign" },
+                { title: "Items in Stock", value: inventory.length.toLocaleString(), icon: "Package" },
+                { title: "Low Stock Items", value: lowStockItems, icon: "AlertCircle" },
+            ],
+            inventory: inventory as typeof mockInventory.inventory,
+        }
+    } catch (error) {
+        return { kpiData: mockInventory.kpiData, inventory: mockInventory.inventory };
+    }
 }
 export async function getProductionPlans() {
-    await simulateDelay(50);
-    return mockProductionPlans;
+    if (!firestore) return mockProductionPlans;
+    try {
+        const snapshot = await firestore.collection('productionPlans').get();
+        if (snapshot.empty) return mockProductionPlans;
+        return snapshot.docs.map(doc => doc.data()) as typeof mockProductionPlans;
+    } catch (error) {
+        return mockProductionPlans;
+    }
 }
 export async function getWorkOrders() {
-    await simulateDelay(50);
-    return mockWorkOrders;
+    if (!firestore) return mockWorkOrders;
+    try {
+        const snapshot = await firestore.collection('workOrders').get();
+        if (snapshot.empty) return mockWorkOrders;
+        return snapshot.docs.map(doc => doc.data()) as typeof mockWorkOrders;
+    } catch (error) {
+        return mockWorkOrders;
+    }
 }
 export async function getOperationsAnalytics() {
     await simulateDelay(50);
