@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useRouter } from "next/navigation";
@@ -14,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Logo } from "@/components/icons";
+import Link from "next/link";
 
 export default function SignInPage() {
   const router = useRouter();
@@ -64,9 +66,9 @@ export default function SignInPage() {
         <CardFooter className="justify-center">
              <div className="text-center text-sm">
                 Don&apos;t have an account?{" "}
-                <a href="#" className="underline">
+                <Link href="/pricing" className="underline">
                     Sign up
-                </a>
+                </Link>
              </div>
         </CardFooter>
       </form>

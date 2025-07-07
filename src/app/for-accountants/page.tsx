@@ -1,6 +1,8 @@
+
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Users, Zap, BarChart, FileStack, Mail, MapPin } from "lucide-react";
+import Link from "next/link";
 
 const benefits = [
     {
@@ -33,7 +35,9 @@ export default function ForAccountantsPage() {
         <p className="text-muted-foreground mt-4 text-lg">
           Elevate your accounting practice with Mardisen Suite. Our Partner Program is designed to help you work more efficiently, scale your services, and provide unparalleled value to your clients.
         </p>
-         <Button size="lg" className="mt-6">Become a Partner</Button>
+         <Button size="lg" className="mt-6" asChild>
+            <Link href="/pricing">Become a Partner</Link>
+         </Button>
       </div>
 
        <div className="grid md:grid-cols-2 gap-8 mt-16">

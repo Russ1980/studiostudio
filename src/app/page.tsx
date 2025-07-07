@@ -178,7 +178,7 @@ export default function LandingPage() {
                         </Link>
                     </Button>
                     <Button asChild variant="outline" className="bg-transparent border-white/50 text-white hover:bg-white hover:text-primary">
-                        <Link href="/signin">Get Started</Link>
+                        <Link href="/pricing">Get Started</Link>
                     </Button>
                     </div>
                 </header>
@@ -199,12 +199,14 @@ export default function LandingPage() {
                     Eliminate 80% of manual financial work with a Serva Assistant that never sleeps. From invoice processing to cash flow optimization, watch Serva Assistant transform your financial operations in real-time.
                 </p>
                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 pt-4">
-                    <Button size="lg" className="bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg">
-                        Get Started Free
-                        <ChevronRight className="h-4 w-4 ml-2"/>
+                    <Button size="lg" className="bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg" asChild>
+                        <Link href="/pricing">
+                            Get Started Free
+                            <ChevronRight className="h-4 w-4 ml-2"/>
+                        </Link>
                     </Button>
-                     <Button size="lg" variant="ghost" className="bg-white/10 hover:bg-white/20 text-white">
-                        Schedule a Demo
+                     <Button size="lg" variant="ghost" className="bg-white/10 hover:bg-white/20 text-white" asChild>
+                        <Link href="/contact">Schedule a Demo</Link>
                     </Button>
                 </div>
                  <div className="flex items-center gap-6 pt-6 text-sm text-white">
