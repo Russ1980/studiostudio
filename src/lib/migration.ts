@@ -3,7 +3,7 @@
 'use server';
 
 import { firestore } from './firebase-admin';
-import { mockClients, mockInvoices, mockEmployees, mockJobsWithDetails as mockJobs, mockTaxFilings, mockTaxPayments, mockBankAccounts, mockTasks, mockChartOfAccounts, mockTimeLogs } from './data';
+import { mockClients, mockInvoices, mockEmployees, mockJobsWithDetails as mockJobs, mockTaxFilings, mockTaxPayments, mockBankAccounts, mockTasks, mockChartOfAccounts, mockTimeLogs, mockJournalEntries } from './data';
 
 type TransformFunction<T, U> = (data: T) => U;
 
@@ -100,4 +100,8 @@ export async function migrateChartOfAccounts() {
 
 export async function migrateTimeLogs() {
     return migrateData(mockTimeLogs, 'timeLogs', { idKey: 'id' });
+}
+
+export async function migrateJournalEntries() {
+    return migrateData(mockJournalEntries, 'journalEntries', { idKey: 'entryNo' });
 }

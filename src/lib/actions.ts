@@ -584,34 +584,65 @@ export async function getVendors() {
     return mockVendors;
 }
 export async function getJournalEntries() {
-    await simulateDelay(50);
+  if (!firestore) return mockJournalEntries;
+  try {
+    const snapshot = await firestore.collection('journalEntries').orderBy('date', 'desc').get();
+    if (snapshot.empty) return mockJournalEntries;
+    return snapshot.docs.map(doc => doc.data()) as typeof mockJournalEntries;
+  } catch (error) {
+    console.error("Error fetching journal entries:", error);
     return mockJournalEntries;
-}
-export async function getChartOfAccounts() {
-  if (!firestore) {
-    console.log("Firestore not initialized, returning mock data for chart of accounts.");
-    return mockChartOfAccounts;
   }
+}
+
+export async function getChartOfAccounts() {
+  if (!firestore) return mockChartOfAccounts;
   try {
     const docRef = firestore.collection('chartOfAccounts').doc('main');
     const docSnap = await docRef.get();
-
-    if (!docSnap.exists) {
-      console.log('No chart of accounts document found, returning mock data as fallback.');
-      return mockChartOfAccounts;
-    }
-    
+    if (!docSnap.exists) return mockChartOfAccounts;
     return docSnap.data() as typeof mockChartOfAccounts;
   } catch (error) {
-    console.error("Error fetching chart of accounts from Firestore:", error);
-    // Fallback to mock data in case of error
+    console.error("Error fetching chart of accounts:", error);
     return mockChartOfAccounts;
   }
 }
+
 export async function getLedgerTransactions() {
-    await simulateDelay(50);
-    return mockLedgerTransactions;
+    if (!firestore) return mockLedgerTransactions;
+    try {
+        const snapshot = await firestore.collection('journalEntries').orderBy('date', 'desc').get();
+        if (snapshot.empty) return mockLedgerTransactions;
+
+        // This is a simplified ledger for one account. A real one would be much more complex.
+        let runningBalance = 1250320.50; // Starting balance from mock
+        const transactions = snapshot.docs.map(doc => {
+            const entry = doc.data();
+            const debit = parseFloat(entry.debits) || 0;
+            const credit = parseFloat(entry.credits) || 0;
+            // Assuming this is a cash account ledger
+            const newBalance = runningBalance - credit + debit;
+            runningBalance = newBalance;
+            return {
+                date: entry.date,
+                journalNo: entry.entryNo,
+                description: entry.description,
+                debit: debit > 0 ? debit.toFixed(2) : "",
+                credit: credit > 0 ? credit.toFixed(2) : "",
+                balance: newBalance.toLocaleString('en-US', {minimumFractionDigits: 2}),
+            };
+        }).reverse(); // Reverse to show oldest first
+
+        return {
+            transactions: transactions.reverse(), // reverse back for display
+            currentBalance: runningBalance.toLocaleString('en-US', {minimumFractionDigits: 2}),
+        };
+    } catch(e) {
+        console.error("Error fetching ledger transactions:", e);
+        return mockLedgerTransactions;
+    }
 }
+
 export async function getArDashboardData() {
     await simulateDelay(50);
     return mockArDashboard;

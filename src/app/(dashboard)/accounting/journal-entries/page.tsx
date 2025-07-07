@@ -1,6 +1,4 @@
 
-"use client";
-
 import Link from "next/link";
 import {
   Card,
@@ -27,14 +25,11 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { PlusCircle, MoreHorizontal } from "lucide-react";
+import { getJournalEntries } from "@/lib/actions";
 
-const entries = [
-  { date: "2024-06-15", entryNo: "JE-001", ref: "Depreciation", description: "Monthly depreciation expense for office equipment.", debits: "1,500.00", credits: "1,500.00", status: "Posted" },
-  { date: "2024-06-10", entryNo: "JE-002", ref: "Owner's Draw", description: "Owner withdrawal for personal use.", debits: "5,000.00", credits: "5,000.00", status: "Posted" },
-  { date: "2024-06-01", entryNo: "JE-003", ref: "Accrued Revenue", description: "To recognize revenue earned but not yet invoiced.", debits: "10,000.00", credits: "10,000.00", status: "Draft" },
-];
+export default async function JournalEntriesPage() {
+  const entries = await getJournalEntries();
 
-export default function JournalEntriesPage() {
   return (
     <div className="flex flex-col gap-6">
       <div>
