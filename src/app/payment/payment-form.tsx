@@ -13,7 +13,9 @@ import { createPaymentIntent } from './actions';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader2 } from 'lucide-react';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
 
 // Make sure to call `loadStripe` outside of a component’s render to avoid
 // recreating the `Stripe` object on every render.
@@ -55,9 +57,35 @@ function CheckoutForm() {
   };
 
   return (
-    <form id="payment-form" onSubmit={handleSubmit}>
-      <PaymentElement id="payment-element" />
-      <Button disabled={isLoading || !stripe || !elements} id="submit" className="w-full mt-6" size="lg">
+    <form id="payment-form" onSubmit={handleSubmit} className="space-y-6">
+       <div>
+          <h3 className="text-lg font-medium text-foreground">Billing Information</h3>
+          <div className="grid gap-4 mt-4">
+             <div className="grid gap-2">
+                <Label htmlFor="companyName">Company Name</Label>
+                <Input id="companyName" placeholder="Your Company Inc." />
+            </div>
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                 <div className="grid gap-2">
+                    <Label htmlFor="email">Email Address</Label>
+                    <Input id="email" type="email" placeholder="you@example.com" required />
+                </div>
+                 <div className="grid gap-2">
+                    <Label htmlFor="phone">Phone Number</Label>
+                    <Input id="phone" type="tel" placeholder="(555) 123-4567" />
+                </div>
+             </div>
+          </div>
+        </div>
+
+        <div>
+           <h3 className="text-lg font-medium text-foreground">Payment Details</h3>
+           <div className="mt-4">
+              <PaymentElement id="payment-element" />
+           </div>
+        </div>
+
+      <Button disabled={isLoading || !stripe || !elements} id="submit" className="w-full" size="lg">
         <span id="button-text">
           {isLoading ? <Loader2 className="animate-spin" /> : 'Confirm & Pay'}
         </span>
@@ -95,7 +123,7 @@ export function PaymentForm({ price }: { price: number }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Payment Information</CardTitle>
+        <CardTitle>Complete Your Purchase</CardTitle>
       </CardHeader>
       <CardContent>
         {clientSecret ? (
