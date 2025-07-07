@@ -165,7 +165,8 @@ export const navLinks: NavLink[] = [
         href: '/accounting/financial-statements',
         items: [
           { href: '/accounting/financial-statements', label: 'Statements Hub', icon: LayoutGrid },
-          { href: '/accounting/financial-statements/profit-and-loss', label: 'Profit &amp; Loss', icon: FileText },
+          { href: '/accounting/financial-statements/profit-and-loss', label: 'Profit & Loss', icon: FileText },
+          { href: '/accounting/financial-statements/consolidated-pl', label: 'Consolidated P&L', icon: FileBarChart2 },
           { href: '/accounting/financial-statements/balance-sheet', label: 'Balance Sheet', icon: FileText },
           { href: '/accounting/financial-statements/cash-flow', label: 'Cash Flow', icon: FileText },
         ],

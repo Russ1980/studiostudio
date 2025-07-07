@@ -13,6 +13,7 @@ import { FileBarChart } from "lucide-react";
 
 const reports = [
     { title: "Profit & Loss", description: "Shows revenues and expenses over a period of time.", href: "/accounting/financial-statements/profit-and-loss" },
+    { title: "Consolidated Profit & Loss", description: "A P&L report for companies with multiple entities or subsidiaries.", href: "/accounting/financial-statements/consolidated-pl" },
     { title: "Balance Sheet", description: "A snapshot of your assets, liabilities, and equity.", href: "/accounting/financial-statements/balance-sheet" },
     { title: "Statement of Cash Flows", description: "Tracks the movement of cash from operating, investing, and financing activities.", href: "/accounting/financial-statements/cash-flow" },
     { title: "Statement of Changes in Equity", description: "Details the changes in a company's equity over time.", href: "#" },
