@@ -904,22 +904,115 @@ export const mockDashboardPageData = {
         healthScore: "94%",
     },
     navItems: [
-        { title: "Executive Overview", description: "Comprehensive business summary", icon: 'BarChart', active: true },
-        { title: "Financial Health", description: "Financial metrics and analysis", icon: 'DollarSign', active: false },
-        { title: "Serva AI Insights", description: "AI-powered business intelligence", icon: 'Wand2', active: false },
-        { title: "Workflow Hub", description: "Team productivity and tasks", icon: 'Users', active: false },
-        { title: "Process Visibility", description: "Operations monitoring", icon: 'Eye', active: false },
-        { title: "Business Context", description: "Industry benchmarks and insights", icon: 'Briefcase', active: false },
-        { title: "Customize Dashboard", description: "Personalize your workspace", icon: 'SlidersHorizontal', active: false },
+        { title: "Executive Overview", description: "Comprehensive business summary", icon: 'BarChart' },
+        { title: "Financial Health", description: "Financial metrics and analysis", icon: 'DollarSign' },
+        { title: "Serva AI Insights", description: "AI-powered business intelligence", icon: 'Wand2' },
+        { title: "Workflow Hub", description: "Team productivity and tasks", icon: 'Users' },
+        { title: "Process Visibility", description: "Operations monitoring", icon: 'Eye' },
+        { title: "Business Context", description: "Industry benchmarks and insights", icon: 'Briefcase' },
+        { title: "Customize Dashboard", description: "Personalize your workspace", icon: 'SlidersHorizontal' },
     ],
     metricCards: [
         { title: "Monthly Expenses", value: "$1,939,079", change: "+5.0%", changeType: "increase", icon: 'TrendingUp', details: null },
         { title: "Net Profit", value: "$2,060,189", details: "Income: $6,538,013\nExpenses: $4,477,824", icon: 'DollarSign', change: null, changeType: null },
         { title: "Sales (30 Days)", value: "$1,803,232", change: "+8.4%", changeType: "increase", icon: 'BarChart3', details: null },
         { title: "A/R Total", value: "$5,753,934", details: "Overdue: $1,812,434", icon: 'Receipt', change: null, changeType: null },
-    ]
+    ],
+    performanceMetrics: {
+        profitLoss: {
+            ytd: `$${(2060189 / 1000000).toFixed(1)}M`,
+            change: `+12.4%`,
+            changeType: "up",
+        },
+        cashFlow: {
+            incoming: `$${(6538013/1000000).toFixed(1)}M`,
+            outgoing: `$${(4477824/1000000).toFixed(1)}M`,
+            net: `$${((6538013 - 4477824)/1000000).toFixed(1)}M`,
+        },
+        accountsReceivable: {
+            outstanding: `$${(5753934/1000000).toFixed(1)}M`,
+            overdue: `$${(1812434/1000000).toFixed(1)}M`,
+        }
+    },
+    alerts: [
+        { id: uuidv4(), type: 'critical', message: 'Invoice #INV-2024-049 from Momentum LLC is 32 days overdue.'},
+        { id: uuidv4(), type: 'warning', message: 'Low stock warning for Raw Material D (10 units remaining).'},
+    ],
+    chartData: [
+        { month: "Jan", income: 1050000, expenses: 700000 },
+        { month: "Feb", income: 1100000, expenses: 750000 },
+        { month: "Mar", income: 1150000, expenses: 800000 },
+        { month: "Apr", income: 1080000, expenses: 780000 },
+        { month: "May", income: 1250000, expenses: 850000 },
+        { month: "Jun", income: 1300000, expenses: 880000 },
+    ],
+    financialHealthData: {
+        kpis: [
+            { title: 'Current Ratio', value: '2.1', status: 'Healthy' },
+            { title: 'Quick Ratio', value: '1.5', status: 'Healthy' },
+            { title: 'Debt-to-Equity', value: '0.4', status: 'Excellent' },
+            { title: 'Working Capital', value: '$1.4M', status: '' },
+        ],
+        cashFlowData: [
+            { month: 'Jan', cashFlow: 350 }, { month: 'Feb', cashFlow: 350 },
+            { month: 'Mar', cashFlow: 350 }, { month: 'Apr', cashFlow: 300 },
+            { month: 'May', cashFlow: 400 }, { month: 'Jun', cashFlow: 420 },
+        ],
+        profitabilityData: [
+            { month: 'Jan', profit: 350, loss: 0 }, { month: 'Feb', profit: 350, loss: 0 },
+            { month: 'Mar', profit: 350, loss: 0 }, { month: 'Apr', profit: 300, loss: 0 },
+            { month: 'May', profit: 400, loss: 0 }, { month: 'Jun', profit: 420, loss: 0 },
+        ],
+    },
+    servaAiInsightsData: [
+        { type: "Anomaly Detection", summary: "A significant revenue dip was detected in April, which is inconsistent with the overall growth trend. This warrants further investigation into sales performance for that month." },
+        { type: "Trend Analysis", summary: "Excluding the anomaly in April, your revenue shows a consistent upward trend over the past six months, indicating strong, sustainable growth." },
+        { type: "Cash Flow Forecast", summary: "Based on current trends, a potential cash surplus of $500k is projected for Q3. Consider strategic investments or debt repayment." },
+        { type: "Key Highlight", summary: "Cost of Goods Sold (COGS) and Salaries are your two largest expense categories, representing 65% of your total operating costs. Optimizing these areas could yield significant savings." },
+    ],
+    workflowHubData: {
+        kpis: [
+            { title: 'Pending Approvals', value: 3 },
+            { title: 'Overdue Tasks', value: 1 },
+            { title: 'Team Capacity', value: '85%' },
+        ],
+        tasks: [
+            { id: '1', name: 'Review Q2 Financials', assignee: 'Sarah Johnson', due: '2 days' },
+            { id: '2', name: 'Approve PO-00126', assignee: 'John Doe', due: '1 day' },
+            { id: '3', name: 'Finalize Marketing Budget', assignee: 'Olivia Smith', due: '3 days' },
+        ],
+        teamMembers: [
+            { name: 'Sarah Johnson', capacity: 90 },
+            { name: 'John Doe', capacity: 75 },
+            { name: 'Olivia Smith', capacity: 88 },
+        ]
+    },
+    processVisibilityData: {
+      kpiData: [
+        { title: "Production Efficiency (OEE)", value: "85%" },
+        { title: "On-Time Delivery", value: "98.2%" },
+        { title: "Quality Rate", value: "99.5%" },
+      ],
+      productionPlanData: [
+          { name: "Widget A", completed: 600, remaining: 400},
+          { name: "Component B", completed: 750, remaining: 4250},
+          { name: "Assembly C", completed: 250, remaining: 0},
+      ]
+    },
+    businessContextData: {
+      marketTrends: [
+          "Increased demand for sustainable products is driving a 15% market shift.",
+          "Supply chain disruptions in Southeast Asia may impact component costs by up to 10%.",
+          "Adoption of AI in financial planning is becoming a competitive necessity."
+      ],
+      competitorBenchmarks: {
+        revenueGrowth: { self: 12.4, industry: 10.2 },
+        profitMargin: { self: 18.9, industry: 16.5 },
+      }
+    },
   };
     
+
 
 
 
