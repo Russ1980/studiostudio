@@ -430,7 +430,7 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input placeholder="Search..." className="pl-9" />
             </div>
-             <Button variant="accent" size="sm">
+             <Button variant="default" size="sm">
               <Wand2 className="mr-2" />
               Serva AI Ready
             </Button>
@@ -498,7 +498,7 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
             </div>
           </div>
         </header>
-        <main className="flex-1 flex flex-col p-4 md:p-6">
+        <main className="flex-1 p-4 md:p-6">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
                 <Breadcrumb />
