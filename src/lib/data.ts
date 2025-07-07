@@ -920,8 +920,7 @@ export const mockDashboardPageData = {
     ],
     performanceMetrics: {
       profitLoss: {
-        currentMonth: "+$45,200",
-        ytd: "+$430,100",
+        ytd: "$430.1k",
         change: "+5.2%",
         changeType: "up",
       },
@@ -933,14 +932,14 @@ export const mockDashboardPageData = {
       accountsReceivable: {
         outstanding: "$245.8k",
         overdue: "$35.2k",
-        avgDays: "22 Days",
       }
     },
     alerts: [
       { id: 1, type: 'critical', message: 'Invoice #INV-2024-049 is 32 days overdue.' },
       { id: 2, type: 'critical', message: 'Bank connection for Savings Account needs to be re-authenticated.' },
       { id: 3, type: 'reminder', message: 'Federal Tax Deposit due in 5 days.' },
-      { id: 4, type: 'reminder', message: 'Payroll for June 16-30 needs approval.' },
     ]
   };
     
+
+

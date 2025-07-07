@@ -430,11 +430,10 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input placeholder="Search..." className="pl-9" />
             </div>
-             <Button variant="default" size="sm">
+             <Button variant="accent" size="sm" onClick={openServaAI}>
               <Wand2 className="mr-2" />
-              Serva AI Ready
+              Ask Serva AI
             </Button>
-            <Button variant="secondary" size="sm" onClick={openServaAI}>Ask Serva AI...</Button>
             
             <div className="flex items-center gap-1">
                 <Button variant="ghost" size="icon" className="rounded-full">
