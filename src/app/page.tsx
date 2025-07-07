@@ -66,7 +66,7 @@ export default function LandingPage() {
         <section className="relative bg-slate-900 text-white">
           <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/30 to-purple-500/30 opacity-20"></div>
           <div className="container relative grid lg:grid-cols-2 gap-12 items-center py-20 md:py-32">
-            <div className="flex flex-col">
+            <div className="flex flex-col pl-6">
               <div className="mb-6">
                 <Badge variant="secondary" className="w-fit bg-white/10 text-white border-white/20">
                   <Zap className="h-3 w-3 mr-2 text-fuchsia-400" />
@@ -173,8 +173,7 @@ export default function LandingPage() {
                 <Link href="#" className="hover:text-foreground">Terms</Link>
                 <Link href="#" className="hover:text-foreground">Privacy</Link>
             </div>
-          </div>
-      </footer>
+          </footer>
     </div>
   );
 }
