@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -65,9 +66,9 @@ export default function SignInPage() {
         <CardFooter className="justify-center">
              <div className="text-center text-sm">
                 Don&apos;t have an account?{" "}
-                <a href="#" className="underline">
+                <Link href="/pricing" className="underline">
                     Sign up
-                </a>
+                </Link>
              </div>
         </CardFooter>
       </form>
