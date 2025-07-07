@@ -37,6 +37,7 @@ import {
   TrendingDown,
   BrainCircuit,
   Zap,
+  GripVertical,
 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
@@ -56,6 +57,9 @@ import {
     ChartTooltipContent,
 } from "@/components/ui/chart";
 import { Area, AreaChart, Bar, BarChart as RechartsBarChart, CartesianGrid, XAxis, YAxis, LineChart, Line, PieChart, Pie, Cell } from "recharts";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { Skeleton } from "@/components/ui/skeleton";
 
 
 const getIcon = (iconName: string) => {
@@ -413,11 +417,90 @@ const BusinessContextView = ({ data }: { data: any }) => {
 };
 
 const CustomizeDashboardView = () => (
-    <div className="flex items-center justify-center h-96 border-2 border-dashed rounded-lg">
-        <div className="text-center">
-            <SlidersHorizontal className="h-12 w-12 mx-auto text-muted-foreground" />
-            <h3 className="mt-4 text-lg font-semibold">Customize Your Dashboard</h3>
-            <p className="mt-1 text-sm text-muted-foreground">Drag and drop widgets to build your perfect view. (Coming soon)</p>
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-1">
+            <Card>
+                <CardHeader>
+                    <CardTitle>Dashboard Widgets</CardTitle>
+                    <CardDescription>Toggle the visibility of dashboard components.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                    <div>
+                        <h4 className="font-semibold mb-2">KPI Cards</h4>
+                        <div className="space-y-3">
+                            <div className="flex items-center justify-between">
+                                <Label htmlFor="kpi-expenses">Monthly Expenses</Label>
+                                <Switch id="kpi-expenses" defaultChecked />
+                            </div>
+                            <div className="flex items-center justify-between">
+                                <Label htmlFor="kpi-profit">Net Profit</Label>
+                                <Switch id="kpi-profit" defaultChecked />
+                            </div>
+                            <div className="flex items-center justify-between">
+                                <Label htmlFor="kpi-sales">Sales (30 Days)</Label>
+                                <Switch id="kpi-sales" defaultChecked />
+                            </div>
+                            <div className="flex items-center justify-between">
+                                <Label htmlFor="kpi-ar">A/R Total</Label>
+                                <Switch id="kpi-ar" defaultChecked />
+                            </div>
+                        </div>
+                    </div>
+                     <div>
+                        <h4 className="font-semibold mb-2">Charts & Tables</h4>
+                        <div className="space-y-3">
+                             <div className="flex items-center justify-between">
+                                <Label htmlFor="chart-pl">Profit & Loss Chart</Label>
+                                <Switch id="chart-pl" defaultChecked />
+                            </div>
+                             <div className="flex items-center justify-between">
+                                <Label htmlFor="table-cashflow">Cash Flow Table</Label>
+                                <Switch id="table-cashflow" defaultChecked />
+                            </div>
+                             <div className="flex items-center justify-between">
+                                <Label htmlFor="table-ar">Accounts Receivable Table</Label>
+                                <Switch id="table-ar" />
+                            </div>
+                              <div className="flex items-center justify-between">
+                                <Label htmlFor="alerts">Alerts & Notifications</Label>
+                                <Switch id="alerts" defaultChecked />
+                            </div>
+                        </div>
+                    </div>
+                </CardContent>
+            </Card>
+        </div>
+        <div className="lg:col-span-2">
+            <Card>
+                 <CardHeader>
+                    <CardTitle>Live Layout Preview</CardTitle>
+                    <CardDescription>This is a representation of your dashboard layout. Drag to reorder.</CardDescription>
+                </CardHeader>
+                <CardContent className="p-4 bg-muted/50 rounded-lg space-y-4">
+                    <div className="grid grid-cols-4 gap-4">
+                        <Skeleton className="h-24" />
+                        <Skeleton className="h-24" />
+                        <Skeleton className="h-24" />
+                        <Skeleton className="h-24" />
+                    </div>
+                    <div className="p-4 border rounded-lg bg-card flex items-center gap-4">
+                        <GripVertical className="text-muted-foreground" />
+                        <div className="flex-1 space-y-2">
+                            <Skeleton className="h-6 w-1/4" />
+                            <Skeleton className="h-40 w-full" />
+                        </div>
+                         <Button variant="ghost" size="icon"><Eye className="text-muted-foreground"/></Button>
+                    </div>
+                     <div className="p-4 border rounded-lg bg-card flex items-center gap-4">
+                        <GripVertical className="text-muted-foreground" />
+                        <div className="flex-1 space-y-2">
+                            <Skeleton className="h-6 w-1/4" />
+                            <Skeleton className="h-20 w-full" />
+                        </div>
+                         <Button variant="ghost" size="icon"><Eye className="text-muted-foreground"/></Button>
+                    </div>
+                </CardContent>
+            </Card>
         </div>
     </div>
 );
