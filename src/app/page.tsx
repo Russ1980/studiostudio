@@ -1,10 +1,11 @@
+
 "use client";
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/icons";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Check, LineChart, TrendingUp, Zap, BarChart3, Users, CheckCircle2, ChevronDown, Briefcase } from "lucide-react";
+import { Check, LineChart, TrendingUp, Zap, BarChart3, Users, CheckCircle2, ChevronDown, Briefcase, DollarSign } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 const features = [
@@ -40,7 +41,10 @@ export default function LandingPage() {
         <div className="container flex h-14 items-center">
           <Link href="#" className="flex items-center gap-2 mr-6">
             <Logo className="h-6 w-6 text-primary" />
-            <span className="font-bold">Mardisen</span><span className="font-normal">Suite</span>
+            <div className="flex items-baseline">
+                <span className="font-bold">Mardisen</span>
+                <span className="font-normal">Suite</span>
+            </div>
           </Link>
           <nav className="hidden items-center gap-4 text-sm text-muted-foreground md:flex">
             <Link href="#" className="transition-colors hover:text-foreground flex items-center gap-1">Solutions <ChevronDown className="h-4 w-4" /></Link>
@@ -91,10 +95,10 @@ export default function LandingPage() {
                 <CardHeader>
                   <div className="flex items-center justify-between">
                      <div className="flex items-center gap-1 p-1 bg-slate-700/50 rounded-lg">
-                         <Button variant="ghost" size="sm" className="text-white hover:bg-slate-700 hover:text-white text-xs">Executive Overview</Button>
-                         <Button variant="ghost" size="sm" className="bg-slate-600 text-white hover:bg-slate-500 text-xs">Financial Health</Button>
-                         <Button variant="ghost" size="sm" className="text-white hover:bg-slate-700 hover:text-white text-xs">Serva AI Insights</Button>
-                         <Button variant="ghost" size="sm" className="text-white hover:bg-slate-700 hover:text-white text-xs">Workflow Hub</Button>
+                         <Button variant="ghost" size="sm" className="text-white hover:bg-slate-700 hover:text-white text-xs gap-1"><BarChart3/>Executive Overview</Button>
+                         <Button variant="ghost" size="sm" className="bg-slate-600 text-white hover:bg-slate-500 text-xs gap-1"><DollarSign/>Financial Health</Button>
+                         <Button variant="ghost" size="sm" className="text-white hover:bg-slate-700 hover:text-white text-xs gap-1"><Zap/>Serva AI Insights</Button>
+                         <Button variant="ghost" size="sm" className="text-white hover:bg-slate-700 hover:text-white text-xs gap-1"><Users/>Workflow Hub</Button>
                      </div>
                   </div>
                 </CardHeader>
@@ -108,7 +112,10 @@ export default function LandingPage() {
                                 </CardTitle>
                                 <CardDescription className="text-green-200/80 text-xs">Overall financial stability assessment</CardDescription>
                            </div>
-                           <span className="text-3xl font-bold text-green-300">87</span>
+                           <div className="text-right">
+                             <p className="text-3xl font-bold text-green-300">87</p>
+                             <p className="text-xs text-green-200/80">out of 100</p>
+                           </div>
                         </CardHeader>
                     </Card>
                     <div className="grid grid-cols-2 gap-4">
@@ -116,14 +123,16 @@ export default function LandingPage() {
                             <CardHeader>
                                 <CardDescription className="flex items-center gap-2 text-slate-300"><TrendingUp className="h-4 w-4" /> Current Ratio</CardDescription>
                                 <CardTitle className="flex items-baseline gap-2">2.4</CardTitle>
-                                <p className="text-xs text-green-400 font-semibold">Healthy</p>
+                                <p className="text-xs text-muted-foreground">Liquidity measure</p>
+                                <p className="text-xs text-green-400 font-semibold flex items-center gap-1"><Check className="h-3 w-3" /> Healthy</p>
                             </CardHeader>
                         </Card>
                          <Card className="bg-slate-700/50 border-slate-600">
                             <CardHeader>
                                 <CardDescription className="flex items-center gap-2 text-slate-300"><BarChart3 className="h-4 w-4" /> Debt-to-Equity</CardDescription>
                                 <CardTitle className="flex items-baseline gap-2">0.32</CardTitle>
-                                <p className="text-xs text-green-400 font-semibold">Conservative</p>
+                                <p className="text-xs text-muted-foreground">Leverage ratio</p>
+                                <p className="text-xs text-green-400 font-semibold flex items-center gap-1"><Check className="h-3 w-3" /> Conservative</p>
                             </CardHeader>
                         </Card>
                     </div>
