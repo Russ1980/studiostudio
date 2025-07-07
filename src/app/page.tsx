@@ -123,7 +123,7 @@ export default function LandingPage() {
   return (
     <div className="flex flex-col min-h-screen bg-white text-gray-900">
       <main className="flex-1">
-        <section className="w-full bg-[#020420] text-white overflow-hidden relative">
+        <section className="w-full bg-gradient-to-b from-[#151A3A] to-[#242E61] text-white overflow-hidden relative">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.05)_1px,_transparent_1px)] bg-[size:40px_40px] opacity-50"></div>
           <div className="container px-4 md:px-6 relative z-10">
             <header className="h-20 flex items-center">
