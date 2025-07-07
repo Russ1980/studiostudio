@@ -71,6 +71,7 @@ import {
   mockMaintenanceTasks,
   mockPaymentsToProcess,
   mockDataValidationResults,
+  mockKeyboardShortcuts,
 } from './data';
 import { getMockUser } from './auth';
 import { getRevenueDataTool } from '@/ai/tools/get-revenue-data';
