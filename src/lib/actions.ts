@@ -76,6 +76,7 @@ import {
 } from './data';
 import { getMockUser } from './auth';
 import { getRevenueDataTool } from '@/ai/tools/get-revenue-data';
+import { Activity, Clock, DollarSign, ListChecks } from 'lucide-react';
 
 const simulateDelay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -607,8 +608,45 @@ export async function getTradingData() {
 
 // Projects
 export async function getProjectsDashboardData() {
-  await simulateDelay(50);
-  return mockProjectsDashboardData;
+    if (!firestore) {
+        console.log("Firestore not initialized, returning mock project dashboard data.");
+        return mockProjectsDashboardData;
+    }
+    try {
+        const jobs = await getJobs();
+        const timeLogs = await getTimeLogs();
+        const tasks = await getTasks();
+
+        const activeProjects = jobs.filter(j => j.status === 'In Progress').length;
+        const overallProfitability = jobs.reduce((acc, job) => acc + job.profitability, 0);
+        const totalBillableHours = timeLogs.reduce((acc, log) => acc + log.hours, 0);
+        const overdueTasks = tasks.filter(t => t.status !== 'Done' && new Date(t.due) < new Date()).length;
+
+        const kpiData = [
+            { title: "Active Projects", value: activeProjects, icon: Activity },
+            { title: "Overall Profitability", value: `$${overallProfitability.toLocaleString()}`, icon: DollarSign, isPositive: overallProfitability >= 0 },
+            { title: "Total Billable Hours", value: totalBillableHours.toLocaleString(), icon: Clock },
+            { title: "Tasks Overdue", value: overdueTasks, icon: ListChecks, isPositive: overdueTasks === 0 },
+        ];
+
+        const projectBudgetData = jobs.slice(0, 3).map(job => ({
+            name: job.name,
+            budget: job.budget,
+            actual: job.spent,
+        }));
+
+        const recentTimeLogs = timeLogs.slice(0, 3);
+
+        return {
+            kpiData,
+            projectBudgetData,
+            recentTimeLogs,
+        };
+
+    } catch (error) {
+        console.error("Error fetching projects dashboard data:", error);
+        return mockProjectsDashboardData;
+    }
 }
 export async function getJobs() {
   if (!firestore) {
@@ -629,8 +667,21 @@ export async function getJobs() {
   }
 }
 export async function getTimeLogs() {
-    await simulateDelay(50);
-    return mockTimeLogs;
+    if (!firestore) {
+        console.log("Firestore not initialized, returning mock data for time logs.");
+        return mockTimeLogs;
+    }
+    try {
+        const snapshot = await firestore.collection('timeLogs').orderBy('date', 'desc').limit(10).get();
+        if (snapshot.empty) {
+            console.log("No time logs found in Firestore, returning mock data as fallback.");
+            return mockTimeLogs;
+        }
+        return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as typeof mockTimeLogs;
+    } catch (error) {
+        console.error("Error fetching time logs from Firestore:", error);
+        return mockTimeLogs;
+    }
 }
 
 // Client Management

@@ -799,10 +799,10 @@ export const mockJobCostingDashboard = {
 };
 
 export const mockTimeLogs = [
-    { id: 1, employee: "Liam Johnson", project: "Website Redesign", task: "Frontend Development", hours: 8, date: "2024-07-22" },
-    { id: 2, employee: "Emma Brown", project: "Hardware Prototype", task: "CAD Design", hours: 6, date: "2024-07-22" },
-    { id: 3, employee: "Olivia Smith", project: "Marketing Campaign", task: "Content Creation", hours: 4, date: "2024-07-21" },
-    { id: 4, employee: "Noah Williams", project: "Website Redesign", task: "Client Meeting", hours: 1.5, date: "2024-07-21" },
+    { id: uuidv4(), employee: "Liam Johnson", project: "Website Redesign", task: "Frontend Development", hours: 8, date: "2024-07-22" },
+    { id: uuidv4(), employee: "Emma Brown", project: "Hardware Prototype", task: "CAD Design", hours: 6, date: "2024-07-22" },
+    { id: uuidv4(), employee: "Olivia Smith", project: "Marketing Campaign", task: "Content Creation", hours: 4, date: "2024-07-21" },
+    { id: uuidv4(), employee: "Noah Williams", project: "Website Redesign", task: "Client Meeting", hours: 1.5, date: "2024-07-21" },
 ];
 
 export const mockJobProfitabilityData = mockJobs.map(job => ({

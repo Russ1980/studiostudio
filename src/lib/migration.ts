@@ -3,7 +3,7 @@
 'use server';
 
 import { firestore } from './firebase-admin';
-import { mockClients, mockInvoices, mockEmployees, mockJobsWithDetails as mockJobs, mockTaxFilings, mockTaxPayments, mockBankAccounts, mockTasks, mockChartOfAccounts } from './data';
+import { mockClients, mockInvoices, mockEmployees, mockJobsWithDetails as mockJobs, mockTaxFilings, mockTaxPayments, mockBankAccounts, mockTasks, mockChartOfAccounts, mockTimeLogs } from './data';
 
 type TransformFunction<T, U> = (data: T) => U;
 
@@ -96,4 +96,8 @@ export async function migrateChartOfAccounts() {
         console.error(`Migration failed for collection chartOfAccounts:`, error);
         return { success: false, error: error.message };
     }
+}
+
+export async function migrateTimeLogs() {
+    return migrateData(mockTimeLogs, 'timeLogs', { idKey: 'id' });
 }
