@@ -294,8 +294,33 @@ export async function getJobCostingDashboardData() {
   return mockJobCostingDashboard;
 }
 export async function getJobDetails(id: string) {
-  await simulateDelay(50);
-  return mockJobsWithDetails.find(job => job.id === id) || null;
+  if (!firestore) {
+    console.log("Firestore not initialized, returning mock data for job details.");
+    return mockJobsWithDetails.find(job => job.id === id) || null;
+  }
+  try {
+    const docRef = firestore.collection('jobs').doc(id);
+    const docSnap = await docRef.get();
+
+    if (!docSnap.exists) {
+      console.log('No such document!');
+      return null;
+    }
+
+    // Convert Firestore Timestamps to serializable format if necessary
+    const data = docSnap.data();
+    // This is a simplified example. In a real app, you might need to handle nested timestamps.
+    for (const key in data) {
+      if (data[key] instanceof admin.firestore.Timestamp) {
+        data[key] = data[key].toDate().toISOString();
+      }
+    }
+    
+    return { id: docSnap.id, ...data };
+  } catch (error) {
+    console.error("Error fetching job details from Firestore:", error);
+    return mockJobsWithDetails.find(job => job.id === id) || null; // Fallback
+  }
 }
 export async function getJobProfitabilityData() {
     await simulateDelay(50);

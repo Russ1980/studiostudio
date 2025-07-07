@@ -1,4 +1,5 @@
 
+
 // This file contains mock data for the entire application.
 // In a real application, this data would be fetched from a database.
 
@@ -726,12 +727,61 @@ export const mockProjectsDashboardData = {
 };
 
 // Job Costing
-export const mockJobs = [
-  { id: "JOB-001", name: "Retail Store Renovation", customer: "QuantumLeap Co.", status: "In Progress", budget: 55000, spent: 30000, profitability: 25000 },
-  { id: "JOB-002", name: "Office Building Construction", customer: "Innovate Inc.", status: "Completed", budget: 1200000, spent: 1150000, profitability: 50000 },
-  { id: "JOB-003", name: "Custom Machinery Build", customer: "Apex Solutions", status: "On Hold", budget: 250000, spent: 100000, profitability: 150000 },
-  { id: "JOB-004", name: "Consulting Engagement", customer: "Stellar Goods", status: "In Progress", budget: 75000, spent: 80000, profitability: -5000 },
+
+export const mockJobsWithDetails = [
+  { 
+    id: "JOB-001", 
+    name: "Retail Store Renovation", 
+    customer: "QuantumLeap Co.", 
+    status: "In Progress", 
+    budget: 55000, 
+    spent: 30000, 
+    profitability: 25000,
+    costEntries: [
+        { id: uuidv4(), date: '2024-07-15', type: 'Materials', description: 'Lumber and framing', amount: 15000 },
+        { id: uuidv4(), date: '2024-07-18', type: 'Labor', description: 'Framing crew - 80 hours', amount: 10000 },
+        { id: uuidv4(), date: '2024-07-20', type: 'Permits', description: 'City building permit', amount: 5000 },
+    ],
+    changeOrders: [
+        { id: 'CO-001', date: '2024-07-19', description: 'Additional wiring for new office outlets.', amount: 2500, status: 'Approved' }
+    ]
+  },
+  { 
+    id: "JOB-002", 
+    name: "Office Building Construction", 
+    customer: "Innovate Inc.", 
+    status: "Completed", 
+    budget: 1200000, 
+    spent: 1150000, 
+    profitability: 50000,
+    costEntries: [],
+    changeOrders: []
+  },
+  { 
+    id: "JOB-003", 
+    name: "Custom Machinery Build", 
+    customer: "Apex Solutions", 
+    status: "On Hold", 
+    budget: 250000, 
+    spent: 100000, 
+    profitability: 150000,
+    costEntries: [],
+    changeOrders: []
+  },
+  { 
+    id: "JOB-004", 
+    name: "Consulting Engagement", 
+    customer: "Stellar Goods", 
+    status: "In Progress", 
+    budget: 75000, 
+    spent: 80000, 
+    profitability: -5000,
+    costEntries: [],
+    changeOrders: []
+  },
 ];
+
+export const mockJobs = mockJobsWithDetails.map(({ costEntries, changeOrders, ...job }) => job);
 
 export const mockJobCostingDashboard = {
   kpiData: [
@@ -747,25 +797,6 @@ export const mockJobCostingDashboard = {
     { job: "Consulting Engagement", type: "Subcontractor", amount: "10,000.00", date: "2024-07-21" },
   ]
 };
-
-export const mockJobsWithDetails = mockJobs.map(job => ({
-  ...job,
-  details: {
-    manager: 'Sarah Johnson',
-    type: 'Fixed-Price',
-    location: 'San Francisco, CA',
-    description: 'A detailed description of the project goes here, outlining the scope, objectives, and key deliverables.',
-  },
-  costEntries: [
-    { id: uuidv4(), date: '2024-07-15', type: 'Materials', description: 'Concrete and rebar', amount: 12000 },
-    { id: uuidv4(), date: '2024-07-18', type: 'Labor', description: 'Carpentry team - 40 hours', amount: 4500 },
-    { id: uuidv4(), date: '2024-07-20', type: 'Subcontractor', description: 'Electrical work - Phase 1', amount: 8000 },
-    { id: uuidv4(), date: '2024-07-21', type: 'Overhead', description: 'Equipment rental', amount: 2500 },
-  ],
-  changeOrders: [
-      { id: 'CO-001', date: '2024-07-19', description: 'Additional wiring for new office outlets.', amount: 1500, status: 'Approved' }
-  ]
-}));
 
 export const mockTimeLogs = [
     { id: 1, employee: "Liam Johnson", project: "Website Redesign", task: "Frontend Development", hours: 8, date: "2024-07-22" },

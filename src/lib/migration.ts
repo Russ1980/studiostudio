@@ -2,7 +2,7 @@
 'use server';
 
 import { firestore } from './firebase-admin';
-import { mockLedgerTransactions, mockClients, mockInvoices, mockEmployees, mockJobs } from './data';
+import { mockLedgerTransactions, mockClients, mockInvoices, mockEmployees, mockJobsWithDetails as mockJobs } from './data';
 
 type TransformFunction<T, U> = (data: T) => U;
 
