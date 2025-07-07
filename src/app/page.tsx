@@ -1,10 +1,11 @@
+
 "use client";
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/icons";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Check, LineChart, TrendingUp, Zap, BarChart3, Users, CheckCircle2, ChevronDown, Briefcase, DollarSign } from "lucide-react";
+import { Check, LineChart, TrendingUp, Zap, BarChart3, Users, CheckCircle2, ChevronDown, DollarSign } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 const features = [
@@ -93,15 +94,13 @@ export default function LandingPage() {
             </div>
             <div className="hidden lg:block">
               <Card className="shadow-2xl bg-slate-800/50 border-slate-700 text-white backdrop-blur-sm">
-                <CardHeader>
-                  <div className="flex items-center justify-between">
+                <CardHeader className="flex items-center justify-between">
                      <div className="flex items-center gap-1 p-1 bg-slate-700/50 rounded-lg">
                          <Button variant="ghost" size="sm" className="text-white hover:bg-slate-700 hover:text-white text-xs gap-1"><BarChart3/>Executive Overview</Button>
                          <Button variant="ghost" size="sm" className="bg-slate-600 text-white hover:bg-slate-500 text-xs gap-1"><DollarSign/>Financial Health</Button>
                          <Button variant="ghost" size="sm" className="text-white hover:bg-slate-700 hover:text-white text-xs gap-1"><Zap/>Serva AI Insights</Button>
                          <Button variant="ghost" size="sm" className="text-white hover:bg-slate-700 hover:text-white text-xs gap-1"><Users/>Workflow Hub</Button>
                      </div>
-                  </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
                     <Card className="bg-green-500/10 border-green-500/20 text-white">
@@ -147,10 +146,10 @@ export default function LandingPage() {
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">One Platform, Infinite Efficiency</h2>
             <p className="max-w-3xl mx-auto mt-4 text-muted-foreground md:text-xl/relaxed">Stop juggling apps. Mardisen Suite brings all your financial operations into one intelligent command center.</p>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-12 text-left">
-                {features.map((feature) => {
+                {features.map((feature, index) => {
                     const Icon = feature.icon;
                     return (
-                         <Card key={feature.title} className="hover:border-primary/50 hover:shadow-lg transition-all">
+                         <Card key={index} className="hover:border-primary/50 hover:shadow-lg transition-all">
                             <CardHeader>
                                 <div className="p-3 rounded-lg bg-primary/10 w-fit">
                                     <Icon className="h-6 w-6 text-primary"/>
