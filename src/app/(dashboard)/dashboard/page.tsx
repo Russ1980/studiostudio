@@ -55,7 +55,7 @@ import {
     ChartTooltip,
     ChartTooltipContent,
 } from "@/components/ui/chart";
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis, LineChart, Line, PieChart, Pie, Cell } from "recharts";
+import { Area, AreaChart, Bar, BarChart as RechartsBarChart, CartesianGrid, XAxis, YAxis, LineChart, Line, PieChart, Pie, Cell } from "recharts";
 
 
 const getIcon = (iconName: string) => {
@@ -221,14 +221,14 @@ const FinancialHealthView = ({ data }: { data: any }) => {
             </CardHeader>
             <CardContent>
               <ChartContainer config={chartConfigBar} className="h-64 w-full">
-                <BarChart data={data.profitabilityData}>
+                <RechartsBarChart data={data.profitabilityData}>
                   <CartesianGrid vertical={false} />
                   <XAxis dataKey="month" tickLine={false} axisLine={false} tickMargin={8} />
                   <YAxis tickFormatter={(value) => `$${value}k`} />
                   <ChartTooltip content={<ChartTooltipContent />} />
                   <Bar dataKey="profit" fill="var(--color-profit)" radius={4} />
                   <Bar dataKey="loss" fill="var(--color-loss)" radius={4} />
-                </BarChart>
+                </RechartsBarChart>
               </ChartContainer>
             </CardContent>
           </Card>
@@ -339,14 +339,14 @@ const ProcessVisibilityView = ({ data }: { data: any }) => {
             </CardHeader>
             <CardContent>
                  <ChartContainer config={chartConfig} className="h-64 w-full">
-                    <BarChart data={data.productionPlanData} layout="vertical">
+                    <RechartsBarChart data={data.productionPlanData} layout="vertical">
                         <CartesianGrid horizontal={false} />
                         <XAxis type="number" hide />
                         <YAxis dataKey="name" type="category" tickLine={false} axisLine={false} width={120} />
                         <ChartTooltip content={<ChartTooltipContent />} />
                         <Bar dataKey="completed" fill="var(--color-units)" radius={4} stackId="a" />
                         <Bar dataKey="remaining" fill="hsl(var(--muted))" radius={4} stackId="a" />
-                    </BarChart>
+                    </RechartsBarChart>
                 </ChartContainer>
             </CardContent>
         </Card>
