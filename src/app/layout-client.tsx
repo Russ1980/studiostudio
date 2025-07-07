@@ -56,5 +56,6 @@ export function RootLayoutClient({ children }: { children: React.ReactNode }) {
     return <AppLayout>{children}</AppLayout>;
   }
 
+  // This is for public pages like the landing page, signin, etc.
   return <>{children}</>;
 }
