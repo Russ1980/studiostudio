@@ -1,4 +1,5 @@
 
+
 'use server';
 
 import { firestore } from './firebase-admin';
@@ -107,8 +108,22 @@ export async function getAccountantDashboardData() {
   return mockAccountantDashboard;
 }
 export async function getTasks() {
-    await simulateDelay(50);
-    return mockTasks;
+    if (!firestore) {
+        console.log("Firestore not initialized, returning mock data for tasks.");
+        return mockTasks;
+    }
+    try {
+        const tasksSnapshot = await firestore.collection('tasks').get();
+        if (tasksSnapshot.empty) {
+            console.log("No tasks found in Firestore, returning mock data as fallback.");
+            return mockTasks;
+        }
+        const tasks = tasksSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        return tasks as typeof mockTasks;
+    } catch (error) {
+        console.error("Error fetching tasks from Firestore:", error);
+        return mockTasks;
+    }
 }
 export async function getRecentReports() {
     await simulateDelay(50);

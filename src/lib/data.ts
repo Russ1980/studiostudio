@@ -41,11 +41,11 @@ export const mockAccountantDashboard = {
 };
 
 export const mockTasks = [
-  { task: "Q2 Tax Filing", client: "Innovate Inc.", due: "2024-07-31", priority: "High", status: "In Progress" },
-  { task: "Monthly Bookkeeping", client: "Apex Solutions", due: "2024-07-25", priority: "Medium", status: "In Progress" },
-  { task: "Review Financials", client: "QuantumLeap Co.", due: "2024-07-28", priority: "Medium", status: "Done" },
-  { task: "Onboard New Client", client: "Momentum LLC", due: "2024-08-05", priority: "High", status: "Not Started" },
-  { task: "Follow up on Invoice #1024", client: "Stellar Goods", due: "2024-07-22", priority: "Low", status: "Done" },
+  { id: "TASK-001", task: "Q2 Tax Filing", client: "Innovate Inc.", due: "2024-07-31", priority: "High", status: "In Progress" },
+  { id: "TASK-002", task: "Monthly Bookkeeping", client: "Apex Solutions", due: "2024-07-25", priority: "Medium", status: "In Progress" },
+  { id: "TASK-003", task: "Review Financials", client: "QuantumLeap Co.", due: "2024-07-28", priority: "Medium", status: "Done" },
+  { id: "TASK-004", task: "Onboard New Client", client: "Momentum LLC", due: "2024-08-05", priority: "High", status: "Not Started" },
+  { id: "TASK-005", task: "Follow up on Invoice #1024", client: "Stellar Goods", due: "2024-07-22", priority: "Low", status: "Done" },
 ];
 
 export const mockRecentReports = [
