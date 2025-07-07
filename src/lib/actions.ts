@@ -72,6 +72,7 @@ import {
   mockPaymentsToProcess,
   mockDataValidationResults,
   mockKeyboardShortcuts,
+  mockTroubleshootingFAQs,
 } from './data';
 import { getMockUser } from './auth';
 import { getRevenueDataTool } from '@/ai/tools/get-revenue-data';
@@ -1094,45 +1095,45 @@ export async function getTradingData() {
 
 // Projects
 export async function getProjectsDashboardData() {
-    if (!firestore) {
-        console.log("Firestore not initialized, returning mock project dashboard data.");
-        return mockProjectsDashboardData;
-    }
-    try {
-        const jobs = await getJobs();
-        const timeLogs = await getTimeLogs();
-        const tasks = await getTasks();
+  if (!firestore) {
+    console.log("Firestore not initialized, returning mock project dashboard data.");
+    return mockProjectsDashboardData;
+  }
+  try {
+    const jobs = await getJobs();
+    const timeLogs = await getTimeLogs();
+    const tasks = await getTasks();
 
-        const activeProjects = jobs.filter(j => j.status === 'In Progress').length;
-        const overallProfitability = jobs.reduce((acc, job) => acc + job.profitability, 0);
-        const totalBillableHours = timeLogs.reduce((acc, log) => acc + log.hours, 0);
-        const overdueTasks = tasks.filter(t => t.status !== 'Done' && new Date(t.due) < new Date()).length;
+    const activeProjects = jobs.filter(j => j.status === 'In Progress').length;
+    const overallProfitability = jobs.reduce((acc, job) => acc + job.profitability, 0);
+    const totalBillableHours = timeLogs.reduce((acc, log) => acc + log.hours, 0);
+    const overdueTasks = tasks.filter(t => t.status !== 'Done' && new Date(t.due) < new Date()).length;
 
-        const kpiData = [
-            { title: "Active Projects", value: activeProjects, icon: 'Activity' },
-            { title: "Overall Profitability", value: `$${overallProfitability.toLocaleString()}`, icon: 'DollarSign', isPositive: overallProfitability >= 0 },
-            { title: "Total Billable Hours", value: totalBillableHours.toLocaleString(), icon: 'Clock' },
-            { title: "Tasks Overdue", value: overdueTasks, icon: 'ListChecks', isPositive: overdueTasks === 0 },
-        ];
+    const kpiData = [
+        { title: "Active Projects", value: activeProjects, icon: 'Activity' },
+        { title: "Overall Profitability", value: `$${overallProfitability.toLocaleString()}`, icon: 'DollarSign', isPositive: overallProfitability >= 0 },
+        { title: "Total Billable Hours", value: totalBillableHours.toLocaleString(), icon: 'Clock' },
+        { title: "Tasks Overdue", value: overdueTasks, icon: 'ListChecks', isPositive: overdueTasks === 0 },
+    ];
 
-        const projectBudgetData = jobs.slice(0, 3).map(job => ({
-            name: job.name,
-            budget: job.budget,
-            actual: job.spent,
-        }));
+    const projectBudgetData = jobs.slice(0, 3).map(job => ({
+        name: job.name,
+        budget: job.budget,
+        actual: job.spent,
+    }));
 
-        const recentTimeLogs = timeLogs.slice(0, 3);
+    const recentTimeLogs = timeLogs.slice(0, 3);
 
-        return {
-            kpiData,
-            projectBudgetData,
-            recentTimeLogs,
-        };
+    return {
+        kpiData,
+        projectBudgetData,
+        recentTimeLogs,
+    };
 
-    } catch (error) {
-        console.error("Error fetching projects dashboard data:", error);
-        return mockProjectsDashboardData;
-    }
+  } catch (error) {
+      console.error("Error fetching projects dashboard data:", error);
+      return mockProjectsDashboardData;
+  }
 }
 export async function getJobs() {
   if (!firestore) {
@@ -1232,4 +1233,9 @@ export async function getAssetLocationsData() {
 export async function getKeyboardShortcuts() {
     await simulateDelay(50);
     return mockKeyboardShortcuts;
+}
+
+export async function getTroubleshootingFAQs() {
+    await simulateDelay(50);
+    return mockTroubleshootingFAQs;
 }
