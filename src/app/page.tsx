@@ -1,18 +1,13 @@
 
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Logo } from '@/components/icons';
+import { Logo, NIcon } from '@/components/icons';
 import Image from 'next/image';
 import { ChevronDown, X, CheckCircle2, Bot, SlidersHorizontal, BarChart, Sparkles } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
-const NIcon = () => (
-    <div className="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center border-2 border-gray-600">
-        <span className="font-bold text-white text-lg italic">N</span>
-    </div>
-)
 
 export default function LandingPage() {
   return (
