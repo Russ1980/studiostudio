@@ -595,9 +595,9 @@ export const mockBenefitsAdmin = {
 
 export const mockTimeAndAttendance = {
   kpiData: [
-    { title: "Pending Timesheets", value: "3", icon: Clock },
-    { title: "Pending Leave Requests", value: "2", icon: Calendar },
-    { title: "Timesheet Exceptions", value: "1", icon: AlertTriangle },
+    { title: "Pending Timesheets", value: "3", icon: "Clock" },
+    { title: "Pending Leave Requests", value: "2", icon: "Calendar" },
+    { title: "Timesheet Exceptions", value: "1", icon: "AlertTriangle" },
   ],
   leaveRequests: [
       { employee: "Noah Williams", type: "Vacation", dates: "July 8 - July 12", status: "Pending" },
