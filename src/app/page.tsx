@@ -39,7 +39,7 @@ export default function LandingPage() {
         <div className="container flex h-14 items-center">
           <Link href="#" className="flex items-center gap-2 mr-6">
             <Logo className="h-6 w-6 text-primary" />
-            <div className="flex items-baseline -space-x-1">
+            <div className="flex items-baseline -space-x-1.5">
                 <span className="font-bold">Mardisen</span>
                 <span className="font-normal">Suite</span>
             </div>
@@ -170,7 +170,9 @@ export default function LandingPage() {
                 <Link href="#" className="hover:text-foreground">Terms</Link>
                 <Link href="#" className="hover:text-foreground">Privacy</Link>
             </div>
-          </footer>
+        </footer>
     </div>
   );
 }
+
+    
