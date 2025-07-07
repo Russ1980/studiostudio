@@ -426,7 +426,7 @@ const SidebarTrigger = React.forwardRef<
         </Button>
       </TooltipTrigger>
       <TooltipContent side="bottom">
-          <p>Toggle Sidebar</p>
+          <p>Open/Close Side Menu</p>
       </TooltipContent>
     </Tooltip>
 
