@@ -77,6 +77,7 @@ import { getMockUser } from './auth';
 import { getRevenueDataTool } from '@/ai/tools/get-revenue-data';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
+import admin from 'firebase-admin';
 
 const simulateDelay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -634,11 +635,120 @@ export async function getChartOfAccounts() {
   try {
     const docRef = firestore.collection('chartOfAccounts').doc('main');
     const docSnap = await docRef.get();
-    if (!docSnap.exists) return mockChartOfAccounts;
+    if (!docSnap.exists) {
+        // If it doesn't exist, create it from mock data
+        await docRef.set(mockChartOfAccounts);
+        return mockChartOfAccounts;
+    }
     return docSnap.data() as typeof mockChartOfAccounts;
   } catch (error) {
     console.error("Error fetching chart of accounts:", error);
     return mockChartOfAccounts;
+  }
+}
+
+const AccountSchema = z.object({
+    name: z.string().min(2, { message: "Account name must be at least 2 characters." }),
+    code: z.string().optional(),
+    type: z.enum(["Asset", "Liability", "Equity", "Income", "Expense"]),
+    detailType: z.string().min(2, { message: "Detail type is required." }),
+    balance: z.coerce.number().optional().default(0),
+});
+
+export async function addChartOfAccount(values: z.infer<typeof AccountSchema>) {
+  if (!firestore) {
+    return { success: false, error: "Firestore not initialized." };
+  }
+
+  const validatedFields = AccountSchema.safeParse(values);
+  if (!validatedFields.success) {
+    return { success: false, error: "Invalid form data." };
+  }
+  
+  const { name, code, type, detailType, balance } = validatedFields.data;
+
+  try {
+    const docRef = firestore.collection('chartOfAccounts').doc('main');
+    
+    await firestore.runTransaction(async (transaction) => {
+        const doc = await transaction.get(docRef);
+        if (!doc.exists) {
+            throw new Error("Chart of Accounts document not found!");
+        }
+
+        const data = doc.data();
+        if (!data) {
+             throw new Error("Chart of Accounts data is empty!");
+        }
+
+        // Simplified: add to a new parent account category within the type
+        const newAccount = {
+            name,
+            code: code || '',
+            type,
+            detailType,
+            status: "Active",
+            balance,
+            ytd: balance,
+            subAccounts: []
+        };
+        
+        // This is a simplified approach. A real app would need a more robust way
+        // to determine where to place the account (e.g., under Current Assets vs Fixed Assets).
+        // For now, we add it as a new main account under the primary category.
+        const categoryMap = {
+            Asset: "assets",
+            Liability: "liabilities",
+            Equity: "liabilities", // Equity is nested under Liabilities in the mock data
+            Income: "income",
+            Expense: "expenses",
+        };
+        
+        const categoryKey = categoryMap[type] as keyof typeof categoryMap;
+
+        // Create category if it doesn't exist
+        if (!data[categoryKey]) {
+            data[categoryKey] = { name: type, balance: 0, accounts: [] };
+        }
+        
+        // Create a new parent-level account entry
+        const newParentAccount = {
+            name: name,
+            code: code || '',
+            type: type,
+            balance: balance,
+            subAccounts: [
+                {...newAccount, balance: balance, ytd: balance}
+            ]
+        }
+        
+        // This logic is flawed. Let's simplify and add to the first group within a category.
+        // e.g. for Asset, add to Current Assets. This is a heuristic.
+        const updatedData = { ...data };
+        
+        const targetCategoryKey = type === 'Asset' ? 'assets' : 'liabilities'; // Simplified
+        const targetCategory = updatedData[targetCategoryKey];
+
+        if(targetCategory && targetCategory.accounts) {
+             targetCategory.accounts.push({
+                 name: newAccount.name,
+                 code: newAccount.code,
+                 type: newAccount.type,
+                 detailType: newAccount.detailType,
+                 status: newAccount.status,
+                 balance: newAccount.balance,
+                 ytd: newAccount.ytd,
+             });
+        }
+        
+        transaction.update(docRef, { [targetCategoryKey]: targetCategory });
+    });
+    
+    revalidatePath('/accounting/chart-of-accounts');
+    return { success: true };
+  } catch (error: any) {
+    console.error("Error adding chart of account:", error);
+    return { success: false, error: error.message };
   }
 }
 

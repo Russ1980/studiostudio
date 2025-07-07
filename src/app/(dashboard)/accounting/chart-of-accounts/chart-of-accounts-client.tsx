@@ -6,7 +6,8 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-  CardDescription
+  CardDescription,
+  CardFooter
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -31,16 +32,115 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { Badge } from "@/components/ui/badge";
-import { PlusCircle, MoreHorizontal, ChevronDown, Download, Upload } from "lucide-react";
-import React from "react";
+import { PlusCircle, MoreHorizontal, ChevronDown, Download, Upload, Loader2 } from "lucide-react";
+import React, { useState, useTransition } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useToast } from "@/hooks/use-toast";
+import { addChartOfAccount } from "@/lib/actions";
+
+const AccountSchema = z.object({
+    name: z.string().min(2, { message: "Account name must be at least 2 characters." }),
+    code: z.string().optional(),
+    type: z.enum(["Asset", "Liability", "Equity", "Income", "Expense"]),
+    detailType: z.string().min(2, { message: "Detail type is required." }),
+    balance: z.coerce.number().optional().default(0),
+});
+
+function AddAccountDialog({ open, onOpenChange }: { open: boolean, onOpenChange: (open: boolean) => void }) {
+    const { toast } = useToast();
+    const [isPending, startTransition] = useTransition();
+
+    const form = useForm<z.infer<typeof AccountSchema>>({
+        resolver: zodResolver(AccountSchema),
+        defaultValues: {
+            name: "",
+            code: "",
+            type: "Expense",
+            detailType: "",
+            balance: 0,
+        },
+    });
+
+    const onSubmit = (values: z.infer<typeof AccountSchema>) => {
+        startTransition(async () => {
+            const result = await addChartOfAccount(values);
+            if (result.success) {
+                toast({ title: "Account Created", description: `Account "${values.name}" has been successfully created.` });
+                onOpenChange(false);
+                form.reset();
+            } else {
+                toast({ title: "Error", description: result.error, variant: "destructive" });
+            }
+        });
+    };
+    
+    return (
+        <Dialog open={open} onOpenChange={onOpenChange}>
+            <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                    <DialogTitle>Add New Account</DialogTitle>
+                    <DialogDescription>
+                        Create a new account for your chart of accounts. Click save when you're done.
+                    </DialogDescription>
+                </DialogHeader>
+                 <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4 py-4">
+                        <FormField control={form.control} name="name" render={({ field }) => (
+                            <FormItem><FormLabel>Account Name</FormLabel><FormControl><Input placeholder="e.g., Office Supplies" {...field} /></FormControl><FormMessage /></FormItem>
+                        )} />
+                        <FormField control={form.control} name="code" render={({ field }) => (
+                            <FormItem><FormLabel>Account Code/Number (Optional)</FormLabel><FormControl><Input placeholder="e.g., 60100" {...field} /></FormControl><FormMessage /></FormItem>
+                        )} />
+                        <FormField control={form.control} name="type" render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Account Type</FormLabel>
+                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                    <FormControl><SelectTrigger><SelectValue placeholder="Select an account type" /></SelectTrigger></FormControl>
+                                    <SelectContent>
+                                        <SelectItem value="Asset">Asset</SelectItem>
+                                        <SelectItem value="Liability">Liability</SelectItem>
+                                        <SelectItem value="Equity">Equity</SelectItem>
+                                        <SelectItem value="Income">Income</SelectItem>
+                                        <SelectItem value="Expense">Expense</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                                <FormMessage />
+                            </FormItem>
+                        )} />
+                         <FormField control={form.control} name="detailType" render={({ field }) => (
+                            <FormItem><FormLabel>Detail Type</FormLabel><FormControl><Input placeholder="e.g., Office/General Administrative Expenses" {...field} /></FormControl><FormMessage /></FormItem>
+                        )} />
+                         <FormField control={form.control} name="balance" render={({ field }) => (
+                            <FormItem><FormLabel>Opening Balance</FormLabel><FormControl><Input type="number" {...field} /></FormControl><FormMessage /></FormItem>
+                        )} />
+                         <DialogFooter>
+                            <Button type="button" variant="outline" onClick={() => onOpenChange(false)} disabled={isPending}>Cancel</Button>
+                            <Button type="submit" disabled={isPending}>
+                                {isPending && <Loader2 className="mr-2 animate-spin" />}
+                                Save Account
+                            </Button>
+                        </DialogFooter>
+                    </form>
+                </Form>
+            </DialogContent>
+        </Dialog>
+    )
+}
 
 export function ChartOfAccountsClientPage({ initialData }: { initialData: any }) {
   const accountsData = initialData;
+  const [isAddAccountOpen, setIsAddAccountOpen] = useState(false);
 
   return (
     <div className="flex flex-col gap-6">
+      <AddAccountDialog open={isAddAccountOpen} onOpenChange={setIsAddAccountOpen} />
       <div>
         <h1 className="text-3xl font-bold">Chart of Accounts</h1>
         <p className="text-muted-foreground">
@@ -53,18 +153,7 @@ export function ChartOfAccountsClientPage({ initialData }: { initialData: any })
           <div className="flex items-center justify-between">
             <Input placeholder="Filter by account name/number..." className="max-w-sm" />
             <div className="flex gap-2">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button><PlusCircle />Add New Account</Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem>Asset</DropdownMenuItem>
-                  <DropdownMenuItem>Liability</DropdownMenuItem>
-                  <DropdownMenuItem>Equity</DropdownMenuItem>
-                  <DropdownMenuItem>Income</DropdownMenuItem>
-                  <DropdownMenuItem>Expense</DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <Button onClick={() => setIsAddAccountOpen(true)}><PlusCircle />Add New Account</Button>
                <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button variant="outline"><Download className="mr-2"/>Import/Export</Button>
