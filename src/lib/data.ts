@@ -889,7 +889,6 @@ export const mockPaymentsToProcess = [
     { id: 'PAY-003', customer: 'QuantumLeap Co.', date: '2024-07-21', amount: 750.00, method: 'ACH', reference: 'Retainer' },
 ];
 
-// Asset Management
 export const mockAssetLocationsData = {
   physicalAssets: [
     { name: "MacBook Pro 16-inch", type: "Laptop", location: "Office 3A", department: "Engineering", value: "$2,500" },
@@ -1086,13 +1085,6 @@ export const mockDashboardPageData = {
     ],
   };
     
-
-export const mockClientBillingData = [
-    { id: "1", clientName: "Innovate Inc.", plan: "Professional", status: "Active", nextBilling: "2024-08-01", amount: 99.00 },
-    { id: "2", clientName: "Apex Solutions", plan: "Enterprise", status: "Active", nextBilling: "2024-08-01", amount: 299.00 },
-    { id: "3", clientName: "QuantumLeap Co.", plan: "Standard", status: "Past Due", nextBilling: "2024-07-15", amount: 49.00 },
-    { id: "4", clientName: "Stellar Goods", plan: "Standard", status: "Canceled", nextBilling: "N/A", amount: 0 },
-];
 export const mockClientComplianceData = [
     { id: "1", clientName: "Innovate Inc.", overallStatus: "Compliant", engagementLetter: "Signed", w9: "On File", bankStatements: "Up to Date" },
     { id: "2", clientName: "Apex Solutions", overallStatus: "Needs Attention", engagementLetter: "Pending", w9: "On File", bankStatements: "Up to Date" },
