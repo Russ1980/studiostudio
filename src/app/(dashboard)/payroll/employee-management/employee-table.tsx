@@ -1,3 +1,4 @@
+
 "use client";
 
 import React from "react";
@@ -43,7 +44,7 @@ export function EmployeeTable({ employees }: { employees: any[] }) {
            <Input placeholder="Filter by employee name..." className="max-w-sm" />
            <div className="flex items-center gap-2">
               <Button variant="outline"><Upload className="mr-2" /> Import Employees</Button>
-              <Button asChild><Link href="#"><FilePlus className="mr-2" />Add Employee</Link></Button>
+              <Button asChild><Link href="/payroll/employee-management/new"><FilePlus className="mr-2" />Add Employee</Link></Button>
            </div>
         </div>
       </CardHeader>

@@ -90,6 +90,8 @@ import {
   ChevronsRight,
   PanelLeft,
   Copy,
+  Briefcase,
+  ShoppingCart,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { User as UserType } from "@/lib/auth";
@@ -343,11 +345,14 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
                             <p className="text-xs text-muted-foreground">Create, save, export, and import data</p>
                           </div>
                       </div>
-                      <ScrollArea className="h-96">
+                      <ScrollArea className="h-auto">
                         <div className="p-2 space-y-1">
                           <p className="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Create New</p>
                           <StyledDropdownMenuItem href="/accounting/journal-entries/new" icon={FilePlus} title="New Transaction" description="Record a new journal entry." data-onboarding="new-transaction-link" />
                           <StyledDropdownMenuItem href="/reports-insights/builder" icon={FileBarChart} title="New Report" description="Build a custom report from scratch." />
+                          <StyledDropdownMenuItem href="/operations/inventory/purchase-orders/new" icon={ShoppingCart} title="New Purchase Order" description="Create an order for new inventory." />
+                          <StyledDropdownMenuItem href="/operations/job-costing/jobs/new" icon={Briefcase} title="New Job" description="Set up a new job to track costs." />
+                          <StyledDropdownMenuItem href="/payroll/employee-management/new" icon={UserPlus} title="New Employee" description="Add a new employee to payroll." />
                           
                           <p className="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Export</p>
                           <StyledDropdownMenuItem href="/data-management/data-export" icon={FileOutput} title="Export Center" description="Export data to CSV, PDF, or Excel." />
@@ -356,7 +361,7 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
                            <StyledDropdownMenuItem href="/data-management/data-import" icon={FileInput} title="Import Wizard" description="Import data from external sources." />
                            <StyledDropdownMenuItem href="/banking/connections" icon={Database} title="Connect Bank Data" description="Sync with your financial institutions." />
 
-                           <p className="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Print &amp; Share</p>
+                           <p className="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Print & Share</p>
                            <DropdownMenuItem asChild className="p-0 focus:bg-transparent">
                              <button onClick={() => window.print()} className="flex w-full items-center gap-3 rounded-lg border bg-card p-2.5 text-card-foreground transition-colors hover:border-primary hover:bg-primary/5 focus:outline-none focus:ring-2 focus:ring-ring">
                                 <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"><Printer className="h-4 w-4" /></div>

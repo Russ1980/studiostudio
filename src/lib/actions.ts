@@ -357,6 +357,37 @@ export async function addNewTask(values: z.infer<typeof TaskSchema>) {
     }
 }
 
+const EmployeeSchema = z.object({
+    name: z.string().min(1, 'Employee name is required'),
+    email: z.string().email('Invalid email address'),
+    department: z.string().min(1, 'Department is required'),
+    role: z.string().min(1, 'Role is required'),
+    hireDate: z.string().min(1, 'Hire date is required'),
+    status: z.enum(['Active', 'On Leave', 'Terminated']),
+    salary: z.coerce.number().positive('Salary must be a positive number'),
+});
+
+export async function addNewEmployee(values: z.infer<typeof EmployeeSchema>) {
+    if (!firestore) {
+        return { success: false, error: "Firestore not initialized." };
+    }
+
+    const validatedFields = EmployeeSchema.safeParse(values);
+
+    if (!validatedFields.success) {
+        return { success: false, error: "Invalid form data." };
+    }
+
+    try {
+        await firestore.collection('employees').add(validatedFields.data);
+        revalidatePath('/payroll/employee-management');
+        return { success: true };
+    } catch (error: any) {
+        return { success: false, error: error.message };
+    }
+}
+
+
 // Document Management
 export async function getDocumentManagementData() {
   await simulateDelay(50);
