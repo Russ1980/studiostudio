@@ -67,19 +67,21 @@ export default function LandingPage() {
         <section className="relative bg-slate-900 text-white">
           <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/30 to-purple-500/30 opacity-20"></div>
           <div className="container relative grid lg:grid-cols-2 gap-12 items-center py-20 md:py-32">
-            <div className="grid gap-6">
-              <Badge variant="secondary" className="w-fit bg-white/10 text-white border-white/20">
-                <Zap className="h-3 w-3 mr-2 text-fuchsia-400" />
-                Powered by Serva Al
-                <span className="ml-2 inline-flex items-center rounded-md bg-green-400/10 px-2 py-1 text-xs font-medium text-green-400 ring-1 ring-inset ring-green-400/20">LIVE</span>
-              </Badge>
-              <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
+            <div className="flex flex-col">
+              <div className="mb-6">
+                <Badge variant="secondary" className="w-fit bg-white/10 text-white border-white/20">
+                  <Zap className="h-3 w-3 mr-2 text-fuchsia-400" />
+                  Powered by Serva Al
+                  <span className="ml-2 inline-flex items-center rounded-md bg-green-400/10 px-2 py-1 text-xs font-medium text-green-400 ring-1 ring-inset ring-green-400/20">LIVE</span>
+                </Badge>
+              </div>
+              <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl leading-tight mb-6">
                 Financial Intelligence Meets <span className="bg-gradient-to-r from-fuchsia-500 to-cyan-500 bg-clip-text text-transparent">AI Power</span>
               </h1>
-              <p className="max-w-[600px] text-slate-300 md:text-xl/relaxed">
+              <p className="max-w-[600px] text-slate-300 md:text-xl/relaxed mb-8">
                 Transform your accounting practice with Serva AI - the industry's first intelligent assistant that understands finance, automates workflows, and delivers insights in real-time.
               </p>
-              <div className="flex items-center gap-6 mt-4 text-sm text-slate-300">
+              <div className="flex items-center gap-4 text-sm text-slate-300">
                   <div className="flex items-center gap-2">
                       <Check className="h-5 w-5 text-green-400"/>
                       <span>Automated Journal Entries</span>
