@@ -575,9 +575,9 @@ export const mockPaySlips = [
 ];
 
 export const mockTaxFilings = [
-    { id: "TF-001", form: "Federal Form 941", jurisdiction: "Federal", dueDate: "2024-07-31", status: "Upcoming" },
-    { id: "TF-002", form: "CA DE 9/9C", jurisdiction: "California", dueDate: "2024-07-31", status: "Upcoming" },
-    { id: "TF-003", form: "Federal Form 940", jurisdiction: "Federal", dueDate: "2025-01-31", status: "Upcoming" },
+    { id: "TF-001", form: "Federal Form 941", jurisdiction: "Federal", dueDate: "2024-07-31", status: "Upcoming", period: "Q2 2024", date: "" },
+    { id: "TF-002", form: "CA DE 9/9C", jurisdiction: "California", dueDate: "2024-07-31", status: "Upcoming", period: "Q2 2024", date: "" },
+    { id: "TF-003", form: "Federal Form 940", jurisdiction: "Federal", dueDate: "2025-01-31", status: "Upcoming", period: "2024 Annual", date: "" },
 ];
 
 export const mockTaxPayments = [

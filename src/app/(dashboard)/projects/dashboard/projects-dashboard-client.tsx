@@ -25,13 +25,14 @@ import {
 import { BarChart, Bar, XAxis, YAxis } from "recharts";
 import { Activity, DollarSign, Clock, ListChecks, PlusCircle } from "lucide-react";
 import Link from "next/link";
+import type { ElementType } from "react";
 
 const chartConfig = {
   budget: { label: "Budget", color: "hsl(var(--chart-2))" },
   actual: { label: "Actual", color: "hsl(var(--primary))" },
 };
 
-const iconMap: { [key: string]: React.ElementType } = {
+const iconMap: { [key: string]: ElementType } = {
     Activity,
     DollarSign,
     Clock,

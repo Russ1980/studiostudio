@@ -1135,6 +1135,7 @@ export async function getProjectsDashboardData() {
       return mockProjectsDashboardData;
   }
 }
+
 export async function getJobs() {
   if (!firestore) {
     console.log("Firestore not initialized, returning mock data for jobs.");
