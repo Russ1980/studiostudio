@@ -38,6 +38,7 @@ import {
   BrainCircuit,
   Zap,
   GripVertical,
+  Upload,
 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
@@ -467,6 +468,13 @@ const CustomizeDashboardView = () => (
                             </div>
                         </div>
                     </div>
+                    <Separator />
+                     <div>
+                        <h4 className="font-semibold mb-2">Appearance</h4>
+                         <div className="space-y-3">
+                            <Button variant="outline" className="w-full justify-start"><Upload className="mr-2 h-4 w-4" /> Upload background image</Button>
+                        </div>
+                     </div>
                 </CardContent>
             </Card>
         </div>
@@ -609,3 +617,4 @@ export default function DashboardPage() {
         </div>
     );
 }
+
