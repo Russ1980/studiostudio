@@ -8,6 +8,7 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 const plans = [
     {
@@ -124,7 +125,9 @@ export default function PricingPage() {
                     </ul>
                 </CardContent>
                 <CardFooter className="flex-col gap-2">
-                    <Button className="w-full">Get Started</Button>
+                    <Button className="w-full" asChild>
+                        <Link href="/payment">Get Started</Link>
+                    </Button>
                     <p className="text-xs text-muted-foreground">{plan.userLimit}</p>
                 </CardFooter>
             </Card>
