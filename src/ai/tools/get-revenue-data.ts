@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileOverview A tool for fetching revenue trend data.
