@@ -1,6 +1,4 @@
 
-"use client";
-
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/icons";
@@ -41,7 +39,7 @@ export default function LandingPage() {
         <div className="container flex h-14 items-center">
           <Link href="#" className="flex items-center gap-2 mr-6">
             <Logo className="h-6 w-6 text-primary" />
-            <div className="flex items-baseline -space-x-px">
+            <div className="flex items-baseline -space-x-1">
                 <span className="font-bold">Mardisen</span>
                 <span className="font-normal">Suite</span>
             </div>
