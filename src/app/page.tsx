@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils';
 
 
 const FinancialHealthCard = () => (
-    <Card className="bg-white/10 backdrop-blur-lg text-white shadow-xl rounded-2xl border border-white/20">
+    <Card className="bg-white/10 backdrop-blur-lg text-white shadow-xl rounded-2xl">
         <CardHeader className="p-4">
             <div className="flex justify-around items-center text-sm">
                 <Button variant="ghost" className="text-white/70 hover:text-white hover:bg-white/10">
