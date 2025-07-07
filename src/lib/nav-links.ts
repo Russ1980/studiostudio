@@ -273,21 +273,7 @@ export const navLinks: NavLink[] = [
     items: [
         { href: '/client-management/billing', label: 'Billing', icon: CreditCard },
         { href: '/client-management/invoicing/batch', label: 'Batch Invoicing', icon: Mail },
-    ],
-  },
-  {
-    label: 'Payments',
-    icon: CreditCard,
-    href: '/payments/process',
-    items: [
         { href: '/payments/process', label: 'Process Payments', icon: CreditCard },
-    ],
-  },
-   {
-    label: 'Compliance',
-    icon: ShieldCheck,
-    href: '/compliance/clients',
-    items: [
         { href: '/compliance/clients', label: 'Client Compliance', icon: ShieldCheck },
     ],
   },
