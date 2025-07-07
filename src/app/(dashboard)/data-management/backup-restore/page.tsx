@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { PlusCircle, History, CloudDownload, RotateCcw, Clock } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 const kpiData = [
     { title: "Last Backup", value: "2 hours ago", icon: Clock },
@@ -40,6 +41,15 @@ const statusVariant: { [key: string]: "success" | "destructive" } = {
 
 
 export default function BackupRestorePage() {
+  const { toast } = useToast();
+
+  const handleCreateBackup = () => {
+    toast({
+        title: "Backup Started",
+        description: "A full system backup is being created in the background."
+    })
+  }
+
   return (
     <div className="grid gap-6">
       <div>
@@ -53,7 +63,7 @@ export default function BackupRestorePage() {
         <CardContent className="p-6 text-center">
             <h2 className="text-xl font-semibold">Create an On-Demand Backup</h2>
             <p className="text-muted-foreground mt-2 mb-4">Create an immediate, full system backup. This may take a few minutes.</p>
-            <Button size="lg"><PlusCircle className="mr-2"/> Create Backup Now</Button>
+            <Button size="lg" onClick={handleCreateBackup}><PlusCircle className="mr-2"/> Create Backup Now</Button>
         </CardContent>
        </Card>
 

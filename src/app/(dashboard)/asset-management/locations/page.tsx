@@ -1,3 +1,4 @@
+
 "use client";
 
 import {
@@ -18,22 +19,22 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { HardDrive, Server, Warehouse } from "lucide-react";
-
-const physicalAssets = [
-  { name: "CNC Mill #1", type: "Machinery", location: "Factory Floor - Bay A", department: "Production", value: "$150,000" },
-  { name: "Forklift", type: "Vehicle", location: "Warehouse B", department: "Logistics", value: "$25,000" },
-  { name: "Raw Material Stock (RM-001)", type: "Inventory", location: "Warehouse A - Rack 3", department: "Inventory", value: "$18,750" },
-  { name: "Dell Latitude Laptops", type: "IT Equipment", location: "Main Office", department: "IT", value: "$35,000" },
-];
-
-const digitalAssets = [
-  { name: "Customer Database", type: "Database", location: "AWS (us-east-1)", status: "Online" },
-  { name: "Source Code Repository", type: "Git Repository", location: "GitHub Enterprise", status: "Online" },
-  { name: "Marketing Website", type: "Web Server", location: "Vercel", status: "Online" },
-  { name: "Archived Financials (2023)", type: "Cold Storage", location: "AWS Glacier", status: "Archived" },
-];
+import { getAssetLocationsData } from "@/lib/actions";
+import { useState, useEffect } from "react";
 
 export default function AssetLocationsPage() {
+    const [data, setData] = useState<{ physicalAssets: any[], digitalAssets: any[] } | null>(null);
+
+    useEffect(() => {
+        getAssetLocationsData().then(setData);
+    }, []);
+
+    if (!data) {
+        return <div>Loading...</div>;
+    }
+
+    const { physicalAssets, digitalAssets } = data;
+
   return (
     <div className="grid gap-6">
       <div>

@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Download, CalendarIcon } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 
 const exportHistory = [
@@ -41,6 +42,15 @@ const statusVariant: { [key: string]: "success" | "destructive" } = {
 };
 
 export default function DataExportPage() {
+    const { toast } = useToast();
+
+    const handleGenerateExport = () => {
+        toast({
+            title: "Export Generating...",
+            description: "Your file is being prepared and will be available for download shortly.",
+        });
+    }
+    
     return (
         <div className="flex flex-col gap-6">
             <div>
@@ -88,7 +98,7 @@ export default function DataExportPage() {
                             </div>
                         </CardContent>
                         <CardFooter>
-                            <Button className="w-full"><Download className="mr-2"/> Generate Export</Button>
+                            <Button className="w-full" onClick={handleGenerateExport}><Download className="mr-2"/> Generate Export</Button>
                         </CardFooter>
                     </Card>
                 </div>
