@@ -1120,9 +1120,9 @@ export const mockDataManagementDashboard = {
 
 export const mockBackupRestoreData = {
     kpiData: [
-        { title: "Last Backup", value: "2 hours ago", icon: Clock },
-        { title: "Backup Frequency", value: "Daily", icon: RotateCcw },
-        { title: "Total Backups", value: "30", icon: History },
+        { title: "Last Backup", value: "2 hours ago", icon: "Clock" },
+        { title: "Backup Frequency", value: "Daily", icon: "RotateCcw" },
+        { title: "Total Backups", value: "30", icon: "History" },
     ],
     backupHistory: [
         { timestamp: "2024-07-22 02:00:00", type: "Full", size: "2.1 GB", status: "Success" },
