@@ -504,10 +504,10 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
                 <Breadcrumb />
               </div>
               {pathname === '/dashboard' && (
-                <Button variant="primary" size="sm" onClick={openServaAI}>
+                <Button variant="accent" size="sm" onClick={openServaAI}>
                     <Wand2 className="mr-2 h-4 w-4" />
                     <span>Serva AI • Enterprise Task Assistant •</span>
-                    <span className="text-primary-foreground/70 ml-1">Ask Serva AI...</span>
+                    <span className="text-accent-foreground/70 ml-1">Ask Serva AI...</span>
                 </Button>
               )}
             </div>
