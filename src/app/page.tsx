@@ -147,7 +147,7 @@ export default function LandingPage() {
                     </div>
                 </Badge>
                 <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none bg-clip-text text-transparent bg-gradient-to-br from-white to-gray-400">
-                  Financial Intelligence Meets AI Power
+                  Financial Intelligence Meets Serva Assistant
                 </h1>
                 <p className="max-w-[600px] text-gray-300 md:text-xl">
                   Transform your accounting practice with Serva AI - the industry's first intelligent assistant that understands finance, automates workflows, and delivers insights in real-time.
