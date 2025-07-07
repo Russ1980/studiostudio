@@ -875,7 +875,6 @@ export const mockClientBillingData = [
     { id: "3", clientName: "QuantumLeap Co.", plan: "Standard", status: "Past Due", nextBilling: "2024-07-15", amount: 49.00 },
     { id: "4", clientName: "Stellar Goods", plan: "Standard", status: "Canceled", nextBilling: "N/A", amount: 0 },
 ];
-
 export const mockClientComplianceData = [
     { id: "1", clientName: "Innovate Inc.", overallStatus: "Compliant", engagementLetter: "Signed", w9: "On File", bankStatements: "Up to Date" },
     { id: "2", clientName: "Apex Solutions", overallStatus: "Needs Attention", engagementLetter: "Pending", w9: "On File", bankStatements: "Up to Date" },
@@ -1085,12 +1084,3 @@ export const mockDashboardPageData = {
         { name: "Checking", balance: -127330.11, icon: 'Landmark' },
     ],
   };
-    
-export const mockClientBillingData = [
-    { id: "1", clientName: "Innovate Inc.", plan: "Professional", status: "Active", nextBilling: "2024-08-01", amount: 99.00 },
-    { id: "2", clientName: "Apex Solutions", plan: "Enterprise", status: "Active", nextBilling: "2024-08-01", amount: 299.00 },
-    { id: "3", clientName: "QuantumLeap Co.", plan: "Standard", status: "Past Due", nextBilling: "2024-07-15", amount: 49.00 },
-    { id: "4", clientName: "Stellar Goods", plan: "Standard", status: "Canceled", nextBilling: "N/A", amount: 0 },
-];
-
-    
