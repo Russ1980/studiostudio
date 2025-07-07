@@ -40,6 +40,7 @@ import {
   FilePlus,
   Landmark,
   CreditCard,
+  Activity,
 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
@@ -69,7 +70,7 @@ import Link from "next/link";
 
 const iconMap: { [key: string]: React.ElementType } = {
     BarChart, DollarSign, Wand2, Users, Eye, Briefcase, SlidersHorizontal,
-    TrendingUp, BarChart3, Receipt, FilePlus, Landmark, CreditCard,
+    TrendingUp, BarChart3, Receipt, FilePlus, Landmark, CreditCard, Activity,
 };
 
 const DonutChartCard = ({ title, total, change, changeType, data }: { title: string, total: string, change?: string, changeType?: string, data: any[] }) => (
@@ -79,8 +80,8 @@ const DonutChartCard = ({ title, total, change, changeType, data }: { title: str
         <CardDescription>
           <div className="text-2xl font-bold">{total}</div>
           {change && (
-            <div className={cn("text-xs", changeType === "increase" ? "text-success" : "text-destructive")}>
-              {changeType === "increase" ? '↑' : '↓'} {change}
+            <div className={cn("text-xs flex items-center gap-1", changeType === "increase" ? "text-success" : "text-destructive")}>
+              {changeType === "increase" ? <TrendingUp className="h-3 w-3"/> : <TrendingDown className="h-3 w-3"/>} {change}
             </div>
           )}
         </CardDescription>
@@ -93,7 +94,7 @@ const DonutChartCard = ({ title, total, change, changeType, data }: { title: str
                         <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                 </Pie>
-                <ChartTooltip content={<ChartTooltipContent />} />
+                <ChartTooltip content={<ChartTooltipContent hideLabel />} />
                 <Legend layout="vertical" align="right" verticalAlign="middle" iconSize={8} />
             </PieChart>
         </ChartContainer>
@@ -206,11 +207,11 @@ const ExecutiveOverviewView = ({ data }: { data: any }) => {
                     <CardContent>
                         <p className="text-2xl font-bold">{salesChartData.total}</p>
                         <ChartContainer config={chartConfig} className="h-32 w-full -ml-4">
-                            <LineChart data={salesChartData.data} margin={{ top: 20, right: 20, bottom: 0, left: 0 }}>
+                            <LineChart data={salesChartData.data} margin={{ top: 20, right: 10, bottom: 0, left: 10 }}>
                                 <XAxis dataKey="name" hide/>
-                                <YAxis domain={['dataMin - 50000', 'dataMax + 50000']} hide/>
-                                <ChartTooltip content={<ChartTooltipContent />} />
-                                <Line type="monotone" dataKey="Sales" stroke="var(--color-Sales)" strokeWidth={2} dot={false}/>
+                                <YAxis domain={['dataMin - 100000', 'dataMax + 100000']} hide/>
+                                <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel indicator="dot" />} />
+                                <Line type="monotone" dataKey="Sales" stroke="var(--color-primary)" strokeWidth={2} dot={false}/>
                             </LineChart>
                         </ChartContainer>
                     </CardContent>
@@ -218,6 +219,9 @@ const ExecutiveOverviewView = ({ data }: { data: any }) => {
                 <DonutChartCard title="Accounts Receivable" total={arChartData.total} data={arChartData.breakdown} />
                 <DonutChartCard title="Accounts Payable" total={apChartData.total} data={apChartData.breakdown} />
                 <DonutChartCard title="Expenses" total={expenseChartData.total} change={expenseChartData.change} changeType={expenseChartData.changeType} data={expenseChartData.breakdown} />
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                  <Card>
                     <CardHeader><CardTitle className="text-base font-medium">Bank Accounts</CardTitle></CardHeader>
                     <CardContent className="space-y-3">

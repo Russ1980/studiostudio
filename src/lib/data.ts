@@ -3,11 +3,11 @@
 
 
 
+
 // This file contains mock data for the entire application.
 // In a real application, this data would be fetched from a database.
 
 import { v4 as uuidv4 } from 'uuid';
-import { type LucideIcon } from 'lucide-react';
 
 // Accountant Portal
 export const mockClients = [
@@ -564,9 +564,9 @@ export const mockPayRuns = [
 export const mockPaySlips = [
     { id: "1", employee: "Liam Johnson", period: "June 1-15, 2024", payDate: "2024-06-20", netPay: "4,178.08" },
     { id: "2", employee: "Olivia Smith", period: "June 1-15, 2024", payDate: "2024-06-20", netPay: "5,208.33" },
-    { id: "3", employee: "Noah Williams", period: "June 1-15, 2024", payDate: "2024-06-20", netPay: "4,583.33" },
-    { id: "4", employee: "Emma Brown", period: "June 1-15, 2024", payDate: "2024-06-20", netPay: "6,250.00" },
-    { id: "5", employee: "Liam Johnson", period: "May 16-31, 2024", payDate: "2024-06-05", netPay: "4,178.08" },
+    { id: "3", name: "Noah Williams", period: "June 1-15, 2024", payDate: "2024-06-20", netPay: "4,583.33" },
+    { id: "4", name: "Emma Brown", period: "June 1-15, 2024", payDate: "2024-06-20", netPay: "6,250.00" },
+    { id: "5", name: "Liam Johnson", period: "May 16-31, 2024", payDate: "2024-06-05", netPay: "4,178.08" },
 ];
 
 export const mockTaxFilings = [
@@ -1024,20 +1024,20 @@ export const mockDashboardPageData = {
         change: "+296%",
         changeType: "increase",
         breakdown: [
-            { name: "Rent & Lease", value: 400, color: "hsl(var(--chart-1))" },
-            { name: "Job Supplies", value: 300, color: "hsl(var(--chart-2))" },
-            { name: "Consultancy", value: 300, color: "hsl(var(--chart-3))" },
-            { name: "Insurance", value: 200, color: "hsl(var(--chart-4))" },
-            { name: "Other", value: 278, color: "hsl(var(--chart-5))" },
+            { name: "Rent & Lease", value: 400000, color: "hsl(var(--chart-1))" },
+            { name: "Job Supplies", value: 650000, color: "hsl(var(--chart-2))" },
+            { name: "Consultancy", value: 150000, color: "hsl(var(--chart-5))" },
+            { name: "Insurance", value: 439079, color: "hsl(var(--chart-3))" },
+            { name: "Other", value: 300000, color: "hsl(var(--chart-4))" },
         ],
     },
     salesChartData: {
         total: "$1,803,232.15",
         data: [
             { name: 'Mar 11', Sales: 200000 },
-            { name: 'Mar 17', Sales: 300000 },
-            { name: 'Mar 24', Sales: 800000 },
-            { name: 'Mar 31', Sales: 600000 },
+            { name: 'Mar 17', Sales: 800000 },
+            { name: 'Mar 24', Sales: 1400000 },
+            { name: 'Mar 31', Sales: 1000000 },
             { name: 'Apr 07', Sales: 400000 },
         ],
     },
@@ -1046,8 +1046,8 @@ export const mockDashboardPageData = {
         breakdown: [
             { name: "Current", value: 1812434.45, color: "hsl(var(--chart-1))" },
             { name: "1-7 days", value: 1052572.03, color: "hsl(var(--chart-2))" },
-            { name: "8-14 days", value: 179919.00, color: "hsl(var(--chart-3))" },
-            { name: "15+ days", value: 2709008.07, color: "hsl(var(--chart-4))" },
+            { name: "8-14 days", value: 179919.00, color: "hsl(var(--chart-5))" },
+            { name: "15+ days", value: 2709008.07, color: "hsl(var(--chart-3))" },
         ],
     },
     apChartData: {
@@ -1055,8 +1055,8 @@ export const mockDashboardPageData = {
         breakdown: [
             { name: "Current", value: 0.00, color: "hsl(var(--chart-1))" },
             { name: "1-7 days", value: 100.00, color: "hsl(var(--chart-2))" },
-            { name: "8-14 days", value: 0.00, color: "hsl(var(--chart-3))" },
-            { name: "15+ days", value: 4257.50, color: "hsl(var(--chart-4))" },
+            { name: "8-14 days", value: 0.00, color: "hsl(var(--chart-5))" },
+            { name: "15+ days", value: 4257.50, color: "hsl(var(--chart-3))" },
         ],
     },
     bankAccountsList: [
