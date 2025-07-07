@@ -11,68 +11,68 @@ import { cn } from '@/lib/utils';
 
 
 const ServaUICard = () => (
-    <Card className="bg-slate-800/60 backdrop-blur-sm border border-slate-700/80 text-white shadow-2xl shadow-black/50">
-        <CardHeader className="p-4 border-b border-slate-700/80">
+    <Card className="bg-card border text-card-foreground shadow-xl">
+        <CardHeader className="p-4 border-b">
             <div className="flex justify-between items-center">
                 <div>
                     <h3 className="font-bold text-lg tracking-wider">SERVA</h3>
-                    <p className="text-xs text-slate-400">SOC 2 & HIPAA compliant</p>
+                    <p className="text-xs text-muted-foreground">SOC 2 & HIPAA compliant</p>
                 </div>
                 <div className="text-right">
-                    <p className="text-xs text-slate-400">Active Processes</p>
+                    <p className="text-xs text-muted-foreground">Active Processes</p>
                     <p className="text-2xl font-bold">24</p>
                 </div>
             </div>
         </CardHeader>
         <CardContent className="p-4 space-y-4">
-            <div className="p-3 rounded-lg border border-slate-700/80 bg-slate-900/50">
+            <div className="p-3 rounded-lg border bg-muted/50">
                 <div className="flex items-center gap-2 mb-1">
-                    <div className="w-2 h-2 rounded-full bg-blue-400"></div>
-                    <span className="text-xs font-semibold text-slate-300">SERVA</span>
-                    <span className="text-xs text-slate-500">2 seconds ago</span>
-                    <Badge variant="destructive" className="ml-auto bg-red-500/20 text-red-300 border-red-400/30">High Priority</Badge>
+                    <div className="w-2 h-2 rounded-full bg-primary"></div>
+                    <span className="text-xs font-semibold text-foreground">SERVA</span>
+                    <span className="text-xs text-muted-foreground">2 seconds ago</span>
+                    <Badge variant="destructive" className="ml-auto">High Priority</Badge>
                 </div>
-                <p className="font-semibold text-white">Launching Serva AI 🚀</p>
-                <p className="text-sm text-slate-400">Your personal AI is analyzing 15 financial reports and identified 3 optimization opportunities worth $12,400.</p>
-                <div className="mt-2 p-2 rounded-md bg-green-500/10 border border-green-400/20 flex items-center gap-2 text-sm">
-                    <ArrowUp className="h-4 w-4 text-green-400"/>
-                    <span className="text-green-300 font-semibold">$12,400</span>
-                    <span className="text-slate-400"> +$2,100</span>
+                <p className="font-semibold text-foreground">Launching Serva AI 🚀</p>
+                <p className="text-sm text-muted-foreground">Your personal AI is analyzing 15 financial reports and identified 3 optimization opportunities worth $12,400.</p>
+                <div className="mt-2 p-2 rounded-md bg-success/10 border border-success/20 flex items-center gap-2 text-sm">
+                    <ArrowUp className="h-4 w-4 text-success"/>
+                    <span className="text-success font-semibold">$12,400</span>
+                    <span className="text-muted-foreground"> +$2,100</span>
                 </div>
             </div>
 
             <div className="grid grid-cols-2 gap-3">
-                <div className="p-3 rounded-lg bg-slate-900/50 border border-slate-700/80">
-                    <p className="text-xs text-slate-400">Time Saved Today</p>
+                <div className="p-3 rounded-lg bg-muted/50 border">
+                    <p className="text-xs text-muted-foreground">Time Saved Today</p>
                     <div className="flex items-end justify-between">
                         <p className="text-2xl font-bold">42h</p>
-                        <BarChart className="h-6 w-6 text-slate-500"/>
+                        <BarChart className="h-6 w-6 text-muted-foreground"/>
                     </div>
-                    <p className="text-xs text-green-400">+12% vs yesterday</p>
+                    <p className="text-xs text-success">+12% vs yesterday</p>
                 </div>
-                <div className="p-3 rounded-lg bg-slate-900/50 border border-slate-700/80">
-                    <p className="text-xs text-slate-400">Tasks Completed</p>
+                <div className="p-3 rounded-lg bg-muted/50 border">
+                    <p className="text-xs text-muted-foreground">Tasks Completed</p>
                     <div className="flex items-end justify-between">
                         <p className="text-2xl font-bold">156</p>
-                         <CheckCircle2 className="h-6 w-6 text-slate-500"/>
+                         <CheckCircle2 className="h-6 w-6 text-muted-foreground"/>
                     </div>
-                    <p className="text-xs text-green-400">+28 this hour</p>
+                    <p className="text-xs text-success">+28 this hour</p>
                 </div>
-                 <div className="p-3 rounded-lg bg-slate-900/50 border border-slate-700/80">
-                    <p className="text-xs text-slate-400">Savings Generated</p>
+                 <div className="p-3 rounded-lg bg-muted/50 border">
+                    <p className="text-xs text-muted-foreground">Savings Generated</p>
                     <div className="flex items-end justify-between">
                         <p className="text-2xl font-bold">$12,400</p>
-                         <DollarSign className="h-6 w-6 text-slate-500"/>
+                         <DollarSign className="h-6 w-6 text-muted-foreground"/>
                     </div>
-                    <p className="text-xs text-slate-400">This month</p>
+                    <p className="text-xs text-muted-foreground">This month</p>
                 </div>
-                 <div className="p-3 rounded-lg bg-orange-500/10 border border-orange-400/20">
-                    <p className="text-xs text-orange-300">Active Alerts</p>
+                 <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/20">
+                    <p className="text-xs text-destructive">Active Alerts</p>
                     <div className="flex items-end justify-between">
-                        <p className="text-2xl font-bold text-orange-300">3</p>
-                         <AlertCircle className="h-6 w-6 text-orange-400"/>
+                        <p className="text-2xl font-bold text-destructive">3</p>
+                         <AlertCircle className="h-6 w-6 text-destructive"/>
                     </div>
-                    <p className="text-xs text-orange-300">Require attention</p>
+                    <p className="text-xs text-destructive">Require attention</p>
                 </div>
             </div>
 
@@ -81,42 +81,43 @@ const ServaUICard = () => (
                 <div className="space-y-2">
                     <div className="flex items-center justify-between text-sm">
                         <div className="flex items-center gap-2">
-                            <div className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse"></div>
-                            <p className="text-slate-300">Launching Serva AI 🚀</p>
-                            <span className="text-slate-500 text-xs">2 seconds ago</span>
+                            <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></div>
+                            <p className="text-foreground">Launching Serva AI 🚀</p>
+                            <span className="text-muted-foreground text-xs">2 seconds ago</span>
                         </div>
-                        <Badge className="bg-blue-500/20 text-blue-300 border-none">active</Badge>
+                        <Badge variant="default">active</Badge>
                     </div>
                     <div className="flex items-center justify-between text-sm">
                          <div className="flex items-center gap-2">
-                            <div className="w-1.5 h-1.5 rounded-full bg-yellow-400 animate-pulse [animation-delay:0.2s]"></div>
-                            <p className="text-slate-300">Processing tax optimization strategies...</p>
-                            <span className="text-slate-500 text-xs">8 seconds ago</span>
+                            <div className="w-1.5 h-1.5 rounded-full bg-yellow-500 animate-pulse [animation-delay:0.2s]"></div>
+                            <p className="text-foreground">Processing tax optimization strategies...</p>
+                            <span className="text-muted-foreground text-xs">8 seconds ago</span>
                         </div>
-                        <Badge className="bg-yellow-500/20 text-yellow-300 border-none">processing</Badge>
+                        <Badge variant="secondary">processing</Badge>
                     </div>
                      <div className="flex items-center justify-between text-sm">
                          <div className="flex items-center gap-2">
-                            <div className="w-1.5 h-1.5 rounded-full bg-green-400"></div>
-                            <p className="text-slate-300">Cash flow optimization complete ✓</p>
-                            <span className="text-slate-500 text-xs">15 seconds ago</span>
+                            <div className="w-1.5 h-1.5 rounded-full bg-success"></div>
+                            <p className="text-foreground">Cash flow optimization complete ✓</p>
+                            <span className="text-muted-foreground text-xs">15 seconds ago</span>
                         </div>
-                        <Badge className="bg-green-500/20 text-green-300 border-none">completed</Badge>
+                        <Badge variant="success">completed</Badge>
                     </div>
                 </div>
             </div>
             
-            <div className="flex items-center justify-between pt-3 border-t border-slate-700/80 gap-2">
-                <Button className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white">
+            <div className="flex items-center justify-between pt-3 border-t gap-2">
+                <Button className="w-full">
                     <Send /> Send Element
                 </Button>
-                <Button variant="ghost" className="w-full hover:bg-slate-700/50 hover:text-white text-slate-400">
+                <Button variant="ghost" className="w-full">
                     <TerminalSquare /> Send Console Errors (2)
                 </Button>
             </div>
         </CardContent>
     </Card>
 );
+
 
 export default function LandingPage() {
   return (
@@ -169,7 +170,7 @@ export default function LandingPage() {
                      <span>$2.5M+ saved monthly</span>
                 </div>
               </div>
-              <div>
+              <div className="hidden lg:block">
                 <ServaUICard />
               </div>
             </div>
