@@ -7,7 +7,7 @@ import { getMockUser } from '@/lib/auth';
 import { useEffect, useState } from 'react';
 import type { User } from '@/lib/auth';
 import { OnboardingProvider } from '@/components/onboarding';
-import { ServaAIProvider } from '@/hooks/use-serva-ai';
+import { ServaAIProvider } from '@/hooks/use-serva-ai.tsx';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { Skeleton } from '@/components/ui/skeleton';
 import dynamic from 'next/dynamic';
