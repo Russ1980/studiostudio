@@ -456,19 +456,12 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
                     </TooltipContent>
                 </Tooltip>
                 <DropdownMenu>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <DropdownMenuTrigger asChild>
+                    <DropdownMenuTrigger asChild>
                         <Button variant="ghost" size="icon" className="rounded-full">
                           <Copy className="h-5 w-5" />
                           <span className="sr-only">Open New Window</span>
                         </Button>
-                      </DropdownMenuTrigger>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                        <p>Open New Window</p>
-                    </TooltipContent>
-                  </Tooltip>
+                    </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem onClick={() => window.open(window.location.origin, '_blank')}>
                       New Window
@@ -491,25 +484,18 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
                     </TooltipContent>
                 </Tooltip>
                 <DropdownMenu>
-                    <Tooltip>
-                        <TooltipTrigger asChild>
-                            <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" size="icon" className="rounded-full relative">
-                                <Bell className="h-5 w-5" />
-                                <Badge
-                                    className="absolute -top-1 -right-1 h-4 w-4 justify-center p-0"
-                                    variant="destructive"
-                                >
-                                    3
-                                </Badge>
-                                <span className="sr-only">Notifications</span>
-                                </Button>
-                            </DropdownMenuTrigger>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                            <p>Notifications</p>
-                        </TooltipContent>
-                    </Tooltip>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon" className="rounded-full relative">
+                        <Bell className="h-5 w-5" />
+                        <Badge
+                            className="absolute -top-1 -right-1 h-4 w-4 justify-center p-0"
+                            variant="destructive"
+                        >
+                            3
+                        </Badge>
+                        <span className="sr-only">Notifications</span>
+                        </Button>
+                    </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="w-80 md:w-96">
                         <DropdownMenuLabel className="flex justify-between items-center">
                             <span>Notifications</span>
