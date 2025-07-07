@@ -75,12 +75,91 @@ import {
   mockDashboardPageData,
 } from './data';
 import { getMockUser } from './auth';
+import { getRevenueDataTool } from '@/ai/tools/get-revenue-data';
 
 const simulateDelay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 export async function getDashboardPageData() {
-  await simulateDelay(50);
-  return mockDashboardPageData;
+    if (!firestore) {
+        return mockDashboardPageData;
+    }
+    try {
+        const user = await getMockUser();
+        const invoicesSnapshot = await firestore.collection('invoices').get();
+        const invoices = invoicesSnapshot.docs.map(doc => doc.data());
+        const revenueData = await getRevenueDataTool({});
+
+        const now = new Date();
+        const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+        const startOfThisMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+        
+        let ytdProfit = 0;
+        let lastMonthProfit = 0;
+        let outstandingReceivables = 0;
+        let overdueReceivables = 0;
+        let netCashFlow = 0;
+        let incomingCash = 0;
+        let outgoingCash = 0;
+
+        invoices.forEach(invoice => {
+            const amount = parseFloat(invoice.amount.replace(/,/g, ''));
+            const dueDate = new Date(invoice.dueDate);
+            const isPaid = invoice.status === 'Paid';
+            const paidDate = isPaid ? dueDate : null; // Mock paid date as due date for simplicity
+
+            if (isPaid) {
+                // Simplified profit calculation, assuming 40% margin
+                const profit = amount * 0.4; 
+                ytdProfit += profit;
+                if (paidDate && paidDate >= lastMonth && paidDate < startOfThisMonth) {
+                    lastMonthProfit += profit;
+                }
+                incomingCash += amount;
+            } else {
+                outstandingReceivables += amount;
+                if (dueDate < now) {
+                    overdueReceivables += amount;
+                }
+            }
+        });
+        
+        // Mock expenses for cash flow
+        outgoingCash = ytdProfit / 0.4 * 0.6; // Assuming total expenses are 60% of revenue
+        netCashFlow = incomingCash - outgoingCash;
+
+        const profitChange = lastMonthProfit > 0 ? ((ytdProfit - lastMonthProfit) / lastMonthProfit * 100).toFixed(1) : 0;
+        
+        return {
+            user,
+            chartData: revenueData.data.map(d => ({ month: d.month, income: d.revenue, expenses: d.revenue * 0.6 })), // Mock expenses
+            recentActivity: mockDashboardPageData.recentActivity,
+            quickActions: mockDashboardPageData.quickActions,
+            performanceMetrics: {
+                profitLoss: {
+                    ytd: `$${(ytdProfit / 1000).toFixed(1)}k`,
+                    change: `${profitChange}%`,
+                    changeType: Number(profitChange) >= 0 ? "up" : "down",
+                },
+                cashFlow: {
+                    incoming: `$${(incomingCash/1000).toFixed(1)}k`,
+                    outgoing: `$${(outgoingCash/1000).toFixed(1)}k`,
+                    net: `$${(netCashFlow/1000).toFixed(1)}k`,
+                },
+                accountsReceivable: {
+                    outstanding: `$${(outstandingReceivables/1000).toFixed(1)}k`,
+                    overdue: `$${(overdueReceivables/1000).toFixed(1)}k`,
+                }
+            },
+            alerts: invoices.filter(i => i.status === 'Overdue').slice(0, 2).map((i: any, idx: number) => ({
+                id: idx,
+                type: 'critical',
+                message: `Invoice #${i.invoice} is ${Math.round((now.getTime() - new Date(i.dueDate).getTime()) / (1000*60*60*24))} days overdue.`
+            })),
+        };
+    } catch(e) {
+        console.error("Error fetching dashboard data, returning mock data", e);
+        return mockDashboardPageData;
+    }
 }
 
 // Accountant Portal
