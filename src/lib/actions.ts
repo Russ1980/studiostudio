@@ -5,6 +5,7 @@ import { firestore } from './firebase-admin';
 import {
   mockClients,
   mockAccountantDashboard,
+  mockDashboardPageData,
   mockTasks,
   mockRecentReports,
   mockFiles,
@@ -1028,7 +1029,10 @@ export async function getPaymentsToProcess() {
 // Asset Management
 export async function getAssetLocationsData() {
     await simulateDelay(50);
-    return mockAssetLocationsData;
+    return {
+        physicalAssets: [],
+        digitalAssets: []
+    }
 }
 
 // Help
