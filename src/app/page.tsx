@@ -10,90 +10,37 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
 
 
-const FinancialHealthCard = () => (
-    <Card className="bg-white text-gray-800 shadow-2xl rounded-2xl border border-gray-200/50">
-        <CardHeader className="p-4 border-b">
-            <div className="flex justify-around items-center text-sm">
-                <Button variant="ghost" className="text-gray-500 hover:text-gray-900 hover:bg-gray-100 text-xs h-8">
-                    <BarChart className="mr-2 h-4 w-4"/> Executive Overview
-                </Button>
-                <Button variant="ghost" className="text-blue-600 hover:text-blue-700 bg-blue-100 font-semibold rounded-full text-xs h-8">
-                    <DollarSign className="mr-2 h-4 w-4"/> Financial Health
-                </Button>
-                <Button variant="ghost" className="text-gray-500 hover:text-gray-900 hover:bg-gray-100 text-xs h-8">
-                    <Zap className="mr-2 h-4 w-4"/> Serva AI Insights
-                </Button>
-                <Button variant="ghost" className="text-gray-500 hover:text-gray-900 hover:bg-gray-100 text-xs h-8">
-                    <Users className="mr-2 h-4 w-4"/> Workflow Hub
-                </Button>
+const ServaAIChatCard = () => (
+    <Card className="bg-gray-800/50 text-white backdrop-blur-lg border-white/20 shadow-2xl rounded-2xl">
+        <CardHeader className="p-4 border-b border-white/20">
+            <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
+                    <Bot className="h-5 w-5 text-primary"/>
+                </div>
+                <CardTitle className="text-base font-semibold">Serva AI</CardTitle>
             </div>
         </CardHeader>
         <CardContent className="p-4 space-y-4">
-            <div className="p-4 rounded-lg bg-green-50 border border-green-200/80">
-                <div className="flex justify-between items-center">
-                    <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center">
-                            <CheckCircle2 className="h-6 w-6 text-white"/>
-                        </div>
-                        <div>
-                            <h4 className="font-semibold text-gray-900">Financial Health Score</h4>
-                            <p className="text-xs text-gray-500">Overall financial stability assessment</p>
-                        </div>
-                    </div>
-                    <div>
-                        <p className="text-4xl font-bold text-green-600">87</p>
-                        <p className="text-xs text-right text-gray-500">out of 100</p>
-                    </div>
+            <div className="flex items-start gap-3 justify-end">
+                <div className="bg-blue-600 rounded-lg p-3 max-w-xs">
+                    <p className="text-sm">What was our highest spending category last quarter?</p>
+                </div>
+                 <Avatar className="h-8 w-8">
+                    <AvatarImage src="https://placehold.co/40x40.png" data-ai-hint="person" />
+                    <AvatarFallback>U</AvatarFallback>
+                </Avatar>
+            </div>
+             <div className="flex items-start gap-3">
+                 <Avatar className="h-8 w-8">
+                    <AvatarFallback className="bg-primary/20">
+                        <Bot className="h-5 w-5 text-primary"/>
+                    </AvatarFallback>
+                </Avatar>
+                <div className="bg-gray-700/80 rounded-lg p-3 max-w-xs">
+                    <p className="text-sm">Your highest spending category was <span className="font-bold text-yellow-300">Marketing at $120,000</span>, which is 15% higher than projected. Would you like a detailed breakdown?</p>
                 </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
-                 <Card className="bg-white border-gray-200/80 shadow-none">
-                    <CardHeader className="pb-2">
-                        <CardTitle className="text-sm font-medium flex items-center gap-2 text-gray-600"><div className="w-2 h-2 rounded-full bg-blue-500"></div>Current Ratio</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <p className="text-3xl font-bold text-gray-900">2.4</p>
-                        <p className="text-xs text-gray-500">Liquidity measure</p>
-                        <p className="text-xs font-semibold text-green-600 flex items-center gap-1 mt-1"><TrendingUp className="h-3 w-3"/> Healthy</p>
-                    </CardContent>
-                </Card>
-                 <Card className="bg-white border-gray-200/80 shadow-none">
-                     <CardHeader className="pb-2">
-                        <CardTitle className="text-sm font-medium flex items-center gap-2 text-gray-600"><div className="w-2 h-2 rounded-full bg-purple-500"></div>Debt-to-Equity</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <p className="text-3xl font-bold text-gray-900">0.32</p>
-                        <p className="text-xs text-gray-500">Leverage ratio</p>
-                        <p className="text-xs font-semibold text-green-600 flex items-center gap-1 mt-1"><TrendingUp className="h-3 w-3"/> Conservative</p>
-                    </CardContent>
-                </Card>
-            </div>
-             <div className="grid grid-cols-2 gap-4">
-                 <Card className="bg-white border-gray-200/80 shadow-none">
-                    <CardHeader className="pb-2">
-                        <CardTitle className="text-sm font-medium flex items-center justify-between text-gray-600">Credit Score <ChevronRight className="h-4 w-4" /></CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <p className="text-3xl font-bold text-gray-900">745</p>
-                    </CardContent>
-                </Card>
-                 <Card className="bg-white border-gray-200/80 shadow-none">
-                     <CardHeader className="pb-2">
-                        <CardTitle className="text-sm font-medium flex items-center justify-between text-gray-600">Revenue <ChevronRight className="h-4 w-4" /></CardTitle>
-                     </CardHeader>
-                     <CardContent>
-                        <p className="text-3xl font-bold text-gray-900">$2,450,000</p>
-                     </CardContent>
-                </Card>
-             </div>
         </CardContent>
-        <CardFooter className="p-2 border-t border-gray-200/80">
-            <div className="flex items-center justify-around w-full text-xs text-gray-500">
-                <Button variant="ghost" size="sm" className="text-xs">Select element</Button>
-                <Button variant="ghost" size="sm" className="text-xs">Send logs</Button>
-                <Button variant="ghost" size="sm" className="text-xs">Screenshot</Button>
-            </div>
-        </CardFooter>
     </Card>
 );
 
@@ -147,7 +94,7 @@ export default function LandingPage() {
                     </div>
                 </Badge>
                 <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none bg-clip-text text-transparent bg-gradient-to-br from-white to-gray-400">
-                  Financial Intelligence Meets Serva Assistant
+                  Financial Intelligence Meets AI Power
                 </h1>
                 <p className="max-w-[600px] text-gray-300 md:text-xl">
                   Transform your accounting practice with Serva AI - the industry's first intelligent assistant that understands finance, automates workflows, and delivers insights in real-time.
@@ -164,7 +111,7 @@ export default function LandingPage() {
                 </div>
               </div>
               <div className="hidden lg:block -mr-16">
-                <FinancialHealthCard />
+                <ServaAIChatCard />
               </div>
             </div>
           </div>
