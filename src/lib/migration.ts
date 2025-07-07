@@ -1,9 +1,7 @@
-
-
 'use server';
 
 import { firestore } from './firebase-admin';
-import { mockClients, mockInvoices, mockEmployees, mockJobsWithDetails as mockJobs, mockTaxFilings, mockTaxPayments, mockBankAccounts, mockTasks, mockChartOfAccounts, mockTimeLogs, mockJournalEntries } from './data';
+import { mockClients, mockInvoices, mockEmployees, mockJobsWithDetails as mockJobs, mockTaxFilings, mockTaxPayments, mockBankAccounts, mockTasks, mockChartOfAccounts, mockTimeLogs, mockJournalEntries, mockPurchaseOrders, mockInventory, mockProductionPlans, mockWorkOrders } from './data';
 
 type TransformFunction<T, U> = (data: T) => U;
 
@@ -31,7 +29,7 @@ export async function migrateData<T extends Record<string, any>, U = T>(
             const batch = firestore.batch();
             
             dataSlice.forEach((item: T) => {
-                const docId = String(item[idKey]).replace(/#/g, '');
+                const docId = String(item[idKey]).replace(/[\/\s#]/g, '_'); // Sanitize ID
                 if (!docId) {
                     console.warn('Skipping item with no ID:', item);
                     return;
@@ -104,4 +102,20 @@ export async function migrateTimeLogs() {
 
 export async function migrateJournalEntries() {
     return migrateData(mockJournalEntries, 'journalEntries', { idKey: 'entryNo' });
+}
+
+export async function migratePurchaseOrders() {
+    return migrateData(mockPurchaseOrders, 'purchaseOrders', { idKey: 'poNumber' });
+}
+
+export async function migrateInventory() {
+    return migrateData(mockInventory, 'inventory', { idKey: 'sku' });
+}
+
+export async function migrateProductionPlans() {
+    return migrateData(mockProductionPlans, 'productionPlans', { idKey: 'id' });
+}
+
+export async function migrateWorkOrders() {
+    return migrateData(mockWorkOrders, 'workOrders', { idKey: 'id' });
 }

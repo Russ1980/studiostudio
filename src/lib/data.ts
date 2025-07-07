@@ -424,19 +424,12 @@ export const mockPurchaseOrders = [
   { poNumber: "PO-00128", vendor: "Component Suppliers Inc.", status: "Partially Received", total: 5000.00, orderDate: "2024-07-05", expectedDelivery: "2024-07-15" },
 ];
 
-export const mockInventory = {
-  kpiData: [
-    { title: "Total Inventory Value", value: "$1,234,567.89" },
-    { title: "Items in Stock", value: "12,450" },
-    { title: "Low Stock Items", value: "15" },
-  ],
-  inventory: [
+export const mockInventory = [
     { sku: "RM-001", name: "Raw Material A", category: "Raw Materials", location: "Warehouse A", cost: 12.50, quantity: 1500, reorderPoint: 500, status: "In Stock" },
     { sku: "COMP-034", name: "Component B", category: "Components", location: "Assembly Line 1", cost: 5.75, quantity: 250, reorderPoint: 200, status: "Low Stock" },
     { sku: "FG-009", name: "Finished Good C", category: "Finished Goods", location: "Warehouse B", cost: 89.99, quantity: 500, reorderPoint: 100, status: "In Stock" },
     { sku: "RM-002", name: "Raw Material D", category: "Raw Materials", location: "Warehouse A", cost: 25.00, quantity: 10, reorderPoint: 50, status: "Out of Stock" },
-  ]
-};
+];
 
 export const mockProductionPlans = [
   { id: "PP-001", product: "Widget A", quantity: 1000, status: "In Progress", due: "2024-07-25" },

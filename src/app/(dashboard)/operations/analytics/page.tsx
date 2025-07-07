@@ -1,4 +1,3 @@
-
 "use client";
 
 import {
@@ -16,22 +15,8 @@ import {
 } from "@/components/ui/chart";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Line, LineChart } from "recharts";
 import { Download, BarChart2 } from "lucide-react";
-
-const resourceData = [
-  { name: "Line 1", utilization: 85 },
-  { name: "Line 2", utilization: 78 },
-  { name: "CNC Mill", utilization: 92 },
-  { name: "Assembly Team", utilization: 65 },
-];
-
-const efficiencyData = [
-  { month: "Jan", planned: 95, actual: 92 },
-  { month: "Feb", planned: 95, actual: 93 },
-  { month: "Mar", planned: 95, actual: 94 },
-  { month: "Apr", planned: 96, actual: 93 },
-  { month: "May", planned: 96, actual: 95 },
-  { month: "Jun", planned: 97, actual: 96 },
-];
+import { getOperationsAnalytics } from "@/lib/actions";
+import { useState, useEffect } from "react";
 
 const chartConfig = {
   utilization: { label: "Utilization", color: "hsl(var(--primary))" },
@@ -40,6 +25,18 @@ const chartConfig = {
 };
 
 export default function AnalyticsPage() {
+  const [analyticsData, setAnalyticsData] = useState<any>(null);
+
+  useEffect(() => {
+    getOperationsAnalytics().then(setAnalyticsData);
+  }, []);
+
+  if (!analyticsData) {
+    return <div>Loading analytics...</div>;
+  }
+  
+  const { resourceData, efficiencyData } = analyticsData;
+
   return (
     <div className="flex flex-col gap-6">
       <div>

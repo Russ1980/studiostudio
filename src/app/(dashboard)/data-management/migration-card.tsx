@@ -1,10 +1,9 @@
-
 'use client';
 
 import React, { useTransition } from 'react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { migrateClientData, migrateInvoiceData, migrateEmployeeData, migrateJobData, migrateTaxFilings, migrateTaxPayments, migrateBankAccounts, migrateTaskData, migrateChartOfAccounts, migrateTimeLogs, migrateJournalEntries } from '@/lib/migration';
+import { migrateClientData, migrateInvoiceData, migrateEmployeeData, migrateJobData, migrateTaxFilings, migrateTaxPayments, migrateBankAccounts, migrateTaskData, migrateChartOfAccounts, migrateTimeLogs, migrateJournalEntries, migratePurchaseOrders, migrateInventory, migrateProductionPlans, migrateWorkOrders } from '@/lib/migration';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 
@@ -73,6 +72,10 @@ export function MigrationCard() {
                 <MigrationButton migrationFn={migrateChartOfAccounts} label="Migrate Chart of Accounts" description="chart of accounts data" />
                 <MigrationButton migrationFn={migrateTimeLogs} label="Migrate Time Logs" description="time log data" />
                 <MigrationButton migrationFn={migrateJournalEntries} label="Migrate Journal Entries" description="journal entry data" />
+                <MigrationButton migrationFn={migratePurchaseOrders} label="Migrate Purchase Orders" description="purchase order data" />
+                <MigrationButton migrationFn={migrateInventory} label="Migrate Inventory" description="inventory data" />
+                <MigrationButton migrationFn={migrateProductionPlans} label="Migrate Production Plans" description="production plan data" />
+                <MigrationButton migrationFn={migrateWorkOrders} label="Migrate Work Orders" description="work order data" />
             </CardContent>
         </Card>
     );
