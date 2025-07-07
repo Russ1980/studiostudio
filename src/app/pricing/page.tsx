@@ -92,9 +92,9 @@ export default function PricingPage() {
           Simple, transparent pricing. All plans come with a 14-day free trial.
         </p>
         <div className="flex items-center justify-center gap-4 mt-8">
-            <Label htmlFor="billing-cycle" className={cn(!isAnnual && "text-primary font-bold")}>Monthly (50% Off)</Label>
-            <Switch id="billing-cycle" checked={isAnnual} onCheckedChange={setIsAnnual} />
-            <Label htmlFor="billing-cycle" className={cn(isAnnual && "text-primary font-bold")}>Annually (70% Off)</Label>
+            <span className={cn("font-medium text-sm", !isAnnual && "text-primary")}>Monthly (50% Off)</span>
+            <Switch id="billing-cycle" checked={isAnnual} onCheckedChange={setIsAnnual} aria-label="Toggle billing cycle" />
+            <span className={cn("font-medium text-sm", isAnnual && "text-primary")}>Annually (70% Off)</span>
         </div>
       </div>
 
@@ -118,7 +118,7 @@ export default function PricingPage() {
                         {Object.entries(plan.features).map(([feature, included]) => (
                             <li key={feature} className="flex items-center gap-2">
                                 {included ? <Check className="h-4 w-4 text-success"/> : <X className="h-4 w-4 text-muted-foreground"/>}
-                                <span className={cn(!included && "text-muted-foreground line-through")}>{feature}</span>
+                                <span className={cn("text-sm", !included && "text-muted-foreground line-through")}>{feature}</span>
                             </li>
                         ))}
                     </ul>
