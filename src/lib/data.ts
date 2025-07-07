@@ -424,12 +424,19 @@ export const mockPurchaseOrders = [
   { poNumber: "PO-00128", vendor: "Component Suppliers Inc.", status: "Partially Received", total: 5000.00, orderDate: "2024-07-05", expectedDelivery: "2024-07-15" },
 ];
 
-export const mockInventory = [
-    { sku: "RM-001", name: "Raw Material A", category: "Raw Materials", location: "Warehouse A", cost: 12.50, quantity: 1500, reorderPoint: 500, status: "In Stock" },
-    { sku: "COMP-034", name: "Component B", category: "Components", location: "Assembly Line 1", cost: 5.75, quantity: 250, reorderPoint: 200, status: "Low Stock" },
-    { sku: "FG-009", name: "Finished Good C", category: "Finished Goods", location: "Warehouse B", cost: 89.99, quantity: 500, reorderPoint: 100, status: "In Stock" },
-    { sku: "RM-002", name: "Raw Material D", category: "Raw Materials", location: "Warehouse A", cost: 25.00, quantity: 10, reorderPoint: 50, status: "Out of Stock" },
-];
+export const mockInventory = {
+    kpiData: [
+        { title: "Total Inventory Value", value: "$1,234,567.89", icon: DollarSign },
+        { title: "Items in Stock", value: "12,450", icon: Package },
+        { title: "Low Stock Items", value: "15", icon: AlertCircle },
+    ],
+    inventory: [
+        { sku: "RM-001", name: "Raw Material A", category: "Raw Materials", location: "Warehouse A", cost: 12.50, quantity: 1500, reorderPoint: 500, status: "In Stock" },
+        { sku: "COMP-034", name: "Component B", category: "Components", location: "Assembly Line 1", cost: 5.75, quantity: 250, reorderPoint: 200, status: "Low Stock" },
+        { sku: "FG-009", name: "Finished Good C", category: "Finished Goods", location: "Warehouse B", cost: 89.99, quantity: 500, reorderPoint: 100, status: "In Stock" },
+        { sku: "RM-002", name: "Raw Material D", category: "Raw Materials", location: "Warehouse A", cost: 25.00, quantity: 10, reorderPoint: 50, status: "Out of Stock" },
+    ]
+};
 
 export const mockProductionPlans = [
   { id: "PP-001", product: "Widget A", quantity: 1000, status: "In Progress", due: "2024-07-25" },
@@ -574,9 +581,9 @@ export const mockTaxPayments = [
 
 export const mockBenefitsAdmin = {
   kpiData: [
-    { title: "Total Enrollment", value: "88%" },
-    { title: "Monthly Cost", value: "$42,500" },
-    { title: "Active Carriers", value: "4" },
+    { title: "Total Enrollment", value: "88%", icon: Users },
+    { title: "Monthly Cost", value: "$42,500", icon: DollarSign },
+    { title: "Active Carriers", value: "4", icon: Building },
   ],
   benefitPlans: [
       { name: "Medical Plan", provider: "Aetna", participants: 68, status: "Active" },
@@ -588,9 +595,9 @@ export const mockBenefitsAdmin = {
 
 export const mockTimeAndAttendance = {
   kpiData: [
-    { title: "Pending Timesheets", value: "3" },
-    { title: "Pending Leave Requests", value: "2" },
-    { title: "Timesheet Exceptions", value: "1" },
+    { title: "Pending Timesheets", value: "3", icon: Clock },
+    { title: "Pending Leave Requests", value: "2", icon: Calendar },
+    { title: "Timesheet Exceptions", value: "1", icon: AlertTriangle },
   ],
   leaveRequests: [
       { employee: "Noah Williams", type: "Vacation", dates: "July 8 - July 12", status: "Pending" },

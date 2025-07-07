@@ -1,4 +1,3 @@
-
 "use client";
 
 import {
@@ -25,15 +24,9 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { Button } from "@/components/ui/button";
+import { getComplianceItems } from "@/lib/actions";
+import { useState, useEffect } from "react";
 
-
-const complianceItems = [
-    { item: "FLSA Overtime Rules", category: "Labor Laws", status: "Compliant", lastChecked: "2024-07-01", description: "Fair Labor Standards Act rules for non-exempt employee overtime." },
-    { item: "ACA Reporting", category: "Benefits", status: "Compliant", lastChecked: "2024-06-28", description: "Affordable Care Act reporting requirements (Forms 1094/1095)." },
-    { item: "I-9 Employment Verification", category: "Hiring", status: "Compliant", lastChecked: "2024-07-05", description: "Verification of employment eligibility for all new hires." },
-    { item: "State Withholding Tax Filings", category: "Tax", status: "Compliant", lastChecked: "2024-07-15", description: "Timely filing of all required state-level payroll tax withholdings." },
-    { item: "Minimum Wage Compliance", category: "Labor Laws", status: "Needs Review", lastChecked: "2024-06-15", description: "State minimum wage increased on July 1. Review employee wages." },
-];
 
 const statusVariant: { [key: string]: "success" | "default" } = {
   Compliant: "success",
@@ -41,6 +34,12 @@ const statusVariant: { [key: string]: "success" | "default" } = {
 };
 
 export default function CompliancePage() {
+  const [complianceItems, setComplianceItems] = useState<any[]>([]);
+
+  useEffect(() => {
+    getComplianceItems().then(setComplianceItems);
+  }, []);
+
   return (
     <div className="grid gap-6">
        <div>
@@ -83,7 +82,7 @@ export default function CompliancePage() {
                                 </TableCell>
                                 <TableCell>{item.category}</TableCell>
                                 <TableCell>
-                                    <Badge variant={statusVariant[item.status]}>{item.status}</Badge>
+                                    <Badge variant={statusVariant[item.status as keyof typeof statusVariant]}>{item.status}</Badge>
                                 </TableCell>
                                 <TableCell>{item.lastChecked}</TableCell>
                                 <TableCell className="text-right">

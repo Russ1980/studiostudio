@@ -1,4 +1,3 @@
-
 "use client";
 
 import {
@@ -10,21 +9,22 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ShieldCheck, Users, DollarSign, Building } from "lucide-react";
-
-const kpiData = [
-  { title: "Total Enrollment", value: "88%", icon: Users },
-  { title: "Monthly Cost", value: "$42,500", icon: DollarSign },
-  { title: "Active Carriers", value: "4", icon: Building },
-];
-
-const benefitPlans = [
-    { name: "Medical Plan", provider: "Aetna", participants: 68, status: "Active" },
-    { name: "Dental Plan", provider: "Delta Dental", participants: 62, status: "Active" },
-    { name: "Vision Plan", provider: "VSP", participants: 55, status: "Active" },
-    { name: "401(k) Retirement Plan", provider: "Fidelity", participants: 58, status: "Active" },
-];
+import { getBenefitsAdminData } from "@/lib/actions";
+import { useState, useEffect } from "react";
 
 export default function BenefitsAdministrationPage() {
+  const [data, setData] = useState<any>(null);
+
+  useEffect(() => {
+    getBenefitsAdminData().then(setData);
+  }, []);
+
+  if (!data) {
+    return <div>Loading...</div>; // Or a skeleton loader
+  }
+  
+  const { kpiData, benefitPlans } = data;
+
   return (
     <div className="grid gap-6">
       <div className="flex items-center justify-between">
@@ -41,7 +41,7 @@ export default function BenefitsAdministrationPage() {
       </div>
 
        <div className="grid gap-6 md:grid-cols-3">
-        {kpiData.map((kpi) => (
+        {kpiData.map((kpi: any) => (
           <Card key={kpi.title}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">{kpi.title}</CardTitle>
@@ -61,7 +61,7 @@ export default function BenefitsAdministrationPage() {
         </CardHeader>
         <CardContent>
             <ul className="space-y-4">
-                {benefitPlans.map((plan, index) => (
+                {benefitPlans.map((plan: any, index: number) => (
                     <li key={index} className="flex items-center gap-4 p-4 rounded-lg border">
                         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-secondary">
                             <ShieldCheck className="h-5 w-5 text-secondary-foreground" />

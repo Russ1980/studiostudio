@@ -109,7 +109,7 @@ export async function migratePurchaseOrders() {
 }
 
 export async function migrateInventory() {
-    return migrateData(mockInventory, 'inventory', { idKey: 'sku' });
+    return migrateData(mockInventory.inventory, 'inventory', { idKey: 'sku' });
 }
 
 export async function migrateProductionPlans() {

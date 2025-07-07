@@ -1,4 +1,3 @@
-
 "use client";
 
 import {
@@ -26,18 +25,17 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { FileDown, Eye } from "lucide-react";
-
-
-const paySlips = [
-    { id: "1", employee: "Liam Johnson", period: "June 1-15, 2024", payDate: "2024-06-20", netPay: "4,178.08" },
-    { id: "2", employee: "Olivia Smith", period: "June 1-15, 2024", payDate: "2024-06-20", netPay: "5,208.33" },
-    { id: "3", employee: "Noah Williams", period: "June 1-15, 2024", payDate: "2024-06-20", netPay: "4,583.33" },
-    { id: "4", employee: "Emma Brown", period: "June 1-15, 2024", payDate: "2024-06-20", netPay: "6,250.00" },
-    { id: "5", employee: "Liam Johnson", period: "May 16-31, 2024", payDate: "2024-06-05", netPay: "4,178.08" },
-];
+import { getPaySlips } from "@/lib/actions";
+import { useState, useEffect } from "react";
 
 
 export default function PaySlipsPage() {
+    const [paySlips, setPaySlips] = useState<any[]>([]);
+
+    useEffect(() => {
+        getPaySlips().then(setPaySlips);
+    }, []);
+
   return (
     <div className="grid gap-6">
        <div>

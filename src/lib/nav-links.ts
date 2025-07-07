@@ -1,4 +1,3 @@
-
 import {
   LayoutGrid,
   Users,
@@ -242,13 +241,13 @@ export const navLinks: NavLink[] = [
   },
   {
     label: 'Payroll System',
-    icon: Receipt,
+    icon: CircleDollarSign,
     href: '/payroll',
     items: [
       { href: '/payroll', label: 'Payroll Dashboard', icon: LayoutGrid },
       { href: '/payroll/employee-management', label: 'Employee Management', icon: Users },
       { href: '/payroll/time-attendance', label: 'Time & Attendance', icon: Clock },
-      { href: '/payroll/payroll-processing', label: 'Payroll Processing', icon: CircleDollarSign },
+      { href: '/payroll/payroll-processing', label: 'Payroll Processing', icon: Zap },
       { href: '/payroll/pay-runs', label: 'Pay Runs', icon: History },
       { href: '/payroll/pay-slips', label: 'Pay Slips', icon: Receipt },
       { href: '/payroll/tax-management', label: 'Tax Management', icon: Landmark },

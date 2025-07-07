@@ -1,4 +1,3 @@
-
 "use client";
 
 import {
@@ -19,19 +18,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Clock, Calendar, AlertTriangle } from "lucide-react";
-
-
-const kpiData = [
-  { title: "Pending Timesheets", value: "3", icon: Clock },
-  { title: "Pending Leave Requests", value: "2", icon: Calendar },
-  { title: "Timesheet Exceptions", value: "1", icon: AlertTriangle },
-];
-
-const leaveRequests = [
-    { employee: "Noah Williams", type: "Vacation", dates: "July 8 - July 12", status: "Pending" },
-    { employee: "Liam Johnson", type: "Sick Leave", dates: "July 1", status: "Pending" },
-    { employee: "Olivia Smith", type: "Vacation", dates: "June 20 - June 25", status: "Approved" },
-];
+import { getTimeAndAttendanceData } from "@/lib/actions";
+import { useState, useEffect } from "react";
 
 const statusVariant: { [key: string]: "success" | "default" } = {
   Approved: "success",
@@ -39,6 +27,18 @@ const statusVariant: { [key: string]: "success" | "default" } = {
 };
 
 export default function TimeAttendancePage() {
+  const [data, setData] = useState<any>(null);
+
+  useEffect(() => {
+    getTimeAndAttendanceData().then(setData);
+  }, []);
+
+  if (!data) {
+    return <div>Loading...</div>;
+  }
+  
+  const { kpiData, leaveRequests } = data;
+
   return (
     <div className="grid gap-6">
       <div className="flex items-center justify-between">
@@ -52,7 +52,7 @@ export default function TimeAttendancePage() {
       </div>
 
        <div className="grid gap-6 md:grid-cols-3">
-        {kpiData.map((kpi) => (
+        {kpiData.map((kpi: any) => (
           <Card key={kpi.title}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">{kpi.title}</CardTitle>
@@ -99,12 +99,12 @@ export default function TimeAttendancePage() {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {leaveRequests.map((req, index) => (
+                            {leaveRequests.map((req: any, index: number) => (
                                 <TableRow key={index}>
                                     <TableCell className="font-medium">{req.employee}</TableCell>
                                     <TableCell>{req.type}</TableCell>
                                     <TableCell>{req.dates}</TableCell>
-                                    <TableCell><Badge variant={statusVariant[req.status]}>{req.status}</Badge></TableCell>
+                                    <TableCell><Badge variant={statusVariant[req.status as keyof typeof statusVariant]}>{req.status}</Badge></TableCell>
                                     <TableCell className="text-right">
                                         <Button variant="outline" size="sm">View</Button>
                                     </TableCell>
