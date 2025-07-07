@@ -483,7 +483,7 @@ const CustomizeDashboardView = () => (
                         <Skeleton className="h-24" />
                         <Skeleton className="h-24" />
                     </div>
-                    <div className="p-4 border rounded-lg bg-card flex items-center gap-4">
+                     <div className="p-4 border rounded-lg bg-card flex items-center gap-4">
                         <GripVertical className="text-muted-foreground" />
                         <div className="flex-1 space-y-2">
                             <Skeleton className="h-6 w-1/4" />
