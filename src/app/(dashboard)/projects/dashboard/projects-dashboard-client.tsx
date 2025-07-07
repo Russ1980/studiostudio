@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/chart";
 import { BarChart, Bar, XAxis, YAxis } from "recharts";
 import { Activity, DollarSign, Clock, ListChecks, PlusCircle } from "lucide-react";
+import Link from "next/link";
 
 const chartConfig = {
   budget: { label: "Budget", color: "hsl(var(--chart-2))" },
@@ -49,7 +50,9 @@ export function ProjectsDashboardClientPage({ initialData }: { initialData: any 
             An overview of project health, financials, and team productivity.
           </p>
         </div>
-        <Button><PlusCircle className="mr-2"/> Create New Project</Button>
+        <Button asChild>
+            <Link href="/projects/all-projects"><PlusCircle className="mr-2"/> Create New Project</Link>
+        </Button>
       </div>
 
        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">

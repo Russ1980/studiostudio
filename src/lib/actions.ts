@@ -1,3 +1,4 @@
+
 'use server';
 
 import { firestore } from './firebase-admin';
@@ -724,10 +725,6 @@ export async function getSchedulingData() {
     await simulateDelay(50);
     return mockScheduling;
 }
-export async function getJobCostingDashboardData() {
-  await simulateDelay(50);
-  return mockJobCostingDashboard;
-}
 export async function getJobDetails(id: string) {
   if (!firestore) {
     console.log("Firestore not initialized, returning mock data for job details.");
@@ -950,6 +947,39 @@ export async function getTimeLogs() {
         return mockTimeLogs;
     }
 }
+export async function getJobCostingDashboardData() {
+  if (!firestore) {
+    console.log("Firestore not initialized, returning mock job costing data.");
+    return mockJobCostingDashboard;
+  }
+  try {
+    const jobsSnapshot = await firestore.collection('jobs').get();
+    if (jobsSnapshot.empty) {
+        return mockJobCostingDashboard;
+    }
+    const jobs = jobsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() as any }));
+
+    const activeJobs = jobs.filter(j => j.status === 'In Progress');
+    const totalBudget = jobs.reduce((acc, job) => acc + job.budget, 0);
+    const totalSpent = jobs.reduce((acc, job) => acc + job.spent, 0);
+    const overallProfitability = jobs.reduce((acc, job) => acc + job.profitability, 0);
+
+    return {
+        kpiData: [
+            { title: "Active Jobs", value: activeJobs.length.toString() },
+            { title: "Total Budget", value: `$${totalBudget.toLocaleString()}` },
+            { title: "Total Spent", value: `$${totalSpent.toLocaleString()}` },
+            { title: "Overall Profitability", value: `$${overallProfitability.toLocaleString()}` },
+        ],
+        budgetVsActualData: jobs.map(j => ({ name: j.name, budget: j.budget, actual: j.spent })).slice(0, 3),
+        recentCostEntries: mockJobCostingDashboard.recentCostEntries, // Keep mock for now
+    };
+  } catch (error) {
+    console.error("Error fetching job costing dashboard data:", error);
+    return mockJobCostingDashboard;
+  }
+}
+
 
 // Client Management
 export async function getClientBillingData() {

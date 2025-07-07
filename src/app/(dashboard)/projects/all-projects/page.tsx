@@ -45,7 +45,7 @@ export default async function AllProjectsPage() {
           </p>
         </div>
         <Button asChild>
-          <Link href="#"><PlusCircle className="mr-2"/> Create Project</Link>
+          <Link href="/operations/job-costing/jobs/new"><PlusCircle className="mr-2"/> Create Project</Link>
         </Button>
       </div>
 
@@ -68,7 +68,11 @@ export default async function AllProjectsPage() {
             <TableBody>
               {projects.map((project) => (
                 <TableRow key={project.id}>
-                  <TableCell className="font-medium">{project.name}</TableCell>
+                  <TableCell className="font-medium">
+                    <Link href={`/operations/job-costing/jobs/${project.id}`} className="hover:underline">
+                      {project.name}
+                    </Link>
+                  </TableCell>
                   <TableCell>{project.customer}</TableCell>
                   <TableCell>
                     <Badge variant={statusVariant[project.status as keyof typeof statusVariant]}>{project.status}</Badge>
@@ -90,9 +94,15 @@ export default async function AllProjectsPage() {
                         <Button variant="ghost" size="icon"><MoreHorizontal /></Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem>View Dashboard</DropdownMenuItem>
-                        <DropdownMenuItem>Log Time</DropdownMenuItem>
-                        <DropdownMenuItem>Edit Project</DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link href={`/operations/job-costing/jobs/${project.id}`}>View Dashboard</Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link href="/projects/time-tracking">Log Time</Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                           <Link href="/operations/job-costing/jobs/new">Edit Project</Link>
+                        </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>
