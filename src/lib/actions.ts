@@ -296,7 +296,8 @@ export async function getJobCostingDashboardData() {
 export async function getJobDetails(id: string) {
   if (!firestore) {
     console.log("Firestore not initialized, returning mock data for job details.");
-    return mockJobsWithDetails.find(job => job.id === id) || null;
+    const job = mockJobsWithDetails.find(job => job.id === id) || null;
+    return JSON.parse(JSON.stringify(job)); // Serialize and deserialize to handle non-plain objects
   }
   try {
     const docRef = firestore.collection('jobs').doc(id);
@@ -307,11 +308,10 @@ export async function getJobDetails(id: string) {
       return null;
     }
 
-    // Convert Firestore Timestamps to serializable format if necessary
     const data = docSnap.data();
     // This is a simplified example. In a real app, you might need to handle nested timestamps.
     for (const key in data) {
-      if (data[key] instanceof admin.firestore.Timestamp) {
+      if (data[key] && typeof data[key].toDate === 'function') {
         data[key] = data[key].toDate().toISOString();
       }
     }
@@ -319,7 +319,8 @@ export async function getJobDetails(id: string) {
     return { id: docSnap.id, ...data };
   } catch (error) {
     console.error("Error fetching job details from Firestore:", error);
-    return mockJobsWithDetails.find(job => job.id === id) || null; // Fallback
+    const job = mockJobsWithDetails.find(job => job.id === id) || null; // Fallback
+    return JSON.parse(JSON.stringify(job)); // Serialize and deserialize
   }
 }
 export async function getJobProfitabilityData() {
@@ -371,12 +372,40 @@ export async function getPaySlips() {
     return mockPaySlips;
 }
 export async function getTaxFilings() {
-    await simulateDelay(50);
-    return mockTaxFilings;
+    if (!firestore) {
+        console.log("Firestore not initialized, returning mock data for tax filings.");
+        return mockTaxFilings;
+    }
+    try {
+        const snapshot = await firestore.collection('taxFilings').get();
+        if (snapshot.empty) {
+            console.log("No tax filings found in Firestore, returning mock data as fallback.");
+            return mockTaxFilings;
+        }
+        const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        return data as typeof mockTaxFilings;
+    } catch (error) {
+        console.error("Error fetching tax filings from Firestore:", error);
+        return mockTaxFilings; // Fallback
+    }
 }
 export async function getTaxPayments() {
-    await simulateDelay(50);
-    return mockTaxPayments;
+     if (!firestore) {
+        console.log("Firestore not initialized, returning mock data for tax payments.");
+        return mockTaxPayments;
+    }
+    try {
+        const snapshot = await firestore.collection('taxPayments').get();
+        if (snapshot.empty) {
+            console.log("No tax payments found in Firestore, returning mock data as fallback.");
+            return mockTaxPayments;
+        }
+        const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        return data as typeof mockTaxPayments;
+    } catch (error) {
+        console.error("Error fetching tax payments from Firestore:", error);
+        return mockTaxPayments; // Fallback
+    }
 }
 export async function getBenefitsAdminData() {
     await simulateDelay(50);

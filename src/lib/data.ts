@@ -567,16 +567,16 @@ export const mockPaySlips = [
 ];
 
 export const mockTaxFilings = [
-    { form: "Federal Form 941", jurisdiction: "Federal", dueDate: "2024-07-31", status: "Upcoming" },
-    { form: "CA DE 9/9C", jurisdiction: "California", dueDate: "2024-07-31", status: "Upcoming" },
-    { form: "Federal Form 940", jurisdiction: "Federal", dueDate: "2025-01-31", status: "Upcoming" },
+    { id: "TF-001", form: "Federal Form 941", jurisdiction: "Federal", dueDate: "2024-07-31", status: "Upcoming" },
+    { id: "TF-002", form: "CA DE 9/9C", jurisdiction: "California", dueDate: "2024-07-31", status: "Upcoming" },
+    { id: "TF-003", form: "Federal Form 940", jurisdiction: "Federal", dueDate: "2025-01-31", status: "Upcoming" },
 ];
 
 export const mockTaxPayments = [
-    { type: "Federal Income Tax", amount: "$85,342.10", dueDate: "2024-07-15", status: "Scheduled" },
-    { type: "Social Security & Medicare", amount: "$31,745.50", dueDate: "2024-07-15", status: "Scheduled" },
-    { type: "CA PIT/SDI", amount: "$22,810.90", dueDate: "2024-07-15", status: "Scheduled" },
-    { type: "Federal Unemployment (FUTA)", amount: "$1,240.00", dueDate: "2024-07-31", status: "Upcoming" },
+    { id: "TP-001", type: "Federal Income Tax", amount: "85342.10", dueDate: "2024-07-15", status: "Scheduled" },
+    { id: "TP-002", type: "Social Security & Medicare", amount: "31745.50", dueDate: "2024-07-15", status: "Scheduled" },
+    { id: "TP-003", type: "CA PIT/SDI", amount: "22810.90", dueDate: "2024-07-15", status: "Scheduled" },
+    { id: "TP-004", type: "Federal Unemployment (FUTA)", amount: "1240.00", dueDate: "2024-07-31", status: "Upcoming" },
 ];
 
 export const mockBenefitsAdmin = {
