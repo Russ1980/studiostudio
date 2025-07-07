@@ -683,10 +683,10 @@ export async function getProjectsDashboardData() {
         const overdueTasks = tasks.filter(t => t.status !== 'Done' && new Date(t.due) < new Date()).length;
 
         const kpiData = [
-            { title: "Active Projects", value: activeProjects, icon: Activity },
-            { title: "Overall Profitability", value: `$${overallProfitability.toLocaleString()}`, icon: DollarSign, isPositive: overallProfitability >= 0 },
-            { title: "Total Billable Hours", value: totalBillableHours.toLocaleString(), icon: Clock },
-            { title: "Tasks Overdue", value: overdueTasks, icon: ListChecks, isPositive: overdueTasks === 0 },
+            { title: "Active Projects", value: activeProjects, icon: 'Activity' },
+            { title: "Overall Profitability", value: `$${overallProfitability.toLocaleString()}`, icon: 'DollarSign', isPositive: overallProfitability >= 0 },
+            { title: "Total Billable Hours", value: totalBillableHours.toLocaleString(), icon: 'Clock' },
+            { title: "Tasks Overdue", value: overdueTasks, icon: 'ListChecks', isPositive: overdueTasks === 0 },
         ];
 
         const projectBudgetData = jobs.slice(0, 3).map(job => ({
