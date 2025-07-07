@@ -13,7 +13,12 @@ import { Progress } from "@/components/ui/progress";
 import Link from 'next/link';
 
 import { FileDown, FileUp, History, ShieldQuestion, Database, CheckSquare, HardDrive } from "lucide-react";
-import { MigrationCard } from "./migration-card";
+import dynamic from 'next/dynamic';
+
+const MigrationCard = dynamic(() => import('./migration-card').then(mod => mod.MigrationCard), {
+  loading: () => <p>Loading migration tools...</p>,
+  ssr: false
+});
 
 const kpiData = [
   { title: "Data Quality Score", value: "92%", icon: CheckSquare, progress: 92 },
