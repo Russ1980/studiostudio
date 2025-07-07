@@ -438,7 +438,7 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input placeholder="Search..." className="pl-9" />
             </div>
-             <Button variant="accent" size="sm" onClick={openServaAI}>
+             <Button variant="primary" size="sm" onClick={openServaAI}>
               <Wand2 className="mr-2" />
               Ask Serva AI
             </Button>
