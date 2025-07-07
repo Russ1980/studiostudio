@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/icons";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Check, LineChart, TrendingUp, Zap, BarChart3, Users, CheckCircle2, ChevronDown, DollarSign } from "lucide-react";
+import { Check, LineChart, TrendingUp, Zap, BarChart3, Users, CheckCircle2, ChevronDown, DollarSign, Briefcase } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 const features = [
