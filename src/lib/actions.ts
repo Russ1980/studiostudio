@@ -71,6 +71,7 @@ import {
   mockDataValidationResults,
   mockKeyboardShortcuts,
   mockDashboardPageData,
+  mockScheduledReports,
 } from './data';
 import { getMockUser } from './auth';
 import { getRevenueDataTool } from '@/ai/tools/get-revenue-data';
@@ -563,7 +564,10 @@ export async function getDataValidationResults() {
     await simulateDelay(50);
     return mockDataValidationResults;
 }
-
+export async function getScheduledReports() {
+    await simulateDelay(50);
+    return mockScheduledReports;
+}
 
 // Accounting
 export async function getAccountingDashboardData() {

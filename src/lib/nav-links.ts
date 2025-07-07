@@ -170,6 +170,15 @@ export const navLinks: NavLink[] = [
           { href: '/accounting/financial-statements/cash-flow', label: 'Cash Flow', icon: FileText },
         ],
       },
+       {
+        label: 'Period-End Close',
+        icon: Clock,
+        href: '/accounting/periods/close',
+        items: [
+            { href: '/accounting/periods/close', label: 'Close Period', icon: Clock },
+            { href: '/accounting/periods/reopen', label: 'Reopen Period', icon: RefreshCw },
+        ]
+       }
     ],
   },
   {

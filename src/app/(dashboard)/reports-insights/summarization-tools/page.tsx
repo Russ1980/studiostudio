@@ -1,6 +1,6 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { SummarizeForm } from "@/app/(dashboard)/insights/summarize-form";
+import { SummarizeForm } from "./summarize-form";
 import { summarizeFinancialReports } from "@/ai/flows/summarize-financial-reports";
 import { summarizeMarketNews } from "@/ai/flows/summarize-market-news";
 import { Wand2 } from "lucide-react";

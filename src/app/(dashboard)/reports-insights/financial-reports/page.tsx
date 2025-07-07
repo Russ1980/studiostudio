@@ -1,6 +1,4 @@
 
-"use client";
-
 import Link from "next/link";
 import {
   Card,
@@ -9,15 +7,15 @@ import {
   CardTitle,
   CardDescription
 } from "@/components/ui/card";
-import { FileBarChart } from "lucide-react";
+import { FileBarChart, FileText } from "lucide-react";
 
 const reports = [
-    { title: "Profit & Loss", description: "Shows revenues and expenses over a period of time.", href: "/accounting/financial-statements/profit-and-loss" },
-    { title: "Balance Sheet", description: "A snapshot of your assets, liabilities, and equity.", href: "#" },
-    { title: "Statement of Cash Flows", description: "Tracks the movement of cash from operating, investing, and financing activities.", href: "#" },
-    { title: "General Ledger", description: "A complete record of all financial transactions.", href: "/accounting/general-ledger" },
-    { title: "Trial Balance", description: "A report of all ledger balances to verify mathematical accuracy.", href: "#" },
-    { title: "Budget vs. Actuals", description: "Compares your budgeted amounts to your actual financial performance.", href: "#" },
+    { title: "Profit & Loss", description: "Shows revenues and expenses over a period of time.", href: "/accounting/financial-statements/profit-and-loss", icon: FileText },
+    { title: "Balance Sheet", description: "A snapshot of your assets, liabilities, and equity.", href: "/accounting/financial-statements/balance-sheet", icon: FileText },
+    { title: "Statement of Cash Flows", description: "Tracks the movement of cash from operating, investing, and financing activities.", href: "/accounting/financial-statements/cash-flow", icon: FileText },
+    { title: "General Ledger", description: "A complete record of all financial transactions.", href: "/accounting/general-ledger", icon: FileText },
+    { title: "Trial Balance", description: "A report of all ledger balances to verify mathematical accuracy.", href: "/reports/trial-balance", icon: FileText },
+    { title: "Budget vs. Actuals", description: "Compares your budgeted amounts to your actual financial performance.", href: "/operations/job-costing/reports/budget-vs-actual", icon: FileText },
 ];
 
 export default function FinancialReportsPage() {

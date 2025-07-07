@@ -1,6 +1,4 @@
 
-"use client";
-
 import {
   Card,
   CardContent,
@@ -24,20 +22,16 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal, PlusCircle } from "lucide-react";
-
-const scheduledReports = [
-  { id: "1", name: "Weekly Sales Summary", frequency: "Weekly", nextRun: "2024-07-29", recipients: "Sales Team", status: "Active" },
-  { id: "2", name: "Monthly P&L Statement", frequency: "Monthly", nextRun: "2024-08-01", recipients: "Leadership", status: "Active" },
-  { id: "3", name: "Quarterly Expense Report", frequency: "Quarterly", nextRun: "2024-10-01", recipients: "Finance Dept", status: "Active" },
-  { id: "4", name: "Daily Flash Report", frequency: "Daily", nextRun: "2024-07-23", recipients: "CEO, CFO", status: "Paused" },
-];
+import { getScheduledReports } from "@/lib/actions";
 
 const statusVariant: { [key: string]: "success" | "secondary" } = {
   Active: "success",
   Paused: "secondary",
 };
 
-export default function ScheduledReportsPage() {
+export default async function ScheduledReportsPage() {
+  const scheduledReports = await getScheduledReports();
+
   return (
     <div className="grid gap-6">
       <div className="flex items-center justify-between">
@@ -74,7 +68,7 @@ export default function ScheduledReportsPage() {
                   <TableCell>{report.nextRun}</TableCell>
                   <TableCell>{report.recipients}</TableCell>
                   <TableCell>
-                    <Badge variant={statusVariant[report.status]}>{report.status}</Badge>
+                    <Badge variant={statusVariant[report.status as keyof typeof statusVariant]}>{report.status}</Badge>
                   </TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>

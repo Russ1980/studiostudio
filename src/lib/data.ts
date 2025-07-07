@@ -225,6 +225,13 @@ export const mockDataValidationResults = [
     { id: 'V004', category: 'Data Integrity', issue: '5 transactions are missing a category', severity: 'Error', details: 'These transactions cannot be included in financial reports.' },
 ];
 
+export const mockScheduledReports = [
+  { id: "1", name: "Weekly Sales Summary", frequency: "Weekly", nextRun: "2024-07-29", recipients: "Sales Team", status: "Active" },
+  { id: "2", name: "Monthly P&L Statement", frequency: "Monthly", nextRun: "2024-08-01", recipients: "Leadership", status: "Active" },
+  { id: "3", name: "Quarterly Expense Report", frequency: "Quarterly", nextRun: "2024-10-01", recipients: "Finance Dept", status: "Active" },
+  { id: "4", name: "Daily Flash Report", frequency: "Daily", nextRun: "2024-07-23", recipients: "CEO, CFO", status: "Paused" },
+];
+
 
 // Accounting
 export const mockAccountingDashboard = {
