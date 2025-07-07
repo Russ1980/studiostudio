@@ -5,8 +5,6 @@ import { useFloating, offset, flip, shift, arrow } from '@floating-ui/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Lightbulb } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Label } from '@/components/ui/label';
 import { useOnboarding } from '@/hooks/use-onboarding';
 
 export const OnboardingTip = () => {
@@ -20,7 +18,6 @@ export const OnboardingTip = () => {
     } = useOnboarding();
     
     const arrowRef = useRef(null);
-    const [dontShowAgain, setDontShowAgain] = useState(false);
     
     const step = steps[currentStep];
     const [targetElement, setTargetElement] = useState<Element | null>(null);
@@ -54,9 +51,6 @@ export const OnboardingTip = () => {
     });
 
     const handleFinish = () => {
-        if (dontShowAgain) {
-            localStorage.setItem('onboarding-completed', 'true');
-        }
         finishOnboarding();
     };
 
@@ -106,10 +100,6 @@ export const OnboardingTip = () => {
                                 Step {currentStep + 1} of {steps.length}
                             </span>
                              <div className="flex items-center gap-4">
-                                <div className="flex items-center space-x-2">
-                                    <Checkbox id="dont-show" checked={dontShowAgain} onCheckedChange={(checked) => setDontShowAgain(!!checked)} />
-                                    <Label htmlFor="dont-show" className="text-xs">Don't show again</Label>
-                                </div>
                                 <Button onClick={isLastStep ? handleFinish : nextStep}>
                                     {isLastStep ? 'Finish' : 'Next'}
                                 </Button>

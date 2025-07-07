@@ -55,6 +55,7 @@ export const OnboardingProvider = ({ children }: OnboardingProviderProps) => {
 
     const finishOnboarding = useCallback(() => {
         setIsFinished(true);
+        localStorage.setItem('onboarding-completed', 'true');
     }, []);
 
     const nextStep = useCallback(() => {
