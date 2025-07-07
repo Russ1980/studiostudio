@@ -49,7 +49,7 @@ export default function SignInPage() {
                     <Logo className="h-8 w-8"/>
                     <span className="text-2xl font-bold">Mardisen Suite</span>
                 </div>
-              <CardTitle className="text-2xl">Log in to Mardisen Suite</CardTitle>
+              <CardTitle className="text-2xl">Log In</CardTitle>
             </CardHeader>
             <CardContent className="grid gap-4">
               <div className="grid gap-2">
