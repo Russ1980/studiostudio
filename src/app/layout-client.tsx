@@ -9,7 +9,6 @@ import type { User } from '@/lib/auth';
 import { OnboardingProvider } from '@/components/onboarding';
 import { ServaAIProvider } from '@/hooks/use-serva-ai';
 import { SidebarProvider } from '@/components/ui/sidebar';
-import LandingLayout from './(landing)/layout';
 import { Skeleton } from '@/components/ui/skeleton';
 
 function AppLayout({ children }: { children: React.ReactNode }) {
@@ -51,7 +50,11 @@ function AppLayout({ children }: { children: React.ReactNode }) {
 
 export function RootLayoutClient({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const isAppRoute = /^\/(dashboard|signin|auth|accountant-portal|accounting|banking|invoicing|operations|payroll|portfolio|tax|projects|reports-insights|client-management|payments|asset-management|data-management|communications|settings|help|search|trading|learn)/.test(pathname);
+  const isAppRoute = /^\/(dashboard|accountant-portal|accounting|banking|invoicing|operations|payroll|portfolio|tax|projects|reports-insights|client-management|payments|asset-management|data-management|communications|settings|help|search|trading|learn)/.test(pathname);
 
-  return isAppRoute ? <AppLayout>{children}</AppLayout> : <LandingLayout>{children}</LandingLayout>;
+  if (isAppRoute) {
+    return <AppLayout>{children}</AppLayout>;
+  }
+
+  return <>{children}</>;
 }
