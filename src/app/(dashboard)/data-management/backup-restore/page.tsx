@@ -1,6 +1,4 @@
 
-"use client";
-
 import {
   Card,
   CardContent,
@@ -19,37 +17,17 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { PlusCircle, History, CloudDownload, RotateCcw, Clock } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
-
-const kpiData = [
-    { title: "Last Backup", value: "2 hours ago", icon: Clock },
-    { title: "Backup Frequency", value: "Daily", icon: RotateCcw },
-    { title: "Total Backups", value: "30", icon: History },
-];
-
-const backupHistory = [
-    { timestamp: "2024-07-22 02:00:00", type: "Full", size: "2.1 GB", status: "Success" },
-    { timestamp: "2024-07-21 02:00:00", type: "Full", size: "2.1 GB", status: "Success" },
-    { timestamp: "2024-07-20 02:00:00", type: "Full", size: "2.0 GB", status: "Failed" },
-    { timestamp: "2024-07-19 02:00:00", type: "Full", size: "2.0 GB", status: "Success" },
-];
+import { getBackupRestoreData } from "@/lib/actions";
+import { BackupButton } from "./backup-button";
 
 const statusVariant: { [key: string]: "success" | "destructive" } = {
   Success: "success",
   Failed: "destructive",
 };
 
-
-export default function BackupRestorePage() {
-  const { toast } = useToast();
-
-  const handleCreateBackup = () => {
-    toast({
-        title: "Backup Started",
-        description: "A full system backup is being created in the background."
-    })
-  }
-
+export default async function BackupRestorePage() {
+  const { kpiData, backupHistory } = await getBackupRestoreData();
+  
   return (
     <div className="grid gap-6">
       <div>
@@ -63,7 +41,7 @@ export default function BackupRestorePage() {
         <CardContent className="p-6 text-center">
             <h2 className="text-xl font-semibold">Create an On-Demand Backup</h2>
             <p className="text-muted-foreground mt-2 mb-4">Create an immediate, full system backup. This may take a few minutes.</p>
-            <Button size="lg" onClick={handleCreateBackup}><PlusCircle className="mr-2"/> Create Backup Now</Button>
+            <BackupButton />
         </CardContent>
        </Card>
 
@@ -103,7 +81,7 @@ export default function BackupRestorePage() {
                             <TableCell className="font-mono">{backup.timestamp}</TableCell>
                             <TableCell>{backup.type}</TableCell>
                             <TableCell>{backup.size}</TableCell>
-                            <TableCell><Badge variant={statusVariant[backup.status]}>{backup.status}</Badge></TableCell>
+                            <TableCell><Badge variant={statusVariant[backup.status as keyof typeof statusVariant]}>{backup.status}</Badge></TableCell>
                             <TableCell className="text-right">
                                 {backup.status === 'Success' && (
                                     <div className="flex gap-2 justify-end">

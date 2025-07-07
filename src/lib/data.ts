@@ -1102,4 +1102,38 @@ export const mockDashboardPageData = {
         { name: "BOI - Business Checking", balance: -52208.00, icon: 'Landmark' },
         { name: "Checking", balance: -127330.11, icon: 'Landmark' },
     ],
-  };
+};
+
+export const mockDataManagementDashboard = {
+    kpiData: [
+        { title: "Data Quality Score", value: "92%", icon: 'CheckSquare', progress: 92 },
+        { title: "Records Managed", value: "1,482,309", icon: 'Database' },
+        { title: "Storage Usage", value: "45%", icon: 'HardDrive', progress: 45 },
+        { title: "Data Completeness", value: "88%", icon: 'CheckSquare', progress: 88 },
+    ],
+    recentActivity: [
+        { description: "Full system backup completed successfully.", time: "2 hours ago" },
+        { description: "Imported 524 new customer records from CSV.", time: "1 day ago" },
+        { description: "Exported Q2 Financials to PDF.", time: "2 days ago" },
+    ]
+};
+
+export const mockBackupRestoreData = {
+    kpiData: [
+        { title: "Last Backup", value: "2 hours ago", icon: Clock },
+        { title: "Backup Frequency", value: "Daily", icon: RotateCcw },
+        { title: "Total Backups", value: "30", icon: History },
+    ],
+    backupHistory: [
+        { timestamp: "2024-07-22 02:00:00", type: "Full", size: "2.1 GB", status: "Success" },
+        { timestamp: "2024-07-21 02:00:00", type: "Full", size: "2.1 GB", status: "Success" },
+        { timestamp: "2024-07-20 02:00:00", type: "Full", size: "2.0 GB", status: "Failed" },
+        { timestamp: "2024-07-19 02:00:00", type: "Full", size: "2.0 GB", status: "Success" },
+    ]
+};
+
+export const mockExportHistory = [
+    { date: "2024-07-22", dataSet: "All Transactions", format: "CSV", status: "Completed" },
+    { date: "2024-07-21", dataSet: "Customers", format: "Excel", status: "Completed" },
+    { date: "2024-07-20", dataSet: "Financial Statements", format: "PDF", status: "Failed" },
+];

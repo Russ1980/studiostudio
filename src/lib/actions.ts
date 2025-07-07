@@ -73,6 +73,9 @@ import {
   mockDataValidationResults,
   mockKeyboardShortcuts,
   mockTroubleshootingFAQs,
+  mockDataManagementDashboard,
+  mockBackupRestoreData,
+  mockExportHistory,
 } from './data';
 import { getMockUser } from './auth';
 import { getRevenueDataTool } from '@/ai/tools/get-revenue-data';
@@ -1239,4 +1242,20 @@ export async function getKeyboardShortcuts() {
 export async function getTroubleshootingFAQs() {
     await simulateDelay(50);
     return mockTroubleshootingFAQs;
+}
+
+// Data Management
+export async function getDataManagementDashboardData() {
+  await simulateDelay(50);
+  return mockDataManagementDashboard;
+}
+
+export async function getBackupRestoreData() {
+    await simulateDelay(50);
+    return mockBackupRestoreData;
+}
+
+export async function getExportHistory() {
+    await simulateDelay(50);
+    return mockExportHistory;
 }

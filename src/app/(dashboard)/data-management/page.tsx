@@ -1,6 +1,4 @@
 
-"use client";
-
 import {
   Card,
   CardContent,
@@ -14,26 +12,22 @@ import Link from 'next/link';
 
 import { FileDown, FileUp, History, ShieldQuestion, Database, CheckSquare, HardDrive } from "lucide-react";
 import dynamic from 'next/dynamic';
+import { getDataManagementDashboardData } from "@/lib/actions";
 
 const MigrationCard = dynamic(() => import('./migration-card').then(mod => mod.MigrationCard), {
   loading: () => <p>Loading migration tools...</p>,
   ssr: false
 });
 
-const kpiData = [
-  { title: "Data Quality Score", value: "92%", icon: CheckSquare, progress: 92 },
-  { title: "Records Managed", value: "1,482,309", icon: Database },
-  { title: "Storage Usage", value: "45%", icon: HardDrive, progress: 45 },
-  { title: "Data Completeness", value: "88%", icon: CheckSquare, progress: 88 },
-];
+const kpiIconMap: { [key: string]: React.ElementType } = {
+  CheckSquare,
+  Database,
+  HardDrive
+};
 
-const recentActivity = [
-    { description: "Full system backup completed successfully.", time: "2 hours ago" },
-    { description: "Imported 524 new customer records from CSV.", time: "1 day ago" },
-    { description: "Exported Q2 Financials to PDF.", time: "2 days ago" },
-];
+export default async function DataManagementDashboard() {
+  const { kpiData, recentActivity } = await getDataManagementDashboardData();
 
-export default function DataManagementDashboard() {
   return (
     <div className="grid gap-6">
       <div>
@@ -44,18 +38,21 @@ export default function DataManagementDashboard() {
       </div>
 
        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        {kpiData.map((kpi) => (
-          <Card key={kpi.title}>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">{kpi.title}</CardTitle>
-              <kpi.icon className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{kpi.value}</div>
-              {kpi.progress !== undefined && <Progress value={kpi.progress} className="h-2 mt-2" />}
-            </CardContent>
-          </Card>
-        ))}
+        {kpiData.map((kpi) => {
+          const Icon = kpiIconMap[kpi.icon];
+          return (
+            <Card key={kpi.title}>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">{kpi.title}</CardTitle>
+                {Icon && <Icon className="h-4 w-4 text-muted-foreground" />}
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{kpi.value}</div>
+                {kpi.progress !== undefined && <Progress value={kpi.progress} className="h-2 mt-2" />}
+              </CardContent>
+            </Card>
+          );
+        })}
       </div>
 
        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
