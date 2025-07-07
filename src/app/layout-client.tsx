@@ -10,6 +10,13 @@ import { OnboardingProvider } from '@/components/onboarding';
 import { ServaAIProvider } from '@/hooks/use-serva-ai';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { Skeleton } from '@/components/ui/skeleton';
+import dynamic from 'next/dynamic';
+
+const FloatingHelpButton = dynamic(
+  () => import('@/components/onboarding/floating-help-button').then((mod) => mod.FloatingHelpButton),
+  { ssr: false }
+);
+
 
 function AppLayout({ children }: { children: React.ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
@@ -42,6 +49,7 @@ function AppLayout({ children }: { children: React.ReactNode }) {
             <OnboardingProvider>
                 <ServaAIProvider>
                     <AppShell user={user}>{children}</AppShell>
+                    <FloatingHelpButton />
                 </ServaAIProvider>
             </OnboardingProvider>
         </SidebarProvider>
