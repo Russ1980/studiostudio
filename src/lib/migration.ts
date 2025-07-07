@@ -3,7 +3,7 @@
 'use server';
 
 import { firestore } from './firebase-admin';
-import { mockClients, mockInvoices, mockEmployees, mockJobsWithDetails as mockJobs, mockTaxFilings, mockTaxPayments, mockBankAccounts, mockTasks } from './data';
+import { mockClients, mockInvoices, mockEmployees, mockJobsWithDetails as mockJobs, mockTaxFilings, mockTaxPayments, mockBankAccounts, mockTasks, mockChartOfAccounts } from './data';
 
 type TransformFunction<T, U> = (data: T) => U;
 
@@ -82,4 +82,18 @@ export async function migrateBankAccounts() {
 
 export async function migrateTaskData() {
     return migrateData(mockTasks, 'tasks', { idKey: 'id' });
+}
+
+export async function migrateChartOfAccounts() {
+    if (!firestore) {
+        return { success: false, error: "Firebase Admin SDK not initialized." };
+    }
+    try {
+        const docRef = firestore.collection('chartOfAccounts').doc('main');
+        await docRef.set(mockChartOfAccounts);
+        return { success: true, migrated: 1 }; // Migrated 1 document
+    } catch (error: any) {
+        console.error(`Migration failed for collection chartOfAccounts:`, error);
+        return { success: false, error: error.message };
+    }
 }

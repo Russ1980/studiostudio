@@ -233,8 +233,25 @@ export async function getJournalEntries() {
     return mockJournalEntries;
 }
 export async function getChartOfAccounts() {
-    await simulateDelay(50);
+  if (!firestore) {
+    console.log("Firestore not initialized, returning mock data for chart of accounts.");
     return mockChartOfAccounts;
+  }
+  try {
+    const docRef = firestore.collection('chartOfAccounts').doc('main');
+    const docSnap = await docRef.get();
+
+    if (!docSnap.exists) {
+      console.log('No chart of accounts document found, returning mock data as fallback.');
+      return mockChartOfAccounts;
+    }
+    
+    return docSnap.data() as typeof mockChartOfAccounts;
+  } catch (error) {
+    console.error("Error fetching chart of accounts from Firestore:", error);
+    // Fallback to mock data in case of error
+    return mockChartOfAccounts;
+  }
 }
 export async function getLedgerTransactions() {
     await simulateDelay(50);
