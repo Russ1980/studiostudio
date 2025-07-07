@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Logo } from "@/components/icons";
+import { ShieldCheck } from "lucide-react";
 
 export default function SignInPage() {
   const router = useRouter();
@@ -70,6 +71,15 @@ export default function SignInPage() {
              </div>
         </CardFooter>
       </form>
+      <div className="px-6 pb-6 text-center">
+        <Separator className="mb-4" />
+        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Enterprise-Grade Security</p>
+        <div className="flex justify-center gap-4 text-xs text-muted-foreground">
+            <span className="flex items-center gap-1"><ShieldCheck className="h-3 w-3" /> SOC 2</span>
+            <span className="flex items-center gap-1"><ShieldCheck className="h-3 w-3" /> HIPAA</span>
+            <span className="flex items-center gap-1"><ShieldCheck className="h-3 w-3" /> GDPR</span>
+        </div>
+      </div>
     </Card>
   );
 }
