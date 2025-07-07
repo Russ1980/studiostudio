@@ -76,6 +76,7 @@ import {
 import { getMockUser } from './auth';
 import { getRevenueDataTool } from '@/ai/tools/get-revenue-data';
 import { revalidatePath } from 'next/cache';
+import { z } from 'zod';
 
 const simulateDelay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -229,16 +230,49 @@ export async function onboardNewClient(formData: any) {
 }
 
 export async function getAccountantDashboardData() {
-  await simulateDelay(50);
-  return mockAccountantDashboard;
+    if (!firestore) {
+        return mockAccountantDashboard;
+    }
+    try {
+        const clientsSnapshot = await firestore.collection('clients').get();
+        const tasksSnapshot = await firestore.collection('tasks').get();
+        const invoicesSnapshot = await firestore.collection('invoices').get();
+
+        const activeClients = clientsSnapshot.docs.filter(doc => doc.data().status === 'Active').length;
+        const tasks = tasksSnapshot.docs.map(doc => doc.data());
+        const pendingTasks = tasks.filter(task => task.status !== 'Done').length;
+        const overdueTasks = tasks.filter(task => task.status !== 'Done' && new Date(task.due) < new Date()).length;
+        
+        const revenueYTD = invoicesSnapshot.docs.reduce((acc, doc) => {
+            if (doc.data().status === 'Paid') {
+                return acc + parseFloat(doc.data().amount.replace(/,/g, ''));
+            }
+            return acc;
+        }, 0);
+
+        return {
+            ...mockAccountantDashboard, // keep mock for deadlines & chart for now
+            kpiData: [
+                { title: "Active Clients", value: activeClients.toString(), change: "" },
+                { title: "Pending Tasks", value: pendingTasks.toString(), change: `${overdueTasks} overdue` },
+                { title: "Revenue YTD", value: `$${(revenueYTD / 1000000).toFixed(1)}M`, change: "+15% vs last year", changeType: "up" },
+                { title: "Client Health", value: "92%", change: "Avg. Satisfaction" },
+            ],
+        };
+
+    } catch (e) {
+        console.error("Error fetching accountant dashboard data:", e);
+        return mockAccountantDashboard;
+    }
 }
+
 export async function getTasks() {
     if (!firestore) {
         console.log("Firestore not initialized, returning mock data for tasks.");
         return mockTasks;
     }
     try {
-        const tasksSnapshot = await firestore.collection('tasks').get();
+        const tasksSnapshot = await firestore.collection('tasks').orderBy('due').get();
         if (tasksSnapshot.empty) {
             console.log("No tasks found in Firestore, returning mock data as fallback.");
             return mockTasks;
@@ -253,6 +287,72 @@ export async function getTasks() {
 export async function getRecentReports() {
     await simulateDelay(50);
     return mockRecentReports;
+}
+
+const ClientSchema = z.object({
+    businessName: z.string().min(1, 'Business name is required'),
+    businessType: z.string().min(1, 'Business type is required'),
+    ein: z.string().optional(),
+    industry: z.string().optional(),
+    contactName: z.string().min(1, 'Contact name is required'),
+    contactEmail: z.string().email('Invalid email address'),
+    contactPhone: z.string().optional(),
+    streetAddress: z.string().optional(),
+    city: z.string().optional(),
+    state: z.string().optional(),
+    zip: z.string().optional(),
+});
+
+export async function addNewClient(values: z.infer<typeof ClientSchema>) {
+    if (!firestore) {
+        return { success: false, error: "Firestore not initialized." };
+    }
+    const validatedFields = ClientSchema.safeParse(values);
+    if (!validatedFields.success) {
+        return { success: false, error: "Invalid form data." };
+    }
+
+    try {
+        await firestore.collection('clients').add({
+            ...validatedFields.data,
+            onboarded: new Date().toISOString().split('T')[0],
+            status: "Active", // Defaulting to Active for simplicity
+            contact: validatedFields.data.contactName, // using contact name as primary contact
+            tier: validatedFields.data.businessType, // using business type as tier
+        });
+        revalidatePath('/accountant-portal/client-list');
+        return { success: true };
+    } catch (error: any) {
+        return { success: false, error: error.message };
+    }
+}
+
+const TaskSchema = z.object({
+    task: z.string().min(1, 'Task name is required'),
+    client: z.string().min(1, 'Client is required'),
+    due: z.string().min(1, 'Due date is required'),
+    priority: z.enum(['High', 'Medium', 'Low']),
+    status: z.enum(['Not Started', 'In Progress', 'Done']),
+});
+
+export async function addNewTask(values: z.infer<typeof TaskSchema>) {
+    if (!firestore) {
+        return { success: false, error: "Firestore not initialized." };
+    }
+
+    const validatedFields = TaskSchema.safeParse(values);
+
+    if (!validatedFields.success) {
+        return { success: false, error: "Invalid form data." };
+    }
+
+    try {
+        await firestore.collection('tasks').add(validatedFields.data);
+        revalidatePath('/accountant-portal/task-management');
+        return { success: true };
+    } catch (error: any) {
+        return { success: false, error: error.message };
+    }
 }
 
 // Document Management

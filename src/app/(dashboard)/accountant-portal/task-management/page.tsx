@@ -19,6 +19,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PlusCircle } from "lucide-react";
 import { getTasks } from "@/lib/actions";
+import Link from "next/link";
 
 const priorityVariant: { [key: string]: "destructive" | "default" | "secondary" } = {
   High: "destructive",
@@ -44,7 +45,11 @@ export default async function TaskManagementPage() {
               Organize, assign, and track all your firm's work.
             </p>
           </div>
-          <Button><PlusCircle className="mr-2"/> Create New Task</Button>
+          <Button asChild>
+            <Link href="/accountant-portal/task-management/new">
+                <PlusCircle className="mr-2"/> Create New Task
+            </Link>
+          </Button>
         </div>
 
       <Tabs defaultValue="my-tasks" className="w-full">
