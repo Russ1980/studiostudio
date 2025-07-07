@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Logo } from '@/components/icons';
 import Image from 'next/image';
-import { ChevronDown, Star, Bot, SlidersHorizontal, BarChart, CheckCircle2, DollarSign, TrendingUp, Users, X, Zap, ChevronRight, BarChart2, AlertTriangle, ArrowUp, Send, CheckCircle } from 'lucide-react';
+import { ChevronDown, Star, Bot, SlidersHorizontal, BarChart, DollarSign, TrendingUp, Users, X, Zap, ChevronRight, BarChart2, AlertTriangle, ArrowUp, Send, CheckCircle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -19,93 +19,93 @@ const ServaUICard = () => {
     
     const getStatusBadge = (status:string) => {
         switch (status) {
-            case 'active': return <Badge variant="outline" className="text-blue-400 border-blue-400/50 bg-blue-400/10">active</Badge>;
-            case 'processing': return <Badge variant="outline" className="text-purple-400 border-purple-400/50 bg-purple-400/10">processing</Badge>;
-            case 'completed': return <Badge variant="outline" className="text-green-400 border-green-400/50 bg-green-400/10">completed</Badge>;
+            case 'active': return <Badge variant="default">active</Badge>;
+            case 'processing': return <Badge variant="secondary">processing</Badge>;
+            case 'completed': return <Badge variant="success">completed</Badge>;
             default: return null;
         }
     }
 
     return (
-        <Card className="bg-slate-800/50 text-white backdrop-blur-lg border-white/20 shadow-2xl rounded-2xl w-full max-w-md mx-auto">
-            <CardHeader className="p-4 flex flex-row items-center justify-between border-b border-white/20">
+        <Card className="bg-card text-card-foreground shadow-2xl rounded-2xl w-full max-w-md mx-auto">
+            <CardHeader className="p-4 flex flex-row items-center justify-between border-b">
                 <div>
                     <h3 className="font-bold text-lg">SERVA</h3>
-                    <p className="text-xs text-slate-400">SOC 2 & HIPAA compliant</p>
+                    <p className="text-xs text-muted-foreground">SOC 2 & HIPAA compliant</p>
                 </div>
                 <div className="text-right">
-                    <p className="text-xs text-slate-400">Active Processes</p>
-                    <p className="text-2xl font-bold bg-gradient-to-br from-purple-400 to-indigo-500 text-white px-3 py-1 rounded-md">24</p>
+                    <p className="text-xs text-muted-foreground">Active Processes</p>
+                    <p className="text-2xl font-bold bg-primary text-primary-foreground px-3 py-1 rounded-md">24</p>
                 </div>
             </CardHeader>
             <CardContent className="p-4 space-y-4">
-                <Card className="bg-slate-700/50 border-white/20">
+                <Card className="bg-secondary">
                     <CardHeader className="p-3">
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
-                                <Bot className="h-4 w-4 text-blue-400" />
+                                <Bot className="h-4 w-4 text-primary" />
                                 <span className="text-sm font-semibold">SERVA</span>
-                                <span className="text-xs text-slate-400">2 seconds ago</span>
+                                <span className="text-xs text-muted-foreground">2 seconds ago</span>
                             </div>
-                            <Badge variant="outline" className="text-red-400 border-red-400/50 bg-red-400/10">High Priority</Badge>
+                            <Badge variant="destructive">High Priority</Badge>
                         </div>
                     </CardHeader>
                     <CardContent className="p-3 pt-0">
-                        <p className="font-semibold mb-2">Launching Serva AI 🚀</p>
-                        <p className="text-sm text-slate-300 mb-3">Your personal AI is analyzing 15 financial reports and identified 3 optimization opportunities worth $12,400.</p>
+                        <p className="font-semibold mb-2 text-card-foreground">Launching Serva AI 🚀</p>
+                        <p className="text-sm text-muted-foreground mb-3">Your personal AI is analyzing 15 financial reports and identified 3 optimization opportunities worth $12,400.</p>
                         <div className="flex items-center gap-2 text-sm">
-                            <ArrowUp className="h-4 w-4 text-green-400"/>
-                            <span className="font-bold text-white">$12,400</span>
-                            <span className="text-green-400 font-semibold">+$2,100</span>
+                            <ArrowUp className="h-4 w-4 text-success"/>
+                            <span className="font-bold text-card-foreground">$12,400</span>
+                            <span className="text-success font-semibold">+$2,100</span>
                         </div>
                     </CardContent>
                 </Card>
 
                 <div className="grid grid-cols-2 gap-4">
-                    <Card className="bg-slate-700/50 border-white/20 p-3">
-                        <p className="text-xs text-slate-400">Time Saved Today</p>
+                    <Card className="bg-background p-3">
+                        <p className="text-xs text-muted-foreground">Time Saved Today</p>
                         <div className="flex items-end justify-between">
                             <p className="text-2xl font-bold">42h</p>
-                            <BarChart2 className="h-6 w-6 text-slate-400" />
+                            <BarChart2 className="h-6 w-6 text-muted-foreground" />
                         </div>
-                        <p className="text-xs text-green-400">+12% vs yesterday</p>
+                        <p className="text-xs text-success">+12% vs yesterday</p>
                     </Card>
-                    <Card className="bg-slate-700/50 border-white/20 p-3">
-                        <p className="text-xs text-slate-400">Tasks Completed</p>
+                    <Card className="bg-background p-3">
+                        <p className="text-xs text-muted-foreground">Tasks Completed</p>
                         <div className="flex items-end justify-between">
                             <p className="text-2xl font-bold">156</p>
-                            <CheckCircle className="h-6 w-6 text-slate-400" />
+                            <CheckCircle className="h-6 w-6 text-muted-foreground" />
                         </div>
-                        <p className="text-xs text-green-400">+28 this hour</p>
+                        <p className="text-xs text-success">+28 this hour</p>
                     </Card>
-                    <Card className="bg-slate-700/50 border-white/20 p-3">
-                        <p className="text-xs text-slate-400">Savings Generated</p>
+                    <Card className="bg-background p-3">
+                        <p className="text-xs text-muted-foreground">Savings Generated</p>
                         <div className="flex items-end justify-between">
                             <p className="text-2xl font-bold">$12,400</p>
-                             <DollarSign className="h-6 w-6 text-slate-400" />
+                             <DollarSign className="h-6 w-6 text-muted-foreground" />
                         </div>
-                        <p className="text-xs text-slate-400">This month</p>
+                        <p className="text-xs text-muted-foreground">This month</p>
                     </Card>
-                    <Card className="bg-orange-500/10 border-orange-500/30 p-3">
-                        <p className="text-xs text-orange-300">Active Alerts</p>
+                    <Card className="bg-destructive/10 border-destructive/50 p-3">
+                        <p className="text-xs text-destructive">Active Alerts</p>
                         <div className="flex items-end justify-between">
-                            <p className="text-2xl font-bold text-orange-300">3</p>
-                             <AlertTriangle className="h-6 w-6 text-orange-300" />
+                            <p className="text-2xl font-bold text-destructive">3</p>
+                             <AlertTriangle className="h-6 w-6 text-destructive" />
                         </div>
-                        <p className="text-xs text-orange-300">Require attention</p>
+                        <p className="text-xs text-destructive">Require attention</p>
                     </Card>
                 </div>
                 <div>
                     <h4 className="text-sm font-semibold mb-2">Recent AI Actions</h4>
                     <ul className="space-y-2">
                         {actions.map(action => (
-                            <li key={action.text} className="flex items-center justify-between text-sm p-2 bg-slate-700/50 rounded-md">
+                            <li key={action.text} className="flex items-center justify-between text-sm p-2 bg-secondary rounded-md">
                                <div className="flex items-center gap-2">
-                                  <div className={`w-1.5 h-1.5 rounded-full ${action.status === 'completed' ? 'bg-green-400' : 'bg-blue-400'}`}></div>
-                                  <span className="text-slate-300">{action.text}</span>
+                                  <div className={`w-1.5 h-1.5 rounded-full ${action.status === 'completed' ? 'bg-success' : 'bg-primary'}`}></div>
+                                  <span className="text-card-foreground">{action.text}</span>
                                </div>
                                <div className="flex items-center gap-4">
-                                  <span className="text-xs text-slate-400">{action.time}</span>
+                                  <span className="text-xs text-muted-foreground">{action.time}</span>
                                   {getStatusBadge(action.status)}
                                </div>
                             </li>
@@ -113,12 +113,12 @@ const ServaUICard = () => {
                     </ul>
                 </div>
             </CardContent>
-            <CardFooter className="p-2 border-t border-white/20 flex items-center justify-between">
-                <Button className="bg-indigo-600 hover:bg-indigo-500 text-white w-full">
+            <CardFooter className="p-2 border-t flex items-center justify-between">
+                <Button className="w-full">
                     <Send className="h-4 w-4 mr-2" />
                     Send Element
                 </Button>
-                <Button variant="ghost" className="text-slate-400 hover:text-white text-xs">Send Console Errors (2)</Button>
+                <Button variant="ghost" className="text-xs">Send Console Errors (2)</Button>
             </CardFooter>
         </Card>
     );
@@ -129,7 +129,7 @@ export default function LandingPage() {
   return (
     <div className="flex flex-col min-h-screen bg-white text-gray-900">
       <main className="flex-1">
-        <section className="w-full bg-gradient-to-br from-[#151A3A] to-[#3A2D5C] text-white overflow-hidden relative">
+        <section className="w-full bg-gradient-to-br from-[#151A3A] to-[#3A2D5C] overflow-hidden relative">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.05)_1px,_transparent_1px)] bg-[size:40px_40px] opacity-50"></div>
             <div className="container px-4 md:px-6 relative z-10">
                 <header className="h-20 flex items-center">
@@ -180,7 +180,7 @@ export default function LandingPage() {
                         Schedule a Demo
                     </Button>
                 </div>
-                 <div className="flex items-center gap-6 pt-6 text-sm">
+                 <div className="flex items-center gap-6 pt-6 text-sm text-white">
                     <div className="flex items-center gap-1">
                         {[...Array(5)].map((_, i) => <Star key={i} className="h-5 w-5 text-yellow-400 fill-yellow-400"/>)}
                         <span className="font-medium ml-1">4.9/5 Rating</span>
