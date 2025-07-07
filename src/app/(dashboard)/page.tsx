@@ -7,104 +7,34 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import {
-  Users,
-  Download,
-  Share2,
-  Settings,
-  RefreshCw,
-  BarChart3,
-  DollarSign,
-  Wand2,
-  Activity,
-  Building,
-  SlidersHorizontal,
-  TrendingUp,
-  Receipt,
-} from "lucide-react";
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
+import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import { getMockUser } from "@/lib/auth";
 import { OnboardingController } from "@/components/onboarding/onboarding-controller";
 import { DevTools } from "@/components/development/dev-tools";
 import { useEffect, useState } from "react";
 import type { User } from "@/lib/auth";
-import { cn } from "@/lib/utils";
+import {
+  DollarSign,
+  TrendingUp,
+  RefreshCw,
+  Download,
+  Share2,
+  Settings,
+  PlusCircle,
+  Receipt,
+  ArrowRight,
+  BarChart3,
+  HeartPulse,
+} from "lucide-react";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
-
-
-const navItems = [
-    {
-        title: "Executive Overview",
-        description: "Comprehensive business summary",
-        icon: BarChart3,
-        active: true,
-    },
-    {
-        title: "Financial Health",
-        description: "Financial metrics and analysis",
-        icon: DollarSign,
-    },
-    {
-        title: "Serva AI Insights",
-        description: "AI-powered business intelligence",
-        icon: Wand2,
-    },
-    {
-        title: "Workflow Hub",
-        description: "Team productivity and tasks",
-        icon: Users,
-    },
-    {
-        title: "Process Visibility",
-        description: "Operations monitoring",
-        icon: Activity,
-    },
-    {
-        title: "Business Context",
-        description: "Industry benchmarks and insights",
-        icon: Building,
-    },
-    {
-        title: "Customize Dashboard",
-        description: "Personalize your workspace",
-        icon: SlidersHorizontal,
-    },
-];
-
-const kpiItems = [
-    {
-        title: "Monthly Expenses",
-        value: "$0",
-        change: "vs last month 0.0%",
-        icon: TrendingUp,
-        iconColor: "text-red-500"
-    },
-    {
-        title: "Net Profit",
-        value: "$0",
-        change: "Income: $0",
-        icon: DollarSign,
-        iconColor: "text-green-500"
-    },
-    {
-        title: "Sales (30 Days)",
-        value: "$0",
-        change: "+8.4%",
-        changeColor: "text-success",
-        icon: BarChart3,
-        iconColor: "text-blue-500"
-    },
-    {
-        title: "A/R Total",
-        value: "$0",
-        change: "Overdue: $0",
-        icon: Receipt,
-        iconColor: "text-purple-500"
-    }
-];
-
 
 export default function DashboardPage() {
   const [user, setUser] = useState<User | null>(null);
@@ -113,16 +43,39 @@ export default function DashboardPage() {
     getMockUser().then(setUser);
   }, []);
 
+  const chartData = [
+      { month: 'Jan', income: 186000, expenses: 80000 },
+      { month: 'Feb', income: 305000, expenses: 200000 },
+      { month: 'Mar', income: 237000, expenses: 120000 },
+      { month: 'Apr', income: 273000, expenses: 190000 },
+      { month: 'May', income: 209000, expenses: 130000 },
+      { month: 'Jun', income: 214000, expenses: 140000 },
+  ];
+  
+  const recentActivity = [
+      { description: "Invoice #1024 paid by Apex Solutions.", time: "2m ago" },
+      { description: "Payroll for June 2024 processed successfully.", time: "1h ago" },
+      { description: "New client 'Stellar Goods' added.", time: "3h ago" },
+      { description: "Q2 Financial Report generated.", time: "1d ago" },
+  ];
+
+  const quickActions = [
+      { label: "New Transaction", icon: PlusCircle },
+      { label: "Create Invoice", icon: Receipt },
+      { label: "Record Payment", icon: DollarSign },
+      { label: "Run Report", icon: BarChart3 }
+  ];
+
   if (!user) {
     return (
         <div className="flex flex-col gap-6">
             <Card><CardContent className="p-6"><Skeleton className="h-20 w-full" /></CardContent></Card>
-            <Card><CardContent className="p-2"><Skeleton className="h-24 w-full" /></CardContent></Card>
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-                <Card><CardContent className="p-6"><Skeleton className="h-24 w-full" /></CardContent></Card>
-                <Card><CardContent className="p-6"><Skeleton className="h-24 w-full" /></CardContent></Card>
-                <Card><CardContent className="p-6"><Skeleton className="h-24 w-full" /></CardContent></Card>
-                <Card><CardContent className="p-6"><Skeleton className="h-24 w-full" /></CardContent></Card>
+            <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+                <div className="lg:col-span-2"><Skeleton className="h-80 w-full" /></div>
+                <div className="lg:col-span-1 space-y-6">
+                    <Skeleton className="h-40 w-full" />
+                    <Skeleton className="h-40 w-full" />
+                </div>
             </div>
         </div>
     );
@@ -137,9 +90,9 @@ export default function DashboardPage() {
         <CardContent className="p-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div className="flex items-center gap-4">
-              <Avatar className="h-12 w-12">
+              <Avatar className="h-16 w-16">
                 <AvatarFallback className="bg-primary text-primary-foreground text-2xl">
-                  <Users />
+                  {user.initials}
                 </AvatarFallback>
               </Avatar>
               <div>
@@ -149,16 +102,16 @@ export default function DashboardPage() {
             </div>
             <div className="flex items-center gap-4 sm:gap-6">
               <div className="text-right sm:text-left">
-                <p className="text-lg font-bold">$2.1M</p>
-                <p className="text-sm text-muted-foreground">Net Revenue</p>
+                <p className="text-2xl font-bold">$2.1M</p>
+                <p className="text-sm text-muted-foreground flex items-center gap-1 justify-end sm:justify-start text-success"><TrendingUp className="h-4 w-4"/> Net Revenue</p>
               </div>
               <div className="text-right sm:text-left">
-                <p className="text-lg font-bold text-success">+12.4%</p>
+                <p className="text-2xl font-bold text-success">+12.4%</p>
                 <p className="text-sm text-muted-foreground">Growth</p>
               </div>
               <div className="text-right sm:text-left">
-                <p className="text-lg font-bold text-primary">94%</p>
-                <p className="text-sm text-muted-foreground">Health Score</p>
+                <p className="text-2xl font-bold text-primary">94%</p>
+                <p className="text-sm text-muted-foreground flex items-center gap-1 justify-end sm:justify-start"><HeartPulse className="h-4 w-4"/> Health Score</p>
               </div>
               <Separator orientation="vertical" className="h-10 hidden sm:block" />
               <div className="flex items-center gap-1">
@@ -171,38 +124,73 @@ export default function DashboardPage() {
           </div>
         </CardContent>
       </Card>
-
-      <Card>
-        <CardContent className="p-2">
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-2">
-                {navItems.map((item) => (
-                    <Button key={item.title} variant="ghost" className={cn("flex flex-col items-start justify-start h-auto p-3 text-left space-y-1", item.active && "bg-muted border border-border")}>
-                        <item.icon className="h-5 w-5 text-primary mb-1"/>
-                        <span className="font-semibold text-sm">{item.title}</span>
-                        <span className="text-xs text-muted-foreground">{item.description}</span>
-                    </Button>
-                ))}
-            </div>
-        </CardContent>
-      </Card>
       
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-        {kpiItems.map((kpi) => (
-            <Card key={kpi.title}>
-                <CardHeader>
-                    <CardTitle className="text-sm font-medium text-muted-foreground flex items-center justify-between">
-                        {kpi.title}
-                        <kpi.icon className={cn("h-4 w-4", kpi.iconColor)} />
-                    </CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <p className="text-2xl font-bold">{kpi.value}</p>
-                    <p className={cn("text-xs text-muted-foreground", kpi.changeColor)}>{kpi.change}</p>
-                </CardContent>
-            </Card>
-        ))}
-      </div>
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+        <div className="lg:col-span-2 flex flex-col gap-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Financial Overview</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ChartContainer config={{
+                income: { label: "Income", color: "hsl(var(--primary))" },
+                expenses: { label: "Expenses", color: "hsl(var(--secondary))" },
+              }} className="h-64 w-full">
+                <BarChart data={chartData}>
+                  <CartesianGrid vertical={false} />
+                  <XAxis
+                    dataKey="month"
+                    tickLine={false}
+                    tickMargin={10}
+                    axisLine={false}
+                  />
+                  <YAxis tickFormatter={(value) => `$${value / 1000}k`} />
+                  <ChartTooltip
+                    cursor={false}
+                    content={<ChartTooltipContent />}
+                  />
+                  <Bar dataKey="income" fill="var(--color-income)" radius={4} />
+                  <Bar dataKey="expenses" fill="var(--color-expenses)" radius={4} />
+                </BarChart>
+              </ChartContainer>
+            </CardContent>
+          </Card>
+        </div>
 
+        <div className="lg:col-span-1 flex flex-col gap-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Quick Actions</CardTitle>
+            </CardHeader>
+            <CardContent className="grid grid-cols-2 gap-4">
+              {quickActions.map(action => {
+                const Icon = action.icon;
+                return <Button key={action.label} variant="outline" className="justify-start"><Icon className="mr-2 h-4 w-4" />{action.label}</Button>
+              })}
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Recent Activity</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ul className="space-y-4">
+                {recentActivity.map((activity, index) => (
+                  <li key={index} className="flex items-start justify-between text-sm">
+                    <p className="text-muted-foreground pr-4">{activity.description}</p>
+                    <p className="text-muted-foreground whitespace-nowrap">{activity.time}</p>
+                  </li>
+                ))}
+              </ul>
+              <Button variant="link" className="w-full mt-4 justify-center">
+                View All Activity <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
     </div>
   );
 }
+
