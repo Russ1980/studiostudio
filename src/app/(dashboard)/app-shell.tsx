@@ -498,18 +498,9 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
             </div>
           </div>
         </header>
-        <main className="p-4 md:p-6">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <Breadcrumb />
-              </div>
-              {pathname === '/dashboard' && (
-                <Button variant="accent" size="sm" onClick={openServaAI}>
-                    <Wand2 className="mr-2 h-4 w-4" />
-                    <span>Serva AI • Enterprise Task Assistant •</span>
-                    <span className="text-accent-foreground/70 ml-1">Ask Serva AI...</span>
-                </Button>
-              )}
+        <main className="flex-1 p-4 md:p-6">
+            <div className="mb-4">
+              <Breadcrumb />
             </div>
             {children}
         </main>
