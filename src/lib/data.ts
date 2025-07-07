@@ -229,10 +229,10 @@ export const mockDataValidationResults = [
 // Accounting
 export const mockAccountingDashboard = {
   kpiData: [
-    { title: "Bank Accounts", value: "$1,250,320.50", detail: "Total cash balance" },
-    { title: "Accounts Receivable", value: "$245,800.00", detail: "$35,200.00 overdue" },
-    { title: "Accounts Payable", value: "$88,450.00", detail: "$15,000.00 due soon" },
-    { title: "YTD Profit", value: "$430,100.00", detail: "+18% vs last year" },
+    { title: "Bank Accounts", value: "$1,250,320.50", detail: "Total cash balance", icon: "Banknote" },
+    { title: "Accounts Receivable", value: "$245,800.00", detail: "$35,200.00 overdue", icon: "Receipt" },
+    { title: "Accounts Payable", value: "$88,450.00", detail: "$15,000.00 due soon", icon: "CreditCard" },
+    { title: "YTD Profit", value: "$430,100.00", detail: "+18% vs last year", icon: "DollarSign" },
   ],
   chartData: [
     { month: "Jan", inflow: 120000, outflow: 80000 },
@@ -402,10 +402,10 @@ export const mockReconciliationData = {
 // Operations
 export const mockOperationsDashboard = {
   kpiData: [
-    { title: "Production Efficiency (OEE)", value: "85%" },
-    { title: "On-Time Delivery", value: "98.2%" },
-    { title: "Quality Rate", value: "99.5%" },
-    { title: "Resource Utilization", value: "78%" },
+    { title: "Production Efficiency (OEE)", value: "85%", icon: "Zap" },
+    { title: "On-Time Delivery", value: "98.2%", icon: "Timer" },
+    { title: "Quality Rate", value: "99.5%", icon: "Award" },
+    { title: "Resource Utilization", value: "78%", icon: "UserCog" },
   ],
   workOrders: [
     { id: "WO-00451", job: "Assemble Product X", status: "In Progress", due: "2024-07-25" },
@@ -426,9 +426,9 @@ export const mockPurchaseOrders = [
 
 export const mockInventory = {
     kpiData: [
-        { title: "Total Inventory Value", value: "$1,234,567.89", icon: DollarSign },
-        { title: "Items in Stock", value: "12,450", icon: Package },
-        { title: "Low Stock Items", value: "15", icon: AlertCircle },
+        { title: "Total Inventory Value", value: "$1,234,567.89", icon: "DollarSign" },
+        { title: "Items in Stock", value: "12,450", icon: "Package" },
+        { title: "Low Stock Items", value: "15", icon: "AlertCircle" },
     ],
     inventory: [
         { sku: "RM-001", name: "Raw Material A", category: "Raw Materials", location: "Warehouse A", cost: 12.50, quantity: 1500, reorderPoint: 500, status: "In Stock" },
@@ -518,10 +518,10 @@ export const mockMaintenanceTasks = [
 // Payroll
 export const mockPayrollDashboard = {
   kpiData: [
-    { title: "Total Gross Pay (YTD)", value: "$4.8M" },
-    { title: "Total Net Pay (YTD)", value: "$3.5M" },
-    { title: "Total Tax Liability (YTD)", value: "$1.3M" },
-    { title: "Active Employees", value: "73" },
+    { title: "Total Gross Pay (YTD)", value: "$4.8M", icon: "DollarSign" },
+    { title: "Total Net Pay (YTD)", value: "$3.5M", icon: "DollarSign" },
+    { title: "Total Tax Liability (YTD)", value: "$1.3M", icon: "Shield" },
+    { title: "Active Employees", value: "73", icon: "Users" },
   ],
   chartData: [
     { month: "Jan", gross: 780000, net: 580000 },

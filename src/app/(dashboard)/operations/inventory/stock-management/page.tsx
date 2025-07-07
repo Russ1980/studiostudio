@@ -25,19 +25,14 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal, PlusCircle, Pencil, Upload, DollarSign, Package, AlertCircle } from "lucide-react";
 import Link from "next/link";
+import { getInventoryData } from "@/lib/actions";
+import { useState, useEffect } from "react";
 
-const kpiData = [
-  { title: "Total Inventory Value", value: "$1,234,567.89", icon: DollarSign },
-  { title: "Items in Stock", value: "12,450", icon: Package },
-  { title: "Low Stock Items", value: "15", icon: AlertCircle },
-];
-
-const inventory = [
-  { sku: "RM-001", name: "Raw Material A", category: "Raw Materials", location: "Warehouse A", cost: 12.50, quantity: 1500, reorderPoint: 500, status: "In Stock" },
-  { sku: "COMP-034", name: "Component B", category: "Components", location: "Assembly Line 1", cost: 5.75, quantity: 250, reorderPoint: 200, status: "Low Stock" },
-  { sku: "FG-009", name: "Finished Good C", category: "Finished Goods", location: "Warehouse B", cost: 89.99, quantity: 500, reorderPoint: 100, status: "In Stock" },
-  { sku: "RM-002", name: "Raw Material D", category: "Raw Materials", location: "Warehouse A", cost: 25.00, quantity: 10, reorderPoint: 50, status: "Out of Stock" },
-];
+const kpiIconMap: { [key: string]: React.ElementType } = {
+  DollarSign,
+  Package,
+  AlertCircle,
+};
 
 const statusVariant: { [key: string]: "success" | "default" | "destructive" } = {
   "In Stock": "success",
@@ -46,6 +41,18 @@ const statusVariant: { [key: string]: "success" | "default" | "destructive" } = 
 };
 
 export default function StockManagementPage() {
+  const [inventoryData, setInventoryData] = useState<any>(null);
+
+  useEffect(() => {
+    getInventoryData().then(setInventoryData);
+  }, []);
+
+  if (!inventoryData) {
+    return <div>Loading...</div>; // or a skeleton component
+  }
+  
+  const { kpiData, inventory } = inventoryData;
+
   return (
     <div className="grid gap-6">
       <div className="flex items-center justify-between">
@@ -58,17 +65,19 @@ export default function StockManagementPage() {
       </div>
       
       <div className="grid gap-6 md:grid-cols-3">
-        {kpiData.map((kpi) => (
+        {kpiData.map((kpi: any) => {
+          const Icon = kpiIconMap[kpi.icon];
+          return (
           <Card key={kpi.title}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">{kpi.title}</CardTitle>
-              <kpi.icon className="h-4 w-4 text-muted-foreground" />
+              {Icon && <Icon className="h-4 w-4 text-muted-foreground" />}
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{kpi.value}</div>
             </CardContent>
           </Card>
-        ))}
+        )})}
       </div>
 
       <Card>
@@ -96,7 +105,7 @@ export default function StockManagementPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {inventory.map((item) => (
+              {inventory.map((item: any) => (
                 <TableRow key={item.sku}>
                   <TableCell className="font-mono">{item.sku}</TableCell>
                   <TableCell className="font-medium">{item.name}</TableCell>
@@ -106,7 +115,7 @@ export default function StockManagementPage() {
                   <TableCell>{item.quantity}</TableCell>
                   <TableCell>{item.reorderPoint}</TableCell>
                   <TableCell>
-                    <Badge variant={statusVariant[item.status]}>{item.status}</Badge>
+                    <Badge variant={statusVariant[item.status as keyof typeof statusVariant]}>{item.status}</Badge>
                   </TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
