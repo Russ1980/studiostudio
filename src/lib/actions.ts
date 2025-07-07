@@ -131,8 +131,22 @@ export async function getInvoicingDashboardData() {
     return mockInvoicingDashboard;
 }
 export async function getInvoices() {
-    await simulateDelay(50);
+  if (!firestore) {
+    console.log("Firestore not initialized, returning mock data for invoices.");
     return mockInvoices;
+  }
+  try {
+    const invoicesSnapshot = await firestore.collection('invoices').get();
+    if (invoicesSnapshot.empty) {
+      console.log("No invoices found in Firestore, returning mock data as fallback.");
+      return mockInvoices;
+    }
+    const invoices = invoicesSnapshot.docs.map(doc => doc.data());
+    return invoices as typeof mockInvoices;
+  } catch (error) {
+    console.error("Error fetching invoices from Firestore:", error);
+    return mockInvoices;
+  }
 }
 export async function getRecurringInvoices() {
     await simulateDelay(50);
