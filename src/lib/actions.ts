@@ -1,5 +1,4 @@
 
-
 'use server';
 
 import { firestore } from './firebase-admin';
@@ -90,31 +89,25 @@ export async function getDashboardPageData() {
         const revenueData = await getRevenueDataTool({});
 
         const now = new Date();
-        const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
         const startOfThisMonth = new Date(now.getFullYear(), now.getMonth(), 1);
         
-        let ytdProfit = 0;
-        let lastMonthProfit = 0;
+        let totalRevenue = 0;
+        let totalExpenses = 0;
         let outstandingReceivables = 0;
         let overdueReceivables = 0;
-        let netCashFlow = 0;
-        let incomingCash = 0;
-        let outgoingCash = 0;
+        let salesLast30Days = 0;
 
         invoices.forEach(invoice => {
             const amount = parseFloat(invoice.amount.replace(/,/g, ''));
             const dueDate = new Date(invoice.dueDate);
-            const isPaid = invoice.status === 'Paid';
-            const paidDate = isPaid ? dueDate : null; // Mock paid date as due date for simplicity
+            
+            totalRevenue += amount; // Simplified: assumes all invoices are revenue
 
-            if (isPaid) {
-                // Simplified profit calculation, assuming 40% margin
-                const profit = amount * 0.4; 
-                ytdProfit += profit;
-                if (paidDate && paidDate >= lastMonth && paidDate < startOfThisMonth) {
-                    lastMonthProfit += profit;
+            if (invoice.status === 'Paid') {
+                const paidDate = dueDate; // Mock paid date
+                if (paidDate > new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000)) {
+                    salesLast30Days += amount;
                 }
-                incomingCash += amount;
             } else {
                 outstandingReceivables += amount;
                 if (dueDate < now) {
@@ -124,30 +117,34 @@ export async function getDashboardPageData() {
         });
         
         // Mock expenses for cash flow
-        outgoingCash = ytdProfit / 0.4 * 0.6; // Assuming total expenses are 60% of revenue
-        netCashFlow = incomingCash - outgoingCash;
+        totalExpenses = totalRevenue * 0.65; // Assuming total expenses are 65% of revenue
+        const netProfit = totalRevenue - totalExpenses;
 
-        const profitChange = lastMonthProfit > 0 ? ((ytdProfit - lastMonthProfit) / lastMonthProfit * 100).toFixed(1) : 0;
+        const formatCurrency = (value: number) => {
+            if (value >= 1000000) return `$${(value / 1000000).toFixed(1)}M`;
+            if (value >= 1000) return `$${(value / 1000).toFixed(1)}k`;
+            return `$${value.toFixed(2)}`;
+        }
         
         return {
+            ...mockDashboardPageData, // Keep other mock data for now
             user,
-            chartData: revenueData.data.map(d => ({ month: d.month, income: d.revenue, expenses: d.revenue * 0.6 })), // Mock expenses
-            recentActivity: mockDashboardPageData.recentActivity,
-            quickActions: mockDashboardPageData.quickActions,
+            mainKpis: {
+                netRevenue: formatCurrency(totalRevenue),
+                growth: "+12.4%", // Mocked
+                healthScore: "94%", // Mocked
+            },
+            metricCards: [
+                { title: "Monthly Expenses", value: formatCurrency(totalExpenses / 12), change: "+5.0%", changeType: "increase", icon: 'TrendingUp', details: null },
+                { title: "Net Profit", value: formatCurrency(netProfit), details: `Income: ${formatCurrency(totalRevenue)}\nExpenses: ${formatCurrency(totalExpenses)}`, icon: 'DollarSign', change: null, changeType: null },
+                { title: "Sales (30 Days)", value: formatCurrency(salesLast30Days), change: "+8.4%", changeType: "increase", icon: 'BarChart3', details: null },
+                { title: "A/R Total", value: formatCurrency(outstandingReceivables), details: `Overdue: ${formatCurrency(overdueReceivables)}`, icon: 'Receipt', change: null, changeType: null },
+            ],
             performanceMetrics: {
-                profitLoss: {
-                    ytd: `$${(ytdProfit / 1000).toFixed(1)}k`,
-                    change: `${profitChange}%`,
-                    changeType: Number(profitChange) >= 0 ? "up" : "down",
-                },
-                cashFlow: {
-                    incoming: `$${(incomingCash/1000).toFixed(1)}k`,
-                    outgoing: `$${(outgoingCash/1000).toFixed(1)}k`,
-                    net: `$${(netCashFlow/1000).toFixed(1)}k`,
-                },
+                ...mockDashboardPageData.performanceMetrics,
                 accountsReceivable: {
-                    outstanding: `$${(outstandingReceivables/1000).toFixed(1)}k`,
-                    overdue: `$${(overdueReceivables/1000).toFixed(1)}k`,
+                    outstanding: formatCurrency(outstandingReceivables),
+                    overdue: formatCurrency(overdueReceivables),
                 }
             },
             alerts: invoices.filter(i => i.status === 'Overdue').slice(0, 2).map((i: any, idx: number) => ({
@@ -155,6 +152,7 @@ export async function getDashboardPageData() {
                 type: 'critical',
                 message: `Invoice #${i.invoice} is ${Math.round((now.getTime() - new Date(i.dueDate).getTime()) / (1000*60*60*24))} days overdue.`
             })),
+            chartData: revenueData.data.map(d => ({ month: d.month, income: d.revenue, expenses: d.revenue * 0.6 })), // Mock expenses
         };
     } catch(e) {
         console.error("Error fetching dashboard data, returning mock data", e);
