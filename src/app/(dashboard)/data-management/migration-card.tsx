@@ -16,7 +16,7 @@ export function MigrationCard() {
         startTransition(async () => {
             toast({
                 title: 'Migration Started',
-                description: 'Migrating transaction data from Supabase to Firebase...',
+                description: 'Migrating transaction data from mock data to Firebase...',
             });
 
             const result = await migrateTransactionData();
@@ -39,9 +39,9 @@ export function MigrationCard() {
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Data Migration</CardTitle>
+                <CardTitle>Data Migration to Firebase</CardTitle>
                 <CardDescription>
-                    Migrate data from legacy systems (e.g., Supabase) to Firebase.
+                    Migrate mock data to your live Firebase Firestore database.
                 </CardDescription>
             </CardHeader>
             <CardContent>
