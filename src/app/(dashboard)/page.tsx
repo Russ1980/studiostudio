@@ -13,12 +13,11 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
-import { getMockUser } from "@/lib/auth";
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
+import { getDashboardPageData } from "@/lib/actions";
 import { OnboardingController } from "@/components/onboarding/onboarding-controller";
 import { DevTools } from "@/components/development/dev-tools";
 import { useEffect, useState } from "react";
-import type { User } from "@/lib/auth";
 import {
   DollarSign,
   TrendingUp,
@@ -31,42 +30,21 @@ import {
   ArrowRight,
   BarChart3,
   HeartPulse,
+  AlertTriangle,
 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
 
 export default function DashboardPage() {
-  const [user, setUser] = useState<User | null>(null);
+  const [dashboardData, setDashboardData] = useState<any | null>(null);
 
   useEffect(() => {
-    getMockUser().then(setUser);
+    getDashboardPageData().then(setDashboardData);
   }, []);
 
-  const chartData = [
-      { month: 'Jan', income: 186000, expenses: 80000 },
-      { month: 'Feb', income: 305000, expenses: 200000 },
-      { month: 'Mar', income: 237000, expenses: 120000 },
-      { month: 'Apr', income: 273000, expenses: 190000 },
-      { month: 'May', income: 209000, expenses: 130000 },
-      { month: 'Jun', income: 214000, expenses: 140000 },
-  ];
-  
-  const recentActivity = [
-      { description: "Invoice #1024 paid by Apex Solutions.", time: "2m ago" },
-      { description: "Payroll for June 2024 processed successfully.", time: "1h ago" },
-      { description: "New client 'Stellar Goods' added.", time: "3h ago" },
-      { description: "Q2 Financial Report generated.", time: "1d ago" },
-  ];
-
-  const quickActions = [
-      { label: "New Transaction", icon: PlusCircle },
-      { label: "Create Invoice", icon: Receipt },
-      { label: "Record Payment", icon: DollarSign },
-      { label: "Run Report", icon: BarChart3 }
-  ];
-
-  if (!user) {
+  if (!dashboardData) {
     return (
         <div className="flex flex-col gap-6">
             <Card><CardContent className="p-6"><Skeleton className="h-20 w-full" /></CardContent></Card>
@@ -77,9 +55,17 @@ export default function DashboardPage() {
                     <Skeleton className="h-40 w-full" />
                 </div>
             </div>
+             <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+                <Skeleton className="h-32 w-full" />
+                <Skeleton className="h-32 w-full" />
+                <Skeleton className="h-32 w-full" />
+            </div>
+             <Skeleton className="h-48 w-full" />
         </div>
     );
   }
+
+  const { user, chartData, recentActivity, quickActions, performanceMetrics, alerts } = dashboardData;
 
   return (
     <div className="flex flex-col gap-6">
@@ -163,7 +149,7 @@ export default function DashboardPage() {
               <CardTitle>Quick Actions</CardTitle>
             </CardHeader>
             <CardContent className="grid grid-cols-2 gap-4">
-              {quickActions.map(action => {
+              {quickActions.map((action: any) => {
                 const Icon = action.icon;
                 return <Button key={action.label} variant="outline" className="justify-start"><Icon className="mr-2 h-4 w-4" />{action.label}</Button>
               })}
@@ -176,7 +162,7 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent>
               <ul className="space-y-4">
-                {recentActivity.map((activity, index) => (
+                {recentActivity.map((activity: any, index: number) => (
                   <li key={index} className="flex items-start justify-between text-sm">
                     <p className="text-muted-foreground pr-4">{activity.description}</p>
                     <p className="text-muted-foreground whitespace-nowrap">{activity.time}</p>
@@ -190,7 +176,61 @@ export default function DashboardPage() {
           </Card>
         </div>
       </div>
+
+       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+        <Card>
+            <CardHeader>
+                <CardTitle className="text-base font-medium">Profit &amp; Loss</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-2">
+                <p className="text-2xl font-bold">{performanceMetrics.profitLoss.ytd}</p>
+                <p className="text-xs text-muted-foreground">
+                    <span className={cn(performanceMetrics.profitLoss.changeType === "up" ? 'text-success' : 'text-destructive')}>
+                        {performanceMetrics.profitLoss.change}
+                    </span> vs last month
+                </p>
+            </CardContent>
+        </Card>
+        <Card>
+            <CardHeader>
+                <CardTitle className="text-base font-medium">Cash Flow</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-2">
+                <p className="text-2xl font-bold">{performanceMetrics.cashFlow.net}</p>
+                <p className="text-xs text-muted-foreground">
+                    <span className="text-success">{performanceMetrics.cashFlow.incoming}</span> in, <span className="text-destructive">{performanceMetrics.cashFlow.outgoing}</span> out
+                </p>
+            </CardContent>
+        </Card>
+        <Card>
+            <CardHeader>
+                <CardTitle className="text-base font-medium">Accounts Receivable</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-2">
+                <p className="text-2xl font-bold">{performanceMetrics.accountsReceivable.outstanding}</p>
+                <p className="text-xs text-muted-foreground">
+                    <span className="text-destructive">{performanceMetrics.accountsReceivable.overdue}</span> overdue
+                </p>
+            </CardContent>
+        </Card>
+    </div>
+
+    <Card>
+        <CardHeader>
+            <CardTitle>Alerts &amp; Notifications</CardTitle>
+        </CardHeader>
+        <CardContent>
+            <ul className="space-y-3">
+                {alerts.map((alert: any) => (
+                    <li key={alert.id} className="flex items-start gap-3">
+                        <AlertTriangle className={cn("h-5 w-5 mt-0.5", alert.type === 'critical' ? 'text-destructive' : 'text-yellow-500')} />
+                        <p className="text-sm text-muted-foreground">{alert.message}</p>
+                    </li>
+                ))}
+            </ul>
+        </CardContent>
+    </Card>
+
     </div>
   );
 }
-

@@ -1,8 +1,9 @@
+
 // This file contains mock data for the entire application.
 // In a real application, this data would be fetched from a database.
 
 import { v4 as uuidv4 } from 'uuid';
-import { Activity, Clock, DollarSign, ListChecks, type LucideIcon } from 'lucide-react';
+import { Activity, Clock, DollarSign, ListChecks, type LucideIcon, FilePlus, Receipt, BarChart3, PlusCircle } from 'lucide-react';
 
 // Accountant Portal
 export const mockClients = [
@@ -859,4 +860,56 @@ export const mockKeyboardShortcuts = [
     { section: 'Actions', shortcut: 'S', action: 'Save Current Form' },
 ];
 
+export const mockDashboardPageData = {
+    user: {
+      name: "Sarah Johnson",
+      initials: "SJ",
+      title: "Financial Controller",
+      role: "Admin",
+    },
+    chartData: [
+        { month: 'Jan', income: 186000, expenses: 80000 },
+        { month: 'Feb', income: 305000, expenses: 200000 },
+        { month: 'Mar', income: 237000, expenses: 120000 },
+        { month: 'Apr', income: 273000, expenses: 190000 },
+        { month: 'May', income: 209000, expenses: 130000 },
+        { month: 'Jun', income: 214000, expenses: 140000 },
+    ],
+    recentActivity: [
+        { description: "Invoice #1024 paid by Apex Solutions.", time: "2m ago" },
+        { description: "Payroll for June 2024 processed successfully.", time: "1h ago" },
+        { description: "New client 'Stellar Goods' added.", time: "3h ago" },
+        { description: "Q2 Financial Report generated.", time: "1d ago" },
+    ],
+    quickActions: [
+        { label: "New Transaction", icon: PlusCircle },
+        { label: "Create Invoice", icon: Receipt },
+        { label: "Record Payment", icon: DollarSign },
+        { label: "Run Report", icon: BarChart3 }
+    ],
+    performanceMetrics: {
+      profitLoss: {
+        currentMonth: "+$45,200",
+        ytd: "+$430,100",
+        change: "+5.2%",
+        changeType: "up",
+      },
+      cashFlow: {
+        incoming: "$175k",
+        outgoing: "$115k",
+        net: "+$60k",
+      },
+      accountsReceivable: {
+        outstanding: "$245.8k",
+        overdue: "$35.2k",
+        avgDays: "22 Days",
+      }
+    },
+    alerts: [
+      { id: 1, type: 'critical', message: 'Invoice #INV-2024-049 is 32 days overdue.' },
+      { id: 2, type: 'critical', message: 'Bank connection for Savings Account needs to be re-authenticated.' },
+      { id: 3, type: 'reminder', message: 'Federal Tax Deposit due in 5 days.' },
+      { id: 4, type: 'reminder', message: 'Payroll for June 16-30 needs approval.' },
+    ]
+  };
     

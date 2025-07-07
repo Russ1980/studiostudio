@@ -72,10 +72,16 @@ import {
   mockMaintenanceTasks,
   mockPaymentsToProcess,
   mockDataValidationResults,
-  mockKeyboardShortcuts
+  mockKeyboardShortcuts,
+  mockDashboardPageData
 } from './data';
 
 const simulateDelay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+export async function getDashboardPageData() {
+  await simulateDelay(50);
+  return mockDashboardPageData;
+}
 
 // Accountant Portal
 export async function getClients() {
