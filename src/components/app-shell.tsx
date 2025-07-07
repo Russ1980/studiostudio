@@ -90,6 +90,8 @@ import {
   ChevronsRight,
   PanelLeft,
   Copy,
+  Briefcase,
+  ShoppingCart,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { User as UserType } from "@/lib/auth";
