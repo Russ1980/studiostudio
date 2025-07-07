@@ -1,11 +1,12 @@
 
 
 
+
 // This file contains mock data for the entire application.
 // In a real application, this data would be fetched from a database.
 
 import { v4 as uuidv4 } from 'uuid';
-import { Activity, Clock, DollarSign, ListChecks, type LucideIcon, FilePlus, Receipt, BarChart3, PlusCircle, TrendingUp, BarChart, Users, Eye, Briefcase, SlidersHorizontal, Wand2, CreditCard, Landmark } from 'lucide-react';
+import { type LucideIcon } from 'lucide-react';
 
 // Accountant Portal
 export const mockClients = [
@@ -1012,10 +1013,10 @@ export const mockDashboardPageData = {
       }
     },
     shortcuts: [
-        { label: "Run payroll", icon: Users, href: "/payroll/pay-runs" },
-        { label: "Get paid online", icon: DollarSign, href: "/payments/process" },
-        { label: "Create invoice", icon: FilePlus, href: "/invoicing/new" },
-        { label: "Record expense", icon: Receipt, href: "/accounting/accounts-payable/bills" },
+        { label: "Run payroll", icon: 'Users', href: "/payroll/pay-runs" },
+        { label: "Get paid online", icon: 'DollarSign', href: "/payments/process" },
+        { label: "Create invoice", icon: 'FilePlus', href: "/invoicing/new" },
+        { label: "Record expense", icon: 'Receipt', href: "/accounting/accounts-payable/bills" },
     ],
     expenseChartData: {
         total: "$1,939,079",
@@ -1058,13 +1059,14 @@ export const mockDashboardPageData = {
         ],
     },
     bankAccountsList: [
-        { name: "(MMA) | Guardian Growth", balance: 782411.38, icon: Landmark },
-        { name: "Amazon Credit", balance: 0.00, icon: CreditCard },
-        { name: "BOI - Business Checking", balance: -52208.00, icon: Landmark },
-        { name: "Checking", balance: -127330.11, icon: Landmark },
+        { name: "(MMA) | Guardian Growth", balance: 782411.38, icon: 'Landmark' },
+        { name: "Amazon Credit", balance: 0.00, icon: 'CreditCard' },
+        { name: "BOI - Business Checking", balance: -52208.00, icon: 'Landmark' },
+        { name: "Checking", balance: -127330.11, icon: 'Landmark' },
     ],
   };
     
+
 
 
 

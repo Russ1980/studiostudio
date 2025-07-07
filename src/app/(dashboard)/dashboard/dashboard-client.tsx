@@ -67,28 +67,10 @@ import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 
 
-const getIcon = (iconName: string) => {
-    switch(iconName) {
-      case 'BarChart': return BarChart;
-      case 'DollarSign': return DollarSign;
-      case 'Wand2': return Wand2;
-      case 'Users': return Users;
-      case 'Eye': return Eye;
-      case 'Briefcase': return Briefcase;
-      case 'SlidersHorizontal': return SlidersHorizontal;
-      default: return BarChart;
-    }
-}
-
-const getMetricIcon = (iconName: string) => {
-    switch(iconName) {
-        case 'TrendingUp': return TrendingUp;
-        case 'DollarSign': return DollarSign;
-        case 'BarChart3': return BarChart3;
-        case 'Receipt': return Receipt;
-        default: return DollarSign;
-    }
-}
+const iconMap: { [key: string]: React.ElementType } = {
+    BarChart, DollarSign, Wand2, Users, Eye, Briefcase, SlidersHorizontal,
+    TrendingUp, BarChart3, Receipt, FilePlus, Landmark, CreditCard,
+};
 
 const DonutChartCard = ({ title, total, change, changeType, data }: { title: string, total: string, change?: string, changeType?: string, data: any[] }) => (
     <Card>
@@ -142,13 +124,13 @@ const ExecutiveOverviewView = ({ data }: { data: any }) => {
         <div className="flex flex-col gap-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {metricCards.map((card: any) => {
-                const Icon = getMetricIcon(card.icon);
+                const Icon = iconMap[card.icon];
                 return (
                     <Card key={card.title}>
                         <CardHeader>
                             <div className="flex items-center gap-2">
                                 <div className="p-2 bg-muted rounded-md">
-                                    <Icon className="h-4 w-4 text-muted-foreground"/>
+                                    {Icon && <Icon className="h-4 w-4 text-muted-foreground"/>}
                                 </div>
                                 <CardTitle className="text-base font-medium">{card.title}</CardTitle>
                             </div>
@@ -239,30 +221,36 @@ const ExecutiveOverviewView = ({ data }: { data: any }) => {
                  <Card>
                     <CardHeader><CardTitle className="text-base font-medium">Bank Accounts</CardTitle></CardHeader>
                     <CardContent className="space-y-3">
-                        {bankAccountsList.map((account: any, index: number) => (
-                             <div key={index} className="flex items-center justify-between">
-                                 <div className="flex items-center gap-2">
-                                     <account.icon className="h-4 w-4 text-muted-foreground" />
-                                     <span className="text-sm font-medium">{account.name}</span>
-                                 </div>
-                                 <span className={cn("text-sm font-semibold", account.balance < 0 && "text-destructive")}>${account.balance.toLocaleString()}</span>
-                             </div>
-                        ))}
+                        {bankAccountsList.map((account: any, index: number) => {
+                             const Icon = iconMap[account.icon];
+                             return (
+                                <div key={index} className="flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                        {Icon && <Icon className="h-4 w-4 text-muted-foreground" />}
+                                        <span className="text-sm font-medium">{account.name}</span>
+                                    </div>
+                                    <span className={cn("text-sm font-semibold", account.balance < 0 && "text-destructive")}>${account.balance.toLocaleString()}</span>
+                                </div>
+                             )
+                        })}
                     </CardContent>
                 </Card>
                  <Card>
                     <CardHeader><CardTitle className="text-base font-medium">Shortcuts</CardTitle></CardHeader>
                     <CardContent className="grid grid-cols-2 gap-4">
-                        {shortcuts.map((shortcut: any, index: number) => (
-                            <Link key={index} href={shortcut.href}>
-                                <Button variant="ghost" className="flex flex-col h-auto p-3 items-center gap-2">
-                                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary">
-                                        <shortcut.icon className="h-5 w-5 text-secondary-foreground" />
-                                    </div>
-                                    <span className="text-xs font-medium">{shortcut.label}</span>
-                                </Button>
-                            </Link>
-                        ))}
+                        {shortcuts.map((shortcut: any, index: number) => {
+                            const Icon = iconMap[shortcut.icon];
+                            return (
+                                <Link key={index} href={shortcut.href}>
+                                    <Button variant="ghost" className="flex flex-col h-auto p-3 items-center gap-2">
+                                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary">
+                                            {Icon && <Icon className="h-5 w-5 text-secondary-foreground" />}
+                                        </div>
+                                        <span className="text-xs font-medium">{shortcut.label}</span>
+                                    </Button>
+                                </Link>
+                            )
+                        })}
                     </CardContent>
                 </Card>
             </div>
@@ -676,8 +664,8 @@ export function DashboardClientPage({ initialData }: { initialData: any }) {
             <Card>
                 <CardContent className="p-0">
                 <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7">
-                    {navItems.map((item: any, index: number) => {
-                    const NavIcon = getIcon(item.icon);
+                    {navItems.map((item: any) => {
+                    const NavIcon = iconMap[item.icon];
                     const isActive = activeView === item.title;
                     return (
                         <button
@@ -686,10 +674,10 @@ export function DashboardClientPage({ initialData }: { initialData: any }) {
                         className={cn(
                             "flex flex-col items-start gap-1 p-4 text-left transition-colors hover:bg-muted/50",
                             isActive && "bg-primary/5",
-                            index < 6 && "border-r"
+                            "border-r"
                         )}
                         >
-                        <NavIcon className={cn("h-5 w-5", isActive ? "text-primary" : "text-muted-foreground")} />
+                        {NavIcon && <NavIcon className={cn("h-5 w-5", isActive ? "text-primary" : "text-muted-foreground")} />}
                         <p className="font-semibold text-sm">{item.title}</p>
                         <p className="text-xs text-muted-foreground">{item.description}</p>
                         </button>
