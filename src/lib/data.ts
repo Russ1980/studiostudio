@@ -1,3 +1,4 @@
+
 // This file contains mock data for the entire application.
 // In a real application, this data would be fetched from a database.
 
@@ -887,6 +888,20 @@ export const mockPaymentsToProcess = [
     { id: 'PAY-002', customer: 'Apex Solutions', date: '2024-07-21', amount: 1250.00, method: 'Credit Card', reference: 'Invoice #INV-2024-056' },
     { id: 'PAY-003', customer: 'QuantumLeap Co.', date: '2024-07-21', amount: 750.00, method: 'ACH', reference: 'Retainer' },
 ];
+
+// Asset Management
+export const mockAssetLocationsData = {
+  physicalAssets: [
+    { name: "MacBook Pro 16-inch", type: "Laptop", location: "Office 3A", department: "Engineering", value: "$2,500" },
+    { name: "CNC Machine", type: "Machinery", location: "Warehouse A", department: "Production", value: "$150,000" },
+    { name: "Company Vehicle", type: "Vehicle", location: "Parking Lot", department: "Sales", value: "$35,000" },
+  ],
+  digitalAssets: [
+    { name: "Company Website", type: "Website", location: "AWS S3", status: "Online" },
+    { name: "Customer Database", type: "Database", location: "AWS RDS", status: "Online" },
+    { name: "Design Files", type: "Files", location: "Google Drive", status: "Archived" },
+  ]
+};
 
 // Help
 export const mockKeyboardShortcuts = [

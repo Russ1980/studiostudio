@@ -73,6 +73,7 @@ import {
   mockKeyboardShortcuts,
   mockDashboardPageData,
   mockScheduledReports,
+  mockAssetLocationsData,
 } from './data';
 import { getMockUser } from './auth';
 import { getRevenueDataTool } from '@/ai/tools/get-revenue-data';
@@ -995,6 +996,12 @@ export async function getClientComplianceData() {
 export async function getPaymentsToProcess() {
     await simulateDelay(50);
     return mockPaymentsToProcess;
+}
+
+// Asset Management
+export async function getAssetLocationsData() {
+    await simulateDelay(50);
+    return mockAssetLocationsData;
 }
 
 // Help
