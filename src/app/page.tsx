@@ -27,8 +27,8 @@ const ServaUICard = () => {
     }
 
     return (
-        <Card className="bg-card text-card-foreground shadow-2xl rounded-2xl w-full max-w-md mx-auto">
-            <CardHeader className="p-4 flex flex-row items-center justify-between border-b">
+        <Card className="bg-white text-gray-800 shadow-2xl rounded-2xl w-full max-w-md mx-auto border-white/20">
+            <CardHeader className="p-4 flex flex-row items-center justify-between border-b bg-slate-50 rounded-t-2xl">
                 <div>
                     <h3 className="font-bold text-lg">SERVA</h3>
                     <p className="text-xs text-muted-foreground">SOC 2 & HIPAA compliant</p>
@@ -39,7 +39,7 @@ const ServaUICard = () => {
                 </div>
             </CardHeader>
             <CardContent className="p-4 space-y-4">
-                <Card className="bg-secondary">
+                <Card className="bg-slate-50">
                     <CardHeader className="p-3">
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
@@ -62,7 +62,7 @@ const ServaUICard = () => {
                 </Card>
 
                 <div className="grid grid-cols-2 gap-4">
-                    <Card className="bg-background p-3">
+                    <Card className="bg-slate-50 p-3">
                         <p className="text-xs text-muted-foreground">Time Saved Today</p>
                         <div className="flex items-end justify-between">
                             <p className="text-2xl font-bold">42h</p>
@@ -70,7 +70,7 @@ const ServaUICard = () => {
                         </div>
                         <p className="text-xs text-success">+12% vs yesterday</p>
                     </Card>
-                    <Card className="bg-background p-3">
+                    <Card className="bg-slate-50 p-3">
                         <p className="text-xs text-muted-foreground">Tasks Completed</p>
                         <div className="flex items-end justify-between">
                             <p className="text-2xl font-bold">156</p>
@@ -78,7 +78,7 @@ const ServaUICard = () => {
                         </div>
                         <p className="text-xs text-success">+28 this hour</p>
                     </Card>
-                    <Card className="bg-background p-3">
+                    <Card className="bg-slate-50 p-3">
                         <p className="text-xs text-muted-foreground">Savings Generated</p>
                         <div className="flex items-end justify-between">
                             <p className="text-2xl font-bold">$12,400</p>
@@ -99,7 +99,7 @@ const ServaUICard = () => {
                     <h4 className="text-sm font-semibold mb-2">Recent AI Actions</h4>
                     <ul className="space-y-2">
                         {actions.map(action => (
-                            <li key={action.text} className="flex items-center justify-between text-sm p-2 bg-secondary rounded-md">
+                            <li key={action.text} className="flex items-center justify-between text-sm p-2 bg-slate-100 rounded-md">
                                <div className="flex items-center gap-2">
                                   <div className={`w-1.5 h-1.5 rounded-full ${action.status === 'completed' ? 'bg-success' : 'bg-primary'}`}></div>
                                   <span className="text-card-foreground">{action.text}</span>
@@ -277,17 +277,17 @@ export default function LandingPage() {
             <div>
                 <h4 className="font-semibold mb-2">Product</h4>
                 <nav className="flex flex-col gap-2 text-sm text-muted-foreground">
-                    <Link href="#" className="hover:underline">Features</Link>
+                    <Link href="/product" className="hover:underline">Features</Link>
                     <Link href="/pricing" className="hover:underline">Pricing</Link>
-                    <Link href="#" className="hover:underline">Security</Link>
+                    <Link href="/help/legal" className="hover:underline">Security</Link>
                 </nav>
             </div>
             <div>
                  <h4 className="font-semibold mb-2">Solutions</h4>
                 <nav className="flex flex-col gap-2 text-sm text-muted-foreground">
-                    <Link href="#" className="hover:underline">For Startups</Link>
+                    <Link href="/solutions" className="hover:underline">For Startups</Link>
                     <Link href="/for-accountants" className="hover:underline">For Accountants</Link>
-                    <Link href="#" className="hover:underline">For Enterprises</Link>
+                    <Link href="/solutions" className="hover:underline">For Enterprises</Link>
                 </nav>
             </div>
             <div>
