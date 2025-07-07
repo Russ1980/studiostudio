@@ -1,12 +1,10 @@
 
-"use client";
-
+import { getOperationsDashboardData } from "@/lib/actions";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-  CardDescription
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,10 +17,9 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Zap, Timer, Award, UserCog, FileText, AlertCircle, PlusCircle, Wrench, BarChart4 } from "lucide-react";
-import { getOperationsDashboardData } from "@/lib/actions";
-import { useState, useEffect } from "react";
+import type { ElementType } from 'react';
 
-const kpiIconMap: { [key: string]: React.ElementType } = {
+const kpiIconMap: { [key: string]: ElementType } = {
   Zap,
   Timer,
   Award,
@@ -34,17 +31,9 @@ const statusVariant: { [key: string]: "default" | "secondary" } = {
   "Pending": "secondary",
 };
 
-export default function OperationsDashboardPage() {
-  const [dashboardData, setDashboardData] = useState<any>(null);
 
-  useEffect(() => {
-    getOperationsDashboardData().then(setDashboardData);
-  }, []);
-
-  if (!dashboardData) {
-    return <div>Loading...</div>; // Or a skeleton loader
-  }
-
+export default async function OperationsDashboardPage() {
+  const dashboardData = await getOperationsDashboardData();
   const { kpiData, workOrders, alerts } = dashboardData;
 
   return (

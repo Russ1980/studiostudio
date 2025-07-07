@@ -1,5 +1,4 @@
 
-"use client";
 
 import {
   Card,
@@ -26,14 +25,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { MoreHorizontal, FileUp, Upload, Search } from "lucide-react";
-
-const filings = [
-    { form: "Form 941", jurisdiction: "Federal", period: "Q2 2024", date: "2024-07-15", status: "Accepted" },
-    { form: "Form DE 9", jurisdiction: "California", period: "Q2 2024", date: "2024-07-15", status: "Accepted" },
-    { form: "Form 941", jurisdiction: "Federal", period: "Q1 2024", date: "2024-04-12", status: "Accepted" },
-    { form: "Form 1120", jurisdiction: "Federal", period: "2023", date: "2024-03-10", status: "Accepted" },
-    { form: "NY S-Corp Tax", jurisdiction: "New York", period: "2023", date: "2024-03-05", status: "Rejected" },
-];
+import { getTaxFilings } from "@/lib/actions";
 
 const statusVariant: { [key: string]: "success" | "destructive" | "default" } = {
   Accepted: "success",
@@ -41,7 +33,9 @@ const statusVariant: { [key: string]: "success" | "destructive" | "default" } = 
   Pending: "default",
 };
 
-export default function TaxFilingsPage() {
+export default async function TaxFilingsPage() {
+  const filings = await getTaxFilings();
+
   return (
     <div className="grid gap-6">
        <div>
@@ -105,7 +99,7 @@ export default function TaxFilingsPage() {
                         <TableCell>{filing.jurisdiction}</TableCell>
                         <TableCell>{filing.period}</TableCell>
                         <TableCell>{filing.date}</TableCell>
-                        <TableCell><Badge variant={statusVariant[filing.status]}>{filing.status}</Badge></TableCell>
+                        <TableCell><Badge variant={statusVariant[filing.status as keyof typeof statusVariant]}>{filing.status}</Badge></TableCell>
                         <TableCell className="text-right">
                              <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
