@@ -13,6 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Logo } from "@/components/icons";
+import { ShieldCheck, Lock } from "lucide-react";
 
 const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
     <svg viewBox="0 0 24 24" {...props}>
@@ -40,63 +41,75 @@ export default function SignInPage() {
   };
 
   return (
-    <Card className="w-full max-w-sm">
-      <form onSubmit={handleSignIn}>
-        <CardHeader className="text-center">
-            <div className="flex justify-center items-center gap-2 mb-4">
-                <Logo className="h-8 w-8"/>
-                <span className="text-2xl font-bold">Mardisen Suite</span>
+    <div className="flex flex-col items-center gap-6">
+        <Card className="w-full max-w-sm">
+          <form onSubmit={handleSignIn}>
+            <CardHeader className="text-center">
+                <div className="flex justify-center items-center gap-2 mb-4">
+                    <Logo className="h-8 w-8"/>
+                    <span className="text-2xl font-bold">Mardisen Suite</span>
+                </div>
+              <CardTitle className="text-2xl">Log in to Mardisen Suite</CardTitle>
+            </CardHeader>
+            <CardContent className="grid gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="email">Email</Label>
+                <Input id="email" type="email" placeholder="m@example.com" defaultValue="loanbox55@gmail.com" required />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="password">Password</Label>
+                <Input id="password" type="password" defaultValue="admin123" required />
+              </div>
+              <Button type="submit" className="w-full">
+                Log In
+              </Button>
+              <div className="relative my-2">
+                <div className="absolute inset-0 flex items-center">
+                    <span className="w-full border-t" />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                    <span className="bg-card px-2 text-muted-foreground">
+                    OR
+                    </span>
+                </div>
+              </div>
+               <Button variant="outline" className="w-full" type="button" disabled>
+                 <GoogleIcon className="h-4 w-4 mr-2" />
+                Sign in with Google
+              </Button>
+               <Button variant="outline" className="w-full" type="button" disabled>
+                 <AppleIcon className="h-4 w-4 mr-2" />
+                Sign in with Apple
+              </Button>
+            </CardContent>
+            <CardFooter className="flex-col items-center gap-4 pt-4">
+                 <div className="flex gap-4 text-sm">
+                  <Link href="#" className="underline hover:text-primary">
+                    Forgot Your Password?
+                  </Link>
+                  <Link href="#" className="underline hover:text-primary">
+                    Can't Log In?
+                  </Link>
+                </div>
+                 <div className="text-center text-sm">
+                    Don&apos;t have an account?{" "}
+                    <Link href="/pricing" className="underline hover:text-primary">
+                        Sign up
+                    </Link>
+                 </div>
+            </CardFooter>
+          </form>
+        </Card>
+        <div className="flex items-center gap-6 text-sm text-white/70">
+            <div className="flex items-center gap-2">
+                <ShieldCheck className="h-4 w-4" />
+                <span>SOC 2 Type II</span>
             </div>
-          <CardTitle className="text-2xl">Log in to Mardisen Suite</CardTitle>
-        </CardHeader>
-        <CardContent className="grid gap-4">
-          <div className="grid gap-2">
-            <Label htmlFor="email">Email</Label>
-            <Input id="email" type="email" placeholder="m@example.com" defaultValue="loanbox55@gmail.com" required />
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="password">Password</Label>
-            <Input id="password" type="password" defaultValue="admin123" required />
-          </div>
-          <Button type="submit" className="w-full">
-            Log In
-          </Button>
-          <div className="relative my-2">
-            <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t" />
+            <div className="flex items-center gap-2">
+                <Lock className="h-4 w-4" />
+                <span>256-bit Encryption</span>
             </div>
-            <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-card px-2 text-muted-foreground">
-                OR
-                </span>
-            </div>
-          </div>
-           <Button variant="outline" className="w-full" type="button" disabled>
-             <GoogleIcon className="h-4 w-4 mr-2" />
-            Sign in with Google
-          </Button>
-           <Button variant="outline" className="w-full" type="button" disabled>
-             <AppleIcon className="h-4 w-4 mr-2" />
-            Sign in with Apple
-          </Button>
-        </CardContent>
-        <CardFooter className="flex-col items-center gap-4 pt-4">
-             <div className="flex gap-4 text-sm">
-              <Link href="#" className="underline hover:text-primary">
-                Forgot Your Password?
-              </Link>
-              <Link href="#" className="underline hover:text-primary">
-                Can't Log In?
-              </Link>
-            </div>
-             <div className="text-center text-sm">
-                Don&apos;t have an account?{" "}
-                <Link href="/pricing" className="underline hover:text-primary">
-                    Sign up
-                </Link>
-             </div>
-        </CardFooter>
-      </form>
-    </Card>
+        </div>
+    </div>
   );
 }
