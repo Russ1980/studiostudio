@@ -2,6 +2,7 @@
 
 
 
+
 // This file contains mock data for the entire application.
 // In a real application, this data would be fetched from a database.
 
@@ -711,10 +712,10 @@ export const mockTradingData = {
 // Projects
 export const mockProjectsDashboardData = {
   kpiData: [
-    { title: "Active Projects", value: "3", icon: Activity },
-    { title: "Overall Profitability", value: "$4,000", icon: DollarSign, isPositive: true },
-    { title: "Total Billable Hours", value: "1,240", icon: Clock },
-    { title: "Tasks Overdue", value: "2", icon: ListChecks, isPositive: false },
+    { title: "Active Projects", value: "3", icon: 'Activity' },
+    { title: "Overall Profitability", value: "$4,000", icon: 'DollarSign', isPositive: true },
+    { title: "Total Billable Hours", value: "1,240", icon: 'Clock' },
+    { title: "Tasks Overdue", value: "2", icon: 'ListChecks', isPositive: false },
   ],
   projectBudgetData: [
     { name: "Website Redesign", budget: 25000, actual: 18000 },
@@ -1066,10 +1067,3 @@ export const mockDashboardPageData = {
     ],
   };
     
-
-
-
-
-
-
-
