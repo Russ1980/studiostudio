@@ -18,7 +18,7 @@ function LandingHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const NavLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
-    <Link href={href} className="text-sm font-medium text-gray-600 hover:text-primary transition-colors">
+    <Link href={href} className="text-sm font-medium text-gray-400 hover:text-white transition-colors">
       {children}
     </Link>
   );
@@ -26,21 +26,23 @@ function LandingHeader() {
   const DropdownNavLink = ({ title, children }: { title: string; children: React.ReactNode }) => (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className="flex items-center gap-1 text-sm font-medium text-gray-600 hover:text-primary transition-colors">
+        <button className="flex items-center gap-1 text-sm font-medium text-gray-400 hover:text-white transition-colors">
           {title}
           <ChevronDown className="h-4 w-4" />
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent>{children}</DropdownMenuContent>
+      <DropdownMenuContent className="bg-background border-border text-foreground">
+        {children}
+      </DropdownMenuContent>
     </DropdownMenu>
   );
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-sm">
+    <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-sm border-border">
       <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
         <Link href="/" className="flex items-center gap-2">
-          <Logo className="h-8 w-8 text-primary" />
-          <span className="font-semibold text-lg text-gray-800">Mardisen</span>
+          <Logo className="h-8 w-8 text-white" />
+          <span className="font-semibold text-lg text-white">Mardisen</span>
         </Link>
         <nav className="hidden md:flex items-center gap-6">
           <DropdownNavLink title="Solutions">
@@ -76,11 +78,11 @@ function LandingHeader() {
         </div>
       </div>
       {mobileMenuOpen && (
-          <div className="md:hidden absolute top-0 left-0 w-full bg-white z-50 p-4">
+          <div className="md:hidden absolute top-0 left-0 w-full bg-background z-50 p-4 border-b border-border">
               <div className="flex justify-between items-center mb-6">
                   <Link href="/" className="flex items-center gap-2">
-                    <Logo className="h-8 w-8 text-primary" />
-                    <span className="font-semibold text-lg text-gray-800">Mardisen</span>
+                    <Logo className="h-8 w-8 text-white" />
+                    <span className="font-semibold text-lg text-white">Mardisen</span>
                   </Link>
                   <Button variant="ghost" size="icon" onClick={() => setMobileMenuOpen(false)}>
                       <X />
@@ -92,7 +94,7 @@ function LandingHeader() {
                 <NavLink href="/pricing">Pricing</NavLink>
                 <NavLink href="/company">Company</NavLink>
                 <NavLink href="/for-accountants">For Accountants</NavLink>
-                <hr/>
+                <hr className="border-border"/>
                 <Button variant="ghost" asChild>
                     <Link href="/signin">Sign In</Link>
                 </Button>
@@ -108,7 +110,7 @@ function LandingHeader() {
 
 function LandingFooter() {
     return (
-        <footer className="bg-primary text-primary-foreground">
+        <footer className="bg-secondary text-secondary-foreground">
             <div className="container mx-auto px-4 md:px-6 py-12">
                 <div className="grid grid-cols-2 md:grid-cols-6 gap-8">
                     <div className="col-span-2 md:col-span-1">
@@ -120,56 +122,56 @@ function LandingFooter() {
 
                     <div className="space-y-4">
                         <h4 className="font-semibold">Product</h4>
-                        <ul className="space-y-2 text-sm">
-                            <li><Link href="#" className="hover:underline">Features</Link></li>
-                            <li><Link href="#" className="hover:underline">Serva AI</Link></li>
-                            <li><Link href="#" className="hover:underline">Integrations</Link></li>
-                            <li><Link href="#" className="hover:underline">Security</Link></li>
-                            <li><Link href="#" className="hover:underline">Pricing</Link></li>
+                        <ul className="space-y-2 text-sm text-muted-foreground">
+                            <li><Link href="/product" className="hover:text-foreground">Features</Link></li>
+                            <li><Link href="/product" className="hover:text-foreground">Serva AI</Link></li>
+                            <li><Link href="/product" className="hover:text-foreground">Integrations</Link></li>
+                            <li><Link href="/product" className="hover:text-foreground">Security</Link></li>
+                            <li><Link href="/pricing" className="hover:text-foreground">Pricing</Link></li>
                         </ul>
                     </div>
                      <div className="space-y-4">
                         <h4 className="font-semibold">Solutions</h4>
-                         <ul className="space-y-2 text-sm">
-                            <li><Link href="#" className="hover:underline">Financial Reporting</Link></li>
-                            <li><Link href="#" className="hover:underline">Invoicing</Link></li>
-                            <li><Link href="#" className="hover:underline">Payroll</Link></li>
-                            <li><Link href="#" className="hover:underline">Expense Tracking</Link></li>
-                            <li><Link href="#" className="hover:underline">Multi-Company Billing</Link></li>
+                         <ul className="space-y-2 text-sm text-muted-foreground">
+                            <li><Link href="/solutions" className="hover:text-foreground">Financial Reporting</Link></li>
+                            <li><Link href="/solutions" className="hover:text-foreground">Invoicing</Link></li>
+                            <li><Link href="/solutions" className="hover:text-foreground">Payroll</Link></li>
+                            <li><Link href="/solutions" className="hover:text-foreground">Expense Tracking</Link></li>
+                            <li><Link href="/solutions" className="hover:text-foreground">Multi-Company Billing</Link></li>
                         </ul>
                     </div>
                      <div className="space-y-4">
                         <h4 className="font-semibold">Resources</h4>
-                         <ul className="space-y-2 text-sm">
-                            <li><Link href="#" className="hover:underline">Blog</Link></li>
-                            <li><Link href="#" className="hover:underline">Help Center</Link></li>
+                         <ul className="space-y-2 text-sm text-muted-foreground">
+                            <li><Link href="#" className="hover:text-foreground">Blog</Link></li>
+                            <li><Link href="/help" className="hover:text-foreground">Help Center</Link></li>
                         </ul>
                         <h4 className="font-semibold pt-4">Company</h4>
-                        <ul className="space-y-2 text-sm">
-                            <li><Link href="#" className="hover:underline">About</Link></li>
-                            <li><Link href="#" className="hover:underline">Team</Link></li>
-                            <li><Link href="#" className="hover:underline">Careers</Link></li>
-                            <li><Link href="#" className="hover:underline">Contact</Link></li>
+                        <ul className="space-y-2 text-sm text-muted-foreground">
+                            <li><Link href="/company" className="hover:text-foreground">About</Link></li>
+                            <li><Link href="/company" className="hover:text-foreground">Team</Link></li>
+                            <li><Link href="/company" className="hover:text-foreground">Careers</Link></li>
+                            <li><Link href="/help/contact-support" className="hover:text-foreground">Contact</Link></li>
                         </ul>
                     </div>
                      <div className="space-y-4">
                         <h4 className="font-semibold">Specialized</h4>
-                        <ul className="space-y-2 text-sm">
-                            <li><Link href="#" className="hover:underline">For Accountants</Link></li>
+                        <ul className="space-y-2 text-sm text-muted-foreground">
+                            <li><Link href="/for-accountants" className="hover:text-foreground">For Accountants</Link></li>
                         </ul>
                     </div>
                      <div className="space-y-4 col-span-2 md:col-span-1">
                         <h4 className="font-semibold">Stay Updated</h4>
-                        <p className="text-sm">Get the latest news and updates from Mardisen.</p>
+                        <p className="text-sm text-muted-foreground">Get the latest news and updates from Mardisen.</p>
                         <form className="flex gap-2">
-                           <Input type="email" placeholder="you@company.com" className="bg-primary-foreground/10 border-primary-foreground/20 text-white placeholder:text-primary-foreground/60" />
-                           <Button type="submit" variant="secondary" className="bg-white text-primary hover:bg-gray-200">
+                           <Input type="email" placeholder="you@company.com" className="bg-muted border-muted-foreground/20 text-white placeholder:text-muted-foreground" />
+                           <Button type="submit" variant="secondary" className="bg-primary text-primary-foreground hover:bg-primary/90">
                                 <ArrowRight className="h-4 w-4" />
                            </Button>
                         </form>
                     </div>
                 </div>
-                 <div className="mt-8 pt-8 border-t border-primary-foreground/20 text-center text-sm">
+                 <div className="mt-8 pt-8 border-t border-border text-center text-sm text-muted-foreground">
                     &copy; {new Date().getFullYear()} Mardisen Suite. All rights reserved.
                 </div>
             </div>
@@ -183,7 +185,7 @@ export default function LandingLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-col min-h-dvh bg-white text-gray-800">
+    <div className="flex flex-col min-h-dvh bg-background text-foreground">
       <LandingHeader />
       <main className="flex-1">{children}</main>
       <LandingFooter />
