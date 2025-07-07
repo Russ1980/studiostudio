@@ -1,16 +1,27 @@
 
+'use client'
 import { AppShell } from '@/components/app-shell';
 import { FloatingHelpButton, OnboardingProvider } from '@/components/onboarding';
 import { ServaAIProvider } from '@/hooks/use-serva-ai';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { getMockUser } from '@/lib/auth';
+import { useEffect, useState } from 'react';
+import { type User } from '@/lib/auth';
 
-export default async function DashboardLayout({
+export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const user = await getMockUser();
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    getMockUser().then(setUser);
+  }, []);
+
+  if (!user) {
+    return <div>Loading...</div>; // Or a loading spinner
+  }
 
   return (
     <SidebarProvider>
