@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Logo } from '@/components/icons';
 import Image from 'next/image';
-import { ChevronDown, Star, Bot, SlidersHorizontal, BarChart, DollarSign, TrendingUp, Users, X, Zap, ChevronRight, BarChart2, AlertTriangle, ArrowUp, Send, CheckCircle } from 'lucide-react';
+import { ChevronDown, Star, Bot, SlidersHorizontal, BarChart, DollarSign, TrendingUp, Users, X, Zap, ChevronRight, BarChart2, AlertTriangle, ArrowUp, Send, CheckCircle, Quote } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -27,7 +27,7 @@ const ServaUICard = () => {
     }
 
     return (
-        <Card className="bg-white text-gray-800 shadow-2xl rounded-2xl w-full max-w-md mx-auto border-white/20">
+        <Card className="bg-white text-gray-800 shadow-2xl rounded-2xl w-full max-w-md mx-auto">
             <CardHeader className="p-4 flex flex-row items-center justify-between border-b bg-slate-50 rounded-t-2xl">
                 <div>
                     <h3 className="font-bold text-lg">SERVA</h3>
@@ -126,6 +126,33 @@ const ServaUICard = () => {
 
 
 export default function LandingPage() {
+    const testimonials = [
+        {
+          name: "Sarah Chen",
+          title: "CFO, TechFlow Solutions",
+          avatar: "SC",
+          quote: "Mardisen's Serva AI transformed our financial operations completely. We've reduced manual work by 80% and gained insights we never had before. The ROI was immediate.",
+          metric: "80%",
+          metricLabel: "Time Saved",
+        },
+        {
+          name: "Michael Rodriguez",
+          title: "Finance Director, GrowthCorp Inc.",
+          avatar: "MR",
+          quote: "The AI-powered insights have been game-changing. Serva AI catches errors before they become problems and suggests optimizations that have saved us thousands monthly.",
+          metric: "$15K/mo",
+          metricLabel: "Cost Savings",
+        },
+        {
+          name: "Emily Watson",
+          title: "Operations Manager, ScaleUp Ventures",
+          avatar: "EW",
+          quote: "Finally, a financial platform that understands our business. The automation is seamless, and the team collaboration features have streamlined our entire approval process.",
+          metric: "3x",
+          metricLabel: "Faster Processing",
+        },
+      ];
+
   return (
     <div className="flex flex-col min-h-screen bg-white text-gray-900">
       <main className="flex-1">
@@ -227,40 +254,48 @@ export default function LandingPage() {
             </div>
         </section>
 
-        <section id="testimonials" className="w-full py-12 md:py-24 lg:py-32 bg-muted/50">
+        <section id="testimonials" className="w-full py-12 md:py-24 lg:py-32 bg-slate-50">
             <div className="container px-4 md:px-6">
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center mb-12">Loved by Modern Accounting Teams</h2>
-                <div className="grid gap-8 lg:grid-cols-2">
-                    <Card>
-                        <CardContent className="p-6">
-                            <div className="flex items-center gap-4 mb-4">
-                                <Avatar>
-                                    <AvatarImage src="https://placehold.co/40x40.png" data-ai-hint="person" />
-                                    <AvatarFallback>JS</AvatarFallback>
-                                </Avatar>
-                                <div>
-                                    <p className="font-semibold">Jane Smith, CPA</p>
-                                    <p className="text-sm text-muted-foreground">Owner, Smith Accounting</p>
+                <div className="flex flex-col items-center justify-center space-y-4 text-center">
+                    <Badge variant="outline" className="py-1.5 px-3 bg-primary/10 text-primary border-primary/20">
+                        <Star className="h-4 w-4 mr-2 text-primary" />
+                        Customer Success Stories
+                    </Badge>
+                    <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">Trusted by Leading Businesses</h2>
+                    <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                        See how companies like yours are transforming their financial operations with Mardisen's AI-powered suite.
+                    </p>
+                </div>
+                <div className="mx-auto grid max-w-5xl items-start gap-8 py-12 lg:grid-cols-3 lg:gap-8">
+                    {testimonials.map((testimonial) => (
+                        <Card key={testimonial.name} className="bg-white shadow-lg hover:shadow-xl transition-shadow duration-300">
+                            <CardContent className="p-6 space-y-4">
+                                <div className="flex items-center gap-2">
+                                    {[...Array(5)].map((_, i) => (
+                                        <Star key={i} className="h-5 w-5 text-yellow-400 fill-yellow-400" />
+                                    ))}
+                                    <span className="text-sm font-semibold text-muted-foreground">5.0</span>
                                 </div>
-                            </div>
-                            <p className="text-muted-foreground">"Mardisen Suite has been a game-changer. Serva AI automates our most tedious reconciliation tasks, freeing up my team to focus on high-value advisory services. We've cut our month-end close time by 40%."</p>
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardContent className="p-6">
-                            <div className="flex items-center gap-4 mb-4">
-                                <Avatar>
-                                    <AvatarImage src="https://placehold.co/40x40.png" data-ai-hint="man" />
-                                    <AvatarFallback>MD</AvatarFallback>
-                                </Avatar>
-                                <div>
-                                    <p className="font-semibold">Michael Davis</p>
-                                    <p className="text-sm text-muted-foreground">CFO, Innovate Inc.</p>
+                                <div className="relative">
+                                     <Quote className="absolute -top-3 -left-3 h-12 w-12 text-slate-100" />
+                                    <p className="text-muted-foreground relative z-10">"{testimonial.quote}"</p>
                                 </div>
-                            </div>
-                            <p className="text-muted-foreground">"The financial insights we get from Serva are unparalleled. It's like having a data analyst on our team 24/7. We identified a major cost-saving opportunity within the first month of use that paid for the software ten times over."</p>
-                        </CardContent>
-                    </Card>
+                                <div className="p-4 rounded-lg bg-green-500/10">
+                                    <p className="text-2xl font-bold text-green-600">{testimonial.metric}</p>
+                                    <p className="text-sm text-green-700/80">{testimonial.metricLabel}</p>
+                                </div>
+                                <div className="flex items-center gap-4 pt-2">
+                                    <Avatar>
+                                        <AvatarFallback className="bg-primary text-primary-foreground">{testimonial.avatar}</AvatarFallback>
+                                    </Avatar>
+                                    <div>
+                                        <p className="font-semibold">{testimonial.name}</p>
+                                        <p className="text-sm text-muted-foreground">{testimonial.title}</p>
+                                    </div>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    ))}
                 </div>
             </div>
         </section>
