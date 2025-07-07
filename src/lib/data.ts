@@ -1,8 +1,8 @@
-
 // This file contains mock data for the entire application.
 // In a real application, this data would be fetched from a database.
 
-import { Activity, Clock, DollarSign, ListChecks, LucideIcon, v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
+import { Activity, Clock, DollarSign, ListChecks, type LucideIcon } from 'lucide-react';
 
 // Accountant Portal
 export const mockClients = [
@@ -858,3 +858,5 @@ export const mockKeyboardShortcuts = [
     { section: 'Actions', shortcut: 'C', action: 'Create New (Invoice, Bill, etc.)' },
     { section: 'Actions', shortcut: 'S', action: 'Save Current Form' },
 ];
+
+    
