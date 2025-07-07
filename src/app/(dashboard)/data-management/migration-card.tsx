@@ -4,7 +4,7 @@
 import React, { useTransition } from 'react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { migrateTransactionData, migrateClientData, migrateInvoiceData } from '@/lib/migration';
+import { migrateTransactionData, migrateClientData, migrateInvoiceData, migrateEmployeeData } from '@/lib/migration';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 
@@ -65,6 +65,7 @@ export function MigrationCard() {
                 <MigrationButton migrationFn={migrateTransactionData} label="Migrate Transactions" description="transaction data" />
                 <MigrationButton migrationFn={migrateClientData} label="Migrate Clients" description="client data" />
                 <MigrationButton migrationFn={migrateInvoiceData} label="Migrate Invoices" description="invoice data" />
+                <MigrationButton migrationFn={migrateEmployeeData} label="Migrate Employees" description="employee data" />
             </CardContent>
         </Card>
     );

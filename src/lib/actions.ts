@@ -320,8 +320,22 @@ export async function getPayrollDashboardData() {
     return mockPayrollDashboard;
 }
 export async function getEmployees() {
-    await simulateDelay(50);
-    return mockEmployees;
+    if (!firestore) {
+        console.log("Firestore not initialized, returning mock data for employees.");
+        return mockEmployees;
+    }
+    try {
+        const employeesSnapshot = await firestore.collection('employees').get();
+        if (employeesSnapshot.empty) {
+            console.log("No employees found in Firestore, returning mock data as fallback.");
+            return mockEmployees;
+        }
+        const employees = employeesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        return employees as typeof mockEmployees;
+    } catch (error) {
+        console.error("Error fetching employees from Firestore:", error);
+        return mockEmployees;
+    }
 }
 export async function getPayRuns() {
     await simulateDelay(50);

@@ -2,7 +2,7 @@
 'use server';
 
 import { firestore } from './firebase-admin';
-import { mockLedgerTransactions, mockClients, mockInvoices } from './data';
+import { mockLedgerTransactions, mockClients, mockInvoices, mockEmployees } from './data';
 
 type TransformFunction<T, U> = (data: T) => U;
 
@@ -61,4 +61,8 @@ export async function migrateClientData() {
 
 export async function migrateInvoiceData() {
     return migrateData(mockInvoices, 'invoices', { idKey: 'invoice' });
+}
+
+export async function migrateEmployeeData() {
+    return migrateData(mockEmployees, 'employees', { idKey: 'id' });
 }
