@@ -581,9 +581,9 @@ export const mockTaxPayments = [
 
 export const mockBenefitsAdmin = {
   kpiData: [
-    { title: "Total Enrollment", value: "88%", icon: Users },
-    { title: "Monthly Cost", value: "$42,500", icon: DollarSign },
-    { title: "Active Carriers", value: "4", icon: Building },
+    { title: "Total Enrollment", value: "88%", icon: "Users" },
+    { title: "Monthly Cost", value: "$42,500", icon: "DollarSign" },
+    { title: "Active Carriers", value: "4", icon: "Building" },
   ],
   benefitPlans: [
       { name: "Medical Plan", provider: "Aetna", participants: 68, status: "Active" },

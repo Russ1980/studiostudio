@@ -12,6 +12,12 @@ import { ShieldCheck, Users, DollarSign, Building } from "lucide-react";
 import { getBenefitsAdminData } from "@/lib/actions";
 import { useState, useEffect } from "react";
 
+const iconMap: { [key: string]: React.ElementType } = {
+    Users,
+    DollarSign,
+    Building,
+};
+
 export default function BenefitsAdministrationPage() {
   const [data, setData] = useState<any>(null);
 
@@ -41,17 +47,19 @@ export default function BenefitsAdministrationPage() {
       </div>
 
        <div className="grid gap-6 md:grid-cols-3">
-        {kpiData.map((kpi: any) => (
+        {kpiData.map((kpi: any) => {
+          const Icon = iconMap[kpi.icon];
+          return (
           <Card key={kpi.title}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">{kpi.title}</CardTitle>
-              <kpi.icon className="h-4 w-4 text-muted-foreground" />
+              {Icon && <Icon className="h-4 w-4 text-muted-foreground" />}
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{kpi.value}</div>
             </CardContent>
           </Card>
-        ))}
+        )})}
       </div>
 
        <Card>
