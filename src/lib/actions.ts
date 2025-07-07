@@ -1,9 +1,7 @@
 
 'use server';
 
-// This file contains server actions that simulate fetching data from a backend.
-// In a real application, these functions would interact with a database.
-
+import { firestore } from './firebase-admin';
 import {
   mockClients,
   mockAccountantDashboard,
@@ -85,9 +83,25 @@ export async function getDashboardPageData() {
 
 // Accountant Portal
 export async function getClients() {
-  await simulateDelay(50);
-  return mockClients;
+  if (!firestore) {
+    console.log("Firestore not initialized, returning mock data.");
+    return mockClients;
+  }
+  try {
+    const clientsSnapshot = await firestore.collection('clients').get();
+    if (clientsSnapshot.empty) {
+      console.log("No clients found in Firestore, returning mock data as fallback.");
+      return mockClients;
+    }
+    const clients = clientsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    return clients as typeof mockClients;
+  } catch (error) {
+    console.error("Error fetching clients from Firestore:", error);
+    // Fallback to mock data in case of error
+    return mockClients;
+  }
 }
+
 export async function getAccountantDashboardData() {
   await simulateDelay(50);
   return mockAccountantDashboard;
