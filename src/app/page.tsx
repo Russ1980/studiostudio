@@ -1,82 +1,179 @@
 
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Logo, NIcon } from '@/components/icons';
+import { Logo } from '@/components/icons';
 import Image from 'next/image';
-import { ChevronDown, X, CheckCircle2, Bot, SlidersHorizontal, BarChart, Sparkles } from 'lucide-react';
+import { ChevronDown, Star, Bot, SlidersHorizontal, BarChart, CheckCircle2, DollarSign, AlertCircle, ArrowUp, Send, TerminalSquare } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { cn } from '@/lib/utils';
 
+
+const ServaUICard = () => (
+    <Card className="bg-slate-800/60 backdrop-blur-sm border border-slate-700/80 text-white shadow-2xl shadow-black/50">
+        <CardHeader className="p-4 border-b border-slate-700/80">
+            <div className="flex justify-between items-center">
+                <div>
+                    <h3 className="font-bold text-lg tracking-wider">SERVA</h3>
+                    <p className="text-xs text-slate-400">SOC 2 & HIPAA compliant</p>
+                </div>
+                <div className="text-right">
+                    <p className="text-xs text-slate-400">Active Processes</p>
+                    <p className="text-2xl font-bold">24</p>
+                </div>
+            </div>
+        </CardHeader>
+        <CardContent className="p-4 space-y-4">
+            <div className="p-3 rounded-lg border border-slate-700/80 bg-slate-900/50">
+                <div className="flex items-center gap-2 mb-1">
+                    <div className="w-2 h-2 rounded-full bg-blue-400"></div>
+                    <span className="text-xs font-semibold text-slate-300">SERVA</span>
+                    <span className="text-xs text-slate-500">2 seconds ago</span>
+                    <Badge variant="destructive" className="ml-auto bg-red-500/20 text-red-300 border-red-400/30">High Priority</Badge>
+                </div>
+                <p className="font-semibold text-white">Launching Serva AI 🚀</p>
+                <p className="text-sm text-slate-400">Your personal AI is analyzing 15 financial reports and identified 3 optimization opportunities worth $12,400.</p>
+                <div className="mt-2 p-2 rounded-md bg-green-500/10 border border-green-400/20 flex items-center gap-2 text-sm">
+                    <ArrowUp className="h-4 w-4 text-green-400"/>
+                    <span className="text-green-300 font-semibold">$12,400</span>
+                    <span className="text-slate-400"> +$2,100</span>
+                </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+                <div className="p-3 rounded-lg bg-slate-900/50 border border-slate-700/80">
+                    <p className="text-xs text-slate-400">Time Saved Today</p>
+                    <div className="flex items-end justify-between">
+                        <p className="text-2xl font-bold">42h</p>
+                        <BarChart className="h-6 w-6 text-slate-500"/>
+                    </div>
+                    <p className="text-xs text-green-400">+12% vs yesterday</p>
+                </div>
+                <div className="p-3 rounded-lg bg-slate-900/50 border border-slate-700/80">
+                    <p className="text-xs text-slate-400">Tasks Completed</p>
+                    <div className="flex items-end justify-between">
+                        <p className="text-2xl font-bold">156</p>
+                         <CheckCircle2 className="h-6 w-6 text-slate-500"/>
+                    </div>
+                    <p className="text-xs text-green-400">+28 this hour</p>
+                </div>
+                 <div className="p-3 rounded-lg bg-slate-900/50 border border-slate-700/80">
+                    <p className="text-xs text-slate-400">Savings Generated</p>
+                    <div className="flex items-end justify-between">
+                        <p className="text-2xl font-bold">$12,400</p>
+                         <DollarSign className="h-6 w-6 text-slate-500"/>
+                    </div>
+                    <p className="text-xs text-slate-400">This month</p>
+                </div>
+                 <div className="p-3 rounded-lg bg-orange-500/10 border border-orange-400/20">
+                    <p className="text-xs text-orange-300">Active Alerts</p>
+                    <div className="flex items-end justify-between">
+                        <p className="text-2xl font-bold text-orange-300">3</p>
+                         <AlertCircle className="h-6 w-6 text-orange-400"/>
+                    </div>
+                    <p className="text-xs text-orange-300">Require attention</p>
+                </div>
+            </div>
+
+            <div>
+                <p className="text-sm font-semibold mb-2">Recent AI Actions</p>
+                <div className="space-y-2">
+                    <div className="flex items-center justify-between text-sm">
+                        <div className="flex items-center gap-2">
+                            <div className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse"></div>
+                            <p className="text-slate-300">Launching Serva AI 🚀</p>
+                            <span className="text-slate-500 text-xs">2 seconds ago</span>
+                        </div>
+                        <Badge className="bg-blue-500/20 text-blue-300 border-none">active</Badge>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                         <div className="flex items-center gap-2">
+                            <div className="w-1.5 h-1.5 rounded-full bg-yellow-400 animate-pulse [animation-delay:0.2s]"></div>
+                            <p className="text-slate-300">Processing tax optimization strategies...</p>
+                            <span className="text-slate-500 text-xs">8 seconds ago</span>
+                        </div>
+                        <Badge className="bg-yellow-500/20 text-yellow-300 border-none">processing</Badge>
+                    </div>
+                     <div className="flex items-center justify-between text-sm">
+                         <div className="flex items-center gap-2">
+                            <div className="w-1.5 h-1.5 rounded-full bg-green-400"></div>
+                            <p className="text-slate-300">Cash flow optimization complete ✓</p>
+                            <span className="text-slate-500 text-xs">15 seconds ago</span>
+                        </div>
+                        <Badge className="bg-green-500/20 text-green-300 border-none">completed</Badge>
+                    </div>
+                </div>
+            </div>
+            
+            <div className="flex items-center justify-between pt-3 border-t border-slate-700/80 gap-2">
+                <Button className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white">
+                    <Send /> Send Element
+                </Button>
+                <Button variant="ghost" className="w-full hover:bg-slate-700/50 hover:text-white text-slate-400">
+                    <TerminalSquare /> Send Console Errors (2)
+                </Button>
+            </div>
+        </CardContent>
+    </Card>
+);
 
 export default function LandingPage() {
   return (
     <div className="flex flex-col min-h-screen bg-white text-gray-900">
-      <div className="bg-primary text-primary-foreground text-center p-2 text-sm flex items-center justify-center gap-4">
-        <span>Save 70% off annually on Mardisen Suite for your first year! Limited time only.</span>
-        <button className="text-primary-foreground/80 hover:text-primary-foreground"><X className="h-4 w-4" /></button>
-      </div>
-      <header className="px-4 lg:px-6 h-16 flex items-center container mx-auto sticky top-0 z-50 bg-white/90 backdrop-blur-sm border-b">
-        <Link href="/" className="flex items-center justify-center gap-2">
-          <Logo className="h-8 w-8" />
-          <span className="font-bold text-lg">Mardisen Suite</span>
-        </Link>
-        <nav className="ml-10 hidden lg:flex gap-4 sm:gap-6 items-center">
-          <Link href="/solutions" className="text-sm font-medium hover:text-primary flex items-center gap-1">Solutions <ChevronDown className="h-4 w-4" /></Link>
-          <Link href="/product" className="text-sm font-medium hover:text-primary flex items-center gap-1">Product <ChevronDown className="h-4 w-4" /></Link>
-          <Link href="/for-accountants" className="text-sm font-medium hover:text-primary">For Accountants</Link>
-          <Link href="/pricing" className="text-sm font-medium hover:text-primary">Pricing</Link>
-          <Link href="/contact" className="text-sm font-medium hover:text-primary">Contact</Link>
-        </nav>
-        <div className="ml-auto flex items-center gap-2">
-          <Button variant="ghost" asChild>
-            <Link href="/signin">
-              Log In
-            </Link>
-          </Button>
-          <Button asChild>
-            <Link href="/signin">Get Started</Link>
-          </Button>
-        </div>
-      </header>
       <main className="flex-1">
-        <section className="w-full bg-[#020420] text-white overflow-hidden">
-            <div className="container px-4 md:px-6 relative">
-                <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-[#020420] via-transparent to-transparent opacity-50 z-0"></div>
-                <div className="grid gap-6 lg:grid-cols-[1fr_550px] lg:gap-12 xl:grid-cols-[1fr_650px] py-24 lg:py-32 relative z-10">
-                <div className="flex flex-col justify-center space-y-4">
-                    <Badge variant="outline" className="w-fit bg-white/10 text-white border-white/20">
-                    <Sparkles className="h-4 w-4 mr-2 text-purple-400"/> Powered by Serva AI <Badge variant="secondary" className="ml-2 bg-green-400/20 text-green-300 border-none">LIVE</Badge>
-                    </Badge>
-                    <div className="space-y-4">
-                    <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
-                        Financial Intelligence Meets <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500">AI Power</span>
-                    </h1>
-                    <p className="max-w-[600px] text-gray-300 md:text-xl">
-                        Transform your accounting practice with Serva AI - the industry's first intelligent assistant that understands finance, automates workflows, and delivers insights in real-time.
-                    </p>
-                    </div>
-                    <div className="flex flex-col md:flex-row gap-4 pt-4">
-                        <div className="flex items-center gap-2">
-                            <NIcon />
-                            <span className="text-sm font-medium">Automated Journal Entries</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <CheckCircle2 className="text-green-400" />
-                            <span className="text-sm font-medium">Intelligent Reconciliation</span>
-                        </div>
-                    </div>
+        <section className="w-full bg-[#020420] text-white overflow-hidden relative">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.05)_1px,_transparent_1px)] bg-[size:40px_40px] opacity-50"></div>
+          <div className="container px-4 md:px-6 relative z-10">
+            <header className="h-20 flex items-center">
+                <Link href="/" className="flex items-center justify-center gap-2">
+                    <Logo className="h-8 w-8" />
+                    <span className="font-bold text-lg text-white">Mardisen Suite</span>
+                </Link>
+                <div className="ml-auto flex items-center gap-2">
+                <Button variant="ghost" asChild className="text-white hover:bg-white/10 hover:text-white">
+                    <Link href="/signin">
+                    Log In
+                    </Link>
+                </Button>
+                <Button asChild className="bg-slate-50 text-slate-900 hover:bg-slate-200">
+                    <Link href="/signin">Get Started</Link>
+                </Button>
                 </div>
-                <Image
-                    src="https://placehold.co/650x500.png"
-                    width="650"
-                    height="500"
-                    alt="Hero"
-                    className="mx-auto aspect-[650/500] overflow-hidden rounded-xl object-cover sm:w-full lg:order-last"
-                    data-ai-hint="financial dashboard chart"
-                />
+            </header>
+            <div className="grid gap-8 lg:grid-cols-2 lg:gap-12 py-16 md:py-24">
+              <div className="flex flex-col justify-center space-y-6">
+                <Badge variant="outline" className="w-fit bg-white/10 text-white border-white/20">
+                  <Star className="h-4 w-4 mr-2 text-yellow-400 fill-yellow-400"/> #1 AI-Powered Financial Suite
+                </Badge>
+                <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
+                  Watch our AI Agents <span className="text-red-400">easily handle</span> your most challenging <span className="text-blue-400">Financial Operations</span>
+                </h1>
+                <p className="max-w-[600px] text-gray-300 md:text-xl">
+                  Eliminate 80% of manual financial work with AI agents that never sleep. From invoice processing to cash flow optimization, watch Serva AI transform your financial operations in real-time.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4">
+                    <Button size="lg" className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-lg">Get Started Free →</Button>
+                    <Button size="lg" variant="outline" className="bg-transparent border-slate-600 text-white hover:bg-slate-800 hover:text-white">Schedule a Demo</Button>
                 </div>
+                <div className="flex items-center gap-6 pt-4 text-sm text-slate-400">
+                    <div className="flex items-center gap-1">
+                        <Star className="h-4 w-4 text-yellow-400 fill-yellow-400"/>
+                        <Star className="h-4 w-4 text-yellow-400 fill-yellow-400"/>
+                        <Star className="h-4 w-4 text-yellow-400 fill-yellow-400"/>
+                        <Star className="h-4 w-4 text-yellow-400 fill-yellow-400"/>
+                        <Star className="h-4 w-4 text-yellow-400 fill-yellow-400/50"/>
+                        <span className="ml-1 font-medium text-white">4.9/5 Rating</span>
+                    </div>
+                    <span>500+ businesses automated</span>
+                     <span>$2.5M+ saved monthly</span>
+                </div>
+              </div>
+              <div>
+                <ServaUICard />
+              </div>
             </div>
+          </div>
         </section>
         
         <section id="serva" className="w-full py-12 md:py-24 lg:py-32 bg-white">

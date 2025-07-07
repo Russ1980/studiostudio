@@ -55,7 +55,7 @@ export function RootLayoutClient({ children }: { children: React.ReactNode }) {
   if (isAppRoute) {
     return <AppLayout>{children}</AppLayout>;
   }
-
+  
   // This is for public pages like the landing page, signin, etc.
-  return <>{children}</>;
+  return <div className="bg-white">{children}</div>;
 }
