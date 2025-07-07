@@ -1,8 +1,11 @@
+
 "use client";
 
 import {
   Card,
   CardContent,
+  CardHeader,
+  CardTitle,
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -12,12 +15,95 @@ import {
   Download,
   Share2,
   Settings,
+  RefreshCw,
+  BarChart3,
+  DollarSign,
+  Wand2,
+  Activity,
+  Building,
+  SlidersHorizontal,
+  TrendingUp,
+  Receipt,
 } from "lucide-react";
 import { getMockUser } from "@/lib/auth";
 import { OnboardingController } from "@/components/onboarding/onboarding-controller";
 import { DevTools } from "@/components/development/dev-tools";
 import { useEffect, useState } from "react";
 import type { User } from "@/lib/auth";
+import { cn } from "@/lib/utils";
+import { Skeleton } from "@/components/ui/skeleton";
+
+
+const navItems = [
+    {
+        title: "Executive Overview",
+        description: "Comprehensive business summary",
+        icon: BarChart3,
+        active: true,
+    },
+    {
+        title: "Financial Health",
+        description: "Financial metrics and analysis",
+        icon: DollarSign,
+    },
+    {
+        title: "Serva AI Insights",
+        description: "AI-powered business intelligence",
+        icon: Wand2,
+    },
+    {
+        title: "Workflow Hub",
+        description: "Team productivity and tasks",
+        icon: Users,
+    },
+    {
+        title: "Process Visibility",
+        description: "Operations monitoring",
+        icon: Activity,
+    },
+    {
+        title: "Business Context",
+        description: "Industry benchmarks and insights",
+        icon: Building,
+    },
+    {
+        title: "Customize Dashboard",
+        description: "Personalize your workspace",
+        icon: SlidersHorizontal,
+    },
+];
+
+const kpiItems = [
+    {
+        title: "Monthly Expenses",
+        value: "$0",
+        change: "vs last month 0.0%",
+        icon: TrendingUp,
+        iconColor: "text-red-500"
+    },
+    {
+        title: "Net Profit",
+        value: "$0",
+        change: "Income: $0",
+        icon: DollarSign,
+        iconColor: "text-green-500"
+    },
+    {
+        title: "Sales (30 Days)",
+        value: "$0",
+        change: "+8.4%",
+        changeColor: "text-success",
+        icon: BarChart3,
+        iconColor: "text-blue-500"
+    },
+    {
+        title: "A/R Total",
+        value: "$0",
+        change: "Overdue: $0",
+        icon: Receipt,
+        iconColor: "text-purple-500"
+    }
+];
 
 
 export default function DashboardPage() {
@@ -28,7 +114,18 @@ export default function DashboardPage() {
   }, []);
 
   if (!user) {
-    return <div>Loading...</div>;
+    return (
+        <div className="flex flex-col gap-6">
+            <Card><CardContent className="p-6"><Skeleton className="h-20 w-full" /></CardContent></Card>
+            <Card><CardContent className="p-2"><Skeleton className="h-24 w-full" /></CardContent></Card>
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+                <Card><CardContent className="p-6"><Skeleton className="h-24 w-full" /></CardContent></Card>
+                <Card><CardContent className="p-6"><Skeleton className="h-24 w-full" /></CardContent></Card>
+                <Card><CardContent className="p-6"><Skeleton className="h-24 w-full" /></CardContent></Card>
+                <Card><CardContent className="p-6"><Skeleton className="h-24 w-full" /></CardContent></Card>
+            </div>
+        </div>
+    );
   }
 
   return (
@@ -40,7 +137,7 @@ export default function DashboardPage() {
         <CardContent className="p-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div className="flex items-center gap-4">
-              <Avatar className="h-16 w-16">
+              <Avatar className="h-12 w-12">
                 <AvatarFallback className="bg-primary text-primary-foreground text-2xl">
                   <Users />
                 </AvatarFallback>
@@ -52,19 +149,20 @@ export default function DashboardPage() {
             </div>
             <div className="flex items-center gap-4 sm:gap-6">
               <div className="text-right sm:text-left">
-                <p className="text-2xl font-bold">$2.1M</p>
+                <p className="text-lg font-bold">$2.1M</p>
                 <p className="text-sm text-muted-foreground">Net Revenue</p>
               </div>
               <div className="text-right sm:text-left">
-                <p className="text-2xl font-bold text-success">+12.4%</p>
+                <p className="text-lg font-bold text-success">+12.4%</p>
                 <p className="text-sm text-muted-foreground">Growth</p>
               </div>
               <div className="text-right sm:text-left">
-                <p className="text-2xl font-bold text-primary">94%</p>
+                <p className="text-lg font-bold text-primary">94%</p>
                 <p className="text-sm text-muted-foreground">Health Score</p>
               </div>
               <Separator orientation="vertical" className="h-10 hidden sm:block" />
               <div className="flex items-center gap-1">
+                <Button variant="ghost" size="icon"><RefreshCw className="h-5 w-5" /></Button>
                 <Button variant="ghost" size="icon"><Download className="h-5 w-5" /></Button>
                 <Button variant="ghost" size="icon"><Share2 className="h-5 w-5" /></Button>
                 <Button variant="ghost" size="icon"><Settings className="h-5 w-5" /></Button>
@@ -74,29 +172,35 @@ export default function DashboardPage() {
         </CardContent>
       </Card>
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <Card>
-          <CardContent className="p-6">
-            <h3 className="font-semibold mb-4">Quick Actions</h3>
-            <div className="grid grid-cols-2 gap-4">
-               <Button variant="outline">Create Invoice</Button>
-               <Button variant="outline">Run Payroll</Button>
-               <Button variant="outline">Add a Bill</Button>
-               <Button variant="outline">View Reports</Button>
+      <Card>
+        <CardContent className="p-2">
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-2">
+                {navItems.map((item) => (
+                    <Button key={item.title} variant="ghost" className={cn("flex flex-col items-start justify-start h-auto p-3 text-left space-y-1", item.active && "bg-muted border border-border")}>
+                        <item.icon className="h-5 w-5 text-primary mb-1"/>
+                        <span className="font-semibold text-sm">{item.title}</span>
+                        <span className="text-xs text-muted-foreground">{item.description}</span>
+                    </Button>
+                ))}
             </div>
-          </CardContent>
-        </Card>
-        <Card>
-           <CardContent className="p-6">
-            <h3 className="font-semibold mb-4">Recent Activity</h3>
-            <ul className="space-y-3">
-              <li className="text-sm text-muted-foreground">Invoice #1024 paid by Apex Solutions.</li>
-              <li className="text-sm text-muted-foreground">Payroll for March 2024 processed successfully.</li>
-              <li className="text-sm text-muted-foreground">New client "Stellar Goods" added.</li>
-              <li className="text-sm text-muted-foreground">Q1 Financial Report generated.</li>
-            </ul>
-          </CardContent>
-        </Card>
+        </CardContent>
+      </Card>
+      
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+        {kpiItems.map((kpi) => (
+            <Card key={kpi.title}>
+                <CardHeader>
+                    <CardTitle className="text-sm font-medium text-muted-foreground flex items-center justify-between">
+                        {kpi.title}
+                        <kpi.icon className={cn("h-4 w-4", kpi.iconColor)} />
+                    </CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <p className="text-2xl font-bold">{kpi.value}</p>
+                    <p className={cn("text-xs text-muted-foreground", kpi.changeColor)}>{kpi.change}</p>
+                </CardContent>
+            </Card>
+        ))}
       </div>
 
     </div>
