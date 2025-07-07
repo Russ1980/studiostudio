@@ -330,14 +330,7 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
       <SidebarInset>
         <header className="sticky top-0 flex h-16 items-center justify-between gap-4 border-b bg-background/80 px-4 backdrop-blur-sm md:px-6 z-40">
           <div className="flex items-center gap-2">
-             <Tooltip>
-              <TooltipTrigger asChild>
-                <SidebarTrigger />
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Toggle Sidebar</p>
-              </TooltipContent>
-            </Tooltip>
+            <SidebarTrigger />
               <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="ghost" size="sm" className="gap-1">
