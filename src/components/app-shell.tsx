@@ -99,7 +99,7 @@ import {
 import { cn } from "@/lib/utils";
 import type { User as UserType } from "@/lib/auth";
 import { Separator } from "@/components/ui/separator";
-import { useServaAI } from "@/hooks/use-serva-ai.tsx";
+import { useServaAI } from "@/hooks/use-serva-ai";
 import dynamic from "next/dynamic";
 
 const ServaAIWidget = dynamic(
@@ -331,106 +331,106 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
         <header className="sticky top-0 flex h-16 items-center justify-between gap-4 border-b bg-background/80 px-4 backdrop-blur-sm md:px-6 z-40">
           <div className="flex items-center gap-2">
             <SidebarTrigger />
-              <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="sm" className="gap-1">
-                          <span>File</span>
-                          <ChevronDown className="h-4 w-4" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                     <DropdownMenuContent align="start" className="w-80 p-0">
-                      <div className="flex items-center gap-3 p-3 border-b">
-                         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary">
-                            <FileIcon className="h-5 w-5" />
-                          </div>
-                          <div>
-                            <p className="font-semibold">File Menu</p>
-                            <p className="text-xs text-muted-foreground">Create, save, export, and import data</p>
-                          </div>
-                      </div>
-                      <ScrollArea className="h-96">
-                        <div className="p-2 space-y-1">
-                          <p className="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Create New</p>
-                          <StyledDropdownMenuItem href="/accounting/journal-entries/new" icon={FilePlus} title="New Transaction" description="Record a new journal entry." data-onboarding="new-transaction-link" />
-                          <StyledDropdownMenuItem href="/reports-insights/builder" icon={FileBarChart} title="New Report" description="Build a custom report from scratch." />
-                          <StyledDropdownMenuItem href="/operations/inventory/purchase-orders/new" icon={ShoppingCart} title="New Purchase Order" description="Create an order for new inventory." />
-                          <StyledDropdownMenuItem href="/operations/job-costing/jobs/new" icon={Briefcase} title="New Job" description="Set up a new job to track costs." />
-                          <StyledDropdownMenuItem href="/payroll/employee-management/new" icon={UserPlus} title="New Employee" description="Add a new employee to payroll." />
-                          
-                          <p className="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Export</p>
-                          <StyledDropdownMenuItem href="/data-management/data-export" icon={FileOutput} title="Export Center" description="Export data to CSV, PDF, or Excel." />
-                         
-                          <p className="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Import Data</p>
-                           <StyledDropdownMenuItem href="/data-management/data-import" icon={FileInput} title="Import Wizard" description="Import data from external sources." />
-                           <StyledDropdownMenuItem href="/banking/connections" icon={Database} title="Connect Bank Data" description="Sync with your financial institutions." />
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm" className="gap-1">
+                  <span>File</span>
+                  <ChevronDown className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-80 p-0">
+                <div className="flex items-center gap-3 p-3 border-b">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary">
+                    <FileIcon className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <p className="font-semibold">File Menu</p>
+                    <p className="text-xs text-muted-foreground">Create, save, export, and import data</p>
+                  </div>
+                </div>
+                <ScrollArea className="h-96">
+                  <div className="p-2 space-y-1">
+                    <p className="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Create New</p>
+                    <StyledDropdownMenuItem href="/accounting/journal-entries/new" icon={FilePlus} title="New Transaction" description="Record a new journal entry." data-onboarding="new-transaction-link" />
+                    <StyledDropdownMenuItem href="/reports-insights/builder" icon={FileBarChart} title="New Report" description="Build a custom report from scratch." />
+                    <StyledDropdownMenuItem href="/operations/inventory/purchase-orders/new" icon={ShoppingCart} title="New Purchase Order" description="Create an order for new inventory." />
+                    <StyledDropdownMenuItem href="/operations/job-costing/jobs/new" icon={Briefcase} title="New Job" description="Set up a new job to track costs." />
+                    <StyledDropdownMenuItem href="/payroll/employee-management/new" icon={UserPlus} title="New Employee" description="Add a new employee to payroll." />
+                    
+                    <p className="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Export</p>
+                    <StyledDropdownMenuItem href="/data-management/data-export" icon={FileOutput} title="Export Center" description="Export data to CSV, PDF, or Excel." />
+                   
+                    <p className="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Import Data</p>
+                     <StyledDropdownMenuItem href="/data-management/data-import" icon={FileInput} title="Import Wizard" description="Import data from external sources." />
+                     <StyledDropdownMenuItem href="/banking/connections" icon={Database} title="Connect Bank Data" description="Sync with your financial institutions." />
 
-                           <p className="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Print & Share</p>
-                           <DropdownMenuItem asChild className="p-0 focus:bg-transparent">
-                             <button onClick={() => window.print()} className="flex w-full items-center gap-3 rounded-lg border bg-card p-2.5 text-card-foreground transition-colors hover:border-primary hover:bg-primary/5 focus:outline-none focus:ring-2 focus:ring-ring">
-                                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"><Printer className="h-4 w-4" /></div>
-                                <div className="flex-1 text-left"><p className="font-semibold text-sm">Print Document</p><p className="text-xs text-muted-foreground truncate">Print the current view.</p></div>
-                             </button>
-                           </DropdownMenuItem>
+                     <p className="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Print & Share</p>
+                     <DropdownMenuItem asChild className="p-0 focus:bg-transparent">
+                       <button onClick={() => window.print()} className="flex w-full items-center gap-3 rounded-lg border bg-card p-2.5 text-card-foreground transition-colors hover:border-primary hover:bg-primary/5 focus:outline-none focus:ring-2 focus:ring-ring">
+                          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"><Printer className="h-4 w-4" /></div>
+                          <div className="flex-1 text-left"><p className="font-semibold text-sm">Print Document</p><p className="text-xs text-muted-foreground truncate">Print the current view.</p></div>
+                       </button>
+                     </DropdownMenuItem>
 
-                           <p className="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Settings</p>
-                            <StyledDropdownMenuItem href="/settings" icon={Settings} title="File Settings" description="Adjust application-wide settings." />
-                        </div>
-                      </ScrollArea>
-                      <div className="p-2 border-t flex items-center justify-between text-xs text-muted-foreground">
-                        <span>10 actions available</span>
-                      </div>
-                    </DropdownMenuContent>
-                </DropdownMenu>
-                 <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="sm" className="gap-1">
-                            <span>Action</span>
-                            <ChevronDown className="h-4 w-4" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                     <DropdownMenuContent align="start" className="w-80 p-0">
-                      <div className="flex items-center gap-3 p-3 border-b">
-                         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary">
-                            <Activity className="h-5 w-5" />
-                          </div>
-                          <div>
-                            <p className="font-semibold">Quick Actions</p>
-                            <p className="text-xs text-muted-foreground">Common business operations</p>
-                          </div>
-                      </div>
-                      <ScrollArea className="h-96">
-                        <div className="p-2 space-y-1">
-                          <p className="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Banking Operations</p>
-                          <StyledDropdownMenuItem href="/banking/import-transactions" icon={Upload} title="Import Bank Transactions" description="Import and categorize bank..." />
-                          <StyledDropdownMenuItem href="/banking/reconciliation" icon={Calculator} title="Run Bank Reconciliation" description="Reconcile bank accounts and..." />
-                          <StyledDropdownMenuItem href="/banking/accounts" icon={RefreshCw} title="Update Account Balances" description="Refresh all account balance..." />
+                     <p className="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Settings</p>
+                      <StyledDropdownMenuItem href="/settings" icon={Settings} title="File Settings" description="Adjust application-wide settings." />
+                  </div>
+                </ScrollArea>
+                <div className="p-2 border-t flex items-center justify-between text-xs text-muted-foreground">
+                  <span>10 actions available</span>
+                </div>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm" className="gap-1">
+                  <span>Action</span>
+                  <ChevronDown className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-80 p-0">
+                <div className="flex items-center gap-3 p-3 border-b">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary">
+                    <Activity className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <p className="font-semibold">Quick Actions</p>
+                    <p className="text-xs text-muted-foreground">Common business operations</p>
+                  </div>
+                </div>
+                <ScrollArea className="h-96">
+                  <div className="p-2 space-y-1">
+                    <p className="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Banking Operations</p>
+                    <StyledDropdownMenuItem href="/banking/import-transactions" icon={Upload} title="Import Bank Transactions" description="Import and categorize bank..." />
+                    <StyledDropdownMenuItem href="/banking/reconciliation" icon={Calculator} title="Run Bank Reconciliation" description="Reconcile bank accounts and..." />
+                    <StyledDropdownMenuItem href="/banking/accounts" icon={RefreshCw} title="Update Account Balances" description="Refresh all account balance..." />
 
-                          <p className="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Period Management</p>
-                          <StyledDropdownMenuItem href="/accounting/periods/close" icon={Clock} title="Close Accounting Period" description="Close current period and finalize..." special />
-                          <StyledDropdownMenuItem href="/accounting/periods/reopen" icon={RefreshCw} title="Reopen Period" description="Reopen previously closed period" />
-                          
-                          <p className="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Financial Reporting</p>
-                          <StyledDropdownMenuItem href="/reports-insights/financial-reports" icon={BarChart3} title="Generate Financial Statements" description="Create P&amp;L, Balance Sheets, etc." />
-                          <StyledDropdownMenuItem href="/reports/trial-balance" icon={Download} title="Export Trial Balance" description="Download the current trial balance." />
-                          <StyledDropdownMenuItem href="/reports-insights/dashboard" icon={TrendingUp} title="Performance Analytics" description="View financial performance." />
+                    <p className="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Period Management</p>
+                    <StyledDropdownMenuItem href="/accounting/periods/close" icon={Clock} title="Close Accounting Period" description="Close current period and finalize..." special />
+                    <StyledDropdownMenuItem href="/accounting/periods/reopen" icon={RefreshCw} title="Reopen Period" description="Reopen previously closed period" />
+                    
+                    <p className="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Financial Reporting</p>
+                    <StyledDropdownMenuItem href="/reports-insights/financial-reports" icon={BarChart3} title="Generate Financial Statements" description="Create P&amp;L, Balance Sheets, etc." />
+                    <StyledDropdownMenuItem href="/reports/trial-balance" icon={Download} title="Export Trial Balance" description="Download the current trial balance." />
+                    <StyledDropdownMenuItem href="/reports-insights/dashboard" icon={TrendingUp} title="Performance Analytics" description="View financial performance." />
 
-                          <p className="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Client Operations</p>
-                          <StyledDropdownMenuItem href="/client-management/invoicing/batch" icon={Mail} title="Send Monthly Invoices" description="Batch send invoices to clients." />
-                          <StyledDropdownMenuItem href="/payments/process" icon={CreditCard} title="Process Payments" description="Process incoming client payments." />
-                          <StyledDropdownMenuItem href="/client-management/billing" icon={DollarSign} title="Update Client Billing" description="Manage client subscriptions." />
-                          <StyledDropdownMenuItem href="/compliance/clients" icon={Shield} title="Client Compliance Check" description="Verify client compliance status." />
+                    <p className="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Client Operations</p>
+                    <StyledDropdownMenuItem href="/client-management/invoicing/batch" icon={Mail} title="Send Monthly Invoices" description="Batch send invoices to clients." />
+                    <StyledDropdownMenuItem href="/payments/process" icon={CreditCard} title="Process Payments" description="Process incoming client payments." />
+                    <StyledDropdownMenuItem href="/client-management/billing" icon={DollarSign} title="Update Client Billing" description="Manage client subscriptions." />
+                    <StyledDropdownMenuItem href="/compliance/clients" icon={Shield} title="Client Compliance Check" description="Verify client compliance status." />
 
-                           <p className="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Data Management</p>
-                          <StyledDropdownMenuItem href="/data-management/backup-restore" icon={Database} title="Backup Database" description="Create a new system backup." />
-                          <StyledDropdownMenuItem href="/accounting/chart-of-accounts/import" icon={Upload} title="Import Chart of Accounts" description="Import from a file." />
-                          <StyledDropdownMenuItem href="/reports/validation" icon={FileText} title="Data Validation Report" description="Check for data inconsistencies." />
-                        </div>
-                      </ScrollArea>
-                      <div className="p-2 border-t flex items-center justify-between text-xs text-muted-foreground">
-                        <span>15 actions available</span>
-                      </div>
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                     <p className="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Data Management</p>
+                    <StyledDropdownMenuItem href="/data-management/backup-restore" icon={Database} title="Backup Database" description="Create a new system backup." />
+                    <StyledDropdownMenuItem href="/accounting/chart-of-accounts/import" icon={Upload} title="Import Chart of Accounts" description="Import from a file." />
+                    <StyledDropdownMenuItem href="/reports/validation" icon={FileText} title="Data Validation Report" description="Check for data inconsistencies." />
+                  </div>
+                </ScrollArea>
+                <div className="p-2 border-t flex items-center justify-between text-xs text-muted-foreground">
+                  <span>15 actions available</span>
+                </div>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
 
           <div className="flex flex-1 items-center justify-end gap-2">
@@ -444,24 +444,17 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
             </Button>
             
             <div className="flex items-center gap-1">
-                <Tooltip>
-                    <TooltipTrigger asChild>
-                        <Button variant="ghost" size="icon" className="rounded-full">
-                          <UserPlus className="h-5 w-5" />
-                          <span className="sr-only">Invite User</span>
-                        </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                        <p>Invite User</p>
-                    </TooltipContent>
-                </Tooltip>
+                <Button variant="ghost" size="icon" className="rounded-full">
+                  <UserPlus className="h-5 w-5" />
+                  <span className="sr-only">Add User</span>
+                </Button>
                 <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className="rounded-full">
-                          <Copy className="h-5 w-5" />
-                          <span className="sr-only">Open New Window</span>
-                        </Button>
-                    </DropdownMenuTrigger>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon" className="rounded-full">
+                      <Copy className="h-5 w-5" />
+                      <span className="sr-only">Open new window</span>
+                    </Button>
+                  </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem onClick={() => window.open(window.location.origin, '_blank')}>
                       New Window
@@ -472,17 +465,10 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
                   </DropdownMenuContent>
                 </DropdownMenu>
                 <Separator orientation="vertical" className="h-6 mx-1" />
-                <Tooltip>
-                    <TooltipTrigger asChild>
-                        <Button variant="ghost" size="icon" className="rounded-full">
-                          <Moon className="h-5 w-5" />
-                          <span className="sr-only">Toggle Theme</span>
-                        </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                        <p>Toggle Theme</p>
-                    </TooltipContent>
-                </Tooltip>
+                <Button variant="ghost" size="icon" className="rounded-full">
+                  <Moon className="h-5 w-5" />
+                  <span className="sr-only">Toggle Theme</span>
+                </Button>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="ghost" size="icon" className="rounded-full relative">

@@ -36,7 +36,6 @@ const initialMessage: ConversationMessage = {
     timestamp: new Date(),
 };
 
-
 export function ServaAIProvider({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ConversationMessage[]>([initialMessage]);
