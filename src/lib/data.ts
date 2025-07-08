@@ -1,8 +1,21 @@
-
 // This file contains mock data for the entire application.
 // In a real application, this data would be fetched from a database.
 
 import { v4 as uuidv4 } from 'uuid';
+
+// Type definitions for Compliance Data
+type ComplianceStatus = 'Complete' | 'Pending' | 'Missing';
+type OverallStatus = 'On Track' | 'At Risk' | 'Needs Attention';
+
+export interface ClientCompliance {
+  id: string;
+  clientName: string;
+  overallStatus: OverallStatus;
+  engagementLetter: ComplianceStatus;
+  w9: ComplianceStatus;
+  bankStatements: ComplianceStatus;
+}
+
 
 // Accountant Portal
 export const mockClients = [
@@ -875,11 +888,11 @@ export const mockClientBillingData = [
     { id: "3", clientName: "QuantumLeap Co.", plan: "Standard", status: "Past Due", nextBilling: "2024-07-15", amount: 49.00 },
     { id: "4", clientName: "Stellar Goods", plan: "Standard", status: "Canceled", nextBilling: "N/A", amount: 0 },
 ];
-export const mockClientComplianceData = [
-    { id: "1", clientName: "Innovate Inc.", overallStatus: "Compliant", engagementLetter: "Signed", w9: "On File", bankStatements: "Up to Date" },
-    { id: "2", clientName: "Apex Solutions", overallStatus: "Needs Attention", engagementLetter: "Pending", w9: "On File", bankStatements: "Up to Date" },
-    { id: "3", clientName: "QuantumLeap Co.", overallStatus: "Compliant", engagementLetter: "Signed", w9: "On File", bankStatements: "Up to Date" },
-    { id: "4", clientName: "Stellar Goods", overallStatus: "Missing Documents", engagementLetter: "Signed", w9: "Missing", bankStatements: "Missing" },
+export const mockClientComplianceData: ClientCompliance[] = [
+    { id: "1", clientName: "Innovate Inc.", overallStatus: "On Track", engagementLetter: "Complete", w9: "Complete", bankStatements: "Complete" },
+    { id: "2", clientName: "Apex Solutions", overallStatus: "At Risk", engagementLetter: "Pending", w9: "Complete", bankStatements: "Missing" },
+    { id: "3", clientName: "QuantumLeap Co.", overallStatus: "Needs Attention", engagementLetter: "Complete", w9: "Pending", bankStatements: "Complete" },
+    { id: "4", clientName: "Stellar Goods", overallStatus: "On Track", engagementLetter: "Complete", w9: "Complete", bankStatements: "Complete" },
 ];
 
 // Payments
@@ -1137,3 +1150,5 @@ export const mockExportHistory = [
     { date: "2024-07-21", dataSet: "Customers", format: "Excel", status: "Completed" },
     { date: "2024-07-20", dataSet: "Financial Statements", format: "PDF", status: "Failed" },
 ];
+
+    
