@@ -71,6 +71,7 @@ import {
   mockMaintenanceTasks,
   mockPaymentsToProcess,
   mockDataValidationResults,
+  mockScheduledReports,
   mockKeyboardShortcuts,
   mockTroubleshootingFAQs,
   mockDataManagementDashboard,
@@ -1186,7 +1187,7 @@ export async function getJobCostingDashboardData() {
     }
     const jobs = jobsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() as any }));
 
-    const activeJobs = jobs.filter(j => j.status === 'In Progress');
+    const activeJobs = jobs.filter(j => j.status === 'In Progress').length;
     const totalBudget = jobs.reduce((acc, job) => acc + job.budget, 0);
     const totalSpent = jobs.reduce((acc, job) => acc + job.spent, 0);
     const overallProfitability = jobs.reduce((acc, job) => acc + job.profitability, 0);
@@ -1259,3 +1260,5 @@ export async function getExportHistory() {
     await simulateDelay(50);
     return mockExportHistory;
 }
+
+    
