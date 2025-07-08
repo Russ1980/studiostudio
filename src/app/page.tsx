@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Logo } from '@/components/icons';
 import Image from 'next/image';
-import { ChevronDown, Star, Bot, SlidersHorizontal, BarChart, DollarSign, TrendingUp, Users, X, Zap, ChevronRight, BarChart2, AlertTriangle, ArrowUp, Send, CheckCircle, Quote } from 'lucide-react';
+import { ChevronDown, Star, AudioWaveform, SlidersHorizontal, BarChart, DollarSign, TrendingUp, Users, X, Zap, ChevronRight, BarChart2, AlertTriangle, ArrowUp, Send, CheckCircle, Quote } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -43,7 +43,7 @@ const ServaUICard = () => {
                     <CardHeader className="p-3">
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
-                                <Bot className="h-4 w-4 text-primary" />
+                                <AudioWaveform className="h-4 w-4 text-primary" />
                                 <span className="text-sm font-semibold">SERVA</span>
                                 <span className="text-xs text-muted-foreground">2 seconds ago</span>
                             </div>
@@ -238,7 +238,7 @@ export default function LandingPage() {
             </div>
             <div className="mx-auto grid max-w-5xl items-start gap-6 py-12 lg:grid-cols-3 lg:gap-12">
                 <div className="flex flex-col items-center text-center gap-2">
-                <Bot className="h-10 w-10 text-primary" />
+                <AudioWaveform className="h-10 w-10 text-primary" />
                 <h3 className="text-xl font-bold">Natural Language Interaction</h3>
                 <p className="text-muted-foreground">Ask complex questions like "What was our highest spending category last quarter?" and get instant, accurate answers and reports.</p>
                 </div>
