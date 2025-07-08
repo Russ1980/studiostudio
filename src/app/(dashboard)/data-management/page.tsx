@@ -9,15 +9,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import Link from 'next/link';
+import type { ElementType } from 'react';
 
 import { FileDown, FileUp, History, ShieldQuestion, Database, CheckSquare, HardDrive } from "lucide-react";
-import dynamic from 'next/dynamic';
 import { getDataManagementDashboardData } from "@/lib/actions";
-
-const MigrationCard = dynamic(() => import('./migration-card').then(mod => mod.MigrationCard), {
-  loading: () => <p>Loading migration tools...</p>,
-  ssr: false
-});
+import { MigrationCardWrapper } from "./migration-card-wrapper";
 
 const kpiIconMap: { [key: string]: React.ElementType } = {
   CheckSquare,
@@ -85,7 +81,7 @@ export default async function DataManagementDashboard() {
                 </CardContent>
             </Card>
        </div>
-       <MigrationCard />
+       <MigrationCardWrapper />
     </div>
   );
 }
