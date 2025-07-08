@@ -4,46 +4,52 @@
 import { firestore } from './firebase-admin';
 import { mockClients, mockInvoices, mockEmployees, mockJobsWithDetails as mockJobs, mockTaxFilings, mockTaxPayments, mockBankAccounts, mockTasks, mockChartOfAccounts, mockTimeLogs, mockJournalEntries, mockPurchaseOrders, mockInventory, mockProductionPlans, mockWorkOrders } from './data';
 
-// Define the shape of the result object for clarity
+// Define the shape of the result object that the MigrationButton expects.
 type MigrationResult = {
   success: boolean;
   migrated?: number;
   error?: string;
 };
 
-// The function now correctly returns a Promise of our result object
+// This is the complete and correct function.
+// It returns a Promise that resolves with the MigrationResult object.
 export async function migrateData(
   data: any[],
   targetCollection: string,
   transform?: (item: any) => any
 ): Promise<MigrationResult> {
   
-  // THE CRITICAL NULL CHECK: Happens once, at the very beginning.
+  // 1. Get the database instance.
+  // const firestore = getFirestoreInstance();
+
+  // 2. THIS IS THE CRITICAL NULL CHECK.
+  //    It happens ONCE, at the very beginning, BEFORE the loop.
   if (!firestore) {
-    console.error("CRITICAL: Firestore is not initialized. Aborting migration.");
+    console.error("MIGRATION FAILED: Firestore database is not initialized.");
+    // Return an object that matches the MigrationResult type.
     return { success: false, error: "Database not initialized." };
   }
 
+  // 3. Since the check passed, it is now safe to use firestore.
   const batch = firestore.batch();
 
   data.forEach(item => {
     const docId = item.id;
     if (!docId) {
-      console.warn("Skipping item in migration due to missing ID:", item);
-      return;
+      return; // Skip this item
     }
     
+    // This line is now safe because of the check in step 2.
     const docRef = firestore.collection(targetCollection).doc(docId);
     const transformedData = transform ? transform(item) : item;
     batch.set(docRef, transformedData);
   });
 
+  // 4. Commit the batch and return the final status object.
   try {
     await batch.commit();
-    console.log(`Success! Migrated ${data.length} docs to ${targetCollection}.`);
     return { success: true, migrated: data.length };
   } catch (error) {
-    console.error("Error committing migration batch:", error);
     const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
     return { success: false, error: errorMessage };
   }
