@@ -653,6 +653,7 @@ export async function getScheduledReports() {
     return mockScheduledReports;
 }
 
+
 // Accounting
 export async function getAccountingDashboardData() {
     await simulateDelay(50);
@@ -1194,7 +1195,7 @@ export async function getJobCostingDashboardData() {
 
     return {
         kpiData: [
-            { title: "Active Jobs", value: activeJobs.length.toString() },
+            { title: "Active Jobs", value: activeJobs.toString() },
             { title: "Total Budget", value: `$${totalBudget.toLocaleString()}` },
             { title: "Total Spent", value: `$${totalSpent.toLocaleString()}` },
             { title: "Overall Profitability", value: `$${overallProfitability.toLocaleString()}` },
@@ -1260,5 +1261,7 @@ export async function getExportHistory() {
     await simulateDelay(50);
     return mockExportHistory;
 }
+
+    
 
     
