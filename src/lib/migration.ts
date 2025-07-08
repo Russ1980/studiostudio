@@ -4,42 +4,43 @@
 import { firestore } from './firebase-admin';
 import { mockClients, mockInvoices, mockEmployees, mockJobsWithDetails as mockJobs, mockTaxFilings, mockTaxPayments, mockBankAccounts, mockTasks, mockChartOfAccounts, mockTimeLogs, mockJournalEntries, mockPurchaseOrders, mockInventory, mockProductionPlans, mockWorkOrders } from './data';
 
-type TransformFunction<T, U> = (data: T) => U;
-
-interface MigrateOptions<T, U> {
-    batchSize?: number;
-    transform?: TransformFunction<T, U>;
-    idKey: keyof T;
-}
-
-export async function migrateData<T extends Record<string, any>, U = T>(
+/**
+ * A generic function to migrate an array of mock data into a specified Firestore collection.
+ * It handles batching and sanitizes the document ID.
+ * @param sourceData The array of data to migrate.
+ * @param targetCollection The name of the Firestore collection.
+ * @param options An object containing migration options like the key to use for the document ID.
+ * @returns An object indicating success or failure.
+ */
+export async function migrateData<T extends Record<string, any>>(
     sourceData: T[],
     targetCollection: string,
-    options: MigrateOptions<T, U>
+    options: { idKey: keyof T; batchSize?: number }
 ) {
+    // This is the critical check to ensure firestore is not null.
     if (!firestore) {
         const errorMsg = "CRITICAL: Firestore is not initialized. Migration cannot proceed.";
         console.error(errorMsg);
         return { success: false, error: errorMsg };
     }
 
-    const { batchSize = 500, transform, idKey } = options;
+    const { idKey, batchSize = 400 } = options; // Using a batch size to avoid exceeding limits.
 
     try {
         let migratedCount = 0;
         for (let i = 0; i < sourceData.length; i += batchSize) {
-            const dataSlice = sourceData.slice(i, i + batchSize);
             const batch = firestore.batch();
+            const dataSlice = sourceData.slice(i, i + batchSize);
             
             dataSlice.forEach((item: T) => {
-                const docId = String(item[idKey]).replace(/[\/\s#]/g, '_'); // Sanitize ID
+                // Ensure docId is a string and sanitize it for Firestore.
+                const docId = String(item[idKey]).replace(/[\/\s#]/g, '_'); 
                 if (!docId) {
                     console.warn('Skipping item with no ID:', item);
                     return;
                 }
                 const docRef = firestore.collection(targetCollection).doc(docId);
-                const transformedData = transform ? transform(item) : item;
-                batch.set(docRef, transformedData);
+                batch.set(docRef, item);
             });
 
             await batch.commit();
@@ -53,6 +54,7 @@ export async function migrateData<T extends Record<string, any>, U = T>(
         return { success: false, error: error.message };
     }
 }
+
 
 export async function migrateClientData() {
     return migrateData(mockClients, 'clients', { idKey: 'id' });
@@ -93,7 +95,7 @@ export async function migrateChartOfAccounts() {
     try {
         const docRef = firestore.collection('chartOfAccounts').doc('main');
         await docRef.set(mockChartOfAccounts);
-        return { success: true, migrated: 1 }; // Migrated 1 document
+        return { success: true, migrated: 1 };
     } catch (error: any) {
         console.error(`Migration failed for collection chartOfAccounts:`, error);
         return { success: false, error: error.message };
