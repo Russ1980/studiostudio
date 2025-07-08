@@ -7,7 +7,7 @@ import {
   useElements,
   useStripe,
 } from '@stripe/react-stripe-js';
-import { loadStripe, StripeElementsOptions } from '@stripe/stripe-js';
+import { loadStripe, StripeElementsOptions, type Appearance } from '@stripe/stripe-js';
 import React, { useEffect, useState } from 'react';
 import { createPaymentIntent } from './actions';
 import { Button } from '@/components/ui/button';
@@ -112,7 +112,7 @@ export function PaymentForm({ price }: { price: number }) {
     }
   }, [price]);
 
-  const appearance = {
+  const appearance: Appearance = {
     theme: 'stripe',
   };
   const options: StripeElementsOptions = {
