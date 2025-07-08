@@ -1,3 +1,4 @@
+
 "use client";
 
 import {
@@ -31,9 +32,9 @@ const recurringInvoices = [
   { id: "REC-003", customer: "Stellar Goods", frequency: "Monthly", nextDate: "2024-08-15", amount: "1,200.00", status: "Paused" },
 ];
 
-const statusVariant: { [key: string]: "success" | "secondary" } = {
+const statusVariant: { [key: string]: "success" | "default" } = {
   Active: "success",
-  Paused: "secondary",
+  Paused: "default",
 };
 
 export default function RecurringInvoicesPage() {

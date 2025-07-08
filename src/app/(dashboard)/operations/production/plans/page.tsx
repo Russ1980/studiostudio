@@ -35,9 +35,9 @@ const productionPlans = [
   { id: "PP-004", product: "Widget A - Rush", quantity: 200, status: "In Progress", due: "2024-07-20" },
 ];
 
-const statusVariant: { [key: string]: "default" | "secondary" | "success" } = {
+const statusVariant: { [key: string]: "default" | "success" } = {
   "In Progress": "default",
-  "Pending": "secondary",
+  "Pending": "default",
   "Completed": "success",
 };
 

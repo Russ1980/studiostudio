@@ -1,3 +1,4 @@
+
 "use client";
 
 import {
@@ -31,15 +32,15 @@ const workOrders = [
   { id: "WO-00454", job: "QA Check for Batch 72", status: "Completed", priority: "Low", due: "2024-07-20", assignedTo: "QA Team" },
 ];
 
-const priorityVariant: { [key: string]: "destructive" | "default" | "secondary" } = {
+const priorityVariant: { [key: string]: "destructive" | "default" } = {
   High: "destructive",
   Medium: "default",
-  Low: "secondary",
+  Low: "default",
 };
 
-const statusVariant: { [key: string]: "default" | "secondary" | "success" } = {
+const statusVariant: { [key: string]: "default" | "success" } = {
   "In Progress": "default",
-  "Pending": "secondary",
+  "Pending": "default",
   "Completed": "success",
 };
 

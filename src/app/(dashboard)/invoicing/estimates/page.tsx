@@ -1,3 +1,4 @@
+
 "use client";
 
 import {
@@ -32,11 +33,11 @@ const estimates = [
   { id: "EST-004", customer: "New Prospect LLC", date: "2024-07-12", amount: "30,000.00", status: "Draft" },
 ];
 
-const statusVariant: { [key: string]: "success" | "destructive" | "default" | "secondary" } = {
+const statusVariant: { [key: string]: "success" | "destructive" | "default" } = {
   Accepted: "success",
   Expired: "destructive",
   Sent: "default",
-  Draft: "secondary",
+  Draft: "default",
 };
 
 export default function EstimatesPage() {

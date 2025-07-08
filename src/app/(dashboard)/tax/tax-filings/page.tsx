@@ -31,6 +31,7 @@ const statusVariant: { [key: string]: "success" | "destructive" | "default" } = 
   Accepted: "success",
   Rejected: "destructive",
   Pending: "default",
+  Upcoming: "default",
 };
 
 export default async function TaxFilingsPage() {

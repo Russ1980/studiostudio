@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -32,14 +33,14 @@ const teamMembers = [
     { name: "Mike Ross", email: "mike.r@example.com", avatar: "MR", role: "Accountant", status: "Pending" },
 ];
 
-const roleVariant: { [key: string]: "default" | "secondary" } = {
+const roleVariant: { [key: string]: "default" } = {
   Admin: "default",
-  Accountant: "secondary",
-  Viewer: "secondary",
+  Accountant: "default",
+  Viewer: "default",
 };
-const statusVariant: { [key: string]: "success" | "secondary" | "default" } = {
+const statusVariant: { [key: string]: "success" | "default" } = {
   Active: "success",
-  Inactive: "secondary",
+  Inactive: "default",
   Pending: "default",
 };
 

@@ -63,7 +63,7 @@ export default function TemplatesPage() {
               {templates.map((template) => (
                 <TableRow key={template.id}>
                   <TableCell className="font-medium">{template.name}</TableCell>
-                  <TableCell><Badge variant="secondary">{template.type}</Badge></TableCell>
+                  <TableCell><Badge variant="default">{template.type}</Badge></TableCell>
                   <TableCell>{template.lastModified}</TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>

@@ -29,7 +29,7 @@ const statusVariant: { [key: string]: "success" | "destructive" | "default" } = 
   "Completed": "success",
   "Overdue": "destructive",
   "In Progress": "default",
-  "Scheduled": "secondary"
+  "Scheduled": "default"
 };
 
 export function MaintenanceClientPage({ tasks }: { tasks: any[] }) {

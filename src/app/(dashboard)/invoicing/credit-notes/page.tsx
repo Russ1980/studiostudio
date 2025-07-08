@@ -1,3 +1,4 @@
+
 "use client";
 
 import {
@@ -31,10 +32,10 @@ const creditNotes = [
   { id: "CN-003", customer: "QuantumLeap Co.", date: "2024-06-20", amount: "100.00", status: "Refunded" },
 ];
 
-const statusVariant: { [key: string]: "success" | "default" | "secondary" } = {
+const statusVariant: { [key: string]: "success" | "default" } = {
   Applied: "success",
   Open: "default",
-  Refunded: "secondary",
+  Refunded: "default",
 };
 
 export default function CreditNotesPage() {

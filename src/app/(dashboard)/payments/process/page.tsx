@@ -71,7 +71,7 @@ export default function ProcessPaymentsPage() {
                             <TableCell>{payment.date}</TableCell>
                             <TableCell className="font-medium">{payment.customer}</TableCell>
                             <TableCell>${payment.amount.toFixed(2)}</TableCell>
-                            <TableCell><Badge variant="secondary">{payment.method}</Badge></TableCell>
+                            <TableCell><Badge variant="default">{payment.method}</Badge></TableCell>
                             <TableCell>{payment.reference}</TableCell>
                             <TableCell className="text-right">
                                 <div className="flex gap-2 justify-end">

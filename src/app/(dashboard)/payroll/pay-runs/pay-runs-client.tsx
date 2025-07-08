@@ -20,10 +20,10 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { FilePlus } from "lucide-react";
 
-const statusVariant: { [key: string]: "success" | "default" | "secondary" } = {
+const statusVariant: { [key: string]: "success" | "default" } = {
   Processed: "success",
   Pending: "default",
-  Draft: "secondary",
+  Draft: "default",
 };
 
 
