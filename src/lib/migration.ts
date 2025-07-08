@@ -49,37 +49,36 @@ export async function migrateData(
   }
 }
 
-
 export async function migrateClientData() {
-    return newMigrateData(mockClients, 'clients');
+    return migrateData(mockClients, 'clients');
 }
 
 export async function migrateInvoiceData() {
-    return newMigrateData(mockInvoices, 'invoices');
+    return migrateData(mockInvoices, 'invoices');
 }
 
 export async function migrateEmployeeData() {
-    return newMigrateData(mockEmployees, 'employees');
+    return migrateData(mockEmployees, 'employees');
 }
 
 export async function migrateJobData() {
-    return newMigrateData(mockJobs, 'jobs');
+    return migrateData(mockJobs, 'jobs');
 }
 
 export async function migrateTaxFilings() {
-    return newMigrateData(mockTaxFilings, 'taxFilings');
+    return migrateData(mockTaxFilings, 'taxFilings');
 }
 
 export async function migrateTaxPayments() {
-    return newMigrateData(mockTaxPayments, 'taxPayments');
+    return migrateData(mockTaxPayments, 'taxPayments');
 }
 
 export async function migrateBankAccounts() {
-    return newMigrateData(mockBankAccounts, 'bankAccounts');
+    return migrateData(mockBankAccounts, 'bankAccounts');
 }
 
 export async function migrateTaskData() {
-    return newMigrateData(mockTasks, 'tasks');
+    return migrateData(mockTasks, 'tasks');
 }
 
 export async function migrateChartOfAccounts(): Promise<MigrationResult> {
@@ -97,57 +96,25 @@ export async function migrateChartOfAccounts(): Promise<MigrationResult> {
 }
 
 export async function migrateTimeLogs() {
-    return newMigrateData(mockTimeLogs, 'timeLogs');
+    return migrateData(mockTimeLogs, 'timeLogs');
 }
 
 export async function migrateJournalEntries() {
-    return newMigrateData(mockJournalEntries, 'journalEntries');
+    return migrateData(mockJournalEntries, 'journalEntries');
 }
 
 export async function migratePurchaseOrders() {
-    return newMigrateData(mockPurchaseOrders, 'purchaseOrders');
+    return migrateData(mockPurchaseOrders, 'purchaseOrders');
 }
 
 export async function migrateInventory() {
-    return newMigrateData(mockInventory.inventory, 'inventory');
+    return migrateData(mockInventory.inventory, 'inventory');
 }
 
 export async function migrateProductionPlans() {
-    return newMigrateData(mockProductionPlans, 'productionPlans');
+    return migrateData(mockProductionPlans, 'productionPlans');
 }
 
 export async function migrateWorkOrders() {
-    return newMigrateData(mockWorkOrders, 'workOrders');
-}
-
-
-export async function newMigrateData(
-  data: any[],
-  targetCollection: string,
-  transform?: (item: any) => any
-) {
-  if (!firestore) {
-    console.error("NEW_MIGRATE_DATA: Firestore is not initialized.");
-    return { success: false, error: "Database not initialized." };
-  }
-
-  const batch = firestore.batch();
-
-  data.forEach(item => {
-    const docId = item.id;
-    if (!docId) {
-      return;
-    }
-    const docRef = firestore.collection(targetCollection).doc(docId);
-    const transformedData = transform ? transform(item) : item;
-    batch.set(docRef, transformedData);
-  });
-
-  try {
-    await batch.commit();
-    return { success: true, migrated: data.length };
-  } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
-    return { success: false, error: errorMessage };
-  }
+    return migrateData(mockWorkOrders, 'workOrders');
 }
