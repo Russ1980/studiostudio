@@ -19,6 +19,15 @@ import { Badge } from "@/components/ui/badge";
 import { getClientBillingData } from "@/lib/actions";
 import { FileText, CreditCard, UserPlus } from "lucide-react";
 
+interface ClientBillingInfo {
+  id: string;
+  clientName: string;
+  plan: string;
+  status: string;
+  nextBilling: string;
+  amount: number;
+}
+
 const statusVariant: { [key: string]: "success" | "destructive" | "default" | "secondary" } = {
   Active: "success",
   "Past Due": "destructive",
@@ -85,7 +94,7 @@ export default async function ClientBillingPage() {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {billingData.map((client) => (
+                            {billingData.map((client: ClientBillingInfo) => (
                                 <TableRow key={client.id}>
                                     <TableCell className="font-medium">{client.clientName}</TableCell>
                                     <TableCell>{client.plan}</TableCell>
