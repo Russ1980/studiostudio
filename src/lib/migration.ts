@@ -3,19 +3,15 @@
 
 import { firestore } from './firebase-admin';
 
-// Define the shape of the result object that the MigrationButton expects.
 type MigrationResult = {
   success: boolean;
   migrated?: number;
   error?: string;
 };
 
-// This is the core, corrected migration logic. This function is NOT exported.
-// It is only used by the helper functions in actions.ts
 export async function migrateData(
   data: any[],
   targetCollection: string,
-  transform?: (item: any) => any,
   idKey: string = 'id'
 ): Promise<MigrationResult> {
   if (!firestore) {
@@ -29,11 +25,8 @@ export async function migrateData(
     const docId = item[idKey] || item.id;
     if (docId) {
       const docRef = firestore.collection(targetCollection).doc(String(docId));
-      const transformedData = transform ? transform(item) : item;
-      batch.set(docRef, transformedData);
+      batch.set(docRef, item);
       migratedCount++;
-    } else {
-        console.warn(`Skipping item in ${targetCollection} migration due to missing ID with key '${idKey}':`, item);
     }
   });
 
@@ -41,15 +34,17 @@ export async function migrateData(
     await batch.commit();
     return { success: true, migrated: migratedCount };
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     return { success: false, error: errorMessage };
   }
 }
 
-// Special case for chart of accounts since it's a single document
-export async function migrateSingleDoc(docData: object, collection: string, docId: string): Promise<MigrationResult> {
+export async function migrateSingleDoc(
+    docData: object,
+    collection: string,
+    docId: string
+): Promise<MigrationResult> {
     if (!firestore) {
-        console.error("MIGRATION FAILED: Firestore is not initialized.");
         return { success: false, error: "Database not initialized." };
     }
     try {
@@ -60,3 +55,5 @@ export async function migrateSingleDoc(docData: object, collection: string, docI
         return { success: false, error: errorMessage };
     }
 }
+
+    

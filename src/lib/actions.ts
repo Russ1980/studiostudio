@@ -4,87 +4,25 @@
 import { firestore } from './firebase-admin';
 import {
   mockClients,
-  mockAccountantDashboard,
-  mockDashboardPageData,
-  mockTasks,
-  mockRecentReports,
-  mockFiles,
-  mockDocRequests,
-  mockDocActivities,
-  mockInvoicingDashboard,
   mockInvoices,
-  mockRecurringInvoices,
-  mockEstimates,
-  mockCreditNotes,
-  mockArAgingData,
-  mockSalesByCustomerData,
-  mockAccountingDashboard,
-  mockCustomers,
-  mockBills,
-  mockVendors,
-  mockJournalEntries,
-  mockChartOfAccounts,
-  mockLedgerTransactions,
-  mockArDashboard,
+  mockEmployees,
+  mockJobs,
+  mockTaxFilings,
+  mockTaxPayments,
   mockBankAccounts,
-  mockBankDashboard,
-  mockBankConnections,
-  mockReviewTransactions,
-  mockTransactionRules,
-  mockReconciliationData,
-  mockOperationsDashboard,
+  mockTasks,
+  mockChartOfAccounts,
+  mockTimeLogs,
+  mockJournalEntries,
   mockPurchaseOrders,
   mockInventory,
   mockProductionPlans,
   mockWorkOrders,
-  mockOperationsAnalytics,
-  mockProductionTracking,
-  mockScheduling,
-  mockPayrollDashboard,
-  mockEmployees,
-  mockPayRuns,
-  mockPaySlips,
-  mockTaxFilings,
-  mockTaxPayments,
-  mockBenefitsAdmin,
-  mockTimeAndAttendance,
-  mockComplianceItems,
-  mockPortfolioOverview,
-  mockStockData,
-  mockLearningResources,
-  mockTradingData,
-  mockJobs,
-  mockJobCostingDashboard,
-  mockJobsWithDetails,
-  mockTimeLogs,
-  mockJobProfitabilityData,
-  mockWipReportData,
-  mockSalesByItemData,
-  mockTaxSummaryData,
-  mockExpenseAnalyticsData,
-  mockProjectsDashboardData,
-  mockTrialBalanceData,
-  mockSalesAnalyticsData,
-  mockClientBillingData,
-  mockClientComplianceData,
-  mockShipments,
-  mockMaintenanceTasks,
-  mockPaymentsToProcess,
-  mockDataValidationResults,
-  mockScheduledReports,
-  mockKeyboardShortcuts,
-  mockTroubleshootingFAQs,
-  mockDataManagementDashboard,
-  mockBackupRestoreData,
-  mockExportHistory,
 } from './data';
-import { getMockUser } from './auth';
-import { getRevenueDataTool } from '@/ai/tools/get-revenue-data';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import admin from 'firebase-admin';
 import { migrateData, migrateSingleDoc } from './migration';
-
 
 const simulateDelay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -1265,18 +1203,20 @@ export async function getExportHistory() {
 }
 
 // MIGRATION SERVER ACTIONS
-export const migrateClientData = async () => migrateData(mockClients, 'clients');
-export const migrateInvoiceData = async () => migrateData(mockInvoices, 'invoices', undefined, 'invoice');
-export const migrateEmployeeData = async () => migrateData(mockEmployees, 'employees');
-export const migrateJobData = async () => migrateData(mockJobs, 'jobs');
-export const migrateTaxFilings = async () => migrateData(mockTaxFilings, 'taxFilings');
-export const migrateTaxPayments = async () => migrateData(mockTaxPayments, 'taxPayments');
-export const migrateBankAccounts = async () => migrateData(mockBankAccounts, 'bankAccounts');
-export const migrateTaskData = async () => migrateData(mockTasks, 'tasks');
-export const migrateTimeLogs = async () => migrateData(mockTimeLogs, 'timeLogs');
-export const migrateJournalEntries = async () => migrateData(mockJournalEntries, 'journalEntries', undefined, 'entryNo');
-export const migratePurchaseOrders = async () => migrateData(mockPurchaseOrders, 'purchaseOrders', undefined, 'poNumber');
-export const migrateInventory = async () => migrateData(mockInventory.inventory, 'inventory', undefined, 'sku');
-export const migrateProductionPlans = async () => migrateData(mockProductionPlans, 'productionPlans');
-export const migrateWorkOrders = async () => migrateData(mockWorkOrders, 'workOrders');
-export const migrateChartOfAccounts = async () => migrateSingleDoc(mockChartOfAccounts, 'chartOfAccounts', 'main');
+export async function migrateClientData() { return migrateData(mockClients, 'clients'); }
+export async function migrateInvoiceData() { return migrateData(mockInvoices, 'invoices', undefined, 'invoice'); }
+export async function migrateEmployeeData() { return migrateData(mockEmployees, 'employees'); }
+export async function migrateJobData() { return migrateData(mockJobs, 'jobs'); }
+export async function migrateTaxFilings() { return migrateData(mockTaxFilings, 'taxFilings'); }
+export async function migrateTaxPayments() { return migrateData(mockTaxPayments, 'taxPayments'); }
+export async function migrateBankAccounts() { return migrateData(mockBankAccounts, 'bankAccounts'); }
+export async function migrateTaskData() { return migrateData(mockTasks, 'tasks'); }
+export async function migrateTimeLogs() { return migrateData(mockTimeLogs, 'timeLogs'); }
+export async function migrateJournalEntries() { return migrateData(mockJournalEntries, 'journalEntries', undefined, 'entryNo'); }
+export async function migratePurchaseOrders() { return migrateData(mockPurchaseOrders, 'purchaseOrders', undefined, 'poNumber'); }
+export async function migrateInventory() { return migrateData(mockInventory.inventory, 'inventory', undefined, 'sku'); }
+export async function migrateProductionPlans() { return migrateData(mockProductionPlans, 'productionPlans'); }
+export async function migrateWorkOrders() { return migrateData(mockWorkOrders, 'workOrders'); }
+export async function migrateChartOfAccounts() { return migrateSingleDoc(mockChartOfAccounts, 'chartOfAccounts', 'main'); }
+
+    
