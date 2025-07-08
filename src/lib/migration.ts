@@ -1,3 +1,4 @@
+
 'use server';
 
 import { firestore } from './firebase-admin';
@@ -17,6 +18,7 @@ export async function migrateData<T extends Record<string, any>, U = T>(
     options: MigrateOptions<T, U>
 ) {
     if (!firestore) {
+        console.error("Firebase Admin SDK not initialized. Aborting migration.");
         return { success: false, error: "Firebase Admin SDK not initialized. Check your environment variables." };
     }
 
