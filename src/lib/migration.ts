@@ -17,28 +17,34 @@ export async function migrateData<T extends Record<string, any>>(
     targetCollection: string,
     options: { idKey: keyof T; batchSize?: number }
 ) {
-    // This is the critical check to ensure firestore is not null.
+    // Part 1: THE FIX - Check the database object *before* doing anything else.
+    // This 'if' block MUST be here, outside and before the loop.
     if (!firestore) {
-        const errorMsg = "CRITICAL: Firestore is not initialized. Migration cannot proceed.";
-        console.error(errorMsg);
-        return { success: false, error: errorMsg };
+        console.error("CRITICAL ERROR: Firestore database is not initialized. Cannot run migration.");
+        return { success: false, error: "Firestore not initialized." }; // Stop the entire function
     }
 
-    const { idKey, batchSize = 400 } = options; // Using a batch size to avoid exceeding limits.
+    // Part 2: Now that the check is done, it is safe to use firestore.
+    console.log(`Firestore is initialized. Starting batch migration for ${targetCollection}...`);
+    const { idKey, batchSize = 400 } = options;
 
     try {
         let migratedCount = 0;
         for (let i = 0; i < sourceData.length; i += batchSize) {
-            const batch = firestore.batch();
+            const batch = firestore.batch(); // It's now safe to create the batch
             const dataSlice = sourceData.slice(i, i + batchSize);
-            
+
             dataSlice.forEach((item: T) => {
-                // Ensure docId is a string and sanitize it for Firestore.
-                const docId = String(item[idKey]).replace(/[\/\s#]/g, '_'); 
-                if (!docId) {
-                    console.warn('Skipping item with no ID:', item);
-                    return;
+                const docIdValue = item[idKey];
+                if (!docIdValue) {
+                    console.warn("Skipping item in migration due to missing ID:", item);
+                    return; // Skips this item in the forEach loop
                 }
+                
+                // Sanitize the ID for Firestore
+                const docId = String(docIdValue).replace(/[\/\s#]/g, '_');
+
+                // This line is now safe because of the check in Part 2.
                 const docRef = firestore.collection(targetCollection).doc(docId);
                 batch.set(docRef, item);
             });
@@ -47,10 +53,10 @@ export async function migrateData<T extends Record<string, any>>(
             migratedCount += dataSlice.length;
         }
 
-        console.log(`Successfully migrated ${migratedCount} documents to ${targetCollection}.`);
+        console.log(`Success! Batch commit of ${migratedCount} documents to ${targetCollection} is complete.`);
         return { success: true, migrated: migratedCount };
     } catch (error: any) {
-        console.error(`Error committing migration batch for ${targetCollection}:`, error);
+        console.error(`Error during final batch commit for ${targetCollection}:`, error);
         return { success: false, error: error.message };
     }
 }
