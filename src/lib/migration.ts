@@ -18,8 +18,9 @@ export async function migrateData<T extends Record<string, any>, U = T>(
     options: MigrateOptions<T, U>
 ) {
     if (!firestore) {
-        console.error("Firebase Admin SDK not initialized. Aborting migration.");
-        return { success: false, error: "Firebase Admin SDK not initialized. Check your environment variables." };
+        const errorMsg = "CRITICAL: Firestore is not initialized. Migration cannot proceed.";
+        console.error(errorMsg);
+        return { success: false, error: errorMsg };
     }
 
     const { batchSize = 500, transform, idKey } = options;
@@ -45,9 +46,10 @@ export async function migrateData<T extends Record<string, any>, U = T>(
             migratedCount += dataSlice.length;
         }
 
+        console.log(`Successfully migrated ${migratedCount} documents to ${targetCollection}.`);
         return { success: true, migrated: migratedCount };
     } catch (error: any) {
-        console.error(`Migration failed for collection ${targetCollection}:`, error);
+        console.error(`Error committing migration batch for ${targetCollection}:`, error);
         return { success: false, error: error.message };
     }
 }
