@@ -4,22 +4,38 @@
 import { firestore } from './firebase-admin';
 import { mockClients, mockInvoices, mockEmployees, mockJobsWithDetails as mockJobs, mockTaxFilings, mockTaxPayments, mockBankAccounts, mockTasks, mockChartOfAccounts, mockTimeLogs, mockJournalEntries, mockPurchaseOrders, mockInventory, mockProductionPlans, mockWorkOrders } from './data';
 
-//
-// === PASTE THIS EXACT TEST CODE INTO YOUR EDITOR ===
-// === IT REPLACES THE OLD migrateData FUNCTION COMPLETELY ===
-//
 export async function migrateData(data: any[], targetCollection: string, transform?: (item: any) => any) {
     
-    // This is a test to see if our changes are deploying.
-    // This code has an INTENTIONAL and OBVIOUS error.
-    const testVariable = "This is a test";
-    testVariable.thisFunctionDoesNotExist(); // THIS LINE SHOULD CAUSE THE BUILD TO FAIL
+    if (!firestore) {
+        console.error("CRITICAL: Firestore is not initialized.");
+        return { success: false, error: "Database not initialized." };
+    }
 
+    const batch = firestore.batch();
+
+    data.forEach(item => {
+        const docId = item.id;
+        if (!docId) {
+            console.warn("Skipping item with no ID:", item);
+            return;
+        }
+        const docRef = firestore.collection(targetCollection).doc(docId); 
+        const transformedData = transform ? transform(item) : item;
+        batch.set(docRef, transformedData);
+    });
+
+    try {
+        await batch.commit();
+        console.log(`Success! Migrated ${data.length} docs to ${targetCollection}.`);
+        return { success: true, migrated: data.length };
+    } catch (error) {
+        console.error("Error committing batch:", error);
+        return { success: false, error: (error as Error).message };
+    }
 }
 
 
 export async function migrateClientData() {
-    // This will likely fail due to the new signature, which is part of the test.
     return migrateData(mockClients, 'clients');
 }
 
