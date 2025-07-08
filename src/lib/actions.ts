@@ -83,6 +83,8 @@ import { getRevenueDataTool } from '@/ai/tools/get-revenue-data';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import admin from 'firebase-admin';
+import { migrateData, migrateSingleDoc } from './migration';
+
 
 const simulateDelay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -1262,6 +1264,19 @@ export async function getExportHistory() {
     return mockExportHistory;
 }
 
-    
-
-    
+// MIGRATION SERVER ACTIONS
+export const migrateClientData = () => migrateData(mockClients, 'clients');
+export const migrateInvoiceData = () => migrateData(mockInvoices, 'invoices', undefined, 'invoice');
+export const migrateEmployeeData = () => migrateData(mockEmployees, 'employees');
+export const migrateJobData = () => migrateData(mockJobs, 'jobs');
+export const migrateTaxFilings = () => migrateData(mockTaxFilings, 'taxFilings');
+export const migrateTaxPayments = () => migrateData(mockTaxPayments, 'taxPayments');
+export const migrateBankAccounts = () => migrateData(mockBankAccounts, 'bankAccounts');
+export const migrateTaskData = () => migrateData(mockTasks, 'tasks');
+export const migrateTimeLogs = () => migrateData(mockTimeLogs, 'timeLogs');
+export const migrateJournalEntries = () => migrateData(mockJournalEntries, 'journalEntries', undefined, 'entryNo');
+export const migratePurchaseOrders = () => migrateData(mockPurchaseOrders, 'purchaseOrders', undefined, 'poNumber');
+export const migrateInventory = () => migrateData(mockInventory.inventory, 'inventory', undefined, 'sku');
+export const migrateProductionPlans = () => migrateData(mockProductionPlans, 'productionPlans');
+export const migrateWorkOrders = () => migrateData(mockWorkOrders, 'workOrders');
+export const migrateChartOfAccounts = () => migrateSingleDoc(mockChartOfAccounts, 'chartOfAccounts', 'main');

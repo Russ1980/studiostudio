@@ -1,22 +1,7 @@
 
+'use server';
+
 import { firestore } from './firebase-admin';
-import {
-  mockClients,
-  mockInvoices,
-  mockEmployees,
-  mockJobs,
-  mockTaxFilings,
-  mockTaxPayments,
-  mockBankAccounts,
-  mockTasks,
-  mockChartOfAccounts,
-  mockTimeLogs,
-  mockJournalEntries,
-  mockPurchaseOrders,
-  mockInventory,
-  mockProductionPlans,
-  mockWorkOrders,
-} from './data';
 
 // Define the shape of the result object that the MigrationButton expects.
 type MigrationResult = {
@@ -26,8 +11,8 @@ type MigrationResult = {
 };
 
 // This is the core, corrected migration logic. This function is NOT exported.
-// It is only used by the helper functions below.
-async function migrateData(
+// It is only used by the helper functions in actions.ts
+export async function migrateData(
   data: any[],
   targetCollection: string,
   transform?: (item: any) => any,
@@ -62,7 +47,7 @@ async function migrateData(
 }
 
 // Special case for chart of accounts since it's a single document
-async function migrateSingleDoc(docData: object, collection: string, docId: string): Promise<MigrationResult> {
+export async function migrateSingleDoc(docData: object, collection: string, docId: string): Promise<MigrationResult> {
     if (!firestore) {
         console.error("MIGRATION FAILED: Firestore is not initialized.");
         return { success: false, error: "Database not initialized." };
@@ -75,23 +60,3 @@ async function migrateSingleDoc(docData: object, collection: string, docId: stri
         return { success: false, error: errorMessage };
     }
 }
-
-
-// === EXPORTED HELPER FUNCTIONS ===
-// These are the functions your page needs. They all call the core logic.
-
-export const migrateClientData = () => migrateData(mockClients, 'clients');
-export const migrateInvoiceData = () => migrateData(mockInvoices, 'invoices', undefined, 'invoice');
-export const migrateEmployeeData = () => migrateData(mockEmployees, 'employees');
-export const migrateJobData = () => migrateData(mockJobs, 'jobs');
-export const migrateTaxFilings = () => migrateData(mockTaxFilings, 'taxFilings');
-export const migrateTaxPayments = () => migrateData(mockTaxPayments, 'taxPayments');
-export const migrateBankAccounts = () => migrateData(mockBankAccounts, 'bankAccounts');
-export const migrateTaskData = () => migrateData(mockTasks, 'tasks');
-export const migrateTimeLogs = () => migrateData(mockTimeLogs, 'timeLogs');
-export const migrateJournalEntries = () => migrateData(mockJournalEntries, 'journalEntries', undefined, 'entryNo');
-export const migratePurchaseOrders = () => migrateData(mockPurchaseOrders, 'purchaseOrders', undefined, 'poNumber');
-export const migrateInventory = () => migrateData(mockInventory.inventory, 'inventory', undefined, 'sku');
-export const migrateProductionPlans = () => migrateData(mockProductionPlans, 'productionPlans');
-export const migrateWorkOrders = () => migrateData(mockWorkOrders, 'workOrders');
-export const migrateChartOfAccounts = () => migrateSingleDoc(mockChartOfAccounts, 'chartOfAccounts', 'main');
