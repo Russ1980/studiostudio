@@ -18,10 +18,15 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { getClientComplianceData } from "@/lib/actions";
 import { CheckCircle2, AlertCircle, XCircle } from "lucide-react";
+import type { ElementType } from "react";
 
-type ComplianceStatus = "Signed" | "On File" | "Up to Date" | "Pending" | "Missing";
-type OverallStatus = "Compliant" | "Needs Attention" | "Missing Documents";
+// This defines the possible statuses for individual documents.
+type ComplianceStatus = "Complete" | "Pending" | "Missing";
 
+// This defines the possible overall statuses for a client.
+type OverallStatus = "On Track" | "At Risk" | "Needs Attention";
+
+// This is the complete and correct shape for a client compliance object.
 interface ClientCompliance {
   id: string;
   clientName: string;
@@ -31,30 +36,26 @@ interface ClientCompliance {
   bankStatements: ComplianceStatus;
 }
 
-const statusIcons: { [key: string]: React.ElementType } = {
-  "Signed": CheckCircle2,
-  "On File": CheckCircle2,
-  "Up to Date": CheckCircle2,
+const statusIcons: { [key: string]: ElementType } = {
+  "Complete": CheckCircle2,
   "Pending": AlertCircle,
   "Missing": XCircle,
 };
 
 const statusColors: { [key: string]: string } = {
-    "Signed": "text-success",
-    "On File": "text-success",
-    "Up to Date": "text-success",
+    "Complete": "text-success",
     "Pending": "text-yellow-500",
     "Missing": "text-destructive",
 };
 
 const overallStatusVariant: { [key: string]: "success" | "destructive" | "default" } = {
-    "Compliant": "success",
+    "On Track": "success",
     "Needs Attention": "default",
-    "Missing Documents": "destructive",
+    "At Risk": "destructive",
   };
 
 export default async function ClientCompliancePage() {
-    const complianceData = await getClientComplianceData();
+    const complianceData: ClientCompliance[] = await getClientComplianceData();
 
     return (
         <div className="grid gap-6">
