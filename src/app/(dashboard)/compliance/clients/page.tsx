@@ -19,6 +19,18 @@ import { Badge } from "@/components/ui/badge";
 import { getClientComplianceData } from "@/lib/actions";
 import { CheckCircle2, AlertCircle, XCircle } from "lucide-react";
 
+type ComplianceStatus = "Signed" | "On File" | "Up to Date" | "Pending" | "Missing";
+type OverallStatus = "Compliant" | "Needs Attention" | "Missing Documents";
+
+interface ClientCompliance {
+  id: string;
+  clientName: string;
+  overallStatus: OverallStatus;
+  engagementLetter: ComplianceStatus;
+  w9: ComplianceStatus;
+  bankStatements: ComplianceStatus;
+}
+
 const statusIcons: { [key: string]: React.ElementType } = {
   "Signed": CheckCircle2,
   "On File": CheckCircle2,
@@ -72,7 +84,7 @@ export default async function ClientCompliancePage() {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {complianceData.map((client) => {
+                            {complianceData.map((client: ClientCompliance) => {
                                 const IconLetter = statusIcons[client.engagementLetter];
                                 const IconW9 = statusIcons[client.w9];
                                 const IconBank = statusIcons[client.bankStatements];
