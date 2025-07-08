@@ -48,7 +48,7 @@ const grossProfit = totalIncome - totalCogs;
 
 const formatCurrency = (value: number) => {
     if (value === 0) return '-';
-    const options = { style: 'currency', currency: 'USD', minimumFractionDigits: 2 };
+    const options = { style: 'currency', currency: 'USD', minimumFractionDigits: 2 } as const;
     if (value < 0) {
         return `-$${Math.abs(value).toLocaleString('en-US', options).replace('$', '')}`;
     }
