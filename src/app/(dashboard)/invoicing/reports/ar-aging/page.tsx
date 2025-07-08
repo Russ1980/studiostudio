@@ -54,7 +54,7 @@ export default async function ARAgingPage() {
                             <TableHead className="text-right">1 - 30 Days</TableHead>
                             <TableHead className="text-right">31 - 60 Days</TableHead>
                             <TableHead className="text-right">61 - 90 Days</TableHead>
-                            <TableHead className="text-right">> 90 Days</TableHead>
+                            <TableHead className="text-right">90+ Days</TableHead>
                             <TableHead className="text-right">Total</TableHead>
                         </TableRow>
                     </TableHeader>
