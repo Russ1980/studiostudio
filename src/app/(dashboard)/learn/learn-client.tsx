@@ -34,7 +34,7 @@ export function LearnClientPage({ quizzes, resources }: { quizzes: any[], resour
                 <AccordionTrigger>{quiz.question}</AccordionTrigger>
                 <AccordionContent>
                   <RadioGroup className="gap-2">
-                    {quiz.options.map((option, i) => (
+                    {quiz.options.map((option: string, i: number) => (
                       <div className="flex items-center space-x-2" key={i}>
                         <RadioGroupItem value={option} id={`q${index}-o${i}`} />
                         <Label htmlFor={`q${index}-o${i}`}>{option}</Label>
