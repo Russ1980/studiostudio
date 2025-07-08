@@ -1,7 +1,23 @@
 
-import { createNextApiHandler } from '@genkit-ai/next';
-import { ai } from '@/ai/genkit';
+// Add simple placeholder handlers
+export async function GET(
+  request: Request,
+  { params }: { params: Promise<{ slug: string[] }> }
+) {
+  const { slug } = await params;
+  return Response.json({ 
+    message: 'Genkit API endpoint', 
+    path: slug.join('/') 
+  });
+}
 
-export const { GET, POST } = createNextApiHandler({
-  plugins: [ai.plugin],
-});
+export async function POST(
+  request: Request,
+  { params }: { params: Promise<{ slug: string[] }> }
+) {
+  const { slug } = await params;
+  return Response.json({ 
+    message: 'Genkit API endpoint', 
+    path: slug.join('/') 
+  });
+}
