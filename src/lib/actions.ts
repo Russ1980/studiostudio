@@ -50,6 +50,7 @@ import {
   mockOperationsAnalytics,
   mockProductionTracking,
   mockScheduling,
+  mockJobCostingDashboard,
   mockJobProfitabilityData,
   mockWipReportData,
   mockShipments,
@@ -766,12 +767,12 @@ export async function addChartOfAccount(values: z.infer<typeof AccountSchema>) {
         
         // Create a new parent-level account entry
         const newParentAccount = {
-            name: name,
-            code: code || '',
-            type: type,
-            balance: balance,
+            name: newAccount.name,
+            code: newAccount.code,
+            type: newAccount.type,
+            balance: newAccount.balance,
             subAccounts: [
-                {...newAccount, balance: balance, ytd: balance}
+                {...newAccount, balance: newAccount.balance, ytd: newAccount.ytd}
             ]
         }
         
