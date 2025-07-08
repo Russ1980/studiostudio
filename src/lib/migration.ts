@@ -24,7 +24,6 @@ export async function migrateData(
     return { success: false, error: "Database not initialized." };
   }
 
-  // Now it is safe to proceed.
   const batch = firestore.batch();
 
   data.forEach(item => {
@@ -52,35 +51,35 @@ export async function migrateData(
 
 
 export async function migrateClientData() {
-    return migrateData(mockClients, 'clients');
+    return newMigrateData(mockClients, 'clients');
 }
 
 export async function migrateInvoiceData() {
-    return migrateData(mockInvoices, 'invoices');
+    return newMigrateData(mockInvoices, 'invoices');
 }
 
 export async function migrateEmployeeData() {
-    return migrateData(mockEmployees, 'employees');
+    return newMigrateData(mockEmployees, 'employees');
 }
 
 export async function migrateJobData() {
-    return migrateData(mockJobs, 'jobs');
+    return newMigrateData(mockJobs, 'jobs');
 }
 
 export async function migrateTaxFilings() {
-    return migrateData(mockTaxFilings, 'taxFilings');
+    return newMigrateData(mockTaxFilings, 'taxFilings');
 }
 
 export async function migrateTaxPayments() {
-    return migrateData(mockTaxPayments, 'taxPayments');
+    return newMigrateData(mockTaxPayments, 'taxPayments');
 }
 
 export async function migrateBankAccounts() {
-    return migrateData(mockBankAccounts, 'bankAccounts');
+    return newMigrateData(mockBankAccounts, 'bankAccounts');
 }
 
 export async function migrateTaskData() {
-    return migrateData(mockTasks, 'tasks');
+    return newMigrateData(mockTasks, 'tasks');
 }
 
 export async function migrateChartOfAccounts(): Promise<MigrationResult> {
@@ -98,25 +97,57 @@ export async function migrateChartOfAccounts(): Promise<MigrationResult> {
 }
 
 export async function migrateTimeLogs() {
-    return migrateData(mockTimeLogs, 'timeLogs');
+    return newMigrateData(mockTimeLogs, 'timeLogs');
 }
 
 export async function migrateJournalEntries() {
-    return migrateData(mockJournalEntries, 'journalEntries');
+    return newMigrateData(mockJournalEntries, 'journalEntries');
 }
 
 export async function migratePurchaseOrders() {
-    return migrateData(mockPurchaseOrders, 'purchaseOrders');
+    return newMigrateData(mockPurchaseOrders, 'purchaseOrders');
 }
 
 export async function migrateInventory() {
-    return migrateData(mockInventory.inventory, 'inventory');
+    return newMigrateData(mockInventory.inventory, 'inventory');
 }
 
 export async function migrateProductionPlans() {
-    return migrateData(mockProductionPlans, 'productionPlans');
+    return newMigrateData(mockProductionPlans, 'productionPlans');
 }
 
 export async function migrateWorkOrders() {
-    return migrateData(mockWorkOrders, 'workOrders');
+    return newMigrateData(mockWorkOrders, 'workOrders');
+}
+
+
+export async function newMigrateData(
+  data: any[],
+  targetCollection: string,
+  transform?: (item: any) => any
+) {
+  if (!firestore) {
+    console.error("NEW_MIGRATE_DATA: Firestore is not initialized.");
+    return { success: false, error: "Database not initialized." };
+  }
+
+  const batch = firestore.batch();
+
+  data.forEach(item => {
+    const docId = item.id;
+    if (!docId) {
+      return;
+    }
+    const docRef = firestore.collection(targetCollection).doc(docId);
+    const transformedData = transform ? transform(item) : item;
+    batch.set(docRef, transformedData);
+  });
+
+  try {
+    await batch.commit();
+    return { success: true, migrated: data.length };
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
+    return { success: false, error: errorMessage };
+  }
 }
