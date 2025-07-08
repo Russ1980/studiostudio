@@ -4,34 +4,50 @@
 import { firestore } from './firebase-admin';
 import { mockClients, mockInvoices, mockEmployees, mockJobsWithDetails as mockJobs, mockTaxFilings, mockTaxPayments, mockBankAccounts, mockTasks, mockChartOfAccounts, mockTimeLogs, mockJournalEntries, mockPurchaseOrders, mockInventory, mockProductionPlans, mockWorkOrders } from './data';
 
-export async function migrateData(data: any[], targetCollection: string, transform?: (item: any) => any) {
+// Define the shape of the result object for clarity
+type MigrationResult = {
+  success: boolean;
+  migrated?: number;
+  error?: string;
+};
+
+// The function now correctly returns a Promise of our result object
+export async function migrateData(
+  data: any[],
+  targetCollection: string,
+  transform?: (item: any) => any
+): Promise<MigrationResult> {
+  
+  // THE CRITICAL NULL CHECK: Happens once, at the very beginning.
+  if (!firestore) {
+    console.error("CRITICAL: Firestore is not initialized. Aborting migration.");
+    return { success: false, error: "Database not initialized." };
+  }
+
+  // Now it is safe to proceed.
+  const batch = firestore.batch();
+
+  data.forEach(item => {
+    const docId = item.id;
+    if (!docId) {
+      console.warn("Skipping item in migration due to missing ID:", item);
+      return;
+    }
     
-    if (!firestore) {
-        console.error("CRITICAL: Firestore is not initialized.");
-        return { success: false, error: "Database not initialized." };
-    }
+    const docRef = firestore.collection(targetCollection).doc(docId);
+    const transformedData = transform ? transform(item) : item;
+    batch.set(docRef, transformedData);
+  });
 
-    const batch = firestore.batch();
-
-    data.forEach(item => {
-        const docId = item.id;
-        if (!docId) {
-            console.warn("Skipping item with no ID:", item);
-            return;
-        }
-        const docRef = firestore.collection(targetCollection).doc(docId); 
-        const transformedData = transform ? transform(item) : item;
-        batch.set(docRef, transformedData);
-    });
-
-    try {
-        await batch.commit();
-        console.log(`Success! Migrated ${data.length} docs to ${targetCollection}.`);
-        return { success: true, migrated: data.length };
-    } catch (error) {
-        console.error("Error committing batch:", error);
-        return { success: false, error: (error as Error).message };
-    }
+  try {
+    await batch.commit();
+    console.log(`Success! Migrated ${data.length} docs to ${targetCollection}.`);
+    return { success: true, migrated: data.length };
+  } catch (error) {
+    console.error("Error committing migration batch:", error);
+    const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
+    return { success: false, error: errorMessage };
+  }
 }
 
 
@@ -67,7 +83,7 @@ export async function migrateTaskData() {
     return migrateData(mockTasks, 'tasks');
 }
 
-export async function migrateChartOfAccounts() {
+export async function migrateChartOfAccounts(): Promise<MigrationResult> {
     if (!firestore) {
         return { success: false, error: "Firebase Admin SDK not initialized." };
     }
