@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -36,7 +35,7 @@ const statusVariant: { [key: string]: "success" | "destructive" | "default" } = 
   Paid: "success",
   Overdue: "destructive",
   Sent: "default",
-  Draft: "secondary",
+  Draft: "default",
 };
 
 export function InvoiceTable({ invoices, clients }: { invoices: Invoice[], clients: Client[] }) {
