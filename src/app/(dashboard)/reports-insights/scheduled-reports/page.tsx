@@ -24,9 +24,18 @@ import {
 import { MoreHorizontal, PlusCircle } from "lucide-react";
 import { getScheduledReports } from "@/lib/actions";
 
-const statusVariant: { [key: string]: "success" | "secondary" } = {
+const statusVariant: { [key: string]: "success" | "default" } = {
   Active: "success",
-  Paused: "secondary",
+  Paused: "default",
+};
+
+type ScheduledReport = {
+  id: string;
+  name: string;
+  frequency: string;
+  nextRun: string;
+  recipients: string;
+  status: string;
 };
 
 export default async function ScheduledReportsPage() {
@@ -61,7 +70,7 @@ export default async function ScheduledReportsPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {scheduledReports.map((report) => (
+              {scheduledReports.map((report: ScheduledReport) => (
                 <TableRow key={report.id}>
                   <TableCell className="font-medium">{report.name}</TableCell>
                   <TableCell>{report.frequency}</TableCell>
