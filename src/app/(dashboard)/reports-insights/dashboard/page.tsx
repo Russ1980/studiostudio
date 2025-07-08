@@ -12,14 +12,11 @@ const mockExpenseData = [
     { category: "Overhead", amount: 85000 },
 ];
 
-const fallbackInsights: {
-    type: "Trend Analysis" | "Anomaly Detection" | "Cash Flow Forecast" | "Key Highlight";
-    summary: string;
-}[] = [
+const fallbackInsights = [
     { type: "Anomaly Detection", summary: "A significant revenue dip was detected in April, which is inconsistent with the overall growth trend. This warrants further investigation." },
     { type: "Trend Analysis", summary: "Excluding the anomaly in April, your revenue shows a consistent upward trend over the past six months, indicating strong growth." },
     { type: "Key Highlight", summary: "Cost of Goods Sold (COGS) and Salaries are your two largest expense categories, representing a significant portion of your total operating costs." },
-];
+] as const;
 
 export default async function ReportsDashboardPage() {
     let insightsData;

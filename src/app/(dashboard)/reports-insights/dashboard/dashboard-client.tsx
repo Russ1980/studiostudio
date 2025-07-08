@@ -49,7 +49,7 @@ const chartConfig = {
   amount: { label: "Amount", color: "hsl(var(--chart-2))" },
 };
 
-export function DashboardClientPage({ insights }: { insights: GenerateDashboardInsightsOutput['insights'] }) {
+export function DashboardClientPage({ insights }: { insights: Readonly<GenerateDashboardInsightsOutput['insights']> }) {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
