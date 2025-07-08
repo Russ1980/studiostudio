@@ -1265,18 +1265,18 @@ export async function getExportHistory() {
 }
 
 // MIGRATION SERVER ACTIONS
-export const migrateClientData = () => migrateData(mockClients, 'clients');
-export const migrateInvoiceData = () => migrateData(mockInvoices, 'invoices', undefined, 'invoice');
-export const migrateEmployeeData = () => migrateData(mockEmployees, 'employees');
-export const migrateJobData = () => migrateData(mockJobs, 'jobs');
-export const migrateTaxFilings = () => migrateData(mockTaxFilings, 'taxFilings');
-export const migrateTaxPayments = () => migrateData(mockTaxPayments, 'taxPayments');
-export const migrateBankAccounts = () => migrateData(mockBankAccounts, 'bankAccounts');
-export const migrateTaskData = () => migrateData(mockTasks, 'tasks');
-export const migrateTimeLogs = () => migrateData(mockTimeLogs, 'timeLogs');
-export const migrateJournalEntries = () => migrateData(mockJournalEntries, 'journalEntries', undefined, 'entryNo');
-export const migratePurchaseOrders = () => migrateData(mockPurchaseOrders, 'purchaseOrders', undefined, 'poNumber');
-export const migrateInventory = () => migrateData(mockInventory.inventory, 'inventory', undefined, 'sku');
-export const migrateProductionPlans = () => migrateData(mockProductionPlans, 'productionPlans');
-export const migrateWorkOrders = () => migrateData(mockWorkOrders, 'workOrders');
-export const migrateChartOfAccounts = () => migrateSingleDoc(mockChartOfAccounts, 'chartOfAccounts', 'main');
+export const migrateClientData = async () => migrateData(mockClients, 'clients');
+export const migrateInvoiceData = async () => migrateData(mockInvoices, 'invoices', undefined, 'invoice');
+export const migrateEmployeeData = async () => migrateData(mockEmployees, 'employees');
+export const migrateJobData = async () => migrateData(mockJobs, 'jobs');
+export const migrateTaxFilings = async () => migrateData(mockTaxFilings, 'taxFilings');
+export const migrateTaxPayments = async () => migrateData(mockTaxPayments, 'taxPayments');
+export const migrateBankAccounts = async () => migrateData(mockBankAccounts, 'bankAccounts');
+export const migrateTaskData = async () => migrateData(mockTasks, 'tasks');
+export const migrateTimeLogs = async () => migrateData(mockTimeLogs, 'timeLogs');
+export const migrateJournalEntries = async () => migrateData(mockJournalEntries, 'journalEntries', undefined, 'entryNo');
+export const migratePurchaseOrders = async () => migrateData(mockPurchaseOrders, 'purchaseOrders', undefined, 'poNumber');
+export const migrateInventory = async () => migrateData(mockInventory.inventory, 'inventory', undefined, 'sku');
+export const migrateProductionPlans = async () => migrateData(mockProductionPlans, 'productionPlans');
+export const migrateWorkOrders = async () => migrateData(mockWorkOrders, 'workOrders');
+export const migrateChartOfAccounts = async () => migrateSingleDoc(mockChartOfAccounts, 'chartOfAccounts', 'main');
