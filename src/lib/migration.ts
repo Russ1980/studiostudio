@@ -3,38 +3,40 @@
 
 import { firestore } from './firebase-admin';
 
+// Define the shape of the result object.
 type MigrationResult = {
   success: boolean;
   migrated?: number;
   error?: string;
 };
 
+// This is our core logic. It's now only used by our Server Actions file.
 export async function migrateData(
   data: any[],
   targetCollection: string,
   idKey: string = 'id'
 ): Promise<MigrationResult> {
+  // Use the imported firestore object, not a function call
   if (!firestore) {
     console.error("MIGRATION FAILED: Firestore is not initialized.");
     return { success: false, error: "Database not initialized." };
   }
 
   const batch = firestore.batch();
-  let migratedCount = 0;
   data.forEach(item => {
-    const docId = item[idKey] || item.id;
+    // Use the idKey to dynamically get the document ID
+    const docId = item[idKey];
     if (docId) {
       const docRef = firestore.collection(targetCollection).doc(String(docId));
       batch.set(docRef, item);
-      migratedCount++;
     }
   });
 
   try {
     await batch.commit();
-    return { success: true, migrated: migratedCount };
+    return { success: true, migrated: data.length };
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
     return { success: false, error: errorMessage };
   }
 }
@@ -55,5 +57,3 @@ export async function migrateSingleDoc(
         return { success: false, error: errorMessage };
     }
 }
-
-    
