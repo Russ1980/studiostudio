@@ -1274,76 +1274,76 @@ const checkFirestore = () => {
 // MIGRATION SERVER ACTIONS
 export async function migrateClientData() { 
     const check = checkFirestore();
-    if(check) return check;
-    return migrateData(mockClients, 'clients'); 
+    if(check || !firestore) return check || { success: false, error: "DB not available" };
+    return migrateData(firestore, mockClients, 'clients'); 
 }
 export async function migrateInvoiceData() { 
     const check = checkFirestore();
-    if(check) return check;
-    return migrateData(mockInvoices, 'invoices', 'invoice'); 
+    if(check || !firestore) return check || { success: false, error: "DB not available" };
+    return migrateData(firestore, mockInvoices, 'invoices', 'invoice'); 
 }
 export async function migrateEmployeeData() { 
     const check = checkFirestore();
-    if(check) return check;
-    return migrateData(mockEmployees, 'employees');
+    if(check || !firestore) return check || { success: false, error: "DB not available" };
+    return migrateData(firestore, mockEmployees, 'employees');
 }
 export async function migrateJobData() { 
     const check = checkFirestore();
-    if(check) return check;
-    return migrateData(mockJobs, 'jobs'); 
+    if(check || !firestore) return check || { success: false, error: "DB not available" };
+    return migrateData(firestore, mockJobs, 'jobs'); 
 }
 export async function migrateTaxFilings() { 
     const check = checkFirestore();
-    if(check) return check;
-    return migrateData(mockTaxFilings, 'taxFilings'); 
+    if(check || !firestore) return check || { success: false, error: "DB not available" };
+    return migrateData(firestore, mockTaxFilings, 'taxFilings'); 
 }
 export async function migrateTaxPayments() { 
     const check = checkFirestore();
-    if(check) return check;
-    return migrateData(mockTaxPayments, 'taxPayments'); 
+    if(check || !firestore) return check || { success: false, error: "DB not available" };
+    return migrateData(firestore, mockTaxPayments, 'taxPayments'); 
 }
 export async function migrateBankAccounts() { 
     const check = checkFirestore();
-    if(check) return check;
-    return migrateData(mockBankAccounts, 'bankAccounts'); 
+    if(check || !firestore) return check || { success: false, error: "DB not available" };
+    return migrateData(firestore, mockBankAccounts, 'bankAccounts'); 
 }
 export async function migrateTaskData() { 
     const check = checkFirestore();
-    if(check) return check;
-    return migrateData(mockTasks, 'tasks'); 
+    if(check || !firestore) return check || { success: false, error: "DB not available" };
+    return migrateData(firestore, mockTasks, 'tasks'); 
 }
 export async function migrateChartOfAccounts() { 
     const check = checkFirestore();
-    if(check) return check;
-    return migrateSingleDoc(mockChartOfAccounts, 'chartOfAccounts', 'main'); 
+    if(check || !firestore) return check || { success: false, error: "DB not available" };
+    return migrateSingleDoc(firestore, mockChartOfAccounts, 'chartOfAccounts', 'main'); 
 }
 export async function migrateTimeLogs() { 
     const check = checkFirestore();
-    if(check) return check;
-    return migrateData(mockTimeLogs, 'timeLogs'); 
+    if(check || !firestore) return check || { success: false, error: "DB not available" };
+    return migrateData(firestore, mockTimeLogs, 'timeLogs'); 
 }
 export async function migrateJournalEntries() { 
     const check = checkFirestore();
-    if(check) return check;
-    return migrateData(mockJournalEntries, 'journalEntries', 'entryNo'); 
+    if(check || !firestore) return check || { success: false, error: "DB not available" };
+    return migrateData(firestore, mockJournalEntries, 'journalEntries', 'entryNo'); 
 }
 export async function migratePurchaseOrders() { 
     const check = checkFirestore();
-    if(check) return check;
-    return migrateData(mockPurchaseOrders, 'purchaseOrders', 'poNumber'); 
+    if(check || !firestore) return check || { success: false, error: "DB not available" };
+    return migrateData(firestore, mockPurchaseOrders, 'purchaseOrders', 'poNumber'); 
 }
 export async function migrateInventory() { 
     const check = checkFirestore();
-    if(check) return check;
-    return migrateData(mockInventory.inventory, 'inventory', 'sku'); 
+    if(check || !firestore) return check || { success: false, error: "DB not available" };
+    return migrateData(firestore, mockInventory.inventory, 'inventory', 'sku'); 
 }
 export async function migrateProductionPlans() { 
     const check = checkFirestore();
-    if(check) return check;
-    return migrateData(mockProductionPlans, 'productionPlans'); 
+    if(check || !firestore) return check || { success: false, error: "DB not available" };
+    return migrateData(firestore, mockProductionPlans, 'productionPlans'); 
 }
 export async function migrateWorkOrders() { 
     const check = checkFirestore();
-    if(check) return check;
-    return migrateData(mockWorkOrders, 'workOrders'); 
+    if(check || !firestore) return check || { success: false, error: "DB not available" };
+    return migrateData(firestore, mockWorkOrders, 'workOrders'); 
 }
