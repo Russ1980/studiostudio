@@ -20,6 +20,23 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+   webpack: (config, { isServer }) => {
+    // Suppress warnings for server-side dependencies
+    if (isServer) {
+      config.externals.push({
+        '@opentelemetry/instrumentation': 'commonjs @opentelemetry/instrumentation',
+        'handlebars': 'commonjs handlebars'
+      });
+    }
+    
+    // Ignore critical dependency warnings
+    config.module = {
+      ...config.module,
+      exprContextCritical: false
+    };
+    
+    return config;
+  }
 };
 
 export default nextConfig;

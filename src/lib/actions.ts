@@ -1263,22 +1263,87 @@ export async function getExportHistory() {
     return mockExportHistory;
 }
 
+const checkFirestore = () => {
+    if (!firestore) {
+        console.error("MIGRATION FAILED: Firestore is not initialized.");
+        return { success: false, error: "Database not initialized." };
+    }
+    return null;
+}
+
 // MIGRATION SERVER ACTIONS
-export async function migrateClientData() { return migrateData(mockClients, 'clients'); }
-export async function migrateInvoiceData() { return migrateData(mockInvoices, 'invoices', 'invoice'); }
-export async function migrateEmployeeData() { return migrateData(mockEmployees, 'employees'); }
-export async function migrateJobData() { return migrateData(mockJobs, 'jobs'); }
-export async function migrateTaxFilings() { return migrateData(mockTaxFilings, 'taxFilings'); }
-export async function migrateTaxPayments() { return migrateData(mockTaxPayments, 'taxPayments'); }
-export async function migrateBankAccounts() { return migrateData(mockBankAccounts, 'bankAccounts'); }
-export async function migrateTaskData() { return migrateData(mockTasks, 'tasks'); }
-export async function migrateChartOfAccounts() { return migrateSingleDoc(mockChartOfAccounts, 'chartOfAccounts', 'main'); }
-export async function migrateTimeLogs() { return migrateData(mockTimeLogs, 'timeLogs'); }
-export async function migrateJournalEntries() { return migrateData(mockJournalEntries, 'journalEntries', 'entryNo'); }
-export async function migratePurchaseOrders() { return migrateData(mockPurchaseOrders, 'purchaseOrders', 'poNumber'); }
-export async function migrateInventory() { return migrateData(mockInventory.inventory, 'inventory', 'sku'); }
-export async function migrateProductionPlans() { return migrateData(mockProductionPlans, 'productionPlans'); }
-export async function migrateWorkOrders() { return migrateData(mockWorkOrders, 'workOrders'); }
-
-
-    
+export async function migrateClientData() { 
+    const check = checkFirestore();
+    if(check) return check;
+    return migrateData(mockClients, 'clients'); 
+}
+export async function migrateInvoiceData() { 
+    const check = checkFirestore();
+    if(check) return check;
+    return migrateData(mockInvoices, 'invoices', 'invoice'); 
+}
+export async function migrateEmployeeData() { 
+    const check = checkFirestore();
+    if(check) return check;
+    return migrateData(mockEmployees, 'employees');
+}
+export async function migrateJobData() { 
+    const check = checkFirestore();
+    if(check) return check;
+    return migrateData(mockJobs, 'jobs'); 
+}
+export async function migrateTaxFilings() { 
+    const check = checkFirestore();
+    if(check) return check;
+    return migrateData(mockTaxFilings, 'taxFilings'); 
+}
+export async function migrateTaxPayments() { 
+    const check = checkFirestore();
+    if(check) return check;
+    return migrateData(mockTaxPayments, 'taxPayments'); 
+}
+export async function migrateBankAccounts() { 
+    const check = checkFirestore();
+    if(check) return check;
+    return migrateData(mockBankAccounts, 'bankAccounts'); 
+}
+export async function migrateTaskData() { 
+    const check = checkFirestore();
+    if(check) return check;
+    return migrateData(mockTasks, 'tasks'); 
+}
+export async function migrateChartOfAccounts() { 
+    const check = checkFirestore();
+    if(check) return check;
+    return migrateSingleDoc(mockChartOfAccounts, 'chartOfAccounts', 'main'); 
+}
+export async function migrateTimeLogs() { 
+    const check = checkFirestore();
+    if(check) return check;
+    return migrateData(mockTimeLogs, 'timeLogs'); 
+}
+export async function migrateJournalEntries() { 
+    const check = checkFirestore();
+    if(check) return check;
+    return migrateData(mockJournalEntries, 'journalEntries', 'entryNo'); 
+}
+export async function migratePurchaseOrders() { 
+    const check = checkFirestore();
+    if(check) return check;
+    return migrateData(mockPurchaseOrders, 'purchaseOrders', 'poNumber'); 
+}
+export async function migrateInventory() { 
+    const check = checkFirestore();
+    if(check) return check;
+    return migrateData(mockInventory.inventory, 'inventory', 'sku'); 
+}
+export async function migrateProductionPlans() { 
+    const check = checkFirestore();
+    if(check) return check;
+    return migrateData(mockProductionPlans, 'productionPlans'); 
+}
+export async function migrateWorkOrders() { 
+    const check = checkFirestore();
+    if(check) return check;
+    return migrateData(mockWorkOrders, 'workOrders'); 
+}
