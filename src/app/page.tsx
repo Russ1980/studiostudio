@@ -200,7 +200,7 @@ export default function LandingPage() {
                   <div className="flex items-center justify-center">
                       <div
                           className="rounded-xl shadow-2xl w-full h-auto aspect-[1024/665] bg-cover bg-center"
-                          style={{ backgroundImage: "url('https://storage.googleapis.com/project-charm-gcp-static-assets/mardsen-dashboard-screenshot.png')" }}
+                          style={{ backgroundImage: "url(https://storage.googleapis.com/project-charm-gcp-static-assets/mardsen-dashboard-screenshot.png)" }}
                           data-ai-hint="dashboard screenshot"
                       />
                   </div>
