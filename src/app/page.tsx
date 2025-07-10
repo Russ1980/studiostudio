@@ -183,8 +183,7 @@ export default function LandingPage() {
                         From core accounting to intelligent tax planning, Mardisen Suite provides a fully integrated set of tools to run your entire financial operations. No more data silos or jumping between apps.
                     </p>
                 </div>
-                <div className="mx-auto grid max-w-5xl items-center gap-8 py-12 lg:grid-cols-2">
-                  <div className="flex flex-col gap-8">
+                <div className="mx-auto grid max-w-4xl grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 py-12">
                     {features.map((feature, index) => (
                       <div key={index} className="flex items-start gap-4">
                         <div className="p-3 bg-primary/10 rounded-full">
@@ -196,14 +195,6 @@ export default function LandingPage() {
                         </div>
                       </div>
                     ))}
-                  </div>
-                  <div className="flex items-center justify-center">
-                      <div
-                          className="rounded-xl shadow-2xl w-full h-auto aspect-[1024/665] bg-cover bg-center"
-                          style={{ backgroundImage: "url(https://storage.googleapis.com/project-charm-gcp-static-assets/mardsen-dashboard-screenshot.png)" }}
-                          data-ai-hint="dashboard screenshot"
-                      />
-                  </div>
                 </div>
             </div>
         </section>
