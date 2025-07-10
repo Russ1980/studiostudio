@@ -3,125 +3,100 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Logo } from '@/components/icons';
 import Image from 'next/image';
-import { ChevronDown, Star, AudioWaveform, SlidersHorizontal, BarChart, DollarSign, TrendingUp, Users, X, Zap, ChevronRight, BarChart2, AlertTriangle, ArrowUp, Send, CheckCircle, Quote } from 'lucide-react';
+import { ChevronDown, Star, AudioWaveform, SlidersHorizontal, BarChart, DollarSign, TrendingUp, Users, X, Zap, ChevronRight, BarChart2, AlertTriangle, ArrowUp, Send, CheckCircle, Quote, CreditCard, Apple, Search } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
+import { Input } from '@/components/ui/input';
+import { Separator } from '@/components/ui/separator';
 
-
-const ServaUICard = () => {
-    const actions = [
-        { status: 'active', text: 'Launching Serva AI', time: '2 seconds ago' },
-        { status: 'processing', text: 'Processing tax optimization strategies...', time: '8 seconds ago' },
-        { status: 'completed', text: 'Cash flow optimization complete', time: '15 seconds ago' },
-    ];
-    
-    const getStatusBadge = (status:string) => {
-        switch (status) {
-            case 'active': return <Badge variant="default">active</Badge>;
-            case 'processing': return <Badge variant="secondary">processing</Badge>;
-            case 'completed': return <Badge variant="success">completed</Badge>;
-            default: return null;
-        }
-    }
-
-    return (
-        <Card className="bg-white text-gray-800 shadow-2xl rounded-2xl w-full max-w-md mx-auto">
-            <CardHeader className="p-4 flex flex-row items-center justify-between border-b bg-slate-50 rounded-t-2xl">
-                <div>
-                    <h3 className="font-bold text-lg">SERVA</h3>
-                    <p className="text-xs text-muted-foreground">SOC 2 & HIPAA compliant</p>
-                </div>
-                <div className="text-right">
-                    <p className="text-xs text-muted-foreground">Active Processes</p>
-                    <p className="text-2xl font-bold bg-primary text-primary-foreground px-3 py-1 rounded-md">24</p>
-                </div>
+const HeroImage = () => {
+  return (
+    <div className="relative w-full max-w-2xl transform scale-90 md:scale-100 lg:scale-110 lg:translate-x-12">
+      {/* Desktop View */}
+      <Card className="bg-white/90 backdrop-blur-sm shadow-2xl rounded-2xl overflow-hidden pr-4">
+        <CardHeader className="flex flex-row items-center justify-between p-4 border-b">
+          <div className="flex items-center gap-2">
+            <Logo className="h-6 w-6" />
+            <span className="font-semibold text-foreground">Mardisen Suite</span>
+          </div>
+          <div className="relative w-48">
+            <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input placeholder="Search" className="pl-8 h-8 text-xs bg-white" />
+          </div>
+        </CardHeader>
+        <CardContent className="p-4 grid grid-cols-2 gap-4">
+          <div className="col-span-2">
+            <h3 className="text-lg font-semibold">Today</h3>
+            <div className="flex justify-between items-baseline mt-1">
+              <div>
+                <p className="text-xs text-muted-foreground">Net volume</p>
+                <p className="text-2xl font-bold text-foreground">$3,528,198.72</p>
+              </div>
+              <div>
+                <p className="text-xs text-muted-foreground">Yesterday</p>
+                <p className="text-sm font-medium text-muted-foreground">$2,931,556.34</p>
+              </div>
+            </div>
+            <div className="h-24 mt-2">
+              <Image src="https://placehold.co/400x100.png" width={400} height={100} alt="Line chart" className="w-full h-full object-contain" data-ai-hint="line chart" />
+            </div>
+          </div>
+          <Card className="bg-white">
+            <CardHeader className="p-3">
+              <CardDescription>Net volume from sales</CardDescription>
+              <CardTitle>$39,274.29</CardTitle>
             </CardHeader>
-            <CardContent className="p-4 space-y-4">
-                <Card className="bg-slate-50">
-                    <CardHeader className="p-3">
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                                <AudioWaveform className="h-4 w-4 text-primary" />
-                                <span className="text-sm font-semibold">SERVA</span>
-                                <span className="text-xs text-muted-foreground">2 seconds ago</span>
-                            </div>
-                            <Badge variant="destructive">High Priority</Badge>
-                        </div>
-                    </CardHeader>
-                    <CardContent className="p-3 pt-0">
-                        <p className="font-semibold mb-2 text-card-foreground">Launching Serva AI 🚀</p>
-                        <p className="text-sm text-muted-foreground mb-3">Your personal AI is analyzing 15 financial reports and identified 3 optimization opportunities worth $12,400.</p>
-                        <div className="flex items-center gap-2 text-sm">
-                            <ArrowUp className="h-4 w-4 text-success"/>
-                            <span className="font-bold text-card-foreground">$12,400</span>
-                            <span className="text-success font-semibold">+$2,100</span>
-                        </div>
-                    </CardContent>
-                </Card>
-
-                <div className="grid grid-cols-2 gap-4">
-                    <Card className="bg-slate-50 p-3">
-                        <p className="text-xs text-muted-foreground">Time Saved Today</p>
-                        <div className="flex items-end justify-between">
-                            <p className="text-2xl font-bold">42h</p>
-                            <BarChart2 className="h-6 w-6 text-muted-foreground" />
-                        </div>
-                        <p className="text-xs text-success">+12% vs yesterday</p>
-                    </Card>
-                    <Card className="bg-slate-50 p-3">
-                        <p className="text-xs text-muted-foreground">Tasks Completed</p>
-                        <div className="flex items-end justify-between">
-                            <p className="text-2xl font-bold">156</p>
-                            <CheckCircle className="h-6 w-6 text-muted-foreground" />
-                        </div>
-                        <p className="text-xs text-success">+28 this hour</p>
-                    </Card>
-                    <Card className="bg-slate-50 p-3">
-                        <p className="text-xs text-muted-foreground">Savings Generated</p>
-                        <div className="flex items-end justify-between">
-                            <p className="text-2xl font-bold">$12,400</p>
-                             <DollarSign className="h-6 w-6 text-muted-foreground" />
-                        </div>
-                        <p className="text-xs text-muted-foreground">This month</p>
-                    </Card>
-                    <Card className="bg-destructive/10 border-destructive/50 p-3">
-                        <p className="text-xs text-destructive">Active Alerts</p>
-                        <div className="flex items-end justify-between">
-                            <p className="text-2xl font-bold text-destructive">3</p>
-                             <AlertTriangle className="h-6 w-6 text-destructive" />
-                        </div>
-                        <p className="text-xs text-destructive">Require attention</p>
-                    </Card>
-                </div>
-                <div>
-                    <h4 className="text-sm font-semibold mb-2">Recent AI Actions</h4>
-                    <ul className="space-y-2">
-                        {actions.map(action => (
-                            <li key={action.text} className="flex items-center justify-between text-sm p-2 bg-slate-100 rounded-md">
-                               <div className="flex items-center gap-2">
-                                  <div className={`w-1.5 h-1.5 rounded-full ${action.status === 'completed' ? 'bg-success' : 'bg-primary'}`}></div>
-                                  <span className="text-card-foreground">{action.text}</span>
-                               </div>
-                               <div className="flex items-center gap-4">
-                                  <span className="text-xs text-muted-foreground">{action.time}</span>
-                                  {getStatusBadge(action.status)}
-                               </div>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
+            <CardContent className="p-3 pt-0 h-20">
+              <Image src="https://placehold.co/200x80.png" width={200} height={80} alt="Line chart" className="w-full h-full object-contain" data-ai-hint="line chart" />
             </CardContent>
-            <CardFooter className="p-2 border-t flex items-center justify-between">
-                <Button className="w-full">
-                    <Send className="h-4 w-4 mr-2" />
-                    Send Element
-                </Button>
-                <Button variant="ghost" className="text-xs">Send Console Errors (2)</Button>
-            </CardFooter>
+          </Card>
+          <Card className="bg-white">
+            <CardHeader className="p-3">
+              <CardDescription>New customers</CardDescription>
+              <CardTitle>37</CardTitle>
+            </CardHeader>
+            <CardContent className="p-3 pt-0 h-20">
+               <Image src="https://placehold.co/200x80.png" width={200} height={80} alt="Line chart" className="w-full h-full object-contain" data-ai-hint="line chart" />
+            </CardContent>
+          </Card>
+        </CardContent>
+      </Card>
+
+      {/* Mobile View */}
+      <div className="absolute -left-12 -bottom-16 w-64">
+        <Card className="bg-white shadow-2xl rounded-2xl p-4 transform -rotate-6">
+          <CardContent className="p-0 space-y-4">
+            <div className="text-center">
+              <div className="inline-block p-1 bg-muted rounded-lg -mt-8 mb-2">
+                <div className="w-14 h-16 bg-purple-200 rounded-md"></div>
+              </div>
+              <h3 className="font-semibold">Mardisen Suite</h3>
+              <p className="text-sm text-muted-foreground">$99 per month</p>
+            </div>
+            <Button className="w-full bg-black hover:bg-gray-800 text-white"><Apple className="mr-2 fill-white"/> Pay</Button>
+            <div className="flex items-center gap-2">
+              <Separator className="flex-1"/>
+              <span className="text-xs text-muted-foreground">Or pay with card</span>
+              <Separator className="flex-1"/>
+            </div>
+            <div className="space-y-2">
+                <Input placeholder="Email" className="text-xs"/>
+                <div className="relative">
+                    <Input placeholder="Card Information" className="text-xs pr-20"/>
+                    <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
+                        <CreditCard className="h-4 w-4 text-blue-500" />
+                        <CreditCard className="h-4 w-4 text-orange-500" />
+                    </div>
+                </div>
+            </div>
+            <Button className="w-full">Pay</Button>
+          </CardContent>
         </Card>
-    );
+      </div>
+    </div>
+  );
 };
 
 
@@ -218,8 +193,8 @@ export default function LandingPage() {
                     <p><span className="font-bold">$2.5M+</span> saved monthly</p>
                  </div>
               </div>
-              <div className="hidden lg:flex items-center justify-center -mr-16">
-                <ServaUICard />
+              <div className="hidden lg:flex items-center justify-center">
+                <HeroImage />
               </div>
             </div>
           </div>
