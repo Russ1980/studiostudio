@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Logo } from '@/components/icons';
 import Image from 'next/image';
-import { ChevronDown, Star, AudioWaveform, SlidersHorizontal, BarChart, DollarSign, TrendingUp, Users, X, Zap, ChevronRight, BarChart2, AlertTriangle, ArrowUp, Send, CheckCircle, Quote, CreditCard, Search } from 'lucide-react';
+import { ChevronDown, Star, AudioWaveform, SlidersHorizontal, BarChart, DollarSign, TrendingUp, Users, X, Zap, ChevronRight, BarChart2, AlertTriangle, ArrowUp, Send, CheckCircle, Quote, CreditCard, Search, BookOpen, Receipt, Wrench, Calculator, BarChart4 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -38,6 +38,39 @@ export default function LandingPage() {
           metricLabel: "Faster Processing",
         },
       ];
+
+  const features = [
+    {
+      icon: BookOpen,
+      title: "Core Accounting",
+      description: "General ledger, chart of accounts, and financial statements."
+    },
+    {
+      icon: Receipt,
+      title: "Invoicing & A/R",
+      description: "Create, send, and track invoices to manage receivables."
+    },
+    {
+      icon: Wrench,
+      title: "Operations",
+      description: "Inventory, production, job costing, and logistics."
+    },
+    {
+      icon: Calculator,
+      title: "Intelligent Tax",
+      description: "AI-powered tax planning, filing, and compliance tools."
+    },
+    {
+      icon: DollarSign,
+      title: "Payroll System",
+      description: "Manage employees, run payroll, and handle tax compliance."
+    },
+    {
+      icon: BarChart4,
+      title: "Reports & Insights",
+      description: "Deep analytics, custom reports, and AI-powered forecasting."
+    },
+  ]
 
   return (
     <div className="flex flex-col min-h-screen bg-white text-gray-900">
@@ -139,7 +172,46 @@ export default function LandingPage() {
             </div>
         </section>
 
-        <section id="testimonials" className="w-full py-12 md:py-24 lg:py-32 bg-slate-50">
+        <section id="features" className="w-full py-12 md:py-24 lg:py-32 bg-slate-50">
+            <div className="container px-4 md:px-6">
+                <div className="flex flex-col items-center justify-center space-y-4 text-center">
+                    <Badge variant="outline" className="py-1.5 px-3 bg-primary/10 text-primary border-primary/20">
+                        <Zap className="h-4 w-4 mr-2 text-primary" />
+                        An End-to-End Financial Intelligence Platform
+                    </Badge>
+                    <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                        From core accounting to intelligent tax planning, Mardisen Suite provides a fully integrated set of tools to run your entire financial operations. No more data silos or jumping between apps.
+                    </p>
+                </div>
+                <div className="mx-auto grid max-w-5xl items-center gap-8 py-12 lg:grid-cols-2">
+                  <div className="flex flex-col gap-8">
+                    {features.map((feature, index) => (
+                      <div key={index} className="flex items-start gap-4">
+                        <div className="p-3 bg-primary/10 rounded-full">
+                            <feature.icon className="h-5 w-5 text-primary"/>
+                        </div>
+                        <div>
+                            <h3 className="font-semibold text-lg">{feature.title}</h3>
+                            <p className="text-muted-foreground">{feature.description}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex items-center justify-center">
+                      <Image 
+                          src="https://storage.googleapis.com/project-charm-gcp-static-assets/mardsen-dashboard-screenshot.png"
+                          alt="Mardisen Suite Dashboard"
+                          width={1024}
+                          height={665}
+                          className="rounded-xl shadow-2xl"
+                          data-ai-hint="dashboard screenshot"
+                      />
+                  </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="testimonials" className="w-full py-12 md:py-24 lg:py-32 bg-white">
             <div className="container px-4 md:px-6">
                 <div className="flex flex-col items-center justify-center space-y-4 text-center">
                     <Badge variant="outline" className="py-1.5 px-3 bg-primary/10 text-primary border-primary/20">
@@ -153,7 +225,7 @@ export default function LandingPage() {
                 </div>
                 <div className="mx-auto grid max-w-5xl items-start gap-8 py-12 lg:grid-cols-3 lg:gap-8">
                     {testimonials.map((testimonial) => (
-                        <Card key={testimonial.name} className="bg-white shadow-lg hover:shadow-xl transition-shadow duration-300">
+                        <Card key={testimonial.name} className="bg-slate-50 shadow-lg hover:shadow-xl transition-shadow duration-300">
                             <CardContent className="p-6 space-y-4">
                                 <div className="flex items-center gap-2">
                                     {[...Array(5)].map((_, i) => (
