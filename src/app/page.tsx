@@ -28,7 +28,7 @@ const HeroImage = () => {
         </Card>
   
         {/* Mobile View in Foreground */}
-        <div className="absolute -bottom-8 -left-16 w-64 h-auto transform rotate-[-12deg]">
+        <div className="absolute -bottom-8 -left-16 w-64 h-auto transform rotate-[-12deg] hidden lg:block">
           <Card className="bg-white shadow-2xl rounded-2xl overflow-hidden border-4 border-slate-200">
             <CardContent className="p-4 text-center">
               <div className="w-16 h-16 bg-primary/10 rounded-lg mx-auto mb-2 flex items-center justify-center">
@@ -153,7 +153,7 @@ export default function LandingPage() {
                     <p><span className="font-bold">$2.5M+</span> saved monthly</p>
                  </div>
               </div>
-              <div className="hidden lg:flex items-center justify-center">
+              <div className="flex items-center justify-center">
                 <HeroImage />
               </div>
             </div>
