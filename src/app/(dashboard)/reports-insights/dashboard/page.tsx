@@ -10,6 +10,7 @@ const mockExpenseData = [
     { category: "COGS", amount: 600000 },
     { category: "R&D", amount: 210000 },
     { category: "Overhead", amount: 85000 },
+    { category: "Other", amount: 335000 },
 ];
 
 const fallbackInsights = [
@@ -58,9 +59,8 @@ export default async function ReportsDashboardPage() {
 
     return (
         <DashboardClientPage 
-            insights={insightsData?.insights || fallbackInsights} 
+            insights={insightsData?.insights || [...fallbackInsights]} 
             revenueData={revenueData}
             expenseData={mockExpenseData}
         />
     );
-}
