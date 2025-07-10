@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Logo } from '@/components/icons';
 import Image from 'next/image';
-import { ChevronDown, Star, AudioWaveform, SlidersHorizontal, BarChart, DollarSign, TrendingUp, Users, X, Zap, ChevronRight, BarChart2, AlertTriangle, ArrowUp, Send, CheckCircle, Quote, CreditCard, Apple, Search } from 'lucide-react';
+import { ChevronDown, Star, AudioWaveform, SlidersHorizontal, BarChart, DollarSign, TrendingUp, Users, X, Zap, ChevronRight, BarChart2, AlertTriangle, ArrowUp, Send, CheckCircle, Quote, CreditCard, Search } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -37,7 +37,7 @@ const HeroImage = () => {
               <h4 className="font-semibold text-sm">Financial Suite</h4>
               <p className="text-xs text-muted-foreground">$99 per month</p>
               <Button className="w-full mt-4 bg-black text-white hover:bg-black/80">
-                <Apple className="h-5 w-5 mr-2 fill-white"/> Pay
+                 Pay
               </Button>
               <div className="relative my-3">
                 <Separator />
