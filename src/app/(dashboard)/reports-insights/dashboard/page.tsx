@@ -59,7 +59,7 @@ export default async function ReportsDashboardPage() {
 
     return (
         <DashboardClientPage 
-            insights={insightsData?.insights || [...fallbackInsights]} 
+            initialInsights={insightsData?.insights || [...fallbackInsights]} 
             revenueData={revenueData}
             expenseData={mockExpenseData}
         />
