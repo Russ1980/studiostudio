@@ -1,3 +1,4 @@
+
 "use client";
 
 import {
@@ -10,7 +11,13 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { DatabaseZap, ShoppingCart, CreditCard } from "lucide-react";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { DatabaseZap, ShoppingCart, CreditCard, PlusCircle } from "lucide-react";
+
+const webhooks = [
+    { url: "https://api.example.com/stripe/webhooks", status: "Enabled", events: 8 },
+];
 
 export default function IntegrationsPage() {
   return (
@@ -23,7 +30,7 @@ export default function IntegrationsPage() {
             </p>
             </div>
         </div>
-      <Tabs defaultValue="accounting" className="w-full">
+      <Tabs defaultValue="payments" className="w-full">
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="accounting">Accounting</TabsTrigger>
           <TabsTrigger value="ecommerce">E-commerce</TabsTrigger>
@@ -70,7 +77,7 @@ export default function IntegrationsPage() {
                 </CardContent>
              </Card>
         </TabsContent>
-        <TabsContent value="payments" className="mt-4">
+        <TabsContent value="payments" className="mt-4 space-y-6">
              <Card>
                 <CardHeader>
                     <CardTitle>Payment Gateways</CardTitle>
@@ -93,6 +100,35 @@ export default function IntegrationsPage() {
                     </Card>
                 </CardContent>
              </Card>
+             <Card>
+                <CardHeader className="flex flex-row items-center justify-between">
+                    <div>
+                        <CardTitle>Stripe Webhooks</CardTitle>
+                        <CardDescription>Manage webhook endpoints for real-time event notifications from Stripe.</CardDescription>
+                    </div>
+                    <Button><PlusCircle className="mr-2"/>Add an endpoint</Button>
+                </CardHeader>
+                <CardContent>
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Endpoint URL</TableHead>
+                                <TableHead>Status</TableHead>
+                                <TableHead>Events</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {webhooks.map((hook, index) => (
+                                <TableRow key={index}>
+                                    <TableCell className="font-mono">{hook.url}</TableCell>
+                                    <TableCell><Badge variant="success">{hook.status}</Badge></TableCell>
+                                    <TableCell>{hook.events} events</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </CardContent>
+            </Card>
         </TabsContent>
       </Tabs>
     </div>
