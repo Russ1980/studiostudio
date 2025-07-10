@@ -13,88 +13,18 @@ import { Separator } from '@/components/ui/separator';
 
 const HeroImage = () => {
   return (
-    <div className="relative w-full max-w-2xl transform scale-90 md:scale-100 lg:scale-110 lg:translate-x-12">
-      {/* Desktop View */}
-      <Card className="bg-white/90 backdrop-blur-sm shadow-2xl rounded-2xl overflow-hidden pr-4">
-        <CardHeader className="flex flex-row items-center justify-between p-4 border-b">
-          <div className="flex items-center gap-2">
-            <Logo className="h-6 w-6" />
-            <span className="font-semibold text-foreground">Mardisen Suite</span>
-          </div>
-          <div className="relative w-48">
-            <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input placeholder="Search" className="pl-8 h-8 text-xs bg-white" />
-          </div>
-        </CardHeader>
-        <CardContent className="p-4 grid grid-cols-2 gap-4">
-          <div className="col-span-2">
-            <h3 className="text-lg font-semibold">Today</h3>
-            <div className="flex justify-between items-baseline mt-1">
-              <div>
-                <p className="text-xs text-muted-foreground">Net volume</p>
-                <p className="text-2xl font-bold text-foreground">$3,528,198.72</p>
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground">Yesterday</p>
-                <p className="text-sm font-medium text-muted-foreground">$2,931,556.34</p>
-              </div>
-            </div>
-            <div className="h-24 mt-2">
-              <Image src="https://placehold.co/400x100.png" width={400} height={100} alt="Line chart" className="w-full h-full object-contain" data-ai-hint="line chart" />
-            </div>
-          </div>
-          <Card className="bg-white">
-            <CardHeader className="p-3">
-              <CardDescription>Net volume from sales</CardDescription>
-              <CardTitle>$39,274.29</CardTitle>
-            </CardHeader>
-            <CardContent className="p-3 pt-0 h-20">
-              <Image src="https://placehold.co/200x80.png" width={200} height={80} alt="Line chart" className="w-full h-full object-contain" data-ai-hint="line chart" />
-            </CardContent>
-          </Card>
-          <Card className="bg-white">
-            <CardHeader className="p-3">
-              <CardDescription>New customers</CardDescription>
-              <CardTitle>37</CardTitle>
-            </CardHeader>
-            <CardContent className="p-3 pt-0 h-20">
-               <Image src="https://placehold.co/200x80.png" width={200} height={80} alt="Line chart" className="w-full h-full object-contain" data-ai-hint="line chart" />
-            </CardContent>
-          </Card>
-        </CardContent>
+    <div className="relative w-full max-w-4xl transform scale-90 md:scale-100 lg:scale-105">
+      <Card className="bg-white/90 backdrop-blur-sm shadow-2xl rounded-2xl overflow-hidden">
+        <Image
+          src="https://storage.googleapis.com/project-charm-gcp-static-assets/mardsen-dashboard-screenshot.png"
+          width={1024}
+          height={665}
+          alt="Mardisen Suite Dashboard Screenshot"
+          className="w-full h-auto"
+          priority
+          data-ai-hint="dashboard screenshot"
+        />
       </Card>
-
-      {/* Mobile View */}
-      <div className="absolute -left-12 -bottom-16 w-64">
-        <Card className="bg-white shadow-2xl rounded-2xl p-4 transform -rotate-6">
-          <CardContent className="p-0 space-y-4">
-            <div className="text-center">
-              <div className="inline-block p-1 bg-muted rounded-lg -mt-8 mb-2">
-                <div className="w-14 h-16 bg-purple-200 rounded-md"></div>
-              </div>
-              <h3 className="font-semibold">Mardisen Suite</h3>
-              <p className="text-sm text-muted-foreground">$99 per month</p>
-            </div>
-            <Button className="w-full bg-black hover:bg-gray-800 text-white"><Apple className="mr-2 fill-white"/> Pay</Button>
-            <div className="flex items-center gap-2">
-              <Separator className="flex-1"/>
-              <span className="text-xs text-muted-foreground">Or pay with card</span>
-              <Separator className="flex-1"/>
-            </div>
-            <div className="space-y-2">
-                <Input placeholder="Email" className="text-xs"/>
-                <div className="relative">
-                    <Input placeholder="Card Information" className="text-xs pr-20"/>
-                    <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
-                        <CreditCard className="h-4 w-4 text-blue-500" />
-                        <CreditCard className="h-4 w-4 text-orange-500" />
-                    </div>
-                </div>
-            </div>
-            <Button className="w-full">Pay</Button>
-          </CardContent>
-        </Card>
-      </div>
     </div>
   );
 };
