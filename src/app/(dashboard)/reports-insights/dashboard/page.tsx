@@ -64,3 +64,4 @@ export default async function ReportsDashboardPage() {
             expenseData={mockExpenseData}
         />
     );
+}
