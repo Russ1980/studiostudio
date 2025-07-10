@@ -1,9 +1,17 @@
+
 'use client';
 
 import React from 'react';
+import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
+import { Wand2 } from 'lucide-react';
+
+interface Insight {
+    type: string;
+    summary: string;
+}
 
 interface DashboardClientPageProps {
-  insights?: any;
+  insights?: Insight[];
   revenueData?: any;
   expenseData?: any;
 }
@@ -14,31 +22,51 @@ export function DashboardClientPage({
   expenseData 
 }: DashboardClientPageProps) {
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">Dashboard Insights</h1>
+    <div className="grid gap-6">
+        <div>
+            <h1 className="text-3xl font-bold">AI-Powered Dashboard</h1>
+            <p className="text-muted-foreground">
+                An overview of your financial data with actionable insights from Serva AI.
+            </p>
+        </div>
       
-      <div className="mb-8">
-        <h2 className="text-xl font-semibold mb-4">Revenue Overview</h2>
-        <div className="bg-white rounded-lg shadow p-6">
-          <pre className="text-sm">{JSON.stringify(revenueData, null, 2)}</pre>
+        <div className="grid gap-6 lg:grid-cols-2">
+            <Card>
+                <CardHeader>
+                    <CardTitle>Revenue Overview</CardTitle>
+                    <CardDescription>Last 6 months of revenue data.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <pre className="text-xs p-4 bg-muted rounded-md">{JSON.stringify(revenueData, null, 2)}</pre>
+                </CardContent>
+            </Card>
+            <Card>
+                <CardHeader>
+                    <CardTitle>Expense Overview</CardTitle>
+                     <CardDescription>Breakdown of expenses by category.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <pre className="text-xs p-4 bg-muted rounded-md">{JSON.stringify(expenseData, null, 2)}</pre>
+                </CardContent>
+            </Card>
         </div>
-      </div>
 
-      <div className="mb-8">
-        <h2 className="text-xl font-semibold mb-4">Expense Overview</h2>
-        <div className="bg-white rounded-lg shadow p-6">
-          <pre className="text-sm">{JSON.stringify(expenseData, null, 2)}</pre>
-        </div>
-      </div>
-
-      {insights && (
-        <div className="mb-8">
-          <h2 className="text-xl font-semibold mb-4">AI Generated Insights</h2>
-          <div className="bg-white rounded-lg shadow p-6">
-            <div dangerouslySetInnerHTML={{ __html: insights }} />
-          </div>
-        </div>
-      )}
+        {insights && insights.length > 0 && (
+            <Card>
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2"><Wand2/> AI Generated Insights</CardTitle>
+                    <CardDescription>Serva AI has analyzed your data and found the following insights.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                    {insights.map((insight, index) => (
+                        <div key={index} className="p-4 border rounded-lg bg-secondary/50">
+                            <h4 className="font-semibold">{insight.type}</h4>
+                            <p className="text-sm text-muted-foreground">{insight.summary}</p>
+                        </div>
+                    ))}
+                </CardContent>
+            </Card>
+        )}
     </div>
   );
 }

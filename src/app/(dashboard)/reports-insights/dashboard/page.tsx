@@ -20,6 +20,8 @@ const fallbackInsights = [
 
 export default async function ReportsDashboardPage() {
     let insightsData;
+    let revenueData;
+
     try {
         // Fetch live revenue data from Firestore
         const revenueResult = await getRevenueDataTool({});
@@ -35,6 +37,8 @@ export default async function ReportsDashboardPage() {
             { month: "May", revenue: 850000 },
             { month: "Jun", revenue: 920000 },
         ];
+
+        revenueData = finalRevenueData;
         
         const aiInput = {
             revenueData: finalRevenueData,
@@ -44,8 +48,19 @@ export default async function ReportsDashboardPage() {
         insightsData = await generateDashboardInsights(aiInput);
     } catch (error) {
         console.error("Failed to generate AI insights:", error);
-        insightsData = { insights: fallbackInsights };
+        insightsData = { insights: [...fallbackInsights] };
+        revenueData = [
+            { month: "Jan", revenue: 680000 }, { month: "Feb", revenue: 720000 },
+            { month: "Mar", revenue: 810000 }, { month: "Apr", revenue: 450000 },
+            { month: "May", revenue: 850000 }, { month: "Jun", revenue: 920000 },
+        ];
     }
 
-    return <DashboardClientPage insights={insightsData?.insights || fallbackInsights} />;
+    return (
+        <DashboardClientPage 
+            insights={insightsData?.insights || fallbackInsights} 
+            revenueData={revenueData}
+            expenseData={mockExpenseData}
+        />
+    );
 }
