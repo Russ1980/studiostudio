@@ -433,7 +433,8 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
                 </div>
               </DropdownMenuContent>
             </DropdownMenu>
-
+          </div>
+          <div className="flex flex-1 items-center justify-end gap-2">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon">
@@ -465,9 +466,6 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-          </div>
-
-          <div className="flex flex-1 items-center justify-end gap-2">
             <div className="relative flex-1 max-w-xs ml-auto">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input placeholder="Search..." className="pl-9" />
