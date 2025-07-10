@@ -95,6 +95,7 @@ import {
   AlertTriangle,
   CheckCircle,
   Info,
+  Star,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { User as UserType } from "@/lib/auth";
@@ -328,7 +329,7 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
       </Sidebar>
 
       <SidebarInset>
-        <header className="sticky top-0 flex h-16 items-center justify-between gap-4 border-b bg-white dark:bg-background px-4 md:px-6 z-40">
+        <header className="sticky top-0 flex h-16 items-center justify-between gap-4 border-b bg-card px-4 md:px-6 z-40">
           <div className="flex items-center gap-2">
             <SidebarTrigger />
             <DropdownMenu>
@@ -429,6 +430,38 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
                 <div className="p-2 border-t flex items-center justify-between text-xs text-muted-foreground">
                   <span>15 actions available</span>
                 </div>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon">
+                  <Star className="h-5 w-5" />
+                  <span className="sr-only">Favorites</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-64">
+                <DropdownMenuLabel>Favorites</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuGroup>
+                  <DropdownMenuItem onSelect={() => router.push('/invoicing/invoices')}>
+                    <FileStack className="mr-2 h-4 w-4" />
+                    <span>All Invoices</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onSelect={() => router.push('/accounting/chart-of-accounts')}>
+                    <BookOpen className="mr-2 h-4 w-4" />
+                    <span>Chart of Accounts</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onSelect={() => router.push('/reports-insights/dashboard')}>
+                    <BarChart3 className="mr-2 h-4 w-4" />
+                    <span>Insights Dashboard</span>
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  <Star className="mr-2 h-4 w-4" />
+                  <span>Add current page</span>
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
