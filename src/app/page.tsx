@@ -11,55 +11,6 @@ import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 
-const HeroImage = () => {
-    return (
-      <div className="relative w-full max-w-4xl transform scale-90 md:scale-100 lg:scale-105">
-        {/* Desktop View in Background */}
-        <Card className="bg-white/90 backdrop-blur-sm shadow-2xl rounded-2xl overflow-hidden">
-             <Image 
-                src="https://storage.googleapis.com/project-charm-gcp-static-assets/mardsen-dashboard-screenshot.png"
-                width={1024}
-                height={665}
-                alt="Mardisen Suite Dashboard Screenshot"
-                className="w-full h-auto"
-                priority
-                data-ai-hint="dashboard screenshot"
-              />
-        </Card>
-  
-        {/* Mobile View in Foreground */}
-        <div className="absolute -bottom-8 -left-16 w-64 h-auto transform rotate-[-12deg] hidden lg:block">
-          <Card className="bg-white shadow-2xl rounded-2xl overflow-hidden border-4 border-slate-200">
-            <CardContent className="p-4 text-center">
-              <div className="w-16 h-16 bg-primary/10 rounded-lg mx-auto mb-2 flex items-center justify-center">
-                 <Image src="https://placehold.co/40x40.png" width={40} height={40} alt="Product" className="rounded-md" data-ai-hint="company logo"/>
-              </div>
-              <h4 className="font-semibold text-sm">Financial Suite</h4>
-              <p className="text-xs text-muted-foreground">$99 per month</p>
-              <Button className="w-full mt-4 bg-black text-white hover:bg-black/80">
-                 Pay
-              </Button>
-              <div className="relative my-3">
-                <Separator />
-                <span className="absolute left-1/2 -translate-x-1/2 -top-2 bg-white px-2 text-xs text-muted-foreground">OR</span>
-              </div>
-               <Input placeholder="Email" className="mb-2 h-8"/>
-               <div className="border rounded-md p-2 space-y-2">
-                 <Input placeholder="Card Number" className="h-8 text-xs"/>
-                 <div className="flex gap-2">
-                    <Input placeholder="MM/YY" className="h-8 text-xs"/>
-                    <Input placeholder="CVC" className="h-8 text-xs"/>
-                 </div>
-               </div>
-               <Button className="w-full mt-4 h-8">Pay</Button>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-    );
-};
-
-
 export default function LandingPage() {
     const testimonials = [
         {
@@ -119,21 +70,21 @@ export default function LandingPage() {
                 </header>
             </div>
           <div className="container px-4 md:px-6 relative z-10">
-            <div className="grid gap-8 lg:grid-cols-2 lg:gap-12 py-16 md:py-24">
-              <div className="flex flex-col justify-center space-y-6">
+            <div className="grid gap-8 py-16 md:py-24 text-center">
+              <div className="flex flex-col items-center justify-center space-y-6">
                  <Badge variant="outline" className="w-fit bg-white/10 text-white border-white/20 py-1.5 px-3">
                     <div className="flex items-center gap-2">
                         <Star className="h-4 w-4 text-yellow-300 fill-yellow-300"/>
                         <span className="font-semibold">#1 Financial Suite with Serva Assistant</span>
                     </div>
                 </Badge>
-                <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none bg-clip-text text-transparent bg-gradient-to-br from-white to-gray-400">
+                <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none bg-clip-text text-transparent bg-gradient-to-br from-white to-gray-400 max-w-4xl mx-auto">
                   Watch our Serva Assistant <span className="text-red-400">easily handle your</span> most challenging <span className="text-blue-400">Financial</span> Operations
                 </h1>
-                <p className="max-w-[600px] text-gray-300 md:text-xl">
+                <p className="max-w-[600px] text-gray-300 md:text-xl mx-auto">
                     Eliminate 80% of manual financial work with a Serva Assistant that never sleeps. From invoice processing to cash flow optimization, watch Serva Assistant transform your financial operations in real-time.
                 </p>
-                 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 pt-4">
+                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
                     <Button size="lg" className="bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg" asChild>
                         <Link href="/pricing">
                             Get Started Free
@@ -144,7 +95,7 @@ export default function LandingPage() {
                         <Link href="/contact">Schedule a Demo</Link>
                     </Button>
                 </div>
-                 <div className="flex items-center gap-6 pt-6 text-sm text-white">
+                 <div className="flex items-center justify-center gap-6 pt-6 text-sm text-white">
                     <div className="flex items-center gap-1">
                         {[...Array(5)].map((_, i) => <Star key={i} className="h-5 w-5 text-yellow-400 fill-yellow-400"/>)}
                         <span className="font-medium ml-1">4.9/5 Rating</span>
@@ -152,9 +103,6 @@ export default function LandingPage() {
                     <p><span className="font-bold">500+</span> businesses automated</p>
                     <p><span className="font-bold">$2.5M+</span> saved monthly</p>
                  </div>
-              </div>
-              <div className="flex items-center justify-center">
-                <HeroImage />
               </div>
             </div>
           </div>
