@@ -15,56 +15,23 @@ const HeroImage = () => {
     return (
       <div className="relative w-full max-w-4xl transform scale-90 md:scale-100 lg:scale-105">
         {/* Desktop View in Background */}
-        <Card className="bg-white/80 backdrop-blur-md shadow-2xl rounded-2xl overflow-hidden -rotate-3 translate-x-4 translate-y-4">
-          <CardHeader className="flex flex-row items-center justify-between p-4 border-b bg-slate-50/50">
-            <div className="flex items-center gap-2">
-              <Logo className="h-6 w-6" />
-              <h3 className="font-semibold text-sm">Mardisen Suite</h3>
-            </div>
-            <div className="relative w-48">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input placeholder="Search..." className="pl-8 h-8" />
-            </div>
-          </CardHeader>
-          <CardContent className="p-4 grid gap-4">
-            <div>
-              <p className="text-xs text-muted-foreground">Today</p>
-              <div className="flex items-baseline justify-between">
-                <p className="text-2xl font-bold">$3,528,198.72</p>
-                <p className="text-sm text-muted-foreground">Yesterday: $2,931,556.34</p>
-              </div>
-            </div>
-            <div className="h-24 bg-slate-100 rounded-md flex items-center justify-center">
-              <p className="text-xs text-slate-400">[Chart Placeholder]</p>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <Card className="bg-slate-50/50">
-                <CardHeader className="p-2">
-                  <CardTitle className="text-xs font-medium">Net volume from sales</CardTitle>
-                </CardHeader>
-                <CardContent className="p-2">
-                  <p className="text-lg font-bold">$39,274.29</p>
-                  <p className="text-xs text-green-600">+32.8%</p>
-                </CardContent>
-              </Card>
-              <Card className="bg-slate-50/50">
-                <CardHeader className="p-2">
-                  <CardTitle className="text-xs font-medium">New Customers</CardTitle>
-                </CardHeader>
-                <CardContent className="p-2">
-                  <p className="text-lg font-bold">37</p>
-                  <p className="text-xs text-muted-foreground">vs 28 yesterday</p>
-                </CardContent>
-              </Card>
-            </div>
-          </CardContent>
+        <Card className="bg-white/90 backdrop-blur-sm shadow-2xl rounded-2xl overflow-hidden">
+             <Image 
+                src="https://storage.googleapis.com/project-charm-gcp-static-assets/mardsen-dashboard-screenshot.png"
+                width={1024}
+                height={665}
+                alt="Mardisen Suite Dashboard Screenshot"
+                className="w-full h-auto"
+                priority
+                data-ai-hint="dashboard screenshot"
+              />
         </Card>
   
         {/* Mobile View in Foreground */}
-        <div className="absolute top-0 left-0 w-64 h-auto transform -translate-x-8 -translate-y-8 rotate-6">
+        <div className="absolute -bottom-8 -left-16 w-64 h-auto transform rotate-[-12deg]">
           <Card className="bg-white shadow-2xl rounded-2xl overflow-hidden border-4 border-slate-200">
             <CardContent className="p-4 text-center">
-              <div className="w-16 h-16 bg-purple-100 rounded-lg mx-auto mb-2 flex items-center justify-center">
+              <div className="w-16 h-16 bg-primary/10 rounded-lg mx-auto mb-2 flex items-center justify-center">
                  <Image src="https://placehold.co/40x40.png" width={40} height={40} alt="Product" className="rounded-md" data-ai-hint="company logo"/>
               </div>
               <h4 className="font-semibold text-sm">Financial Suite</h4>
