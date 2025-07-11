@@ -1,4 +1,3 @@
-
 import {
   LayoutGrid,
   Users,
@@ -44,7 +43,7 @@ import {
   Calculator,
   CalendarDays,
   BarChart4,
-  Link as LinkIcon,
+  LinkIcon,
   RefreshCw,
   ArrowLeftRight,
   PieChart,
@@ -352,7 +351,7 @@ export const navLinks: NavLink[] = [
       { href: '/communications/automation', label: 'Automation', icon: Wrench },
     ],
   },
-  {
+    {
     label: 'Asset Management',
     icon: FolderOpen,
     href: '/asset-management',
@@ -383,6 +382,7 @@ export const navLinks: NavLink[] = [
       { href: '/settings', label: 'Account', icon: User },
       { href: '/settings/company', label: 'Company', icon: Building },
       { href: '/settings/team', label: 'Team Management', icon: Users, onboardingId: 'team-settings-link' },
+      { href: '/settings/roles', label: 'Roles &amp; Permissions', icon: ShieldCheck },
       { href: '/settings/security', label: 'Security', icon: ShieldCheck },
       { href: '/settings/integrations', label: 'Integrations', icon: Plug },
       { href: '/settings/billing', label: 'Billing & Subscription', icon: CreditCard },
