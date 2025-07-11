@@ -46,7 +46,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-  TooltipPortal,
+  TooltipProvider,
 } from "@/components/ui/tooltip";
 import {
   Bell,
@@ -442,37 +442,45 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
             </DropdownMenu>
           </div>
           <div className="flex flex-1 items-center justify-end gap-2">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon">
-                  <Star className="h-5 w-5" />
-                  <span className="sr-only">Favorites</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-64">
-                <DropdownMenuLabel>Favorites</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                  <DropdownMenuItem onSelect={() => router.push('/invoicing/invoices')}>
-                    <FileStack className="mr-2 h-4 w-4" />
-                    <span>All Invoices</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onSelect={() => router.push('/accounting/chart-of-accounts')}>
-                    <BookOpen className="mr-2 h-4 w-4" />
-                    <span>Chart of Accounts</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onSelect={() => router.push('/reports-insights/dashboard')}>
-                    <BarChart3 className="mr-2 h-4 w-4" />
-                    <span>Insights Dashboard</span>
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <Star className="mr-2 h-4 w-4" />
-                  <span>Add current page</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <TooltipProvider>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                         <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" size="icon">
+                                <Star className="h-5 w-5" />
+                                <span className="sr-only">Favorites</span>
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end" className="w-64">
+                                <DropdownMenuLabel>Favorites</DropdownMenuLabel>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuGroup>
+                                <DropdownMenuItem onSelect={() => router.push('/invoicing/invoices')}>
+                                    <FileStack className="mr-2 h-4 w-4" />
+                                    <span>All Invoices</span>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem onSelect={() => router.push('/accounting/chart-of-accounts')}>
+                                    <BookOpen className="mr-2 h-4 w-4" />
+                                    <span>Chart of Accounts</span>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem onSelect={() => router.push('/reports-insights/dashboard')}>
+                                    <BarChart3 className="mr-2 h-4 w-4" />
+                                    <span>Insights Dashboard</span>
+                                </DropdownMenuItem>
+                                </DropdownMenuGroup>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem>
+                                <Star className="mr-2 h-4 w-4" />
+                                <span>Add current page</span>
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </TooltipTrigger>
+                    <TooltipContent><p>Favorites</p></TooltipContent>
+                </Tooltip>
+            </TooltipProvider>
+
             <div className="relative flex-1 max-w-xs ml-auto">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input placeholder="Search..." className="pl-9" />
@@ -483,72 +491,94 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
             </Button>
             
             <div className="flex items-center gap-1">
-                <Button variant="ghost" size="icon" className="rounded-full">
-                  <UserPlus className="h-5 w-5" />
-                  <span className="sr-only">Add User</span>
-                </Button>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon" className="rounded-full">
-                      <Copy className="h-5 w-5" />
-                      <span className="sr-only">Open new window</span>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={() => window.open(window.location.origin, '_blank')}>
-                      New Window
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => window.open(window.location.href, '_blank')}>
-                      Duplicate Window
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-                <Separator orientation="vertical" className="h-6 mx-1" />
-                <Button variant="ghost" size="icon" className="rounded-full">
-                  <Moon className="h-5 w-5" />
-                  <span className="sr-only">Toggle Theme</span>
-                </Button>
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className="rounded-full relative">
-                        <Bell className="h-5 w-5" />
-                        <Badge
-                            className="absolute -top-1 -right-1 h-4 w-4 justify-center p-0"
-                            variant="destructive"
-                        >
-                            3
-                        </Badge>
-                        <span className="sr-only">Notifications</span>
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-80 md:w-96">
-                        <DropdownMenuLabel className="flex justify-between items-center">
-                            <span>Notifications</span>
-                            <Badge variant="secondary">3 New</Badge>
-                        </DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuGroup>
-                            {notifications.map((notification, index) => (
-                                <DropdownMenuItem key={index} className="p-2 items-start cursor-pointer" onSelect={() => router.push('/communications/notifications')}>
-                                    <notification.icon className={cn("h-5 w-5 mr-3 mt-1 shrink-0", {
-                                        'text-destructive': notification.type === 'warning',
-                                        'text-success': notification.type === 'success',
-                                        'text-primary': notification.type === 'info',
-                                    })} />
-                                    <div className="flex-1">
-                                        <p className="font-semibold text-sm">{notification.title}</p>
-                                        <p className="text-xs text-muted-foreground">{notification.description}</p>
-                                        <p className="text-xs text-muted-foreground/70 mt-1">{notification.time}</p>
-                                    </div>
-                                </DropdownMenuItem>
-                            ))}
-                        </DropdownMenuGroup>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem className="justify-center" onSelect={() => router.push('/communications/notifications')}>
-                            View All Notifications
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                <TooltipProvider>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <Button variant="ghost" size="icon" className="rounded-full">
+                            <UserPlus className="h-5 w-5" />
+                            <span className="sr-only">Add User</span>
+                            </Button>
+                        </TooltipTrigger>
+                        <TooltipContent><p>Invite User</p></TooltipContent>
+                    </Tooltip>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                             <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button variant="ghost" size="icon" className="rounded-full">
+                                    <Copy className="h-5 w-5" />
+                                    <span className="sr-only">Open new window</span>
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                    <DropdownMenuItem onClick={() => window.open(window.location.origin, '_blank')}>
+                                    New Window
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem onClick={() => window.open(window.location.href, '_blank')}>
+                                    Duplicate Window
+                                    </DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        </TooltipTrigger>
+                        <TooltipContent><p>New Window</p></TooltipContent>
+                    </Tooltip>
+                    <Separator orientation="vertical" className="h-6 mx-1" />
+                     <Tooltip>
+                        <TooltipTrigger asChild>
+                             <Button variant="ghost" size="icon" className="rounded-full">
+                            <Moon className="h-5 w-5" />
+                            <span className="sr-only">Toggle Theme</span>
+                            </Button>
+                        </TooltipTrigger>
+                        <TooltipContent><p>Toggle Theme</p></TooltipContent>
+                    </Tooltip>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button variant="ghost" size="icon" className="rounded-full relative">
+                                    <Bell className="h-5 w-5" />
+                                    <Badge
+                                        className="absolute -top-1 -right-1 h-4 w-4 justify-center p-0"
+                                        variant="destructive"
+                                    >
+                                        3
+                                    </Badge>
+                                    <span className="sr-only">Notifications</span>
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end" className="w-80 md:w-96">
+                                    <DropdownMenuLabel className="flex justify-between items-center">
+                                        <span>Notifications</span>
+                                        <Badge variant="secondary">3 New</Badge>
+                                    </DropdownMenuLabel>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuGroup>
+                                        {notifications.map((notification, index) => (
+                                            <DropdownMenuItem key={index} className="p-2 items-start cursor-pointer" onSelect={() => router.push('/communications/notifications')}>
+                                                <notification.icon className={cn("h-5 w-5 mr-3 mt-1 shrink-0", {
+                                                    'text-destructive': notification.type === 'warning',
+                                                    'text-success': notification.type === 'success',
+                                                    'text-primary': notification.type === 'info',
+                                                })} />
+                                                <div className="flex-1">
+                                                    <p className="font-semibold text-sm">{notification.title}</p>
+                                                    <p className="text-xs text-muted-foreground">{notification.description}</p>
+                                                    <p className="text-xs text-muted-foreground/70 mt-1">{notification.time}</p>
+                                                </div>
+                                            </DropdownMenuItem>
+                                        ))}
+                                    </DropdownMenuGroup>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuItem className="justify-center" onSelect={() => router.push('/communications/notifications')}>
+                                        View All Notifications
+                                    </DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        </TooltipTrigger>
+                        <TooltipContent><p>Notifications</p></TooltipContent>
+                    </Tooltip>
+                </TooltipProvider>
                  <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="secondary" className="flex items-center gap-2 p-1 pr-2 rounded-full h-auto" data-onboarding="user-profile">
