@@ -1,3 +1,4 @@
+
 import { getLedgerTransactions } from "@/lib/actions";
 import { GeneralLedgerClientPage } from "./general-ledger-client";
 
