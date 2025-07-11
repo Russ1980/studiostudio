@@ -901,17 +901,19 @@ export async function getPurchaseOrders() {
         if (snapshot.empty) return mockPurchaseOrders;
         return snapshot.docs.map(doc => doc.data()) as typeof mockPurchaseOrders;
     } catch (error) {
+        console.error("Error fetching purchase orders from Firestore:", error);
         return mockPurchaseOrders;
     }
 }
+
 export async function getInventoryData() {
     if (!firestore) return { kpiData: mockInventory.kpiData, inventory: mockInventory.inventory };
     try {
         const snapshot = await firestore.collection('inventory').get();
         const inventory = snapshot.empty ? mockInventory.inventory : snapshot.docs.map(doc => doc.data());
 
-        const totalValue = inventory.reduce((acc, item) => acc + item.cost * item.quantity, 0);
-        const lowStockItems = inventory.filter(item => item.quantity <= item.reorderPoint).length;
+        const totalValue = inventory.reduce((acc, item: any) => acc + item.cost * item.quantity, 0);
+        const lowStockItems = inventory.filter((item: any) => item.quantity <= item.reorderPoint).length;
         
         return {
             kpiData: [
@@ -922,9 +924,11 @@ export async function getInventoryData() {
             inventory: inventory as typeof mockInventory.inventory,
         }
     } catch (error) {
+        console.error("Error fetching inventory data from Firestore:", error);
         return { kpiData: mockInventory.kpiData, inventory: mockInventory.inventory };
     }
 }
+
 export async function getProductionPlans() {
     if (!firestore) return mockProductionPlans;
     try {
@@ -1204,7 +1208,7 @@ export async function getJobCostingDashboardData() {
             { title: "Total Spent", value: `$${totalSpent.toLocaleString()}` },
             { title: "Overall Profitability", value: `$${overallProfitability.toLocaleString()}` },
         ],
-        budgetVsActualData: jobs.map(j => ({ name: j.name, budget: j.budget, actual: j.spent })).slice(0, 3),
+        budgetVsActualData: jobs.map(j => ({ name: j.name, budget: j.budget, actual: j.actual })).slice(0, 3),
         recentCostEntries: mockJobCostingDashboard.recentCostEntries, // Keep mock for now
     };
   } catch (error) {
