@@ -1293,7 +1293,7 @@ export async function migrateEmployeeData() {
 export async function migrateJobData() { 
     const check = checkFirestore();
     if(check || !firestore) return check || { success: false, error: "DB not available" };
-    return migrateData(firestore, mockJobs, 'jobs'); 
+    return migrateData(firestore, mockJobsWithDetails, 'jobs'); 
 }
 export async function migrateTaxFilings() { 
     const check = checkFirestore();
