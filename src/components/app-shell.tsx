@@ -575,7 +575,10 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
                           </DropdownMenuItem>
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem onSelect={signOut}>
+                        <DropdownMenuItem onSelect={async () => {
+                            await signOut();
+                            router.push('/signin');
+                        }}>
                           <LogOut className="mr-2 h-4 w-4" />
                           <span>Log out</span>
                         </DropdownMenuItem>
@@ -597,3 +600,5 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
     </>
   );
 }
+
+    
