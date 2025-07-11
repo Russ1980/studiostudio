@@ -53,8 +53,6 @@ const initialTeamMembers = [
 const roles = [
   { value: "Admin", label: "Admin" },
   { value: "Accountant", label: "Accountant" },
-  { value: "Accounts Payable", label: "Accounts Payable" },
-  { value: "Accounts Receivable", label: "Accounts Receivable" },
   { value: "Reports Only", label: "Reports Only" },
   { value: "Time Tracking Only", label: "Time Tracking Only" },
   { value: "Viewer", label: "Viewer" },
