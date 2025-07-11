@@ -53,6 +53,10 @@ const initialTeamMembers = [
 const roles = [
   { value: "Admin", label: "Admin" },
   { value: "Accountant", label: "Accountant" },
+  { value: "Accounts Payable", label: "Accounts Payable" },
+  { value: "Accounts Receivable", label: "Accounts Receivable" },
+  { value: "Reports Only", label: "Reports Only" },
+  { value: "Time Tracking Only", label: "Time Tracking Only" },
   { value: "Viewer", label: "Viewer" },
 ];
 
@@ -189,27 +193,30 @@ export default function TeamManagementPage() {
                   <TableCell>
                      <Popover>
                         <PopoverTrigger asChild>
-                            <Button variant="outline" role="combobox" className="w-[150px] justify-between">
+                            <Button variant="outline" role="combobox" className="w-[200px] justify-between">
                                 {member.role}
                                 {isPending ? <Loader2 className="ml-2 h-4 w-4 animate-spin" /> : <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" /> }
                             </Button>
                         </PopoverTrigger>
-                        <PopoverContent className="w-[150px] p-0">
+                        <PopoverContent className="w-[200px] p-0">
                             <Command>
+                                <CommandInput placeholder="Search roles..." />
                                 <CommandList>
+                                <CommandEmpty>No role found.</CommandEmpty>
                                     <CommandGroup>
                                         {roles.map((role) => (
                                         <CommandItem
                                             key={role.value}
                                             value={role.value}
                                             onSelect={(currentValue) => {
-                                                handleRoleChange(member.id, currentValue.charAt(0).toUpperCase() + currentValue.slice(1));
+                                                const newRole = roles.find(r => r.label.toLowerCase() === currentValue)?.label || member.role;
+                                                handleRoleChange(member.id, newRole);
                                             }}
                                         >
                                             <Check
                                             className={cn(
                                                 "mr-2 h-4 w-4",
-                                                member.role === role.value ? "opacity-100" : "opacity-0"
+                                                member.role === role.label ? "opacity-100" : "opacity-0"
                                             )}
                                             />
                                             {role.label}
@@ -222,7 +229,7 @@ export default function TeamManagementPage() {
                     </Popover>
                   </TableCell>
                    <TableCell>
-                    <Badge variant={statusVariant[member.status]}>{member.status}</Badge>
+                    <Badge variant={statusVariant[member.status as keyof typeof statusVariant]}>{member.status}</Badge>
                   </TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
@@ -245,4 +252,3 @@ export default function TeamManagementPage() {
     </div>
   );
 }
-
