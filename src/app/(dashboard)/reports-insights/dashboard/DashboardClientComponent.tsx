@@ -1,6 +1,6 @@
 'use client'
 
-export function DashboardClientPage({ 
+export function DashboardClientComponent({ 
   initialInsights,
   revenueData,
   expenseData 
@@ -14,7 +14,6 @@ export function DashboardClientPage({
       <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Revenue Section */}
         <div className="bg-white shadow rounded-lg p-6">
           <h2 className="text-lg font-semibold mb-4">Revenue Data</h2>
           <pre className="text-sm bg-gray-50 p-2 rounded">
@@ -22,7 +21,6 @@ export function DashboardClientPage({
           </pre>
         </div>
         
-        {/* Expense Section */}
         <div className="bg-white shadow rounded-lg p-6">
           <h2 className="text-lg font-semibold mb-4">Expense Data</h2>
           <pre className="text-sm bg-gray-50 p-2 rounded">
@@ -30,7 +28,6 @@ export function DashboardClientPage({
           </pre>
         </div>
         
-        {/* Insights Section */}
         {initialInsights && (
           <div className="bg-white shadow rounded-lg p-6 md:col-span-2">
             <h2 className="text-lg font-semibold mb-4">AI Insights</h2>
@@ -45,5 +42,3 @@ export function DashboardClientPage({
     </div>
   )
 }
-
-export default DashboardClientPage
