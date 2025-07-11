@@ -28,7 +28,20 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
 
 const initialTeamMembers = [
     { id: "1", name: "Sarah Johnson", email: "sarah.j@example.com", avatar: "SJ", role: "Admin", status: "Active" },
@@ -49,9 +62,61 @@ const statusVariant: { [key: string]: "success" | "default" } = {
   Pending: "default",
 };
 
+function InviteUserDialog({ onInvite }: { onInvite: (email: string, role: string) => void }) {
+    const [email, setEmail] = useState("");
+    const [role, setRole] = useState("Viewer");
+    const [open, setOpen] = useState(false);
+
+    const handleInvite = () => {
+        onInvite(email, role);
+        setOpen(false);
+        setEmail("");
+        setRole("Viewer");
+    };
+
+    return (
+        <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild>
+                <Button><UserPlus className="mr-2"/> Invite User</Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                    <DialogTitle>Invite a new user</DialogTitle>
+                    <DialogDescription>
+                        Enter the user's email and assign them a role. They will receive an email to set up their account.
+                    </DialogDescription>
+                </DialogHeader>
+                <div className="grid gap-4 py-4">
+                    <div className="grid grid-cols-4 items-center gap-4">
+                        <Label htmlFor="email" className="text-right">Email</Label>
+                        <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="col-span-3" />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                        <Label htmlFor="role" className="text-right">Role</Label>
+                        <div className="col-span-3">
+                            <Select onValueChange={setRole} defaultValue={role}>
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Select a role" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {roles.map(r => <SelectItem key={r.value} value={r.value}>{r.label}</SelectItem>)}
+                                </SelectContent>
+                            </Select>
+                        </div>
+                    </div>
+                </div>
+                <DialogFooter>
+                    <Button onClick={handleInvite} disabled={!email}>Send Invitation</Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
+    );
+}
+
 export default function TeamManagementPage() {
   const [teamMembers, setTeamMembers] = useState(initialTeamMembers);
   const [isPending, startTransition] = useTransition();
+  const { toast } = useToast();
 
   const handleRoleChange = (userId: string, newRole: string) => {
     startTransition(() => {
@@ -66,6 +131,22 @@ export default function TeamManagementPage() {
     });
   };
 
+  const handleInviteUser = (email: string, role: string) => {
+    const newUser = {
+        id: (teamMembers.length + 1).toString(),
+        name: "Invited User",
+        email: email,
+        avatar: email.substring(0,2).toUpperCase(),
+        role: role,
+        status: "Pending",
+    };
+    setTeamMembers(prev => [...prev, newUser]);
+    toast({
+        title: "Invitation Sent",
+        description: `An invitation has been sent to ${email}.`,
+    });
+  };
+
   return (
     <div className="grid gap-6">
       <div className="flex items-center justify-between">
@@ -75,7 +156,7 @@ export default function TeamManagementPage() {
             Invite new team members and set their roles and permissions.
           </p>
         </div>
-        <Button><UserPlus className="mr-2"/> Invite User</Button>
+        <InviteUserDialog onInvite={handleInviteUser} />
       </div>
       <Card>
         <CardHeader>
@@ -164,3 +245,4 @@ export default function TeamManagementPage() {
     </div>
   );
 }
+
