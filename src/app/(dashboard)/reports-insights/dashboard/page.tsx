@@ -1,6 +1,6 @@
 
 import { generateDashboardInsights } from "@/ai/flows/generate-dashboard-insights";
-import { DashboardClientPage } from "./dashboard-client";
+import { DashboardClientPage } from "@/app/(dashboard)/reports-insights/dashboard/dashboard-client";
 import { getRevenueDataTool } from "@/ai/tools/get-revenue-data";
 
 // Mock expense data for now, as we don't have live expense tracking yet.
