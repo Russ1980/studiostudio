@@ -92,6 +92,12 @@ export async function getDashboardPageData() {
     }
     try {
         const invoicesSnapshot = await firestore.collection('invoices').get();
+        // If the collection is empty, use mock data.
+        if (invoicesSnapshot.empty) {
+            console.log("No invoices found, using mock data for dashboard.");
+            return mockDashboardPageData;
+        }
+
         const invoices = invoicesSnapshot.docs.map(doc => doc.data());
         const revenueData = await getRevenueDataTool({});
 
