@@ -97,6 +97,8 @@ import {
   Info,
   Star,
   FileStack,
+  Sun,
+  Laptop
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { AuthUser } from "@/components/auth-provider";
@@ -104,6 +106,7 @@ import { Separator } from "@/components/ui/separator";
 import { useServaAI } from "@/hooks/use-serva-ai";
 import dynamic from "next/dynamic";
 import { useAuth } from "@/components/auth-provider";
+import { useTheme } from "next-themes";
 
 const ServaAIWidget = dynamic(
   () => import('@/components/serva-ai/serva-ai-widget').then((mod) => mod.ServaAIWidget),
@@ -303,6 +306,7 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
   const { state } = useSidebar();
   const { openServaAI } = useServaAI();
   const { signOut } = useAuth();
+  const { setTheme } = useTheme();
   const isCollapsed = state === "collapsed";
  
   return (
@@ -525,10 +529,29 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
                     <Separator orientation="vertical" className="h-6 mx-1" />
                      <Tooltip>
                         <TooltipTrigger asChild>
-                             <Button variant="ghost" size="icon" className="rounded-full">
-                            <Moon className="h-5 w-5" />
-                            <span className="sr-only">Toggle Theme</span>
-                            </Button>
+                             <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button variant="ghost" size="icon" className="rounded-full">
+                                    <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+                                    <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+                                    <span className="sr-only">Toggle Theme</span>
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                    <DropdownMenuItem onClick={() => setTheme("light")}>
+                                        <Sun className="mr-2 h-4 w-4" />
+                                        <span>Light</span>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem onClick={() => setTheme("dark")}>
+                                        <Moon className="mr-2 h-4 w-4" />
+                                        <span>Dark</span>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem onClick={() => setTheme("system")}>
+                                        <Laptop className="mr-2 h-4 w-4" />
+                                        <span>System</span>
+                                    </DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
                         </TooltipTrigger>
                         <TooltipContent><p>Toggle Theme</p></TooltipContent>
                     </Tooltip>
