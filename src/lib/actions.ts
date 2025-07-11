@@ -82,7 +82,6 @@ import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import admin from 'firebase-admin';
 import { migrateData, migrateSingleDoc } from './migration';
-import { getMockUser } from './auth';
 import { getRevenueDataTool } from '@/ai/tools/get-revenue-data';
 
 const simulateDelay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
@@ -92,7 +91,6 @@ export async function getDashboardPageData() {
         return mockDashboardPageData;
     }
     try {
-        const user = await getMockUser();
         const invoicesSnapshot = await firestore.collection('invoices').get();
         const invoices = invoicesSnapshot.docs.map(doc => doc.data());
         const revenueData = await getRevenueDataTool({});
@@ -137,7 +135,6 @@ export async function getDashboardPageData() {
         
         return {
             ...mockDashboardPageData, // Keep other mock data for now
-            user,
             mainKpis: {
                 netRevenue: formatCurrency(totalRevenue),
                 growth: "+12.4%", // Mocked
