@@ -95,12 +95,15 @@ import {
   AlertTriangle,
   CheckCircle,
   Info,
+  Star,
+  FileStack,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { User as UserType } from "@/lib/auth";
+import type { AuthUser } from "@/components/auth-provider";
 import { Separator } from "@/components/ui/separator";
 import { useServaAI } from "@/hooks/use-serva-ai";
 import dynamic from "next/dynamic";
+import { useAuth } from "@/components/auth-provider";
 
 const ServaAIWidget = dynamic(
   () => import('@/components/serva-ai/serva-ai-widget').then((mod) => mod.ServaAIWidget),
@@ -289,11 +292,12 @@ const notifications = [
     { type: "info", icon: Info, title: "New Client Onboarded", description: "Apex Solutions has completed the onboarding process.", time: "1d ago" },
 ];
 
-export function AppShell({ children, user }: { children: React.ReactNode, user: UserType }) {
+export function AppShell({ children, user }: { children: React.ReactNode, user: AuthUser }) {
   const pathname = usePathname();
   const router = useRouter();
   const { state } = useSidebar();
   const { openServaAI } = useServaAI();
+  const { signOut } = useAuth();
   const isCollapsed = state === "collapsed";
  
   return (
@@ -432,8 +436,38 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
-
           <div className="flex flex-1 items-center justify-end gap-2">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon">
+                  <Star className="h-5 w-5" />
+                  <span className="sr-only">Favorites</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-64">
+                <DropdownMenuLabel>Favorites</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuGroup>
+                  <DropdownMenuItem onSelect={() => router.push('/invoicing/invoices')}>
+                    <FileStack className="mr-2 h-4 w-4" />
+                    <span>All Invoices</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onSelect={() => router.push('/accounting/chart-of-accounts')}>
+                    <BookOpen className="mr-2 h-4 w-4" />
+                    <span>Chart of Accounts</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onSelect={() => router.push('/reports-insights/dashboard')}>
+                    <BarChart3 className="mr-2 h-4 w-4" />
+                    <span>Insights Dashboard</span>
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  <Star className="mr-2 h-4 w-4" />
+                  <span>Add current page</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <div className="relative flex-1 max-w-xs ml-auto">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input placeholder="Search..." className="pl-9" />
@@ -541,7 +575,7 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
                           </DropdownMenuItem>
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem onSelect={() => router.push('/signin')}>
+                        <DropdownMenuItem onSelect={signOut}>
                           <LogOut className="mr-2 h-4 w-4" />
                           <span>Log out</span>
                         </DropdownMenuItem>

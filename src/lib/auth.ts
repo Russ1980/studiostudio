@@ -1,23 +1,27 @@
-'use server';
 
-export type User = {
+'use server';
+import type { User as FirebaseUser } from 'firebase/auth';
+
+export type AuthUser = {
+  uid: string;
   name: string;
   initials: string;
-  email: string;
+  email: string | null;
   title: string;
   role: string;
 };
 
-const mockUser: User = {
-  name: "Sarah Johnson",
-  initials: "SJ",
-  email: "sarah.j@example.com",
-  title: "Financial Controller",
-  role: "Admin",
-};
+// This function maps a Firebase User object to our app's AuthUser type
+export function mapFirebaseUserToAuthUser(firebaseUser: FirebaseUser): AuthUser {
+  const name = firebaseUser.displayName || 'New User';
+  const initials = name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
 
-export async function getMockUser(): Promise<User> {
-  // Simulate network delay
-  await new Promise(resolve => setTimeout(resolve, 50));
-  return mockUser;
+  return {
+    uid: firebaseUser.uid,
+    name,
+    initials,
+    email: firebaseUser.email,
+    title: 'User', // You can enhance this with custom claims
+    role: 'Admin', // Default role, can be enhanced
+  };
 }

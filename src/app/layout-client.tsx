@@ -3,22 +3,25 @@
 
 import { usePathname } from 'next/navigation';
 import { AppShell } from '@/components/app-shell';
-import { getMockUser } from '@/lib/auth';
-import { useEffect, useState } from 'react';
-import type { User } from '@/lib/auth';
 import { OnboardingProvider } from '@/components/onboarding';
 import { ServaAIProvider } from '@/hooks/use-serva-ai';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useAuth } from '@/components/auth-provider';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 function AppLayout({ children }: { children: React.ReactNode }) {
-    const [user, setUser] = useState<User | null>(null);
+    const { user, loading } = useAuth();
+    const router = useRouter();
 
     useEffect(() => {
-        getMockUser().then(setUser);
-    }, []);
+        if (!loading && !user) {
+            router.push('/signin');
+        }
+    }, [user, loading, router]);
 
-    if (!user) {
+    if (loading || !user) {
         return (
              <div className="flex h-screen w-full">
                 <div className="hidden md:block border-r" style={{width: '16rem'}}>
@@ -51,6 +54,15 @@ function AppLayout({ children }: { children: React.ReactNode }) {
 export function RootLayoutClient({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isAppRoute = /^\/(dashboard|accountant-portal|accounting|banking|invoicing|operations|payroll|portfolio|tax|projects|reports-insights|client-management|payments|asset-management|data-management|communications|settings|help|search|trading|learn)/.test(pathname);
+  const { user, loading } = useAuth();
+
+  if (loading) {
+      return (
+        <div className="flex h-screen items-center justify-center">
+            <Skeleton className="h-12 w-12 rounded-full" />
+        </div>
+      )
+  }
 
   if (isAppRoute) {
     return <AppLayout>{children}</AppLayout>;

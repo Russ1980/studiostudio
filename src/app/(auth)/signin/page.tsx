@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useRouter } from "next/navigation";
@@ -13,7 +14,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Logo } from "@/components/icons";
-import { ShieldCheck, Lock } from "lucide-react";
+import { ShieldCheck, Lock, Loader2 } from "lucide-react";
+import React, { useState } from "react";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { useToast } from "@/hooks/use-toast";
+import { app } from "@/lib/firebase-client";
 
 const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
     <svg viewBox="0 0 24 24" {...props}>
@@ -33,11 +38,28 @@ const AppleIcon = (props: React.SVGProps<SVGSVGElement>) => (
 
 export default function SignInPage() {
   const router = useRouter();
+  const { toast } = useToast();
+  const [email, setEmail] = useState("loanbox55@gmail.com");
+  const [password, setPassword] = useState("admin123");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSignIn = (event: React.FormEvent) => {
+  const handleSignIn = async (event: React.FormEvent) => {
     event.preventDefault();
-    // Simulate a successful login and redirect to the dashboard
-    router.push("/dashboard");
+    setIsLoading(true);
+    const auth = getAuth(app);
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      router.push("/dashboard");
+    } catch (error: any) {
+      console.error("Firebase Auth Error:", error);
+      toast({
+        title: "Sign-in Failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+        setIsLoading(false);
+    }
   };
 
   return (
@@ -53,13 +75,14 @@ export default function SignInPage() {
             <CardContent className="grid gap-4">
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" placeholder="m@example.com" defaultValue="loanbox55@gmail.com" required />
+                <Input id="email" type="email" placeholder="m@example.com" value={email} onChange={(e) => setEmail(e.target.value)} required />
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="password">Password</Label>
-                <Input id="password" type="password" defaultValue="admin123" required />
+                <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
               </div>
-              <Button type="submit" className="w-full">
+              <Button type="submit" className="w-full" disabled={isLoading}>
+                {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Log In
               </Button>
               <div className="relative my-2">
