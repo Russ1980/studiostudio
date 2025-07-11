@@ -11,5 +11,21 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-// Initialize Firebase
-export const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+// Check if all required Firebase config keys are present
+const areEnvsLoaded = 
+    firebaseConfig.apiKey &&
+    firebaseConfig.authDomain &&
+    firebaseConfig.projectId;
+
+let app;
+
+if (areEnvsLoaded) {
+    app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+} else {
+    console.error("Firebase environment variables are not loaded. Please check your .env.local file.");
+    // In a non-functional state, we can assign a placeholder object to `app` to avoid further crashes.
+    // However, any Firebase call will fail.
+    app = {}; 
+}
+
+export { app };
