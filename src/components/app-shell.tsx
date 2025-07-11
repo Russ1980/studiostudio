@@ -592,6 +592,9 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
               <div className="flex items-center gap-2">
                 <Breadcrumb />
               </div>
+               <div className="flex items-center gap-2">
+                <Badge variant="outline">Sample Data Mode</Badge>
+              </div>
             </div>
             {children}
         </main>
@@ -600,5 +603,3 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
     </>
   );
 }
-
-    
