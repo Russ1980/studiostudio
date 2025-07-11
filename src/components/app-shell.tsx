@@ -144,44 +144,49 @@ function Breadcrumb() {
   );
 }
 
-const renderDropdownItems = (links: NavLink[]): React.ReactNode => {
-  return links.map((link) => (
-    <React.Fragment key={link.href || link.label}>
-      {link.items && link.items.length > 0 ? (
-        <DropdownMenuSub>
-          <DropdownMenuSubTrigger>
-            {link.icon && <link.icon className="mr-2 size-4" />}
-            <span>{link.label}</span>
-          </DropdownMenuSubTrigger>
-          <DropdownMenuPortal>
-            <DropdownMenuSubContent
-              sideOffset={8}
-              alignOffset={-4}
-              className="bg-sidebar border-sidebar-border text-sidebar-foreground"
-            >
-              {renderDropdownItems(link.items)}
-            </DropdownMenuSubContent>
-          </DropdownMenuPortal>
-        </DropdownMenuSub>
-      ) : (
-        <DropdownMenuItem asChild>
-          <Link href={link.href || "#"}>
-            {link.icon && <link.icon className="mr-2 size-4" />}
-            <span>{link.label}</span>
-          </Link>
-        </DropdownMenuItem>
-      )}
-    </React.Fragment>
-  ));
+const renderDropdownItems = (links: NavLink[], userRole: string): React.ReactNode => {
+    return links
+    .filter(link => !link.allowedRoles || link.allowedRoles.includes(userRole))
+    .map((link) => (
+      <React.Fragment key={link.href || link.label}>
+        {link.items && link.items.length > 0 ? (
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger>
+              {link.icon && <link.icon className="mr-2 size-4" />}
+              <span>{link.label}</span>
+            </DropdownMenuSubTrigger>
+            <DropdownMenuPortal>
+              <DropdownMenuSubContent
+                sideOffset={8}
+                alignOffset={-4}
+                className="bg-sidebar border-sidebar-border text-sidebar-foreground"
+              >
+                {renderDropdownItems(link.items, userRole)}
+              </DropdownMenuSubContent>
+            </DropdownMenuPortal>
+          </DropdownMenuSub>
+        ) : (
+          <DropdownMenuItem asChild>
+            <Link href={link.href || "#"}>
+              {link.icon && <link.icon className="mr-2 size-4" />}
+              <span>{link.label}</span>
+            </Link>
+          </DropdownMenuItem>
+        )}
+      </React.Fragment>
+    ));
 };
 
 function renderNavLinks(
   links: NavLink[],
   pathname: string,
   isCollapsed: boolean,
+  userRole: string,
   level = 1
 ) {
-  return links.map((link) => (
+  return links
+    .filter(link => !link.allowedRoles || link.allowedRoles.includes(userRole))
+    .map((link) => (
     <SidebarMenuItem key={link.href || link.label}>
       {link.items && link.items.length > 0 ? (
         isCollapsed && level === 1 ? (
@@ -212,7 +217,7 @@ function renderNavLinks(
               <DropdownMenuLabel>{link.label}</DropdownMenuLabel>
               <DropdownMenuSeparator className="bg-sidebar-border" />
               <DropdownMenuGroup>
-                {renderDropdownItems(link.items)}
+                {renderDropdownItems(link.items, userRole)}
               </DropdownMenuGroup>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -236,7 +241,7 @@ function renderNavLinks(
             </CollapsibleTrigger>
             <CollapsibleContent>
               <SidebarMenuSub>
-                {renderNavLinks(link.items, pathname, isCollapsed, level + 1)}
+                {renderNavLinks(link.items, pathname, isCollapsed, userRole, level + 1)}
               </SidebarMenuSub>
             </CollapsibleContent>
           </Collapsible>
@@ -323,7 +328,7 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
         </SidebarHeader>
 
         <SidebarContent className="p-2">
-          <SidebarMenu>{renderNavLinks(navLinks, pathname, isCollapsed)}</SidebarMenu>
+          <SidebarMenu>{renderNavLinks(navLinks, pathname, isCollapsed, user.role)}</SidebarMenu>
         </SidebarContent>
 
         <SidebarFooter className="p-2 mt-auto border-t border-sidebar-border">

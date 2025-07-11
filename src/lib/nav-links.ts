@@ -81,6 +81,7 @@ export type NavLink = {
   icon: LucideIcon;
   items?: NavLink[];
   onboardingId?: string;
+  allowedRoles?: string[]; // 'Admin' or 'User'
 };
 
 export const navLinks: NavLink[] = [
@@ -88,11 +89,13 @@ export const navLinks: NavLink[] = [
     label: 'Dashboard',
     icon: LayoutGrid,
     href: '/dashboard',
+    allowedRoles: ['Admin', 'User'],
   },
   {
     label: 'Accountant Portal',
     icon: Briefcase,
     href: '/accountant-portal',
+    allowedRoles: ['Admin'],
     items: [
       { href: '/accountant-portal', label: 'Portal Dashboard', icon: LayoutGrid },
       { href: '/accountant-portal/client-list', label: 'Client List', icon: Users },
@@ -108,6 +111,7 @@ export const navLinks: NavLink[] = [
     icon: Receipt,
     href: '/invoicing/dashboard',
     onboardingId: 'invoicing-link',
+    allowedRoles: ['Admin', 'User'],
     items: [
       { href: '/invoicing/dashboard', label: 'Dashboard', icon: LayoutGrid },
       { href: '/invoicing/new', label: 'Create Invoice', icon: FilePlus },
@@ -135,6 +139,7 @@ export const navLinks: NavLink[] = [
     label: 'Accounting',
     icon: BookOpen,
     href: '/accounting',
+    allowedRoles: ['Admin', 'User'],
     items: [
       { href: '/accounting', label: 'Accounting Dashboard', icon: LayoutGrid },
       { href: '/accounting/chart-of-accounts', label: 'Chart of Accounts', icon: FileStack, onboardingId: 'chart-of-accounts-link' },
@@ -187,6 +192,7 @@ export const navLinks: NavLink[] = [
     icon: Landmark,
     href: '/banking',
     onboardingId: 'banking-link',
+    allowedRoles: ['Admin', 'User'],
     items: [
       { href: '/banking/dashboard', label: 'Dashboard', icon: LayoutGrid },
       { href: '/banking/accounts', label: 'Accounts', icon: Banknote },
@@ -201,6 +207,7 @@ export const navLinks: NavLink[] = [
     label: 'Operations',
     icon: Wrench,
     href: '/operations',
+    allowedRoles: ['Admin', 'User'],
     items: [
       { href: '/operations', label: 'Dashboard', icon: LayoutGrid },
       {
@@ -253,6 +260,7 @@ export const navLinks: NavLink[] = [
     label: 'Payroll System',
     icon: CircleDollarSign,
     href: '/payroll',
+    allowedRoles: ['Admin', 'User'],
     items: [
       { href: '/payroll', label: 'Payroll Dashboard', icon: LayoutGrid },
       { href: '/payroll/employee-management', label: 'Employee Management', icon: Users },
@@ -270,6 +278,7 @@ export const navLinks: NavLink[] = [
     label: 'Client Management',
     icon: Users,
     href: '/client-management/billing',
+    allowedRoles: ['Admin'],
     items: [
         { href: '/client-management/billing', label: 'Billing', icon: CreditCard },
         { href: '/client-management/invoicing/batch', label: 'Batch Invoicing', icon: Mail },
@@ -281,6 +290,7 @@ export const navLinks: NavLink[] = [
     label: 'Investments',
     icon: TrendingUp,
     href: '/portfolio',
+    allowedRoles: ['Admin', 'User'],
     items: [
       { href: '/portfolio/overview', label: 'Portfolio Overview', icon: LayoutGrid },
       { href: '/portfolio/asset-classes', label: 'Asset Classes', icon: PieChart },
@@ -293,6 +303,7 @@ export const navLinks: NavLink[] = [
     label: 'Intelligent Tax',
     icon: Calculator,
     href: '/tax',
+    allowedRoles: ['Admin', 'User'],
     items: [
       { href: '/tax', label: 'Tax Dashboard', icon: LayoutGrid },
       { href: '/tax/tax-planning', label: 'Tax Planning', icon: FileText },
@@ -305,6 +316,7 @@ export const navLinks: NavLink[] = [
     icon: BarChart4,
     href: '/reports-insights/dashboard',
     onboardingId: 'reports-link',
+    allowedRoles: ['Admin', 'User'],
     items: [
       { href: '/reports-insights/dashboard', label: 'Dashboard', icon: LayoutGrid },
       { href: '/reports-insights/financial-reports', label: 'Financial Reports', icon: FileBarChart, onboardingId: 'financial-reports-link' },
@@ -320,6 +332,7 @@ export const navLinks: NavLink[] = [
     label: 'Projects',
     icon: Briefcase,
     href: '/projects',
+    allowedRoles: ['Admin', 'User'],
     items: [
       { href: '/projects/dashboard', label: 'Projects Dashboard', icon: LayoutGrid },
       { href: '/projects/all-projects', label: 'All Projects', icon: ListChecks },
@@ -331,6 +344,7 @@ export const navLinks: NavLink[] = [
     label: 'Communications',
     icon: MessageSquare,
     href: '/communications',
+    allowedRoles: ['Admin', 'User'],
     items: [
       { href: '/communications/email-center', label: 'Email Center', icon: Mail },
       { href: '/communications/notifications', label: 'Notifications', icon: Bell },
@@ -342,6 +356,7 @@ export const navLinks: NavLink[] = [
     label: 'Asset Management',
     icon: FolderOpen,
     href: '/asset-management',
+    allowedRoles: ['Admin', 'User'],
     items: [
         { href: '/asset-management/locations', label: 'Asset Locations', icon: MapPin },
     ]
@@ -350,6 +365,7 @@ export const navLinks: NavLink[] = [
     label: 'Data Management',
     icon: Database,
     href: '/data-management',
+    allowedRoles: ['Admin'],
     items: [
       { href: '/data-management', label: 'Dashboard', icon: LayoutGrid },
       { href: '/data-management/data-import', label: 'Data Import', icon: FileDown },
@@ -362,6 +378,7 @@ export const navLinks: NavLink[] = [
     label: 'Settings',
     icon: Settings,
     href: '/settings',
+    allowedRoles: ['Admin', 'User'],
     items: [
       { href: '/settings', label: 'Account', icon: User },
       { href: '/settings/company', label: 'Company', icon: Building },
@@ -379,6 +396,7 @@ export const navLinks: NavLink[] = [
     label: 'Help',
     icon: HelpCircle,
     href: '/help',
+    allowedRoles: ['Admin', 'User'],
     items: [
       { href: '/help', label: 'Help Center', icon: LifeBuoy },
       { href: '/help/getting-started', label: 'Getting Started', icon: Rocket },
