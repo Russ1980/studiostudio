@@ -19,6 +19,7 @@ import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import { PaymentForm } from "./payment-form";
 import { Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 
 function OrderSummary({ plan, cycle, price }: { plan: string, cycle: string, price: number }) {
     const total = price / 100;
@@ -72,7 +73,7 @@ function OrderSummary({ plan, cycle, price }: { plan: string, cycle: string, pri
 }
 
 function PaymentPageContent() {
-    const searchParams = new URLSearchParams(window.location.search);
+    const searchParams = useSearchParams();
     const plan = searchParams.get("plan") || "Professional";
     const cycle = searchParams.get("cycle") || "yearly";
     const price = parseInt(searchParams.get("price") || "35640", 10);
