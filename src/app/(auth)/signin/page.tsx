@@ -115,10 +115,10 @@ export default function SignInPage() {
             </CardContent>
             <CardFooter className="flex-col items-center gap-4 pt-4">
                  <div className="flex gap-4 text-sm">
-                  <Link href="#" className="underline hover:text-primary">
+                  <Link href="/forgot-password" className="underline hover:text-primary">
                     Forgot Your Password?
                   </Link>
-                  <Link href="#" className="underline hover:text-primary">
+                  <Link href="/help/contact-support" className="underline hover:text-primary">
                     Can't Log In?
                   </Link>
                 </div>
@@ -144,5 +144,3 @@ export default function SignInPage() {
     </div>
   );
 }
-
-    
