@@ -1,7 +1,6 @@
 
 "use client";
 
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -23,8 +22,8 @@ import { Step7DataMapping } from "./components/step7-data-mapping";
 import { Step8TestImport } from "./components/step8-test-import";
 import { Step9FinalImport } from "./components/step9-final-import";
 import { Step10Completion } from "./components/step10-completion";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import Link from "next/link";
+import { DialogClose } from "@/components/ui/dialog";
 
 const wizardSteps = [
   { id: 1, name: "Welcome", component: Step1Welcome },
@@ -38,21 +37,6 @@ const wizardSteps = [
   { id: 9, name: "Final Import", component: Step9FinalImport },
   { id: 10, name: "Completion", component: Step10Completion },
 ];
-
-export function MigrationWizardLauncherButton() {
-    return (
-         <Dialog>
-            <DialogTrigger asChild>
-                 <Button>
-                    <Wand className="mr-2"/> Launch Migration Wizard
-                </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-5xl">
-                 <DataMigrationWizardPage />
-            </DialogContent>
-        </Dialog>
-    )
-}
 
 function DataMigrationWizardContent() {
   const { currentStep, setCurrentStep, migrationData } = useMigrationWizard();
@@ -115,7 +99,7 @@ function DataMigrationWizardContent() {
             ))}
           </ol>
         </CardHeader>
-        <CardContent className="min-h-[400px]">
+        <CardContent className="min-h-[400px] py-8">
             <CurrentStepComponent />
         </CardContent>
         <CardFooter className="flex justify-between border-t pt-6">
@@ -125,9 +109,9 @@ function DataMigrationWizardContent() {
           {currentStep < wizardSteps.length ? (
             <Button onClick={handleNext} disabled={isNextDisabled()}>Next <ArrowRight className="ml-2"/></Button>
           ) : (
-            <Button asChild>
-                <Link href="/dashboard">Finish Migration</Link>
-            </Button>
+            <DialogClose asChild>
+                <Button>Finish Migration</Button>
+            </DialogClose>
           )}
         </CardFooter>
       </Card>
@@ -148,4 +132,3 @@ export default function DataMigrationWizardPage() {
     </MigrationWizardProvider>
   );
 }
-

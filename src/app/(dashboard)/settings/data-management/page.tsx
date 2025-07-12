@@ -12,16 +12,8 @@ import {
 } from "@/components/ui/card";
 import Link from 'next/link';
 import { Database, ArrowRight, Wand } from "lucide-react";
-import dynamic from "next/dynamic";
-import { Skeleton } from "@/components/ui/skeleton";
-
-const MigrationWizardLink = dynamic(() => 
-    import('@/app/(dashboard)/settings/data-migration-wizard/page').then(mod => mod.MigrationWizardLauncherButton),
-    { 
-        ssr: false,
-        loading: () => <Skeleton className="h-10 w-48" />
-    }
-);
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import DataMigrationWizardPage from "../data-migration-wizard/page";
 
 
 export default function DataManagementSettingsPage() {
@@ -58,7 +50,16 @@ export default function DataManagementSettingsPage() {
             <p className="text-muted-foreground">This guided process ensures data integrity and a seamless transition.</p>
         </CardContent>
         <CardFooter className="border-t pt-6">
-            <MigrationWizardLink />
+            <Dialog>
+                <DialogTrigger asChild>
+                    <Button>
+                        <Wand className="mr-2"/> Launch Migration Wizard
+                    </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-5xl">
+                    <DataMigrationWizardPage />
+                </DialogContent>
+            </Dialog>
         </CardFooter>
       </Card>
     </div>
