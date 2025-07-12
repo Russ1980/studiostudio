@@ -988,6 +988,53 @@ export async function getJournalEntries() {
   }
 }
 
+const JournalEntrySchema = z.object({
+    date: z.string().min(1),
+    entryNo: z.string().min(1),
+    ref: z.string().optional(),
+    lineItems: z.array(z.object({
+        account: z.string().min(1),
+        debit: z.coerce.number().optional(),
+        credit: z.coerce.number().optional(),
+        description: z.string().optional(),
+    })).min(2),
+}).refine(data => {
+    const totalDebits = data.lineItems.reduce((acc, item) => acc + (item.debit || 0), 0);
+    const totalCredits = data.lineItems.reduce((acc, item) => acc + (item.credit || 0), 0);
+    return Math.abs(totalDebits - totalCredits) < 0.001;
+}, {
+    message: "Total debits must equal total credits.",
+    path: ["lineItems"],
+});
+
+export async function addNewJournalEntry(values: z.infer<typeof JournalEntrySchema>) {
+    if (!firestore) return { success: false, error: "Firestore not initialized." };
+    
+    const validatedFields = JournalEntrySchema.safeParse(values);
+    if (!validatedFields.success) return { success: false, error: "Invalid form data." };
+
+    try {
+        const { lineItems, ...entryData } = validatedFields.data;
+        const totalDebits = lineItems.reduce((acc, item) => acc + (item.debit || 0), 0);
+        const totalCredits = lineItems.reduce((acc, item) => acc + (item.credit || 0), 0);
+
+        const newEntry = {
+            ...entryData,
+            userId: FAKE_USER_ID,
+            status: "Posted", // Default to posted for now
+            debits: totalDebits.toFixed(2),
+            credits: totalCredits.toFixed(2),
+            description: "Manual Journal Entry" // Simplified description
+        };
+
+        await firestore.collection('journalEntries').add(newEntry);
+        revalidatePath('/accounting/journal-entries');
+        return { success: true };
+    } catch (error: any) {
+        return { success: false, error: error.message };
+    }
+}
+
 export async function getChartOfAccounts() {
   if (!firestore) return mockChartOfAccounts;
   try {
