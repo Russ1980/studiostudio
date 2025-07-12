@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Logo } from "@/components/icons";
 import { ShieldCheck, Lock, Loader2 } from "lucide-react";
 import React, { useState } from "react";
@@ -81,6 +82,10 @@ export default function SignInPage() {
                 <Label htmlFor="password">Password</Label>
                 <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
               </div>
+              <div className="flex items-center space-x-2">
+                <Checkbox id="remember-me" />
+                <Label htmlFor="remember-me" className="text-sm font-normal">Remember me</Label>
+              </div>
               <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading ? (
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -139,3 +144,5 @@ export default function SignInPage() {
     </div>
   );
 }
+
+    
