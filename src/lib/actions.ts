@@ -1,3 +1,4 @@
+
 'use server';
 
 import { firestore } from './firebase-admin';
@@ -946,6 +947,8 @@ export async function getJobDetails(id: string) {
     }
 
     const data = docSnap.data();
+    if (!data) return null;
+
     // This is a simplified example. In a real app, you might need to handle nested timestamps.
     for (const key in data) {
       if (data[key] && typeof data[key].toDate === 'function') {
