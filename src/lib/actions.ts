@@ -197,6 +197,34 @@ export async function getClients() {
   }
 }
 
+export async function getClientById(id: string) {
+    if (!firestore) {
+        console.log("Firestore not initialized, cannot fetch client.");
+        return null;
+    }
+    try {
+        const docRef = firestore.collection('clients').doc(id);
+        const docSnap = await docRef.get();
+
+        if (!docSnap.exists) {
+            console.log('No such client document!');
+            return null;
+        }
+
+        const data = docSnap.data();
+        if (data?.userId !== FAKE_USER_ID) {
+            console.log('Access denied for this client.');
+            return null;
+        }
+        
+        return { id: docSnap.id, ...data };
+
+    } catch (error) {
+        console.error("Error fetching client by ID:", error);
+        return null;
+    }
+}
+
 export async function onboardNewClient(formData: any) {
   if (!firestore) {
     return { success: false, error: 'Firestore not initialized' };
@@ -304,7 +332,8 @@ export async function getRecentReports() {
     return mockRecentReports;
 }
 
-const ClientSchema = z.object({
+const ClientFormSchema = z.object({
+    id: z.string().optional(),
     businessName: z.string().min(1, 'Business name is required'),
     businessType: z.string().min(1, 'Business type is required'),
     ein: z.string().optional(),
@@ -318,11 +347,11 @@ const ClientSchema = z.object({
     zip: z.string().optional(),
 });
 
-export async function addNewClient(values: z.infer<typeof ClientSchema>) {
+export async function addNewClient(values: z.infer<typeof ClientFormSchema>) {
     if (!firestore) {
         return { success: false, error: "Firestore not initialized." };
     }
-    const validatedFields = ClientSchema.safeParse(values);
+    const validatedFields = ClientFormSchema.safeParse(values);
     if (!validatedFields.success) {
         return { success: false, error: "Invalid form data." };
     }
@@ -342,6 +371,46 @@ export async function addNewClient(values: z.infer<typeof ClientSchema>) {
         return { success: false, error: error.message };
     }
 }
+
+const UpdateClientSchema = ClientFormSchema.extend({
+    id: z.string(),
+    status: z.enum(["Active", "Onboarding", "Inactive"]),
+});
+
+export async function updateClient(values: z.infer<typeof UpdateClientSchema>) {
+    if (!firestore) {
+        return { success: false, error: "Firestore not initialized." };
+    }
+    const validatedFields = UpdateClientSchema.safeParse(values);
+    if (!validatedFields.success) {
+        return { success: false, error: "Invalid form data." };
+    }
+
+    try {
+        const { id, ...clientData } = validatedFields.data;
+        const docRef = firestore.collection('clients').doc(id);
+
+        const doc = await docRef.get();
+        if (doc.data()?.userId !== FAKE_USER_ID) {
+            return { success: false, error: "Permission denied." };
+        }
+
+        await docRef.update({
+            ...clientData,
+            contact: clientData.contactName,
+            tier: clientData.businessType,
+        });
+
+        revalidatePath('/accountant-portal/client-list');
+        revalidatePath(`/accountant-portal/edit-client/${id}`);
+        return { success: true };
+
+    } catch (error: any) {
+        console.error("Error updating client:", error);
+        return { success: false, error: error.message };
+    }
+}
+
 
 const TaskSchema = z.object({
     task: z.string().min(1, 'Task name is required'),

@@ -1,7 +1,9 @@
+
 "use client";
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   Card,
   CardContent,
@@ -30,7 +32,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { MoreHorizontal, ArrowUpDown, Download, PlusCircle } from "lucide-react";
+import { MoreHorizontal, ArrowUpDown, Download, PlusCircle, Pencil } from "lucide-react";
 
 const statusVariant: { [key: string]: "success" | "default" | "secondary" } = {
   Active: "success",
@@ -40,6 +42,7 @@ const statusVariant: { [key: string]: "success" | "default" | "secondary" } = {
 
 export function ClientListTable({ clients }: { clients: any[] }) {
   const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
+  const router = useRouter();
   
   const handleSelectAll = (checked: boolean | "indeterminate") => {
     if (checked === true) {
@@ -118,7 +121,10 @@ export function ClientListTable({ clients }: { clients: any[] }) {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                       <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                      <DropdownMenuItem>View Client Details</DropdownMenuItem>
+                      <DropdownMenuItem onSelect={() => router.push(`/accountant-portal/edit-client/${client.id}`)}>
+                        <Pencil className="mr-2 h-4 w-4" />
+                        Edit Client
+                      </DropdownMenuItem>
                       <DropdownMenuItem>Manage Subscription</DropdownMenuItem>
                       <DropdownMenuItem>Go to Client Portal</DropdownMenuItem>
                       <DropdownMenuSeparator />
