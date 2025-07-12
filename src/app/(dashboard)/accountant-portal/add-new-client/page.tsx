@@ -72,7 +72,11 @@ export default function AddNewClientPage() {
         toast({ title: "Client Added", description: `${values.businessName} has been successfully added.` });
         router.push("/accountant-portal/client-list");
       } else {
-        toast({ title: "Error", description: result.error, variant: "destructive" });
+        toast({ 
+          title: "Error Creating Client", 
+          description: result.error || "An unexpected error occurred.", 
+          variant: "destructive" 
+        });
       }
     });
   };

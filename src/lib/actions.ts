@@ -391,7 +391,10 @@ export async function addNewClient(values: z.infer<typeof ClientFormSchema>) {
         revalidatePath('/accountant-portal/client-list');
         return { success: true };
     } catch (error: any) {
-        return { success: false, error: error.message };
+        if (error.message.includes('ALREADY_EXISTS')) {
+             return { success: false, error: "A client with this information already exists." };
+        }
+        return { success: false, error: "An unknown error occurred while adding the client." };
     }
 }
 
