@@ -875,7 +875,10 @@ export async function getPurchaseOrders() {
     if (!firestore) return mockPurchaseOrders;
     try {
         const snapshot = await firestore.collection('purchaseOrders').get();
-        if (snapshot.empty) return mockPurchaseOrders;
+        if (snapshot.empty) {
+            console.log('No purchase orders found, returning mock data.');
+            return mockPurchaseOrders;
+        }
         return snapshot.docs.map(doc => doc.data()) as typeof mockPurchaseOrders;
     } catch (error) {
         console.error("Error fetching purchase orders from Firestore:", error);
@@ -905,7 +908,6 @@ export async function getInventoryData() {
         return { kpiData: mockInventory.kpiData, inventory: mockInventory.inventory };
     }
 }
-
 export async function getProductionPlans() {
     if (!firestore) return mockProductionPlans;
     try {
