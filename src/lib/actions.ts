@@ -104,10 +104,8 @@ export async function getDashboardPageData() {
         }
 
         const invoices = invoicesSnapshot.docs.map(doc => doc.data());
-        const revenueData = await getRevenueDataTool({});
-
+        
         const now = new Date();
-        const startOfThisMonth = new Date(now.getFullYear(), now.getMonth(), 1);
         
         let totalRevenue = 0;
         let totalExpenses = 0;
@@ -169,7 +167,6 @@ export async function getDashboardPageData() {
                 type: 'critical',
                 message: `Invoice #${i.invoice} is ${Math.round((now.getTime() - new Date(i.dueDate).getTime()) / (1000*60*60*24))} days overdue.`
             })),
-            chartData: revenueData.data.map(d => ({ month: d.month, income: d.revenue, expenses: d.revenue * 0.6 })), // Mock expenses
         };
     } catch(e) {
         console.error("Error fetching dashboard data, returning mock data", e);
