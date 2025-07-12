@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -23,10 +24,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { MoreHorizontal, Search } from "lucide-react";
+import { MoreHorizontal, Search, Pencil } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { getInvoices as getInvoicesType, getClients as getClientsType } from "@/lib/actions";
+import { useRouter } from "next/navigation";
 
 type Invoice = Awaited<ReturnType<typeof getInvoicesType>>[0];
 type Client = Awaited<ReturnType<typeof getClientsType>>[0];
@@ -42,6 +44,7 @@ export function InvoiceTable({ invoices, clients }: { invoices: Invoice[], clien
     const [searchTerm, setSearchTerm] = useState("");
     const [statusFilter, setStatusFilter] = useState("all");
     const [clientFilter, setClientFilter] = useState("all");
+    const router = useRouter();
 
     const filteredInvoices = invoices.filter(invoice => 
         (invoice.customer.toLowerCase().includes(searchTerm.toLowerCase()) || invoice.invoice.toLowerCase().includes(searchTerm.toLowerCase())) &&
@@ -118,7 +121,10 @@ export function InvoiceTable({ invoices, clients }: { invoices: Invoice[], clien
                                             <Button variant="ghost" size="icon"><MoreHorizontal /></Button>
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent align="end">
-                                            <DropdownMenuItem>View Details</DropdownMenuItem>
+                                            <DropdownMenuItem onSelect={() => router.push(`/invoicing/invoices/edit/${invoice.id}`)}>
+                                                <Pencil className="mr-2 h-4 w-4" />
+                                                Edit Invoice
+                                            </DropdownMenuItem>
                                             <DropdownMenuItem>Send Reminder</DropdownMenuItem>
                                             <DropdownMenuItem>Record Payment</DropdownMenuItem>
                                         </DropdownMenuContent>

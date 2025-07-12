@@ -623,13 +623,29 @@ export async function getInvoices() {
       console.log("No invoices found in Firestore, returning mock data as fallback.");
       return mockInvoices;
     }
-    const invoices = invoicesSnapshot.docs.map(doc => doc.data());
-    return invoices as typeof mockInvoices;
+    const invoices = invoicesSnapshot.docs.map(doc => ({id: doc.id, ...doc.data()}));
+    return invoices as (typeof mockInvoices[0] & {id: string})[];
   } catch (error) {
     console.error("Error fetching invoices from Firestore:", error);
-    return mockInvoices;
+    return mockInvoices.map(i => ({...i, id: i.invoice}));
   }
 }
+
+export async function getInvoiceById(id: string) {
+    if (!firestore) return null;
+    try {
+        const docRef = firestore.collection('invoices').doc(id);
+        const docSnap = await docRef.get();
+        if (!docSnap.exists || docSnap.data()?.userId !== FAKE_USER_ID) {
+            return null;
+        }
+        return { id: docSnap.id, ...docSnap.data() };
+    } catch (error) {
+        console.error("Error fetching invoice by ID:", error);
+        return null;
+    }
+}
+
 
 const InvoiceFormSchema = z.object({
   customer: z.string().min(1),
@@ -642,6 +658,10 @@ const InvoiceFormSchema = z.object({
     rate: z.coerce.number().min(0),
   })).min(1),
   notes: z.string().optional(),
+});
+
+const UpdateInvoiceSchema = InvoiceFormSchema.extend({
+    id: z.string(),
 });
 
 export async function addNewInvoice(values: z.infer<typeof InvoiceFormSchema>) {
@@ -669,12 +689,40 @@ export async function addNewInvoice(values: z.infer<typeof InvoiceFormSchema>) {
             status: 'Sent', // Default status
         };
 
-        // Use invoiceNumber as the document ID for idempotency
-        await firestore.collection('invoices').doc(newInvoice.invoiceNumber).set(newInvoice);
+        const docRef = await firestore.collection('invoices').add(newInvoice);
         revalidatePath('/invoicing/invoices');
-        return { success: true };
+        return { success: true, id: docRef.id };
     } catch (error: any) {
         return { success: false, error: error.message };
+    }
+}
+
+export async function updateInvoice(values: z.infer<typeof UpdateInvoiceSchema>) {
+    if (!firestore) return { success: false, error: "Firestore not initialized." };
+    
+    const validatedFields = UpdateInvoiceSchema.safeParse(values);
+    if (!validatedFields.success) return { success: false, error: "Invalid form data." };
+
+    try {
+        const { id, lineItems, ...invoiceData } = validatedFields.data;
+        const subtotal = lineItems.reduce((acc, item) => acc + item.quantity * item.rate, 0);
+        const tax = subtotal * 0.08;
+        const total = subtotal + tax;
+
+        const docRef = firestore.collection('invoices').doc(id);
+        const doc = await docRef.get();
+        if (doc.data()?.userId !== FAKE_USER_ID) return { success: false, error: "Permission denied." };
+        
+        await docRef.update({
+            ...invoiceData,
+            amount: total.toFixed(2),
+        });
+
+        revalidatePath(`/invoicing/invoices`);
+        revalidatePath(`/invoicing/invoices/edit/${id}`);
+        return { success: true };
+    } catch (e: any) {
+        return { success: false, error: e.message };
     }
 }
 
@@ -839,11 +887,11 @@ export async function getJournalEntries() {
 export async function getChartOfAccounts() {
   if (!firestore) return mockChartOfAccounts;
   try {
-    const docRef = firestore.collection('chartOfAccounts').doc('main');
+    const docRef = firestore.collection('chartOfAccounts').doc(FAKE_USER_ID);
     const docSnap = await docRef.get();
     if (!docSnap.exists) {
         // If it doesn't exist, create it from mock data
-        await docRef.set(mockChartOfAccounts);
+        await docRef.set({ ...mockChartOfAccounts, userId: FAKE_USER_ID });
         return mockChartOfAccounts;
     }
     return docSnap.data() as typeof mockChartOfAccounts;
@@ -874,7 +922,7 @@ export async function addChartOfAccount(values: z.infer<typeof AccountSchema>) {
   const { name, code, type, detailType, balance } = validatedFields.data;
 
   try {
-    const docRef = firestore.collection('chartOfAccounts').doc('main');
+    const docRef = firestore.collection('chartOfAccounts').doc(FAKE_USER_ID);
     
     await firestore.runTransaction(async (transaction) => {
         const doc = await transaction.get(docRef);

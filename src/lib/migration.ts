@@ -23,13 +23,17 @@ export async function migrateData(
 ): Promise<MigrationResult> {
   const batch = db.batch();
   data.forEach(item => {
-    // Use the idKey to dynamically get the document ID
-    const docId = item[idKey];
     // Add the userId to each item before saving
     const itemWithUser = { ...item, userId: FAKE_USER_ID };
+    // Use the idKey to dynamically get the document ID
+    const docId = item[idKey];
     if (docId) {
       const docRef = db.collection(targetCollection).doc(String(docId));
       batch.set(docRef, itemWithUser);
+    } else {
+        // If no ID key, let Firestore generate one
+        const docRef = db.collection(targetCollection).doc();
+        batch.set(docRef, itemWithUser);
     }
   });
 
