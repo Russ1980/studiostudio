@@ -169,7 +169,8 @@ export async function getDashboardPageData() {
             })),
         };
     } catch(e) {
-        console.error("Error fetching dashboard data, returning mock data", e);
+        console.error("Error fetching dashboard data from Firestore, returning mock data as a fallback.", e);
+        // Fallback to mock data if the query fails for any reason (like missing index)
         return mockDashboardPageData;
     }
 }
