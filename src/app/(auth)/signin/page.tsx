@@ -82,7 +82,11 @@ export default function SignInPage() {
                 <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
               </div>
               <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                {isLoading ? (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                ) : (
+                    <Lock className="mr-2 h-4 w-4" />
+                )}
                 Log In
               </Button>
               <div className="relative my-2">
