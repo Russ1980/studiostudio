@@ -55,9 +55,9 @@ export function BankingDashboardClientPage({ initialData }: { initialData: any }
                         <CardTitle>Quick Actions</CardTitle>
                     </CardHeader>
                     <CardContent className="grid gap-4">
-                        <Button className="w-full justify-start" asChild><Link href="/banking/connections"><LinkIcon/>Connect Account</Link></Button>
-                        <Button variant="outline" className="w-full justify-start" asChild><Link href="/banking/transfers"><ArrowLeftRight/>Transfer Funds</Link></Button>
-                        <Button variant="outline" className="w-full justify-start" asChild><Link href="/banking/reconciliation"><RefreshCw/>Reconcile</Link></Button>
+                        <Button className="w-full justify-start" asChild><Link href="/banking/connections"><LinkIcon className="mr-2"/>Connect Account</Link></Button>
+                        <Button variant="outline" className="w-full justify-start" asChild><Link href="/banking/transfers"><ArrowLeftRight className="mr-2"/>Transfer Funds</Link></Button>
+                        <Button variant="outline" className="w-full justify-start" asChild><Link href="/banking/reconciliation"><RefreshCw className="mr-2"/>Reconcile</Link></Button>
                     </CardContent>
                 </Card>
 
