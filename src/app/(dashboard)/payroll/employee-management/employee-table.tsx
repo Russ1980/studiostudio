@@ -28,7 +28,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { MoreHorizontal, ArrowUpDown, Upload, FilePlus } from "lucide-react";
+import { MoreHorizontal, ArrowUpDown, Upload, FilePlus, Pencil } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const statusVariant: { [key: string]: "success" | "default" | "secondary" | "destructive" } = {
   Active: "success",
@@ -37,6 +38,8 @@ const statusVariant: { [key: string]: "success" | "default" | "secondary" | "des
 };
 
 export function EmployeeTable({ employees }: { employees: any[] }) {
+  const router = useRouter();
+  
   return (
     <Card>
       <CardHeader>
@@ -86,8 +89,11 @@ export function EmployeeTable({ employees }: { employees: any[] }) {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                       <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                      <DropdownMenuItem onSelect={() => router.push(`/payroll/employee-management/edit/${employee.id}`)}>
+                        <Pencil className="mr-2 h-4 w-4" />
+                        Edit Employee
+                      </DropdownMenuItem>
                       <DropdownMenuItem>View Profile</DropdownMenuItem>
-                      <DropdownMenuItem>Edit Compensation</DropdownMenuItem>
                       <DropdownMenuItem>Manage Benefits</DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem className="text-destructive focus:bg-destructive/10 focus:text-destructive">Offboard Employee</DropdownMenuItem>

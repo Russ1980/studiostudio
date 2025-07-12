@@ -453,6 +453,10 @@ const EmployeeSchema = z.object({
     salary: z.coerce.number().positive('Salary must be a positive number'),
 });
 
+const EmployeeUpdateSchema = EmployeeSchema.extend({
+    id: z.string(),
+});
+
 export async function addNewEmployee(values: z.infer<typeof EmployeeSchema>) {
     if (!firestore) {
         return { success: false, error: "Firestore not initialized." };
@@ -473,6 +477,64 @@ export async function addNewEmployee(values: z.infer<typeof EmployeeSchema>) {
         return { success: true };
     } catch (error: any) {
         return { success: false, error: error.message };
+    }
+}
+
+export async function updateEmployee(values: z.infer<typeof EmployeeUpdateSchema>) {
+    if (!firestore) {
+        return { success: false, error: "Firestore not initialized." };
+    }
+    const validatedFields = EmployeeUpdateSchema.safeParse(values);
+    if (!validatedFields.success) {
+        return { success: false, error: "Invalid form data." };
+    }
+
+    try {
+        const { id, ...employeeData } = validatedFields.data;
+        const docRef = firestore.collection('employees').doc(id);
+
+        const doc = await docRef.get();
+        if (doc.data()?.userId !== FAKE_USER_ID) {
+            return { success: false, error: "Permission denied." };
+        }
+
+        await docRef.update(employeeData);
+
+        revalidatePath('/payroll/employee-management');
+        revalidatePath(`/payroll/employee-management/edit/${id}`);
+        return { success: true };
+
+    } catch (error: any) {
+        console.error("Error updating employee:", error);
+        return { success: false, error: error.message };
+    }
+}
+
+export async function getEmployeeById(id: string) {
+    if (!firestore) {
+        console.log("Firestore not initialized, cannot fetch employee.");
+        return null;
+    }
+    try {
+        const docRef = firestore.collection('employees').doc(id);
+        const docSnap = await docRef.get();
+
+        if (!docSnap.exists) {
+            console.log('No such employee document!');
+            return null;
+        }
+
+        const data = docSnap.data();
+        if (data?.userId !== FAKE_USER_ID) {
+            console.log('Access denied for this employee.');
+            return null;
+        }
+        
+        return { id: docSnap.id, ...data };
+
+    } catch (error) {
+        console.error("Error fetching employee by ID:", error);
+        return null;
     }
 }
 
