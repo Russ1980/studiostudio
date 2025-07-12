@@ -184,19 +184,41 @@ export async function getClients() {
     return mockClients;
   }
   try {
-    const clientsSnapshot = await firestore.collection('clients').where('userId', '==', FAKE_USER_ID).get();
+    const clientsSnapshot = await firestore.collection('clients')
+      .where('userId', '==', FAKE_USER_ID)
+      .where('status', '!=', 'Inactive') // Filter out inactive clients
+      .get();
     if (clientsSnapshot.empty) {
-      console.log("No clients found in Firestore, returning mock data as fallback.");
-      return mockClients;
+      console.log("No active clients found in Firestore, returning mock data as fallback.");
+      return mockClients.filter(c => c.status !== 'Inactive');
     }
     const clients = clientsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
     return clients as typeof mockClients;
   } catch (error) {
     console.error("Error fetching clients from Firestore:", error);
     // Fallback to mock data in case of error
-    return mockClients;
+    return mockClients.filter(c => c.status !== 'Inactive');
   }
 }
+
+export async function deactivateClient(clientId: string) {
+    if (!firestore) {
+        return { success: false, error: "Firestore not initialized." };
+    }
+    try {
+        const docRef = firestore.collection('clients').doc(clientId);
+        const doc = await docRef.get();
+        if (doc.data()?.userId !== FAKE_USER_ID) {
+            return { success: false, error: "Permission denied." };
+        }
+        await docRef.update({ status: 'Inactive' });
+        revalidatePath('/accountant-portal/client-list');
+        return { success: true };
+    } catch (error: any) {
+        return { success: false, error: error.message };
+    }
+}
+
 
 export async function getClientById(id: string) {
     if (!firestore) {
