@@ -27,13 +27,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal, PlusCircle, Trash2, Pencil } from "lucide-react";
 import { Input } from "@/components/ui/input";
-
-const productionPlans = [
-  { id: "PP-001", product: "Widget A", quantity: 1000, status: "In Progress", due: "2024-07-25" },
-  { id: "PP-002", product: "Component B", quantity: 5000, status: "Pending", due: "2024-07-28" },
-  { id: "PP-003", product: "Assembly C", quantity: 250, status: "Completed", due: "2024-07-22" },
-  { id: "PP-004", product: "Widget A - Rush", quantity: 200, status: "In Progress", due: "2024-07-20" },
-];
+import { getProductionPlans } from "@/lib/actions";
+import { useEffect, useState } from "react";
 
 const statusVariant: { [key: string]: "default" | "success" } = {
   "In Progress": "default",
@@ -42,6 +37,12 @@ const statusVariant: { [key: string]: "default" | "success" } = {
 };
 
 export default function ProductionPlansPage() {
+  const [productionPlans, setProductionPlans] = useState<any[]>([]);
+
+  useEffect(() => {
+    getProductionPlans().then(setProductionPlans);
+  }, []);
+
   return (
     <div className="grid gap-6">
       <div className="flex items-center justify-between">
@@ -82,7 +83,7 @@ export default function ProductionPlansPage() {
                   <TableCell className="font-medium">{plan.product}</TableCell>
                   <TableCell>{plan.quantity}</TableCell>
                   <TableCell>
-                    <Badge variant={statusVariant[plan.status]}>{plan.status}</Badge>
+                    <Badge variant={statusVariant[plan.status as keyof typeof statusVariant]}>{plan.status}</Badge>
                   </TableCell>
                   <TableCell>{plan.due}</TableCell>
                   <TableCell className="text-right">

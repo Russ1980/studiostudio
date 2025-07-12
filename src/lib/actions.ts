@@ -912,9 +912,13 @@ export async function getProductionPlans() {
     if (!firestore) return mockProductionPlans;
     try {
         const snapshot = await firestore.collection('productionPlans').get();
-        if (snapshot.empty) return mockProductionPlans;
+        if (snapshot.empty) {
+            console.log('No production plans found, returning mock data.');
+            return mockProductionPlans;
+        }
         return snapshot.docs.map(doc => doc.data()) as typeof mockProductionPlans;
     } catch (error) {
+        console.error("Error fetching production plans:", error);
         return mockProductionPlans;
     }
 }
@@ -922,9 +926,13 @@ export async function getWorkOrders() {
     if (!firestore) return mockWorkOrders;
     try {
         const snapshot = await firestore.collection('workOrders').get();
-        if (snapshot.empty) return mockWorkOrders;
+        if (snapshot.empty) {
+            console.log('No work orders found, returning mock data.');
+            return mockWorkOrders;
+        }
         return snapshot.docs.map(doc => doc.data()) as typeof mockWorkOrders;
     } catch (error) {
+        console.error("Error fetching work orders:", error);
         return mockWorkOrders;
     }
 }

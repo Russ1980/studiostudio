@@ -24,13 +24,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal, PlusCircle } from "lucide-react";
-
-const workOrders = [
-  { id: "WO-00451", job: "Assemble 500x Product X", status: "In Progress", priority: "High", due: "2024-07-25", assignedTo: "Line 1" },
-  { id: "WO-00452", job: "Calibrate Machine B", status: "Pending", priority: "Medium", due: "2024-07-28", assignedTo: "Maintenance Team" },
-  { id: "WO-00453", job: "Package Order #1088", status: "Pending", priority: "High", due: "2024-07-22", assignedTo: "Shipping Dept" },
-  { id: "WO-00454", job: "QA Check for Batch 72", status: "Completed", priority: "Low", due: "2024-07-20", assignedTo: "QA Team" },
-];
+import { getWorkOrders } from "@/lib/actions";
+import { useEffect, useState } from "react";
 
 const priorityVariant: { [key: string]: "destructive" | "default" } = {
   High: "destructive",
@@ -45,6 +40,12 @@ const statusVariant: { [key: string]: "default" | "success" } = {
 };
 
 export default function WorkOrdersPage() {
+  const [workOrders, setWorkOrders] = useState<any[]>([]);
+
+  useEffect(() => {
+    getWorkOrders().then(setWorkOrders);
+  }, []);
+
   return (
     <div className="grid gap-6">
       <div className="flex items-center justify-between">
@@ -80,10 +81,10 @@ export default function WorkOrdersPage() {
                   <TableCell className="font-mono">{order.id}</TableCell>
                   <TableCell className="font-medium">{order.job}</TableCell>
                   <TableCell>
-                    <Badge variant={statusVariant[order.status]}>{order.status}</Badge>
+                    <Badge variant={statusVariant[order.status as keyof typeof statusVariant]}>{order.status}</Badge>
                   </TableCell>
                   <TableCell>
-                    <Badge variant={priorityVariant[order.priority]}>{order.priority}</Badge>
+                    <Badge variant={priorityVariant[order.priority as keyof typeof priorityVariant]}>{order.priority}</Badge>
                   </TableCell>
                   <TableCell>{order.due}</TableCell>
                   <TableCell>{order.assignedTo}</TableCell>
