@@ -1,4 +1,3 @@
-
 'use server';
 
 import { firestore } from './firebase-admin';
@@ -738,7 +737,6 @@ export async function addChartOfAccount(values: z.infer<typeof AccountSchema>) {
              throw new Error("Chart of Accounts data is empty!");
         }
 
-        // Simplified: add to a new parent account category within the type
         const newAccount = {
             name,
             code: code || '',
@@ -747,58 +745,28 @@ export async function addChartOfAccount(values: z.infer<typeof AccountSchema>) {
             status: "Active",
             balance,
             ytd: balance,
-            subAccounts: []
         };
         
-        // This is a simplified approach. A real app would need a more robust way
-        // to determine where to place the account (e.g., under Current Assets vs Fixed Assets).
-        // For now, we add it as a new main account under the primary category.
-        const categoryMap = {
-            Asset: "assets",
-            Liability: "liabilities",
-            Equity: "liabilities", // Equity is nested under Liabilities in the mock data
-            Income: "income",
-            Expense: "expenses",
-        };
-        
-        const categoryKey = categoryMap[type] as keyof typeof categoryMap;
+        const categoryKey = type.toLowerCase() + 's';
+        const targetCategory = data[categoryKey];
 
-        // Create category if it doesn't exist
-        if (!data[categoryKey]) {
-            data[categoryKey] = { name: type, balance: 0, accounts: [] };
-        }
-        
-        // Create a new parent-level account entry
-        const newParentAccount = {
-            name: newAccount.name,
-            code: newAccount.code,
-            type: newAccount.type,
-            balance: newAccount.balance,
-            subAccounts: [
-                {...newAccount, balance: newAccount.balance, ytd: newAccount.ytd}
-            ]
-        }
-        
-        // This logic is flawed. Let's simplify and add to the first group within a category.
-        // e.g. for Asset, add to Current Assets. This is a heuristic.
-        const updatedData = { ...data };
-        
-        const targetCategoryKey = type === 'Asset' ? 'assets' : 'liabilities'; // Simplified
-        const targetCategory = updatedData[targetCategoryKey];
-
-        if(targetCategory && targetCategory.accounts) {
+        if (targetCategory && Array.isArray(targetCategory.accounts)) {
              targetCategory.accounts.push({
-                 name: newAccount.name,
-                 code: newAccount.code,
-                 type: newAccount.type,
-                 detailType: newAccount.detailType,
-                 status: newAccount.status,
-                 balance: newAccount.balance,
-                 ytd: newAccount.ytd,
-             });
+                name: "New Parent Account", // Simplified parent creation
+                code: "",
+                type,
+                balance: newAccount.balance,
+                subAccounts: [newAccount]
+            });
+            targetCategory.balance = (parseFloat(targetCategory.balance) + newAccount.balance).toString();
+
+             const updatePayload: { [key: string]: any } = {};
+             updatePayload[categoryKey] = targetCategory;
+
+            transaction.update(docRef, updatePayload);
+        } else {
+             throw new Error(`Category "${categoryKey}" not found or invalid in Chart of Accounts.`);
         }
-        
-        transaction.update(docRef, { [targetCategoryKey]: targetCategory });
     });
     
     revalidatePath('/accounting/chart-of-accounts');
@@ -808,6 +776,7 @@ export async function addChartOfAccount(values: z.infer<typeof AccountSchema>) {
     return { success: false, error: error.message };
   }
 }
+
 
 export async function getLedgerTransactions() {
     if (!firestore) return mockLedgerTransactions;

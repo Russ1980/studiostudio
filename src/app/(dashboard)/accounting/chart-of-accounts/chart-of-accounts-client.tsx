@@ -1,4 +1,3 @@
-
 "use client";
 
 import {
@@ -44,6 +43,7 @@ import { z } from "zod";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { addChartOfAccount } from "@/lib/actions";
+import { useRouter } from "next/navigation";
 
 const AccountSchema = z.object({
     name: z.string().min(2, { message: "Account name must be at least 2 characters." }),
@@ -56,6 +56,7 @@ const AccountSchema = z.object({
 function AddAccountDialog({ open, onOpenChange }: { open: boolean, onOpenChange: (open: boolean) => void }) {
     const { toast } = useToast();
     const [isPending, startTransition] = useTransition();
+    const router = useRouter();
 
     const form = useForm<z.infer<typeof AccountSchema>>({
         resolver: zodResolver(AccountSchema),
@@ -75,6 +76,7 @@ function AddAccountDialog({ open, onOpenChange }: { open: boolean, onOpenChange:
                 toast({ title: "Account Created", description: `Account "${values.name}" has been successfully created.` });
                 onOpenChange(false);
                 form.reset();
+                router.refresh(); 
             } else {
                 toast({ title: "Error", description: result.error, variant: "destructive" });
             }

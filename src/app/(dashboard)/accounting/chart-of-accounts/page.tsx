@@ -1,4 +1,3 @@
-
 import { getChartOfAccounts } from "@/lib/actions";
 import { ChartOfAccountsClientPage } from "./chart-of-accounts-client";
 
