@@ -1,4 +1,3 @@
-
 'use server';
 
 import { firestore } from './firebase-admin';
@@ -26,7 +25,7 @@ export async function migrateData(
     // Add the userId to each item before saving
     const itemWithUser = { ...item, userId: FAKE_USER_ID };
     // Use the idKey to dynamically get the document ID
-    const docId = item[idKey];
+    let docId = item[idKey];
     if (docId) {
       const docRef = db.collection(targetCollection).doc(String(docId));
       batch.set(docRef, itemWithUser);

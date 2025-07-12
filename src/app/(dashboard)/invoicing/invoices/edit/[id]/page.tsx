@@ -1,4 +1,3 @@
-
 import { getInvoiceById, getClients } from "@/lib/actions";
 import { notFound } from "next/navigation";
 import { EditInvoiceForm } from "./edit-invoice-form";

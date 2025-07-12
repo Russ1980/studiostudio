@@ -539,6 +539,85 @@ export async function getEmployeeById(id: string) {
     }
 }
 
+const JobSchema = z.object({
+  name: z.string().min(1, 'Job name is required'),
+  customer: z.string().min(1, 'Customer is required'),
+  startDate: z.string().min(1, 'Start date is required'),
+  endDate: z.string().min(1, 'End date is required'),
+  budget: z.coerce.number().positive('Budget must be a positive number'),
+  jobType: z.string().min(1, 'Job type is required'),
+  description: z.string().optional(),
+});
+
+export async function addNewJob(values: z.infer<typeof JobSchema>) {
+    if (!firestore) {
+        return { success: false, error: "Firestore not initialized." };
+    }
+    const validatedFields = JobSchema.safeParse(values);
+    if (!validatedFields.success) {
+        return { success: false, error: "Invalid form data." };
+    }
+
+    try {
+        const newJob = {
+            ...validatedFields.data,
+            userId: FAKE_USER_ID,
+            status: "In Progress", // Default status
+            spent: 0,
+            profitability: 0,
+            costEntries: [],
+            changeOrders: [],
+        };
+        await firestore.collection('jobs').add(newJob);
+        revalidatePath('/operations/job-costing/jobs');
+        return { success: true };
+    } catch (error: any) {
+        return { success: false, error: error.message };
+    }
+}
+
+const PurchaseOrderSchema = z.object({
+  vendor: z.string().min(1),
+  location: z.string().min(1),
+  deliveryDate: z.string().min(1),
+  lineItems: z.array(z.object({
+    item: z.string().min(1),
+    description: z.string().optional(),
+    quantity: z.coerce.number().min(1),
+    unitCost: z.coerce.number().min(0),
+  })).min(1),
+});
+
+export async function addNewPurchaseOrder(values: z.infer<typeof PurchaseOrderSchema>) {
+    if (!firestore) {
+        return { success: false, error: "Firestore not initialized." };
+    }
+    const validatedFields = PurchaseOrderSchema.safeParse(values);
+    if (!validatedFields.success) {
+        return { success: false, error: "Invalid form data." };
+    }
+    
+    try {
+        const { lineItems, ...poData } = validatedFields.data;
+        const total = lineItems.reduce((acc, item) => acc + item.quantity * item.unitCost, 0);
+
+        const newPO = {
+            ...poData,
+            userId: FAKE_USER_ID,
+            poNumber: `PO-${Date.now().toString().slice(-6)}`,
+            status: 'Sent',
+            total,
+            orderDate: new Date().toISOString().split('T')[0],
+            expectedDelivery: poData.deliveryDate,
+        };
+        await firestore.collection('purchaseOrders').add(newPO);
+        revalidatePath('/operations/inventory/purchase-orders');
+        return { success: true };
+    } catch (error: any) {
+        return { success: false, error: error.message };
+    }
+}
+
 
 // Document Management
 export async function getDocumentManagementData() {
