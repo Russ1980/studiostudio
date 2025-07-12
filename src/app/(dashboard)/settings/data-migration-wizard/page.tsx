@@ -23,6 +23,8 @@ import { Step7DataMapping } from "./components/step7-data-mapping";
 import { Step8TestImport } from "./components/step8-test-import";
 import { Step9FinalImport } from "./components/step9-final-import";
 import { Step10Completion } from "./components/step10-completion";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import Link from "next/link";
 
 const wizardSteps = [
   { id: 1, name: "Welcome", component: Step1Welcome },
@@ -36,6 +38,21 @@ const wizardSteps = [
   { id: 9, name: "Final Import", component: Step9FinalImport },
   { id: 10, name: "Completion", component: Step10Completion },
 ];
+
+export function MigrationWizardLauncherButton() {
+    return (
+         <Dialog>
+            <DialogTrigger asChild>
+                 <Button>
+                    <Wand className="mr-2"/> Launch Migration Wizard
+                </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-5xl">
+                 <DataMigrationWizardPage />
+            </DialogContent>
+        </Dialog>
+    )
+}
 
 function DataMigrationWizardContent() {
   const { currentStep, setCurrentStep, migrationData } = useMigrationWizard();
@@ -70,7 +87,7 @@ function DataMigrationWizardContent() {
   const CurrentStepComponent = wizardSteps[currentStep-1].component;
 
   return (
-      <Card>
+      <Card className="border-none shadow-none">
         <CardHeader>
           <ol className="flex items-center w-full">
             {wizardSteps.map((step, index) => (
@@ -108,7 +125,9 @@ function DataMigrationWizardContent() {
           {currentStep < wizardSteps.length ? (
             <Button onClick={handleNext} disabled={isNextDisabled()}>Next <ArrowRight className="ml-2"/></Button>
           ) : (
-            <Button>Finish Migration</Button>
+            <Button asChild>
+                <Link href="/dashboard">Finish Migration</Link>
+            </Button>
           )}
         </CardFooter>
       </Card>
@@ -129,3 +148,4 @@ export default function DataMigrationWizardPage() {
     </MigrationWizardProvider>
   );
 }
+
