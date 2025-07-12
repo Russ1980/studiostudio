@@ -4,16 +4,7 @@
 import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
 import { getAuth, onAuthStateChanged, signOut as firebaseSignOut, type User as FirebaseUser } from 'firebase/auth';
 import { app } from '@/lib/firebase-client';
-import { mapFirebaseUserToAuthUser } from '@/lib/auth';
-
-export type AuthUser = {
-  uid: string;
-  name: string;
-  initials: string;
-  email: string | null;
-  title: string;
-  role: string;
-};
+import { mapFirebaseUserToAuthUser, type AuthUser } from '@/lib/auth';
 
 interface AuthContextType {
   user: AuthUser | null;
