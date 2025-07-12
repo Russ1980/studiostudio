@@ -675,11 +675,15 @@ export async function getVendors() {
     await simulateDelay(50);
     return mockVendors;
 }
+
 export async function getJournalEntries() {
   if (!firestore) return mockJournalEntries;
   try {
     const snapshot = await firestore.collection('journalEntries').orderBy('date', 'desc').get();
-    if (snapshot.empty) return mockJournalEntries;
+    if (snapshot.empty) {
+      console.log('No journal entries found, returning mock data.');
+      return mockJournalEntries;
+    }
     return snapshot.docs.map(doc => doc.data()) as typeof mockJournalEntries;
   } catch (error) {
     console.error("Error fetching journal entries:", error);
@@ -783,7 +787,10 @@ export async function getLedgerTransactions() {
     if (!firestore) return mockLedgerTransactions;
     try {
         const snapshot = await firestore.collection('journalEntries').orderBy('date', 'desc').get();
-        if (snapshot.empty) return mockLedgerTransactions;
+        if (snapshot.empty) {
+            console.log("No journal entries found in Firestore, returning mock data for ledger.");
+            return mockLedgerTransactions
+        };
 
         // This is a simplified ledger for one account. A real one would be much more complex.
         let runningBalance = 1250320.50; // Starting balance from mock
