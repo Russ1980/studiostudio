@@ -1208,7 +1208,7 @@ export async function getJobCostingDashboardData() {
             { title: "Total Spent", value: `$${totalSpent.toLocaleString()}` },
             { title: "Overall Profitability", value: `$${overallProfitability.toLocaleString()}` },
         ],
-        budgetVsActualData: jobs.map(j => ({ name: j.name, budget: j.budget, actual: j.actual })).slice(0, 3),
+        budgetVsActualData: jobs.map(j => ({ name: j.name, budget: j.budget, actual: j.spent })).slice(0, 3),
         recentCostEntries: mockJobCostingDashboard.recentCostEntries, // Keep mock for now
     };
   } catch (error) {
