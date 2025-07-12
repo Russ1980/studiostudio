@@ -83,6 +83,7 @@ import { z } from 'zod';
 import admin from 'firebase-admin';
 import { migrateData, migrateSingleDoc } from './migration';
 import { getRevenueDataTool } from '@/ai/tools/get-revenue-data';
+import { v4 as uuidv4 } from 'uuid';
 
 // Placeholder for the currently logged-in user's ID.
 // In a real app, you would get this from the session.
@@ -1092,41 +1093,34 @@ export async function getSchedulingData() {
     await simulateDelay(50);
     return mockScheduling;
 }
+
 export async function getJobDetails(id: string) {
-  if (!firestore) {
-    console.log("Firestore not initialized, returning mock data for job details.");
-    const job = mockJobsWithDetails.find(job => job.id === id) || null;
-    return JSON.parse(JSON.stringify(job)); // Serialize and deserialize to handle non-plain objects
-  }
-  try {
-    const docRef = firestore.collection('jobs').doc(id);
-    const docSnap = await docRef.get();
+    if (!firestore) {
+        console.log("Firestore not initialized, returning mock data for job details.");
+        return mockJobsWithDetails.find(job => job.id === id) || null;
+    }
+    try {
+        const docRef = firestore.collection('jobs').doc(id);
+        const docSnap = await docRef.get();
 
-    if (!docSnap.exists) {
-      console.log('No such document!');
-      return null;
+        if (!docSnap.exists) {
+            console.log('No such document!');
+            return null;
+        }
+        
+        const data = docSnap.data();
+        if (!data || data.userId !== FAKE_USER_ID) {
+            console.log('Job not found or access denied.');
+            return null;
+        }
+        
+        return { id: docSnap.id, ...data };
+    } catch (error) {
+        console.error("Error fetching job details from Firestore:", error);
+        return mockJobsWithDetails.find(job => job.id === id) || null; // Fallback
     }
-    
-    const data = docSnap.data();
-    if (!data || data.userId !== FAKE_USER_ID) {
-        console.log('Job not found or access denied.');
-        return null;
-    }
-
-    // This is a simplified example. In a real app, you might need to handle nested timestamps.
-    for (const key in data) {
-      if (data[key] && typeof data[key].toDate === 'function') {
-        data[key] = data[key].toDate().toISOString();
-      }
-    }
-    
-    return { id: docSnap.id, ...data };
-  } catch (error) {
-    console.error("Error fetching job details from Firestore:", error);
-    const job = mockJobsWithDetails.find(job => job.id === id) || null; // Fallback
-    return JSON.parse(JSON.stringify(job)); // Serialize and deserialize
-  }
 }
+
 export async function getJobProfitabilityData() {
     await simulateDelay(50);
     return mockJobProfitabilityData;

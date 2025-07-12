@@ -94,7 +94,9 @@ export default async function AllJobsPage() {
                         <Button variant="ghost" size="icon"><MoreHorizontal /></Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem>View Details</DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                           <Link href={`/operations/job-costing/jobs/${job.id}`}>View Details</Link>
+                        </DropdownMenuItem>
                         <DropdownMenuItem>Enter Costs</DropdownMenuItem>
                         <DropdownMenuItem>Edit Job</DropdownMenuItem>
                       </DropdownMenuContent>
