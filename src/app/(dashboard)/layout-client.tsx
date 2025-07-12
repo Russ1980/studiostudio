@@ -10,6 +10,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useAuth } from '@/components/auth-provider';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import { Logo } from '@/components/icons';
 
 function AppLayout({ children }: { children: React.ReactNode }) {
     const { user, loading } = useAuth();
@@ -24,17 +25,28 @@ function AppLayout({ children }: { children: React.ReactNode }) {
     if (loading || !user) {
         return (
              <div className="flex h-screen w-full">
-                <div className="hidden md:block border-r" style={{width: '16rem'}}>
+                <div className="hidden md:block border-r bg-muted/40" style={{width: '16rem'}}>
                     <div className="p-4">
-                        <Skeleton className="h-8 w-32 mb-8" />
+                        <div className="flex items-center gap-2 mb-8">
+                            <Skeleton className="h-8 w-8" />
+                            <Skeleton className="h-6 w-24" />
+                        </div>
                         <div className="space-y-2">
                            {[...Array(6)].map((_, i) => <Skeleton key={i} className="h-10 w-full" />)}
                         </div>
                     </div>
                 </div>
-                <div className="flex-1 p-4">
-                    <Skeleton className="h-10 w-full" />
-                    <Skeleton className="h-[200px] w-full mt-4" />
+                <div className="flex-1 p-6">
+                    <header className="flex items-center justify-between mb-6">
+                        <Skeleton className="h-8 w-48" />
+                        <div className="flex items-center gap-2">
+                             <Skeleton className="h-10 w-24" />
+                             <Skeleton className="h-10 w-10 rounded-full" />
+                             <Skeleton className="h-10 w-10 rounded-full" />
+                        </div>
+                    </header>
+                    <Skeleton className="h-24 w-full" />
+                    <Skeleton className="h-[400px] w-full mt-6" />
                 </div>
             </div>
         )
@@ -58,8 +70,11 @@ export function RootLayoutClient({ children }: { children: React.ReactNode }) {
 
   if (loading) {
       return (
-        <div className="flex h-screen items-center justify-center">
-            <Skeleton className="h-12 w-12 rounded-full" />
+        <div className="flex h-screen items-center justify-center bg-background">
+            <div className="flex flex-col items-center gap-4">
+                <Logo className="h-12 w-12 animate-pulse" />
+                <p className="text-muted-foreground">Loading Mardisen Suite...</p>
+            </div>
         </div>
       )
   }
@@ -71,5 +86,3 @@ export function RootLayoutClient({ children }: { children: React.ReactNode }) {
   // This is for public pages like the landing page, signin, etc.
   return <div className="bg-white">{children}</div>;
 }
-
-    

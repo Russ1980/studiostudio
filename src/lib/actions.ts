@@ -727,7 +727,15 @@ export async function getInvoices() {
       console.log("No invoices found in Firestore, returning mock data as fallback.");
       return mockInvoices;
     }
-    const invoices = invoicesSnapshot.docs.map(doc => ({id: doc.id, ...doc.data()}));
+    const invoices = invoicesSnapshot.docs.map(doc => {
+      const data = doc.data();
+      return {
+        ...data,
+        id: doc.id,
+        // Ensure amount is a formatted string
+        amount: parseFloat(data.amount).toLocaleString('en-US', {minimumFractionDigits: 2}),
+      }
+    });
     return invoices as (typeof mockInvoices[0] & {id: string})[];
   } catch (error) {
     console.error("Error fetching invoices from Firestore:", error);
@@ -1218,7 +1226,7 @@ export async function getOperationsDashboardData() {
 export async function getPurchaseOrders() {
     if (!firestore) return mockPurchaseOrders;
     try {
-        const snapshot = await firestore.collection('purchaseOrders').where('userId', '==', FAKE_USER_ID).get();
+        const snapshot = await firestore.collection('purchaseOrders').where('userId', '==', FAKE_USER_ID).orderBy('orderDate', 'desc').get();
         if (snapshot.empty) {
             console.log('No purchase orders found, returning mock data.');
             return mockPurchaseOrders;
@@ -1489,7 +1497,14 @@ export async function getJobs() {
       console.log("No jobs found in Firestore, returning mock data as fallback.");
       return mockJobs;
     }
-    const jobs = jobsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const jobs = jobsSnapshot.docs.map(doc => {
+        const data = doc.data();
+        return {
+            id: doc.id, 
+            ...data,
+            profitability: parseFloat(data.profitability),
+        }
+    });
     return jobs as typeof mockJobs;
   } catch (error) {
     console.error("Error fetching jobs from Firestore:", error);
@@ -1651,7 +1666,7 @@ export async function migrateTaskData() {
 export async function migrateChartOfAccounts() { 
     const check = checkFirestore();
     if(check || !firestore) return check || { success: false, error: "DB not available" };
-    return migrateSingleDoc(firestore, mockChartOfAccounts, 'chartOfAccounts', 'main'); 
+    return migrateSingleDoc(firestore, mockChartOfAccounts, 'chartOfAccounts', FAKE_USER_ID); 
 }
 export async function migrateTimeLogs() { 
     const check = checkFirestore();
