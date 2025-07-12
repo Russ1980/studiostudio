@@ -1,7 +1,7 @@
 
 import { generateDashboardInsights } from "@/ai/flows/generate-dashboard-insights";
-import { DashboardClientComponent } from "./DashboardClientComponent";
 import { getRevenueDataTool } from "@/ai/tools/get-revenue-data";
+import { InsightsDashboardClient } from "./insights-dashboard-client";
 
 // Mock expense data for now, as we don't have live expense tracking yet.
 const mockExpenseData = [
@@ -58,8 +58,8 @@ export default async function ReportsDashboardPage() {
     }
 
     return (
-        <DashboardClientComponent 
-            initialInsights={insightsData?.insights || [...fallbackInsights]} 
+        <InsightsDashboardClient
+            insights={insightsData?.insights || [...fallbackInsights]} 
             revenueData={revenueData}
             expenseData={mockExpenseData}
         />
