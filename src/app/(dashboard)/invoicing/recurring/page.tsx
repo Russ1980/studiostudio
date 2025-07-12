@@ -25,12 +25,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal, PlusCircle } from "lucide-react";
 import Link from "next/link";
-
-const recurringInvoices = [
-  { id: "REC-001", customer: "Innovate Inc.", frequency: "Monthly", nextDate: "2024-08-01", amount: "5,000.00", status: "Active" },
-  { id: "REC-002", customer: "Apex Solutions", frequency: "Quarterly", nextDate: "2024-10-01", amount: "15,000.00", status: "Active" },
-  { id: "REC-003", customer: "Stellar Goods", frequency: "Monthly", nextDate: "2024-08-15", amount: "1,200.00", status: "Paused" },
-];
+import { getRecurringInvoices } from "@/lib/actions";
+import { useEffect, useState } from "react";
 
 const statusVariant: { [key: string]: "success" | "default" } = {
   Active: "success",
@@ -38,6 +34,12 @@ const statusVariant: { [key: string]: "success" | "default" } = {
 };
 
 export default function RecurringInvoicesPage() {
+  const [recurringInvoices, setRecurringInvoices] = useState<any[]>([]);
+
+  useEffect(() => {
+    getRecurringInvoices().then(setRecurringInvoices);
+  }, []);
+
   return (
     <div className="grid gap-6">
       <div className="flex items-center justify-between">
@@ -76,7 +78,7 @@ export default function RecurringInvoicesPage() {
                   <TableCell>{profile.nextDate}</TableCell>
                   <TableCell>${profile.amount}</TableCell>
                   <TableCell>
-                    <Badge variant={statusVariant[profile.status]}>{profile.status}</Badge>
+                    <Badge variant={statusVariant[profile.status as keyof typeof statusVariant]}>{profile.status}</Badge>
                   </TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
