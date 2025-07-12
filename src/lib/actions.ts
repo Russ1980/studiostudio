@@ -84,6 +84,10 @@ import admin from 'firebase-admin';
 import { migrateData, migrateSingleDoc } from './migration';
 import { getRevenueDataTool } from '@/ai/tools/get-revenue-data';
 
+// Placeholder for the currently logged-in user's ID.
+// In a real app, you would get this from the session.
+const FAKE_USER_ID = "user-placeholder-id";
+
 const simulateDelay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 export async function getDashboardPageData() {
@@ -91,7 +95,7 @@ export async function getDashboardPageData() {
         return mockDashboardPageData;
     }
     try {
-        const invoicesSnapshot = await firestore.collection('invoices').get();
+        const invoicesSnapshot = await firestore.collection('invoices').where('userId', '==', FAKE_USER_ID).get();
         // If the collection is empty, use mock data.
         if (invoicesSnapshot.empty) {
             console.log("No invoices found, using mock data for dashboard.");
@@ -179,7 +183,7 @@ export async function getClients() {
     return mockClients;
   }
   try {
-    const clientsSnapshot = await firestore.collection('clients').get();
+    const clientsSnapshot = await firestore.collection('clients').where('userId', '==', FAKE_USER_ID).get();
     if (clientsSnapshot.empty) {
       console.log("No clients found in Firestore, returning mock data as fallback.");
       return mockClients;
@@ -202,6 +206,7 @@ export async function onboardNewClient(formData: any) {
     const primaryContactUser = formData.clientUsers?.find((u: any) => u.role === 'Admin') || formData.clientUsers?.[0];
 
     const newClientData = {
+      userId: FAKE_USER_ID,
       businessName: formData.legalName || 'Unnamed Client',
       ein: formData.ein || '',
       address: formData.address || '',
@@ -244,9 +249,9 @@ export async function getAccountantDashboardData() {
         return mockAccountantDashboard;
     }
     try {
-        const clientsSnapshot = await firestore.collection('clients').get();
-        const tasksSnapshot = await firestore.collection('tasks').get();
-        const invoicesSnapshot = await firestore.collection('invoices').get();
+        const clientsSnapshot = await firestore.collection('clients').where('userId', '==', FAKE_USER_ID).get();
+        const tasksSnapshot = await firestore.collection('tasks').where('userId', '==', FAKE_USER_ID).get();
+        const invoicesSnapshot = await firestore.collection('invoices').where('userId', '==', FAKE_USER_ID).get();
 
         const activeClients = clientsSnapshot.docs.filter(doc => doc.data().status === 'Active').length;
         const tasks = tasksSnapshot.docs.map(doc => doc.data());
@@ -282,7 +287,7 @@ export async function getTasks() {
         return mockTasks;
     }
     try {
-        const tasksSnapshot = await firestore.collection('tasks').orderBy('due').get();
+        const tasksSnapshot = await firestore.collection('tasks').where('userId', '==', FAKE_USER_ID).orderBy('due').get();
         if (tasksSnapshot.empty) {
             console.log("No tasks found in Firestore, returning mock data as fallback.");
             return mockTasks;
@@ -324,6 +329,7 @@ export async function addNewClient(values: z.infer<typeof ClientSchema>) {
 
     try {
         await firestore.collection('clients').add({
+            userId: FAKE_USER_ID,
             ...validatedFields.data,
             onboarded: new Date().toISOString().split('T')[0],
             status: "Active", // Defaulting to Active for simplicity
@@ -357,7 +363,10 @@ export async function addNewTask(values: z.infer<typeof TaskSchema>) {
     }
 
     try {
-        await firestore.collection('tasks').add(validatedFields.data);
+        await firestore.collection('tasks').add({
+            userId: FAKE_USER_ID,
+            ...validatedFields.data
+        });
         revalidatePath('/accountant-portal/task-management');
         return { success: true };
     } catch (error: any) {
@@ -387,7 +396,10 @@ export async function addNewEmployee(values: z.infer<typeof EmployeeSchema>) {
     }
 
     try {
-        await firestore.collection('employees').add(validatedFields.data);
+        await firestore.collection('employees').add({
+            userId: FAKE_USER_ID,
+            ...validatedFields.data
+        });
         revalidatePath('/payroll/employee-management');
         return { success: true };
     } catch (error: any) {
@@ -414,7 +426,7 @@ export async function getInvoicingDashboardData() {
     }
 
     try {
-        const invoicesSnapshot = await firestore.collection('invoices').get();
+        const invoicesSnapshot = await firestore.collection('invoices').where('userId', '==', FAKE_USER_ID).get();
         if (invoicesSnapshot.empty) {
             console.log("No invoices found in Firestore, returning mock invoicing dashboard data.");
             return mockInvoicingDashboard;
@@ -474,7 +486,7 @@ export async function getInvoices() {
     return mockInvoices;
   }
   try {
-    const invoicesSnapshot = await firestore.collection('invoices').orderBy('invoiceNumber', 'desc').get();
+    const invoicesSnapshot = await firestore.collection('invoices').where('userId', '==', FAKE_USER_ID).orderBy('invoiceNumber', 'desc').get();
     if (invoicesSnapshot.empty) {
       console.log("No invoices found in Firestore, returning mock data as fallback.");
       return mockInvoices;
@@ -518,6 +530,7 @@ export async function addNewInvoice(values: z.infer<typeof InvoiceFormSchema>) {
         const total = subtotal + tax;
 
         const newInvoice = {
+            userId: FAKE_USER_ID,
             ...invoiceData,
             invoice: invoiceData.invoiceNumber, // Match field name in data
             amount: total.toFixed(2),
@@ -549,7 +562,7 @@ export async function getArAgingData() {
     if (!firestore) return mockArAgingData;
 
     try {
-        const invoicesSnapshot = await firestore.collection('invoices').where('status', '!=', 'Paid').get();
+        const invoicesSnapshot = await firestore.collection('invoices').where('status', '!=', 'Paid').where('userId', '==', FAKE_USER_ID).get();
         if (invoicesSnapshot.empty) return mockArAgingData;
 
         const agingData: { [key: string]: { current: number; "1-30": number; "31-60": number; "61-90": number; "90+": number; total: number } } = {};
@@ -599,7 +612,7 @@ export async function getArAgingData() {
 export async function getSalesByCustomerData() {
     if (!firestore) return mockSalesByCustomerData;
     try {
-        const invoicesSnapshot = await firestore.collection('invoices').where('status', '==', 'Paid').get();
+        const invoicesSnapshot = await firestore.collection('invoices').where('status', '==', 'Paid').where('userId', '==', FAKE_USER_ID).get();
         if (invoicesSnapshot.empty) return mockSalesByCustomerData;
 
         const salesData: { [key: string]: { invoices: number; sales: number } } = {};
@@ -679,7 +692,7 @@ export async function getVendors() {
 export async function getJournalEntries() {
   if (!firestore) return mockJournalEntries;
   try {
-    const snapshot = await firestore.collection('journalEntries').orderBy('date', 'desc').get();
+    const snapshot = await firestore.collection('journalEntries').where('userId', '==', FAKE_USER_ID).orderBy('date', 'desc').get();
     if (snapshot.empty) {
       console.log('No journal entries found, returning mock data.');
       return mockJournalEntries;
@@ -786,7 +799,7 @@ export async function addChartOfAccount(values: z.infer<typeof AccountSchema>) {
 export async function getLedgerTransactions() {
     if (!firestore) return mockLedgerTransactions;
     try {
-        const snapshot = await firestore.collection('journalEntries').orderBy('date', 'desc').get();
+        const snapshot = await firestore.collection('journalEntries').where('userId', '==', FAKE_USER_ID).orderBy('date', 'desc').get();
         if (snapshot.empty) {
             console.log("No journal entries found in Firestore, returning mock data for ledger.");
             return mockLedgerTransactions
@@ -833,7 +846,7 @@ export async function getBankAccounts() {
         return mockBankAccounts;
     }
     try {
-        const snapshot = await firestore.collection('bankAccounts').get();
+        const snapshot = await firestore.collection('bankAccounts').where('userId', '==', FAKE_USER_ID).get();
         if (snapshot.empty) {
             console.log("No bank accounts found in Firestore, returning mock data as fallback.");
             return mockBankAccounts;
@@ -874,7 +887,7 @@ export async function getOperationsDashboardData() {
 export async function getPurchaseOrders() {
     if (!firestore) return mockPurchaseOrders;
     try {
-        const snapshot = await firestore.collection('purchaseOrders').get();
+        const snapshot = await firestore.collection('purchaseOrders').where('userId', '==', FAKE_USER_ID).get();
         if (snapshot.empty) {
             console.log('No purchase orders found, returning mock data.');
             return mockPurchaseOrders;
@@ -889,7 +902,7 @@ export async function getPurchaseOrders() {
 export async function getInventoryData() {
     if (!firestore) return { kpiData: mockInventory.kpiData, inventory: mockInventory.inventory };
     try {
-        const snapshot = await firestore.collection('inventory').get();
+        const snapshot = await firestore.collection('inventory').where('userId', '==', FAKE_USER_ID).get();
         const inventory = snapshot.empty ? mockInventory.inventory : snapshot.docs.map(doc => doc.data());
 
         const totalValue = inventory.reduce((acc, item: any) => acc + item.cost * item.quantity, 0);
@@ -911,7 +924,7 @@ export async function getInventoryData() {
 export async function getProductionPlans() {
     if (!firestore) return mockProductionPlans;
     try {
-        const snapshot = await firestore.collection('productionPlans').get();
+        const snapshot = await firestore.collection('productionPlans').where('userId', '==', FAKE_USER_ID).get();
         if (snapshot.empty) {
             console.log('No production plans found, returning mock data.');
             return mockProductionPlans;
@@ -925,7 +938,7 @@ export async function getProductionPlans() {
 export async function getWorkOrders() {
     if (!firestore) return mockWorkOrders;
     try {
-        const snapshot = await firestore.collection('workOrders').get();
+        const snapshot = await firestore.collection('workOrders').where('userId', '==', FAKE_USER_ID).get();
         if (snapshot.empty) {
             console.log('No work orders found, returning mock data.');
             return mockWorkOrders;
@@ -962,9 +975,12 @@ export async function getJobDetails(id: string) {
       console.log('No such document!');
       return null;
     }
-
+    
     const data = docSnap.data();
-    if (!data) return null;
+    if (!data || data.userId !== FAKE_USER_ID) {
+        console.log('Job not found or access denied.');
+        return null;
+    }
 
     // This is a simplified example. In a real app, you might need to handle nested timestamps.
     for (const key in data) {
@@ -1008,7 +1024,7 @@ export async function getEmployees() {
         return mockEmployees;
     }
     try {
-        const employeesSnapshot = await firestore.collection('employees').get();
+        const employeesSnapshot = await firestore.collection('employees').where('userId', '==', FAKE_USER_ID).get();
         if (employeesSnapshot.empty) {
             console.log("No employees found in Firestore, returning mock data as fallback.");
             return mockEmployees;
@@ -1034,7 +1050,7 @@ export async function getTaxFilings() {
         return mockTaxFilings;
     }
     try {
-        const snapshot = await firestore.collection('taxFilings').get();
+        const snapshot = await firestore.collection('taxFilings').where('userId', '==', FAKE_USER_ID).get();
         if (snapshot.empty) {
             console.log("No tax filings found in Firestore, returning mock data as fallback.");
             return mockTaxFilings;
@@ -1052,7 +1068,7 @@ export async function getTaxPayments() {
         return mockTaxPayments;
     }
     try {
-        const snapshot = await firestore.collection('taxPayments').get();
+        const snapshot = await firestore.collection('taxPayments').where('userId', '==', FAKE_USER_ID).get();
         if (snapshot.empty) {
             console.log("No tax payments found in Firestore, returning mock data as fallback.");
             return mockTaxPayments;
@@ -1144,7 +1160,7 @@ export async function getJobs() {
     return mockJobs;
   }
   try {
-    const jobsSnapshot = await firestore.collection('jobs').get();
+    const jobsSnapshot = await firestore.collection('jobs').where('userId', '==', FAKE_USER_ID).get();
     if (jobsSnapshot.empty) {
       console.log("No jobs found in Firestore, returning mock data as fallback.");
       return mockJobs;
@@ -1162,7 +1178,7 @@ export async function getTimeLogs() {
         return mockTimeLogs;
     }
     try {
-        const snapshot = await firestore.collection('timeLogs').orderBy('date', 'desc').limit(10).get();
+        const snapshot = await firestore.collection('timeLogs').where('userId', '==', FAKE_USER_ID).orderBy('date', 'desc').limit(10).get();
         if (snapshot.empty) {
             console.log("No time logs found in Firestore, returning mock data as fallback.");
             return mockTimeLogs;
@@ -1179,7 +1195,7 @@ export async function getJobCostingDashboardData() {
     return mockJobCostingDashboard;
   }
   try {
-    const jobsSnapshot = await firestore.collection('jobs').get();
+    const jobsSnapshot = await firestore.collection('jobs').where('userId', '==', FAKE_USER_ID).get();
     if (jobsSnapshot.empty) {
         return mockJobCostingDashboard;
     }

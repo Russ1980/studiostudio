@@ -11,6 +11,9 @@ type MigrationResult = {
   error?: string;
 };
 
+// Placeholder for the currently logged-in user's ID.
+const FAKE_USER_ID = "user-placeholder-id";
+
 // This is our core logic. It's now only used by our Server Actions file.
 export async function migrateData(
   db: adminFirestore.Firestore,
@@ -22,9 +25,11 @@ export async function migrateData(
   data.forEach(item => {
     // Use the idKey to dynamically get the document ID
     const docId = item[idKey];
+    // Add the userId to each item before saving
+    const itemWithUser = { ...item, userId: FAKE_USER_ID };
     if (docId) {
       const docRef = db.collection(targetCollection).doc(String(docId));
-      batch.set(docRef, item);
+      batch.set(docRef, itemWithUser);
     }
   });
 
@@ -44,7 +49,8 @@ export async function migrateSingleDoc(
     docId: string
 ): Promise<MigrationResult> {
     try {
-        await db.collection(collection).doc(docId).set(docData);
+        const docWithUser = { ...docData, userId: FAKE_USER_ID };
+        await db.collection(collection).doc(docId).set(docWithUser);
         return { success: true, migrated: 1 };
     } catch (error) {
         const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
