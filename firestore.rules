@@ -1,0 +1,77 @@
+
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper function to check ownership based on the userId field
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+
+    // Secure all primary collections by checking the 'userId' field on each document.
+    // This ensures users can only access data that belongs to them.
+    match /clients/{docId} {
+      allow read, write: if isOwner(resource.data.userId);
+    }
+
+    match /invoices/{docId} {
+      allow read, write: if isOwner(resource.data.userId);
+    }
+
+    match /employees/{docId} {
+      allow read, write: if isOwner(resource.data.userId);
+    }
+    
+    match /jobs/{docId} {
+      allow read, write: if isOwner(resource.data.userId);
+    }
+
+    match /tasks/{docId} {
+      allow read, write: if isOwner(resource.data.userId);
+    }
+
+    match /journalEntries/{docId} {
+      allow read, write: if isOwner(resource.data.userId);
+    }
+    
+    match /purchaseOrders/{docId} {
+        allow read, write: if isOwner(resource.data.userId);
+    }
+
+    match /inventory/{docId} {
+        allow read, write: if isOwner(resource.data.userId);
+    }
+
+    match /productionPlans/{docId} {
+        allow read, write: if isOwner(resource.data.userId);
+    }
+
+    match /workOrders/{docId} {
+        allow read, write: if isOwner(resource.data.userId);
+    }
+
+    match /timeLogs/{docId} {
+        allow read, write: if isOwner(resource.data.userId);
+    }
+
+    match /bankAccounts/{docId} {
+      allow read, write: if isOwner(resource.data.userId);
+    }
+
+    match /taxFilings/{docId} {
+      allow read, write: if isOwner(resource.data.userId);
+    }
+
+    match /taxPayments/{docId} {
+      allow read, write: if isOwner(resource.data.userId);
+    }
+    
+    // The Chart of Accounts is stored as a single document per user,
+    // where the document ID *is* the user's ID.
+    match /chartOfAccounts/{userId} {
+      allow read, write: if isOwner(userId);
+    }
+
+  }
+}
