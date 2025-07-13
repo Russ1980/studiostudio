@@ -6,12 +6,13 @@ import { EditInvoiceForm } from "./edit-invoice-form";
 export default async function EditInvoicePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const invoice = await getInvoiceById(id);
-  const clients = await getClients();
   
   if (!invoice) {
     notFound();
   }
 
+  const clients = await getClients();
+  
   return (
     <div className="grid gap-6">
       <div className="flex items-center justify-between">
