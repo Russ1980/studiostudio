@@ -84,6 +84,7 @@ import admin from 'firebase-admin';
 import { migrateData, migrateSingleDoc } from './migration';
 import { getRevenueDataTool } from '@/ai/tools/get-revenue-data';
 import { v4 as uuidv4 } from 'uuid';
+import { getStockPrice } from '@/ai/tools/get-stock-price';
 
 // Placeholder for the currently logged-in user's ID.
 // In a real app, you would get this from the session.
@@ -1413,9 +1414,43 @@ export async function getPortfolioOverviewData() {
     await simulateDelay(50);
     return mockPortfolioOverview;
 }
-export async function getStockData() {
-    await simulateDelay(50);
-    return mockStockData;
+
+export async function getStockData(ticker: string = 'AAPL') {
+    try {
+        const price = await getStockPrice({ ticker });
+        
+        // Use a hash of the ticker to create deterministic, but unique, mock data
+        const tickerHash = ticker.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+        const change = parseFloat(((tickerHash % 5) - 2.5).toFixed(2));
+        const changePercent = parseFloat(((change / price) * 100).toFixed(2));
+
+        const generateChartData = () => {
+            const data = [];
+            let currentPrice = price - change * 7;
+            for (let i = 0; i < 8; i++) {
+                data.push({
+                    date: `${9 + i}:30`,
+                    value: parseFloat(currentPrice.toFixed(2)),
+                });
+                currentPrice += change + ((Math.random() - 0.5) * 2);
+            }
+            return data;
+        };
+
+        const stockDetails = mockStockData[ticker.toUpperCase() as keyof typeof mockStockData] || mockStockData['DEFAULT'];
+
+        return {
+            ...stockDetails,
+            ticker: ticker.toUpperCase(),
+            price: price.toFixed(2),
+            change: change.toFixed(2),
+            changePercent: changePercent.toFixed(2),
+            chartData: generateChartData(),
+        };
+    } catch (e) {
+        console.error(`Failed to get stock data for ${ticker}:`, e);
+        return mockStockData['DEFAULT'];
+    }
 }
 export async function getLearningResources() {
     await simulateDelay(50);

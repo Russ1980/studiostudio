@@ -105,11 +105,11 @@ export const mockInvoicingDashboard = {
 };
 
 export const mockInvoices = [
-  { invoice: "#INV-2024-051", customer: "QuantumLeap Co.", amount: "25,000.00", dueDate: "2024-07-31", status: "Sent" },
-  { invoice: "#INV-2024-050", customer: "Apex Solutions", amount: "12,500.00", dueDate: "2024-06-20", status: "Paid" },
-  { invoice: "#INV-2024-049", customer: "Momentum LLC", amount: "10,000.00", dueDate: "2024-06-20", status: "Overdue" },
-  { invoice: "#INV-2024-048", customer: "Stellar Goods", amount: "5,000.00", dueDate: "2024-07-15", status: "Sent" },
-  { invoice: "#INV-2024-047", customer: "Innovate Inc.", amount: "50,000.00", dueDate: "2024-06-15", status: "Paid" },
+  { invoice: "#INV-2024-051", customer: "QuantumLeap Co.", amount: "25000", dueDate: "2024-07-31", status: "Sent" },
+  { invoice: "#INV-2024-050", customer: "Apex Solutions", amount: "12500", dueDate: "2024-06-20", status: "Paid" },
+  { invoice: "#INV-2024-049", customer: "Momentum LLC", amount: "10000", dueDate: "2024-06-20", status: "Overdue" },
+  { invoice: "#INV-2024-048", customer: "Stellar Goods", amount: "5000", dueDate: "2024-07-15", status: "Sent" },
+  { invoice: "#INV-2024-047", customer: "Innovate Inc.", amount: "50000", dueDate: "2024-06-15", status: "Paid" },
 ];
 
 export const mockRecurringInvoices = [
@@ -291,49 +291,49 @@ export const mockVendors = [
 ];
 
 export const mockJournalEntries = [
-  { date: "2024-06-15", entryNo: "JE-001", ref: "Depreciation", description: "Monthly depreciation expense for office equipment.", debits: "1,500.00", credits: "1,500.00", status: "Posted" },
-  { date: "2024-06-10", entryNo: "JE-002", ref: "Owner's Draw", description: "Owner withdrawal for personal use.", debits: "5,000.00", credits: "5,000.00", status: "Posted" },
-  { date: "2024-06-01", entryNo: "JE-003", ref: "Accrued Revenue", description: "To recognize revenue earned but not yet invoiced.", debits: "10,000.00", credits: "10,000.00", status: "Draft" },
+  { date: "2024-06-15", entryNo: "JE-001", ref: "Depreciation", description: "Monthly depreciation expense for office equipment.", debits: "1500.00", credits: "1500.00", status: "Posted" },
+  { date: "2024-06-10", entryNo: "JE-002", ref: "Owner's Draw", description: "Owner withdrawal for personal use.", debits: "5000.00", credits: "5000.00", status: "Posted" },
+  { date: "2024-06-01", entryNo: "JE-003", ref: "Accrued Revenue", description: "To recognize revenue earned but not yet invoiced.", debits: "10000.00", credits: "10000.00", status: "Draft" },
 ];
 
 export const mockChartOfAccounts = {
   assets: {
     name: "Assets",
-    balance: "1,584,570.50",
+    balance: "1584570.50",
     accounts: [
       { 
-        name: "Current Assets", code: "1000", type: "Bank", balance: "1,510,320.50",
+        name: "Current Assets", code: "1000", type: "Bank", balance: "1510320.50",
         subAccounts: [
-          { name: "Main Checking Account", code: "1001", type: "Bank", detailType: "Checking", status: "Active", balance: "1,250,320.50", ytd: "5,400,000.00" },
-          { name: "Accounts Receivable", code: "1200", type: "Accounts Receivable", detailType: "Accounts Receivable (A/R)", status: "Active", balance: "245,800.00", ytd: "1,200,500.00" },
-          { name: "Prepaid Expenses", code: "1300", type: "Other Current Asset", detailType: "Prepaid Expenses", status: "Active", balance: "14,200.00", ytd: "50,000.00" },
+          { name: "Main Checking Account", code: "1001", type: "Bank", detailType: "Checking", status: "Active", balance: 1250320.50, ytd: 5400000.00 },
+          { name: "Accounts Receivable", code: "1200", type: "Accounts Receivable", detailType: "Accounts Receivable (A/R)", status: "Active", balance: 245800.00, ytd: 1200500.00 },
+          { name: "Prepaid Expenses", code: "1300", type: "Other Current Asset", detailType: "Prepaid Expenses", status: "Active", balance: 14200.00, ytd: 50000.00 },
         ]
       },
        { 
-        name: "Fixed Assets", code: "1500", type: "Fixed Asset", balance: "74,250.00",
+        name: "Fixed Assets", code: "1500", type: "Fixed Asset", balance: 74250.00,
         subAccounts: [
-          { name: "Machinery & Equipment", code: "1510", type: "Fixed Asset", detailType: "Machinery & Equipment", status: "Active", balance: "150,000.00", ytd: "150,000.00" },
-          { name: "Accumulated Depreciation", code: "1520", type: "Fixed Asset", detailType: "Accumulated Depreciation", status: "Active", balance: "-75,750.00", ytd: "-75,750.00" },
+          { name: "Machinery & Equipment", code: "1510", type: "Fixed Asset", detailType: "Machinery & Equipment", status: "Active", balance: 150000.00, ytd: 150000.00 },
+          { name: "Accumulated Depreciation", code: "1520", type: "Fixed Asset", detailType: "Accumulated Depreciation", status: "Active", balance: -75750.00, ytd: -75750.00 },
         ]
       },
     ]
   },
   liabilities: {
     name: "Liabilities & Equity",
-    balance: "1,584,570.50",
+    balance: "1584570.50",
     accounts: [
        { 
-        name: "Liabilities", code: "2000", type: "Liability", balance: "100,950.00",
+        name: "Liabilities", code: "2000", type: "Liability", balance: 100950.00,
         subAccounts: [
-          { name: "Accounts Payable", code: "2010", type: "Accounts Payable", detailType: "Accounts Payable (A/P)", status: "Active", balance: "88,450.00", ytd: "750,000.00" },
-          { name: "Business Credit Card", code: "2100", type: "Credit Card", detailType: "Credit Card", status: "Active", balance: "12,500.00", ytd: "150,000.00" },
+          { name: "Accounts Payable", code: "2010", type: "Accounts Payable", detailType: "Accounts Payable (A/P)", status: "Active", balance: 88450.00, ytd: 750000.00 },
+          { name: "Business Credit Card", code: "2100", type: "Credit Card", detailType: "Credit Card", status: "Active", balance: 12500.00, ytd: 150000.00 },
         ]
       },
        { 
-        name: "Equity", code: "3000", type: "Equity", balance: "1,483,620.50",
+        name: "Equity", code: "3000", type: "Equity", balance: 1483620.50,
         subAccounts: [
-          { name: "Owner's Equity", code: "3100", type: "Equity", detailType: "Owner's Equity", status: "Active", balance: "1,053,520.50", ytd: "1,053,520.50" },
-          { name: "Retained Earnings", code: "3200", type: "Equity", detailType: "Retained Earnings", status: "Active", balance: "430,100.00", ytd: "430,100.00" },
+          { name: "Owner's Equity", code: "3100", type: "Equity", detailType: "Owner's Equity", status: "Active", balance: 1053520.50, ytd: 1053520.50 },
+          { name: "Retained Earnings", code: "3200", type: "Equity", detailType: "Retained Earnings", status: "Active", balance: 430100.00, ytd: 430100.00 },
         ]
       },
     ]
@@ -366,9 +366,9 @@ export const mockArDashboard = {
 
 // Banking
 export const mockBankAccounts = [
-    { id: 'acc_1', name: "Business Checking", bank: "Chase Bank", lastFour: "1234", balance: "1,250,320.50", type: "bank" },
-    { id: 'acc_2', name: "Business Credit Card", bank: "American Express", lastFour: "5678", balance: "12,500.00", type: "credit" },
-    { id: 'acc_3', name: "Savings Account", bank: "Chase Bank", lastFour: "4321", balance: "500,000.00", type: "bank" },
+    { id: 'acc_1', name: "Business Checking", bank: "Chase Bank", lastFour: "1234", balance: "1250320.50", type: "bank" },
+    { id: 'acc_2', name: "Business Credit Card", bank: "American Express", lastFour: "5678", balance: "12500.00", type: "credit" },
+    { id: 'acc_3', name: "Savings Account", bank: "Chase Bank", lastFour: "4321", balance: "500000.00", type: "bank" },
 ];
 
 export const mockBankDashboard = {
@@ -411,13 +411,13 @@ export const mockTransactionRules = [
 
 export const mockReconciliationData = {
   payments: [
-    { date: "2024-06-25", description: "Cloud Services LLC", amount: "5,000.00" },
-    { date: "2024-06-20", description: "Marketing Agency Co.", amount: "10,500.00" },
-    { date: "2024-06-18", description: "Office Supplies Inc.", amount: "1,200.00" },
+    { date: "2024-06-25", description: "Cloud Services LLC", amount: "5000.00" },
+    { date: "2024-06-20", description: "Marketing Agency Co.", amount: "10500.00" },
+    { date: "2024-06-18", description: "Office Supplies Inc.", amount: "1200.00" },
   ],
   deposits: [
-    { date: "2024-06-28", description: "Payment from Innovate Inc.", amount: "50,000.00" },
-    { date: "2024-06-22", description: "Stripe Payout", amount: "12,500.00" },
+    { date: "2024-06-28", description: "Payment from Innovate Inc.", amount: "50000.00" },
+    { date: "2024-06-22", description: "Stripe Payout", amount: "12500.00" },
   ]
 };
 
@@ -566,11 +566,11 @@ export const mockPayrollDashboard = {
 };
 
 export const mockEmployees = [
-    { id: "1", name: "Liam Johnson", email: "liam.j@innovate.com", department: "Engineering", role: "Software Engineer", status: "Active", hireDate: "2022-08-15" },
-    { id: "2", name: "Olivia Smith", email: "olivia.s@innovate.com", department: "Marketing", role: "Marketing Manager", status: "Active", hireDate: "2021-03-01" },
-    { id: "3", name: "Noah Williams", email: "noah.w@innovate.com", department: "Sales", role: "Account Executive", status: "On Leave", hireDate: "2023-01-10" },
-    { id: "4", name: "Emma Brown", email: "emma.b@innovate.com", department: "Product", role: "Product Manager", status: "Active", hireDate: "2022-05-20" },
-    { id: "5", name: "James Jones", email: "james.j@innovate.com", department: "Engineering", role: "QA Engineer", status: "Terminated", hireDate: "2021-11-30" },
+    { id: "1", name: "Liam Johnson", email: "liam.j@innovate.com", department: "Engineering", role: "Software Engineer", status: "Active", hireDate: "2022-08-15", salary: 120000 },
+    { id: "2", name: "Olivia Smith", email: "olivia.s@innovate.com", department: "Marketing", role: "Marketing Manager", status: "Active", hireDate: "2021-03-01", salary: 95000 },
+    { id: "3", name: "Noah Williams", email: "noah.w@innovate.com", department: "Sales", role: "Account Executive", status: "On Leave", hireDate: "2023-01-10", salary: 85000 },
+    { id: "4", name: "Emma Brown", email: "emma.b@innovate.com", department: "Product", role: "Product Manager", status: "Active", hireDate: "2022-05-20", salary: 110000 },
+    { id: "5", name: "James Jones", email: "james.j@innovate.com", department: "Engineering", role: "QA Engineer", status: "Terminated", hireDate: "2021-11-30", salary: 90000 },
 ];
 
 export const mockPayRuns = [
@@ -662,27 +662,50 @@ export const mockPortfolioOverview = {
   ]
 };
 
-export const mockStockData = {
-  name: "Apple Inc.",
-  ticker: "AAPL",
-  price: "172.25",
-  change: "+2.50",
-  changePercent: "+1.5",
-  logo: "https://placehold.co/40x40.png",
-  marketCap: "2.65T",
-  peRatio: "28.5",
-  divYield: "0.55%",
-  about: "Apple Inc. designs, manufactures, and markets smartphones, personal computers, tablets, wearables, and accessories worldwide. It also sells various related services.",
-  chartData: [
-    { date: "9:30", value: 170.50 },
-    { date: "10:00", value: 171.00 },
-    { date: "11:00", value: 171.75 },
-    { date: "12:00", value: 171.25 },
-    { date: "1:00", value: 172.00 },
-    { date: "2:00", value: 172.50 },
-    { date: "3:00", value: 172.10 },
-    { date: "4:00", value: 172.25 },
-  ]
+export const mockStockData: Record<string, any> = {
+  AAPL: {
+    name: "Apple Inc.",
+    ticker: "AAPL",
+    price: 172.25,
+    change: 2.50,
+    changePercent: 1.5,
+    logo: "https://placehold.co/40x40.png",
+    marketCap: "2.65T",
+    peRatio: "28.5",
+    divYield: "0.55%",
+    about: "Apple Inc. designs, manufactures, and markets smartphones, personal computers, tablets, wearables, and accessories worldwide. It also sells various related services.",
+    chartData: [
+      { date: "9:30", value: 170.50 }, { date: "10:00", value: 171.00 }, { date: "11:00", value: 171.75 }, { date: "12:00", value: 171.25 }, { date: "1:00", value: 172.00 }, { date: "2:00", value: 172.50 }, { date: "3:00", value: 172.10 }, { date: "4:00", value: 172.25 },
+    ]
+  },
+  GOOGL: {
+    name: "Alphabet Inc.",
+    ticker: "GOOGL",
+    price: 155.50,
+    change: -1.20,
+    changePercent: -0.77,
+    logo: "https://placehold.co/40x40.png",
+    marketCap: "1.95T",
+    peRatio: "25.8",
+    divYield: "0.00%",
+    about: "Alphabet Inc. is a holding company that gives ambitious projects the resources, freedom, and focus to make their ideas happen.",
+    chartData: [
+      { date: "9:30", value: 157.00 }, { date: "10:00", value: 156.50 }, { date: "11:00", value: 156.00 }, { date: "12:00", value: 155.80 }, { date: "1:00", value: 155.20 }, { date: "2:00", value: 155.60 }, { date: "3:00", value: 155.40 }, { date: "4:00", value: 155.50 },
+    ]
+  },
+  DEFAULT: {
+    name: "Not Found",
+    ticker: "N/A",
+    price: 0,
+    change: 0,
+    changePercent: 0,
+    logo: "https://placehold.co/40x40.png",
+    marketCap: "N/A",
+    peRatio: "N/A",
+    divYield: "N/A",
+    about: "This stock ticker was not found. Please try another one.",
+    chartData: [],
+  }
 };
 
 export const mockLearningResources = {
@@ -973,21 +996,12 @@ export const mockDashboardPageData = {
         { title: "A/R Total", value: "$5,753,934", details: "Overdue: $1,812,434", icon: 'Receipt', change: null, changeType: null },
     ],
     performanceMetrics: {
-        profitLoss: {
-            ytd: `$${(2060189 / 1000000).toFixed(1)}M`,
-            change: `+12.4%`,
-            changeType: "up",
-        },
-        cashFlow: {
-            incoming: `$${(6538013/1000000).toFixed(1)}M`,
-            outgoing: `$${(4477824/1000000).toFixed(1)}M`,
-            net: `$${((6538013 - 4477824)/1000000).toFixed(1)}M`,
-        },
+        ...mockDashboardPageData.performanceMetrics,
         accountsReceivable: {
             outstanding: `$${(5753934/1000000).toFixed(1)}M`,
             overdue: `$${(1812434/1000000).toFixed(1)}M`,
         }
-    },
+      },
     alerts: [
         { id: uuidv4(), type: 'critical', message: 'Invoice #INV-2024-049 from Momentum LLC is 32 days overdue.'},
         { id: uuidv4(), type: 'warning', message: 'Low stock warning for Raw Material D (10 units remaining).'},

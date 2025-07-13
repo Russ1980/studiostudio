@@ -1,5 +1,7 @@
+
 "use client";
 
+import { useState } from "react";
 import {
   Card,
   CardContent,
@@ -21,9 +23,68 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
 
 export function TradingClientPage({ data }: { data: any }) {
-  const { openPositions, tradeHistory } = data;
+  const [positions, setPositions] = useState(data.openPositions);
+  const [history, setHistory] = useState(data.tradeHistory);
+  const [ticker, setTicker] = useState("");
+  const [quantity, setQuantity] = useState(0);
+  const { toast } = useToast();
+  
+  const handleTrade = (type: "Buy" | "Sell") => {
+    if (!ticker || quantity <= 0) {
+      toast({
+        title: "Invalid Trade",
+        description: "Please enter a valid ticker and quantity.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    // In a real app, you'd fetch the current price. We'll mock it.
+    const currentPrice = Math.floor(Math.random() * 200) + 50;
+
+    setHistory(prev => [
+      {
+        id: prev.length + 1,
+        type,
+        ticker: ticker.toUpperCase(),
+        shares: quantity,
+        price: currentPrice,
+        date: new Date().toISOString().split("T")[0],
+      },
+      ...prev,
+    ]);
+    
+    // Update positions
+    const existingPosition = positions.find((p: any) => p.ticker === ticker.toUpperCase());
+    if (existingPosition) {
+      const newShares = existingPosition.shares + (type === "Buy" ? quantity : -quantity);
+      if (newShares > 0) {
+        setPositions(positions.map((p: any) => p.ticker === ticker.toUpperCase() ? {...p, shares: newShares} : p));
+      } else {
+        setPositions(positions.filter((p: any) => p.ticker !== ticker.toUpperCase()));
+      }
+    } else if (type === "Buy") {
+        setPositions([...positions, {
+            ticker: ticker.toUpperCase(),
+            shares: quantity,
+            avgPrice: currentPrice,
+            currentPrice: currentPrice,
+            gainLoss: 0,
+        }])
+    }
+
+    toast({
+      title: "Trade Executed",
+      description: `Successfully ${type === 'Buy' ? 'bought' : 'sold'} ${quantity} shares of ${ticker.toUpperCase()}.`,
+    });
+
+    setTicker("");
+    setQuantity(0);
+  };
+
   return (
     <div className="grid gap-6 lg:grid-cols-3">
       <div className="lg:col-span-1">
@@ -35,12 +96,12 @@ export function TradingClientPage({ data }: { data: any }) {
           <CardContent className="grid gap-4">
             <div className="grid gap-2">
               <Label htmlFor="ticker">Stock Ticker</Label>
-              <Input id="ticker" placeholder="e.g., AAPL" />
+              <Input id="ticker" placeholder="e.g., AAPL" value={ticker} onChange={(e) => setTicker(e.target.value)} />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-2">
                 <Label htmlFor="quantity">Quantity</Label>
-                <Input id="quantity" type="number" placeholder="0" />
+                <Input id="quantity" type="number" placeholder="0" value={quantity} onChange={(e) => setQuantity(parseInt(e.target.value) || 0)}/>
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="price">Price</Label>
@@ -49,9 +110,9 @@ export function TradingClientPage({ data }: { data: any }) {
             </div>
           </CardContent>
           <CardFooter className="flex justify-between">
-            <Button variant="success" className="w-full">Buy</Button>
+            <Button variant="success" className="w-full" onClick={() => handleTrade("Buy")}>Buy</Button>
             <div className="w-4"></div>
-            <Button variant="destructive" className="w-full">Sell</Button>
+            <Button variant="destructive" className="w-full" onClick={() => handleTrade("Sell")}>Sell</Button>
           </CardFooter>
         </Card>
       </div>
@@ -78,7 +139,7 @@ export function TradingClientPage({ data }: { data: any }) {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {openPositions.map((pos: any) => (
+                    {positions.map((pos: any) => (
                       <TableRow key={pos.ticker}>
                         <TableCell className="font-medium">{pos.ticker}</TableCell>
                         <TableCell>{pos.shares}</TableCell>
@@ -111,7 +172,7 @@ export function TradingClientPage({ data }: { data: any }) {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {tradeHistory.map((trade: any) => (
+                    {history.map((trade: any) => (
                       <TableRow key={trade.id}>
                         <TableCell>
                           <Badge variant={trade.type === 'Buy' ? 'success' : 'destructive'}>{trade.type}</Badge>

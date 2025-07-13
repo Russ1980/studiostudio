@@ -1,5 +1,8 @@
+
 "use client";
 
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   Card,
   CardContent,
@@ -25,8 +28,15 @@ const chartConfig = {
   },
 };
 
-export function SearchClientPage({ initialStockData }: { initialStockData: any }) {
-  const stockData = initialStockData;
+export function SearchClientPage({ stockData }: { stockData: any }) {
+  const router = useRouter();
+  const [ticker, setTicker] = useState(stockData.ticker);
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    router.push(`/search?ticker=${ticker.toUpperCase()}`);
+  };
+  
   return (
     <div className="grid gap-6">
       <Card>
@@ -37,13 +47,18 @@ export function SearchClientPage({ initialStockData }: { initialStockData: any }
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="flex w-full max-w-lg items-center space-x-2">
-            <Input type="text" placeholder="Search by ticker (e.g., AAPL)" />
+          <form onSubmit={handleSearch} className="flex w-full max-w-lg items-center space-x-2">
+            <Input 
+              type="text" 
+              placeholder="Search by ticker (e.g., AAPL)" 
+              value={ticker}
+              onChange={(e) => setTicker(e.target.value)}
+            />
             <Button type="submit">
               <SearchIcon className="mr-2 h-4 w-4" />
               Search
             </Button>
-          </div>
+          </form>
         </CardContent>
       </Card>
 
@@ -62,8 +77,8 @@ export function SearchClientPage({ initialStockData }: { initialStockData: any }
               <CardTitle>{stockData.name} ({stockData.ticker})</CardTitle>
               <div className="flex items-baseline gap-2">
                 <p className="text-2xl font-bold">${stockData.price}</p>
-                <p className="text-lg font-semibold text-success">
-                  {stockData.change} ({stockData.changePercent}%)
+                <p className={`text-lg font-semibold ${stockData.change >= 0 ? 'text-success' : 'text-destructive'}`}>
+                  {stockData.change > 0 ? '+' : ''}{stockData.change} ({stockData.changePercent > 0 ? '+' : ''}{stockData.changePercent}%)
                 </p>
               </div>
             </div>
