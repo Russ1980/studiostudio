@@ -67,6 +67,14 @@ export function RootLayoutClient({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isAppRoute = /^\/(dashboard|accountant-portal|accounting|banking|invoicing|operations|payroll|portfolio|tax|projects|reports-insights|client-management|payments|asset-management|data-management|communications|settings|help|search|trading|learn)/.test(pathname);
   const { user, loading } = useAuth();
+  const router = useRouter();
+  
+  useEffect(() => {
+    // If we're not loading, there's no user, and we're not on a public-facing page, redirect to signin
+    if (!loading && !user && isAppRoute) {
+        router.push('/signin');
+    }
+  }, [user, loading, isAppRoute, router]);
 
   if (loading) {
       return (
@@ -80,6 +88,10 @@ export function RootLayoutClient({ children }: { children: React.ReactNode }) {
   }
 
   if (isAppRoute) {
+    if (!user) {
+        // Render a loading state or null while redirecting
+        return null;
+    }
     return <AppLayout>{children}</AppLayout>;
   }
   
