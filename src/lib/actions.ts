@@ -93,6 +93,7 @@ const simulateDelay = (ms: number) => new Promise(resolve => setTimeout(resolve,
 
 export async function getDashboardPageData() {
     if (!firestore) {
+        console.log("Firestore not initialized, returning mock data for dashboard.");
         return mockDashboardPageData;
     }
     try {
@@ -382,9 +383,9 @@ export async function addNewClient(values: z.infer<typeof ClientFormSchema>) {
             userId: FAKE_USER_ID,
             ...validatedFields.data,
             onboarded: new Date().toISOString().split('T')[0],
-            status: "Active", // Defaulting to Active for simplicity
-            contact: validatedFields.data.contactName, // using contact name as primary contact
-            tier: validatedFields.data.businessType, // using business type as tier
+            status: "Active", // Defaulting to Active for new clients
+            contact: validatedFields.data.contactName, // Map contactName to contact
+            tier: validatedFields.data.businessType, // Map businessType to tier
         });
         revalidatePath('/accountant-portal/client-list');
         return { success: true };
