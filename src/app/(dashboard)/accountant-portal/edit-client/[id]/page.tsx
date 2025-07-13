@@ -7,7 +7,7 @@ export default async function EditClientPage({ params }: { params: Promise<{ id:
   const { id } = await params;
   const client = await getClientById(id);
   
-  // This check ensures that we have a full client object with businessName before proceeding.
+  // This check ensures that the client object is not null and has the necessary properties before proceeding.
   if (!client || !client.businessName) {
     notFound();
   }
