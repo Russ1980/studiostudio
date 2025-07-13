@@ -18,7 +18,7 @@ export default async function DashboardPage() {
             chartData: revenueData.data.map(d => ({ month: d.month, income: d.revenue, expenses: d.revenue * 0.6 })),
         };
     } catch (error) {
-        console.error("Failed to fetch dashboard data, falling back to mock data:", error);
+        console.error("Failed to fetch live dashboard data, falling back to mock data:", error);
         // If any of the async operations fail, use the mock data as a fallback.
         initialData = {
             ...mockDashboardPageData,
