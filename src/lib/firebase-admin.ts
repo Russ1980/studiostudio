@@ -27,4 +27,4 @@ if (!admin.apps.length) {
     }
 }
 
-export const firestore = admin.apps.length ? admin.firestore() : null;
+export const firestore: admin.firestore.Firestore | null = admin.apps.length ? admin.firestore() : null;
