@@ -1,6 +1,6 @@
 
 // Import the functions you need from the SDKs you need
-import { initializeApp, getApps, getApp } from "firebase/app";
+import { initializeApp, getApps, getApp, type FirebaseApp } from "firebase/app";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -17,7 +17,7 @@ const areEnvsLoaded =
     firebaseConfig.authDomain &&
     firebaseConfig.projectId;
 
-let app;
+let app: FirebaseApp;
 
 if (areEnvsLoaded) {
     app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
@@ -25,7 +25,7 @@ if (areEnvsLoaded) {
     console.error("Firebase environment variables are not loaded. Please check your .env.local file.");
     // In a non-functional state, we can assign a placeholder object to `app` to avoid further crashes.
     // However, any Firebase call will fail.
-    app = {}; 
+    app = {} as FirebaseApp; 
 }
 
 export { app };
