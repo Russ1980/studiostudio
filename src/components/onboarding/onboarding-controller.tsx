@@ -1,9 +1,8 @@
 "use client";
 
-import React, { createContext, useState, useEffect, useCallback, useMemo } from 'react';
+import React, { createContext, useState, useEffect, useCallback, useMemo, useContext } from 'react';
 import { OnboardingStep, businessOwnerSteps, accountantSteps, bookkeeperSteps } from '@/lib/onboarding-steps';
 import { OnboardingTip } from './onboarding-tip';
-import { useOnboarding } from '@/hooks/use-onboarding';
 
 type OnboardingContextType = {
     steps: OnboardingStep[];
@@ -68,7 +67,7 @@ export const OnboardingProvider = ({ children }: OnboardingProviderProps) => {
 
     const prevStep = useCallback(() => {
         if (currentStep > 0) {
-            setCurrentStep(prev => prev - 1);
+            setCurrentStep(prev => prev + 1);
         }
     }, [currentStep]);
 
@@ -100,9 +99,13 @@ export const OnboardingProvider = ({ children }: OnboardingProviderProps) => {
 };
 
 export const OnboardingController = ({ userRole }: { userRole: string }) => {
-    const { startOnboarding } = useOnboarding();
+    const context = useContext(OnboardingContext);
+    
+    const startOnboarding = context?.startOnboarding;
 
     useEffect(() => {
+        if (!startOnboarding) return;
+
         const completed = localStorage.getItem('onboarding-completed');
         if (completed !== 'true') {
             const timer = setTimeout(() => {

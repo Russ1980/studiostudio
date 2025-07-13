@@ -59,7 +59,7 @@ export const OnboardingTip = () => {
         right: 'left',
         bottom: 'top',
         left: 'right',
-    }[placement.split('-')[0]]!;
+    }[placement?.split('-')[0] || 'bottom']!;
 
     return (
         <AnimatePresence>
