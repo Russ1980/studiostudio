@@ -73,6 +73,7 @@ import {
   BarChart3,
   Pencil,
   Banknote,
+  Newspaper,
 } from 'lucide-react';
 
 export type NavLink = {
@@ -298,6 +299,12 @@ export const navLinks: NavLink[] = [
       { href: '/search', label: 'Stock Search', icon: Search },
       { href: '/learn', label: 'Learn', icon: GraduationCap },
     ],
+  },
+  {
+    label: 'Market Overview',
+    icon: Newspaper,
+    href: '/market-overview',
+    allowedRoles: ['Admin', 'User'],
   },
   {
     label: 'Intelligent Tax',
