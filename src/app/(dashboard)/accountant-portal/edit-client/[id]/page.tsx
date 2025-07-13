@@ -25,3 +25,4 @@ export default async function EditClientPage({ params }: { params: Promise<{ id:
     </div>
   );
 }
+
