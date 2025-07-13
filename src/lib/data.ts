@@ -118,19 +118,6 @@ export const mockRecurringInvoices = [
   { id: "REC-003", customer: "Stellar Goods", frequency: "Monthly", nextDate: "2024-08-15", amount: "1,200.00", status: "Paused" },
 ];
 
-export const mockEstimates = [
-  { id: "EST-001", customer: "Innovate Inc.", date: "2024-07-10", amount: "12,500.00", status: "Sent" },
-  { id: "EST-002", customer: "Apex Solutions", date: "2024-07-08", amount: "8,000.00", status: "Accepted" },
-  { id: "EST-003", customer: "QuantumLeap Co.", date: "2024-06-25", amount: "2,500.00", status: "Expired" },
-  { id: "EST-004", customer: "New Prospect LLC", date: "2024-07-12", amount: "30,000.00", status: "Draft" },
-];
-
-export const mockCreditNotes = [
-  { id: "CN-001", customer: "Innovate Inc.", date: "2024-07-10", amount: "500.00", status: "Applied" },
-  { id: "CN-002", customer: "Apex Solutions", date: "2024-07-05", amount: "250.00", status: "Open" },
-  { id: "CN-003", customer: "QuantumLeap Co.", date: "2024-06-20", amount: "100.00", status: "Refunded" },
-];
-
 export const mockArAgingData = [
   { customer: "Innovate Inc.", current: "5,000.00", "1-30": "2,500.00", "31-60": "0.00", "61-90": "0.00", "90+": "0.00", total: "7,500.00" },
   { customer: "Apex Solutions", current: "10,000.00", "1-30": "0.00", "31-60": "5,000.00", "61-90": "0.00", "90+": "0.00", total: "15,000.00" },
@@ -1175,5 +1162,3 @@ export const mockExportHistory = [
     { date: "2024-07-21", dataSet: "Customers", format: "Excel", status: "Completed" },
     { date: "2024-07-20", dataSet: "Financial Statements", format: "PDF", status: "Failed" },
 ];
-
-    

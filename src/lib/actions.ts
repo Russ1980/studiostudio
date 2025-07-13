@@ -72,8 +72,6 @@ import {
   mockKeyboardShortcuts,
   mockTroubleshootingFAQs,
   mockRecurringInvoices,
-  mockEstimates,
-  mockCreditNotes,
   mockClientBillingData,
   mockClientComplianceData,
   mockPaymentsToProcess,
@@ -757,14 +755,7 @@ export async function getRecurringInvoices() {
     await simulateDelay(50);
     return mockRecurringInvoices;
 }
-export async function getEstimates() {
-    await simulateDelay(50);
-    return mockEstimates;
-}
-export async function getCreditNotes() {
-    await simulateDelay(50);
-    return mockCreditNotes;
-}
+
 export async function getArAgingData() {
     if (!firestore) return mockArAgingData;
 
