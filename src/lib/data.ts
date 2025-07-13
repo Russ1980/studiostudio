@@ -968,6 +968,24 @@ export const mockTroubleshootingFAQs = [
     },
 ];
 
+const performanceMetricsBase = {
+    cashFlow: {
+      incoming: "$1,803,232.15",
+      outgoing: "$1,939,079.35",
+      net: "-$135,847.20",
+    },
+    accountsReceivable: {
+      outstanding: "$5,753,933.55",
+      overdue: "$1,812,434.45",
+    },
+    accountsPayable: {
+      outstanding: "$4,357.50",
+      overdue: "$0.00",
+    },
+    grossProfitMargin: "70%",
+    netProfitMargin: "31.52%",
+};
+
 export const mockDashboardPageData = {
     user: {
       name: "Sarah Johnson",
@@ -995,13 +1013,7 @@ export const mockDashboardPageData = {
         { title: "Sales (30 Days)", value: "$1,803,232", change: "+8.4%", changeType: "increase", icon: 'BarChart3', details: null },
         { title: "A/R Total", value: "$5,753,934", details: "Overdue: $1,812,434", icon: 'Receipt', change: null, changeType: null },
     ],
-    performanceMetrics: {
-        ...mockDashboardPageData.performanceMetrics,
-        accountsReceivable: {
-            outstanding: `$${(5753934/1000000).toFixed(1)}M`,
-            overdue: `$${(1812434/1000000).toFixed(1)}M`,
-        }
-      },
+    performanceMetrics: performanceMetricsBase,
     alerts: [
         { id: uuidv4(), type: 'critical', message: 'Invoice #INV-2024-049 from Momentum LLC is 32 days overdue.'},
         { id: uuidv4(), type: 'warning', message: 'Low stock warning for Raw Material D (10 units remaining).'},
