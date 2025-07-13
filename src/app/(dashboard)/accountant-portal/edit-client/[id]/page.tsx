@@ -1,7 +1,7 @@
 
 import { getClientById } from "@/lib/actions";
 import { notFound } from "next/navigation";
-import { EditClientForm } from "./edit-client-form";
+import { EditClientForm } from "@/app/(dashboard)/accountant-portal/edit-client/[id]/edit-client-form";
 
 export default async function EditClientPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
