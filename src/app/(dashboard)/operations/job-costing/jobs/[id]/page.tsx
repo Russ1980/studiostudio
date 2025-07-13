@@ -13,4 +13,3 @@ export default async function JobDetailsPage({ params }: { params: Promise<{ id:
 
   return <JobDetailsClientPage job={job} />;
 }
-

@@ -27,4 +27,3 @@ export default async function EditInvoicePage({ params }: { params: Promise<{ id
     </div>
   );
 }
-
