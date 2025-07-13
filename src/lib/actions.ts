@@ -91,91 +91,6 @@ const FAKE_USER_ID = "user-placeholder-id";
 
 const simulateDelay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-export async function getDashboardPageData() {
-    if (!firestore) {
-        console.log("Firestore not initialized, returning mock data for dashboard.");
-        return mockDashboardPageData;
-    }
-    try {
-        const invoicesSnapshot = await firestore.collection('invoices').where('userId', '==', FAKE_USER_ID).get();
-        // If the collection is empty, use mock data.
-        if (invoicesSnapshot.empty) {
-            console.log("No invoices found, using mock data for dashboard.");
-            return mockDashboardPageData;
-        }
-
-        const invoices = invoicesSnapshot.docs.map(doc => doc.data());
-        
-        const now = new Date();
-        
-        let totalRevenue = 0;
-        let totalExpenses = 0;
-        let outstandingReceivables = 0;
-        let overdueReceivables = 0;
-        let salesLast30Days = 0;
-
-        invoices.forEach(invoice => {
-            const amount = parseFloat(invoice.amount.replace(/,/g, ''));
-            const dueDate = new Date(invoice.dueDate);
-            
-            totalRevenue += amount; // Simplified: assumes all invoices are revenue
-
-            if (invoice.status === 'Paid') {
-                const paidDate = dueDate; // Mock paid date
-                if (paidDate > new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000)) {
-                    salesLast30Days += amount;
-                }
-            } else {
-                outstandingReceivables += amount;
-                if (dueDate < now) {
-                    overdueReceivables += amount;
-                }
-            }
-        });
-        
-        // Mock expenses for cash flow
-        totalExpenses = totalRevenue * 0.65; // Assuming total expenses are 65% of revenue
-        const netProfit = totalRevenue - totalExpenses;
-
-        const formatCurrency = (value: number) => {
-            if (value >= 1000000) return `$${(value / 1000000).toFixed(1)}M`;
-            if (value >= 1000) return `$${(value / 1000).toFixed(1)}k`;
-            return `$${value.toFixed(2)}`;
-        }
-        
-        return {
-            ...mockDashboardPageData, // Keep other mock data for now
-            mainKpis: {
-                netRevenue: formatCurrency(totalRevenue),
-                growth: "+12.4%", // Mocked
-                healthScore: "94%", // Mocked
-            },
-            metricCards: [
-                { title: "Monthly Expenses", value: formatCurrency(totalExpenses / 12), change: "+5.0%", changeType: "increase", icon: 'TrendingUp', details: null },
-                { title: "Net Profit", value: formatCurrency(netProfit), details: `Income: ${formatCurrency(totalRevenue)}\nExpenses: ${formatCurrency(totalExpenses)}`, icon: 'DollarSign', change: null, changeType: null },
-                { title: "Sales (30 Days)", value: formatCurrency(salesLast30Days), change: "+8.4%", changeType: "increase", icon: 'BarChart3', details: null },
-                { title: "A/R Total", value: formatCurrency(outstandingReceivables), details: `Overdue: ${formatCurrency(overdueReceivables)}`, icon: 'Receipt', change: null, changeType: null },
-            ],
-            performanceMetrics: {
-                ...mockDashboardPageData.performanceMetrics,
-                accountsReceivable: {
-                    outstanding: formatCurrency(outstandingReceivables),
-                    overdue: formatCurrency(overdueReceivables),
-                }
-            },
-            alerts: invoices.filter(i => i.status === 'Overdue').slice(0, 2).map((i: any, idx: number) => ({
-                id: idx,
-                type: 'critical',
-                message: `Invoice #${i.invoice} is ${Math.round((now.getTime() - new Date(i.dueDate).getTime()) / (1000*60*60*24))} days overdue.`
-            })),
-        };
-    } catch(e) {
-        console.error("Error fetching dashboard data from Firestore, returning mock data as a fallback. Error:", e);
-        // Fallback to mock data if the query fails for any reason (like missing index)
-        return mockDashboardPageData;
-    }
-}
-
 // Accountant Portal
 export async function getClients() {
   if (!firestore) {
@@ -964,8 +879,82 @@ export async function getScheduledReports() {
 
 // Accounting
 export async function getAccountingDashboardData() {
-    await simulateDelay(50);
-    return mockAccountingDashboard;
+  try {
+    if (!firestore) {
+      console.warn("Firestore not initialized, returning mock data.");
+      return mockDashboardPageData;
+    }
+
+    const invoicesSnapshot = await firestore.collection('invoices').where('userId', '==', FAKE_USER_ID).get();
+    if (invoicesSnapshot.empty) {
+      console.warn("No invoices found, using mock data for dashboard.");
+      return mockDashboardPageData;
+    }
+
+    const invoices = invoicesSnapshot.docs.map(doc => doc.data());
+    const now = new Date();
+    let totalRevenue = 0;
+    let totalExpenses = 0;
+    let outstandingReceivables = 0;
+    let overdueReceivables = 0;
+    let salesLast30Days = 0;
+
+    invoices.forEach(invoice => {
+      const amount = parseFloat(invoice.amount.replace(/,/g, ''));
+      const dueDate = new Date(invoice.dueDate);
+      totalRevenue += amount;
+      if (invoice.status === 'Paid') {
+        const paidDate = dueDate; // Mock paid date
+        if (paidDate > new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000)) {
+          salesLast30Days += amount;
+        }
+      } else {
+        outstandingReceivables += amount;
+        if (dueDate < now) {
+          overdueReceivables += amount;
+        }
+      }
+    });
+
+    totalExpenses = totalRevenue * 0.65;
+    const netProfit = totalRevenue - totalExpenses;
+
+    const formatCurrency = (value: number) => {
+      if (value >= 1000000) return `$${(value / 1000000).toFixed(1)}M`;
+      if (value >= 1000) return `$${(value / 1000).toFixed(1)}k`;
+      return `$${value.toFixed(2)}`;
+    }
+
+    return {
+      ...mockDashboardPageData,
+      mainKpis: {
+        netRevenue: formatCurrency(totalRevenue),
+        growth: "+12.4%",
+        healthScore: "94%",
+      },
+      metricCards: [
+        { title: "Monthly Expenses", value: formatCurrency(totalExpenses / 12), change: "+5.0%", changeType: "increase", icon: 'TrendingUp', details: null },
+        { title: "Net Profit", value: formatCurrency(netProfit), details: `Income: ${formatCurrency(totalRevenue)}\nExpenses: ${formatCurrency(totalExpenses)}`, icon: 'DollarSign', change: null, changeType: null },
+        { title: "Sales (30 Days)", value: formatCurrency(salesLast30Days), change: "+8.4%", changeType: "increase", icon: 'BarChart3', details: null },
+        { title: "A/R Total", value: formatCurrency(outstandingReceivables), details: `Overdue: ${formatCurrency(overdueReceivables)}`, icon: 'Receipt', change: null, changeType: null },
+      ],
+      performanceMetrics: {
+        ...mockDashboardPageData.performanceMetrics,
+        accountsReceivable: {
+          outstanding: formatCurrency(outstandingReceivables),
+          overdue: formatCurrency(overdueReceivables),
+        }
+      },
+      alerts: invoices.filter(i => i.status === 'Overdue').slice(0, 2).map((i: any, idx: number) => ({
+        id: idx,
+        type: 'critical',
+        message: `Invoice #${i.invoice} is ${Math.round((now.getTime() - new Date(i.dueDate).getTime()) / (1000 * 60 * 60 * 24))} days overdue.`
+      })),
+    };
+  } catch (e) {
+    console.error("Error in getAccountingDashboardData. Falling back to mock data.", e);
+    return mockDashboardPageData;
+  }
 }
 export async function getCustomers() {
     await simulateDelay(50);
