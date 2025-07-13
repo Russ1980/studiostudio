@@ -5,10 +5,9 @@ import { SearchClientPage } from "./search-client";
 export default async function SearchPage({
   searchParams,
 }: {
-  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
+  searchParams?: { [key: string]: string | string[] | undefined };
 }) {
-  const search = (await searchParams) || {};
-  const ticker = typeof search?.ticker === 'string' ? search.ticker : 'AAPL';
+  const ticker = typeof searchParams?.ticker === 'string' ? searchParams.ticker : 'AAPL';
   const stockData = await getStockData(ticker);
   return <SearchClientPage stockData={stockData} />;
 }
