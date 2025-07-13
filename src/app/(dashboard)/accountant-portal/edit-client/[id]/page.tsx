@@ -7,7 +7,8 @@ export default async function EditClientPage({ params }: { params: { id: string 
   const { id } = params;
   const client = await getClientById(id);
   
-  if (!client) {
+  // This is the critical check. If the client or its core properties don't exist, stop rendering.
+  if (!client || !client.businessName) {
     notFound();
   }
 

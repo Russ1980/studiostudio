@@ -3,7 +3,7 @@
 
 import { usePathname, useRouter } from 'next/navigation';
 import { AppShell } from '@/components/app-shell';
-import { OnboardingProvider } from '@/components/onboarding';
+import { OnboardingProvider } from '@/components/onboarding/onboarding-controller';
 import { ServaAIProvider } from '@/hooks/use-serva-ai';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -90,5 +90,5 @@ export function RootLayoutClient({ children }: { children: React.ReactNode }) {
   }
   
   // This is for public pages like the landing page, signin, etc.
-  return <div className="bg-white">{children}</div>;
+  return <div className="bg-background">{children}</div>;
 }
