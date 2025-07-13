@@ -42,7 +42,7 @@ import {
   CreditCard,
   Activity,
 } from "lucide-react";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { Progress } from "@/components/ui/progress";
@@ -66,6 +66,8 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
+import { useToast } from "@/hooks/use-toast";
+import React from "react";
 
 
 const iconMap: { [key: string]: React.ElementType } = {
@@ -593,6 +595,24 @@ const CustomizeDashboardView = () => (
 );
 
 export function DashboardClientPage({ initialData }: { initialData: any }) {
+    const { toast } = useToast();
+    const [avatarSrc, setAvatarSrc] = useState<string | null>(null);
+
+    const handleAvatarUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.files && event.target.files[0]) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                setAvatarSrc(e.target?.result as string);
+                toast({
+                    title: "Profile Photo Updated",
+                    description: "Your new photo has been uploaded successfully.",
+                });
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+    
     if (!initialData) {
         // You can return a loading skeleton or a simple message
         return <div>Loading dashboard...</div>;
@@ -627,11 +647,18 @@ export function DashboardClientPage({ initialData }: { initialData: any }) {
                 <CardContent className="p-4">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div className="flex items-center gap-4">
-                    <Avatar className="h-14 w-14">
-                        <AvatarFallback className="bg-primary text-primary-foreground text-2xl">
-                        {user.initials}
-                        </AvatarFallback>
-                    </Avatar>
+                    <label htmlFor="avatar-upload" className="cursor-pointer group relative">
+                        <Avatar className="h-14 w-14">
+                            <AvatarImage src={avatarSrc || undefined} alt={user.name} />
+                            <AvatarFallback className="bg-primary text-primary-foreground text-2xl group-hover:bg-primary/80 transition-colors">
+                                {user.initials}
+                            </AvatarFallback>
+                        </Avatar>
+                        <div className="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                            <Upload className="h-6 w-6 text-white" />
+                        </div>
+                        <input id="avatar-upload" type="file" className="sr-only" accept="image/*" onChange={handleAvatarUpload} />
+                    </label>
                     <div>
                         <h2 className="text-xl font-bold">{user.name}</h2>
                         <p className="text-muted-foreground">{user.title}</p>
