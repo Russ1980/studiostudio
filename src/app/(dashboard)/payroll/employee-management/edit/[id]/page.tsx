@@ -3,8 +3,8 @@ import { getEmployeeById } from "@/lib/actions";
 import { notFound } from "next/navigation";
 import { EditEmployeeForm } from "./edit-employee-form";
 
-export default async function EditEmployeePage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
+export default async function EditEmployeePage({ params }: { params: { id: string } }) {
+  const { id } = params;
   const employee = await getEmployeeById(id);
   
   if (!employee) {
