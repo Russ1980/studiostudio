@@ -968,24 +968,6 @@ export const mockTroubleshootingFAQs = [
     },
 ];
 
-const performanceMetricsBase = {
-    cashFlow: {
-      incoming: "$1,803,232.15",
-      outgoing: "$1,939,079.35",
-      net: "-$135,847.20",
-    },
-    accountsReceivable: {
-      outstanding: "$5,753,933.55",
-      overdue: "$1,812,434.45",
-    },
-    accountsPayable: {
-      outstanding: "$4,357.50",
-      overdue: "$0.00",
-    },
-    grossProfitMargin: "70%",
-    netProfitMargin: "31.52%",
-};
-
 export const mockDashboardPageData = {
     user: {
       name: "Sarah Johnson",
@@ -1008,12 +990,28 @@ export const mockDashboardPageData = {
         { title: "Customize Dashboard", description: "Personalize your workspace", icon: 'SlidersHorizontal' },
     ],
     metricCards: [
-        { title: "Monthly Expenses", value: "$1,939,079", change: "+5.0%", changeType: "increase", icon: 'TrendingUp', details: null },
-        { title: "Net Profit", value: "$2,060,189", details: "Income: $6,538,013\nExpenses: $4,477,824", icon: 'DollarSign', change: null, changeType: null },
-        { title: "Sales (30 Days)", value: "$1,803,232", change: "+8.4%", changeType: "increase", icon: 'BarChart3', details: null },
-        { title: "A/R Total", value: "$5,753,934", details: "Overdue: $1,812,434", icon: 'Receipt', change: null, changeType: null },
+        { title: "Monthly Expenses", value: "$1.9M", change: "+5.0%", changeType: "increase", icon: 'TrendingUp', details: null },
+        { title: "Net Profit", value: "$2.0M", details: "Income: $6.5M\nExpenses: $4.5M", icon: 'DollarSign', change: null, changeType: null },
+        { title: "Sales (30 Days)", value: "$1.8M", change: "+8.4%", changeType: "increase", icon: 'BarChart3', details: null },
+        { title: "A/R Total", value: "$5.7M", details: "Overdue: $1.8M", icon: 'Receipt', change: null, changeType: null },
     ],
-    performanceMetrics: performanceMetricsBase,
+    performanceMetrics: {
+        cashFlow: {
+          incoming: "$1.8M",
+          outgoing: "$1.9M",
+          net: "-$135K",
+        },
+        accountsReceivable: {
+          outstanding: "$5.7M",
+          overdue: "$1.8M",
+        },
+        accountsPayable: {
+          outstanding: "$4.3K",
+          overdue: "$0.00",
+        },
+        grossProfitMargin: "70%",
+        netProfitMargin: "31.52%",
+    },
     alerts: [
         { id: uuidv4(), type: 'critical', message: 'Invoice #INV-2024-049 from Momentum LLC is 32 days overdue.'},
         { id: uuidv4(), type: 'warning', message: 'Low stock warning for Raw Material D (10 units remaining).'},
@@ -1097,7 +1095,7 @@ export const mockDashboardPageData = {
         { label: "Record expense", icon: 'Receipt', href: "/accounting/accounts-payable/bills" },
     ],
     expenseChartData: {
-        total: "$1,939,079",
+        total: "$1.9M",
         change: "+296%",
         changeType: "increase",
         breakdown: [
@@ -1109,7 +1107,7 @@ export const mockDashboardPageData = {
         ],
     },
     salesChartData: {
-        total: "$1,803,232.15",
+        total: "$1.8M",
         data: [
             { name: 'Mar 11', Sales: 200000 },
             { name: 'Mar 17', Sales: 800000 },
@@ -1119,7 +1117,7 @@ export const mockDashboardPageData = {
         ],
     },
     arChartData: {
-        total: "$5,753,933.55",
+        total: "$5.7M",
         breakdown: [
             { name: "Current", value: 1812434.45, color: "hsl(var(--chart-1))" },
             { name: "1-7 days", value: 1052572.03, color: "hsl(var(--chart-2))" },
@@ -1128,7 +1126,7 @@ export const mockDashboardPageData = {
         ],
     },
     apChartData: {
-        total: "$4,357.50",
+        total: "$4.3K",
         breakdown: [
             { name: "Current", value: 0.00, color: "hsl(var(--chart-1))" },
             { name: "1-7 days", value: 100.00, color: "hsl(var(--chart-2))" },

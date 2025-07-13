@@ -1,14 +1,13 @@
 
 'use client';
 
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { AppShell } from '@/components/app-shell';
 import { OnboardingProvider } from '@/components/onboarding';
 import { ServaAIProvider } from '@/hooks/use-serva-ai';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useAuth } from '@/components/auth-provider';
-import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { Logo } from '@/components/icons';
 
@@ -67,19 +66,26 @@ export function RootLayoutClient({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isAppRoute = /^\/(dashboard|accountant-portal|accounting|banking|invoicing|operations|payroll|portfolio|tax|projects|reports-insights|client-management|payments|asset-management|data-management|communications|settings|help|search|trading|learn)/.test(pathname);
   const { user, loading } = useAuth();
-
-  if (loading) {
-      return (
-        <div className="flex h-screen items-center justify-center bg-background">
-            <div className="flex flex-col items-center gap-4">
-                <Logo className="h-12 w-12 animate-pulse" />
-                <p className="text-muted-foreground">Loading Mardisen Suite...</p>
-            </div>
-        </div>
-      )
-  }
+  const router = useRouter();
+  
+  useEffect(() => {
+    // If we're not loading, there's no user, and we're on a protected app route, redirect to signin
+    if (!loading && !user && isAppRoute) {
+        router.push('/signin');
+    }
+  }, [user, loading, isAppRoute, router]);
 
   if (isAppRoute) {
+    if (loading || !user) {
+         return (
+            <div className="flex h-screen items-center justify-center bg-background">
+                <div className="flex flex-col items-center gap-4">
+                    <Logo className="h-12 w-12 animate-pulse" />
+                    <p className="text-muted-foreground">Loading Mardisen Suite...</p>
+                </div>
+            </div>
+          )
+    }
     return <AppLayout>{children}</AppLayout>;
   }
   
