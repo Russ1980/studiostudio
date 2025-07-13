@@ -383,9 +383,9 @@ export async function addNewClient(values: z.infer<typeof ClientFormSchema>) {
             userId: FAKE_USER_ID,
             ...validatedFields.data,
             onboarded: new Date().toISOString().split('T')[0],
-            status: "Active", // Defaulting to Active for new clients
-            contact: validatedFields.data.contactName, // Map contactName to contact
-            tier: validatedFields.data.businessType, // Map businessType to tier
+            status: "Active",
+            contact: validatedFields.data.contactName,
+            tier: validatedFields.data.businessType,
         });
         revalidatePath('/accountant-portal/client-list');
         return { success: true };
