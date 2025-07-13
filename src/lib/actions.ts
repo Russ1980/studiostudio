@@ -879,18 +879,13 @@ export async function getScheduledReports() {
 
 // Accounting
 export async function getAccountingDashboardData() {
+  if (!firestore) {
+    console.warn("Firestore not initialized, returning mock data.");
+    return mockDashboardPageData;
+  }
   try {
-    if (!firestore) {
-      console.warn("Firestore not initialized, returning mock data.");
-      return mockDashboardPageData;
-    }
-
     const invoicesSnapshot = await firestore.collection('invoices').where('userId', '==', FAKE_USER_ID).get();
-    if (invoicesSnapshot.empty) {
-      console.warn("No invoices found, using mock data for dashboard.");
-      return mockDashboardPageData;
-    }
-
+    
     const invoices = invoicesSnapshot.docs.map(doc => doc.data());
     const now = new Date();
     let totalRevenue = 0;
