@@ -15,7 +15,7 @@ const ADMIN_UID = 'hDk9W59tFlW6rFOF1ownI4gV4Wa2';
 
 // This function maps a Firebase User object to our app's AuthUser type
 export function mapFirebaseUserToAuthUser(firebaseUser: FirebaseUser): AuthUser {
-  const name = firebaseUser.displayName || 'New User';
+  const name = firebaseUser.displayName || 'Sarah Johnson'; // Default name for demo
   const initials = name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
 
   // Check if the logged-in user is the designated admin

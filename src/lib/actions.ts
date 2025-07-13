@@ -92,14 +92,17 @@ export async function getClients() {
   try {
     const clientsSnapshot = await firestore.collection('clients')
       .where('userId', '==', FAKE_USER_ID)
-      .where('status', '!=', 'Inactive') // Filter out inactive clients
       .get();
-    if (clientsSnapshot.empty) {
+      
+    const allClients = clientsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const activeClients = allClients.filter(c => c.status !== 'Inactive');
+
+    if (activeClients.length === 0) {
       console.log("No active clients found in Firestore, returning mock data as fallback.");
       return mockClients.filter(c => c.status !== 'Inactive');
     }
-    const clients = clientsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    return clients as typeof mockClients;
+
+    return activeClients as typeof mockClients;
   } catch (error) {
     console.error("Error fetching clients from Firestore:", error);
     // Fallback to mock data in case of error
@@ -636,11 +639,11 @@ export async function getInvoices() {
       }
       const invoices = invoicesSnapshot.docs.map(doc => {
         const data = doc.data();
+        const amount = parseFloat(data.amount) || 0;
         return {
           ...data,
           id: doc.id,
-          // Ensure amount is a formatted string
-          amount: parseFloat(data.amount).toLocaleString('en-US', {minimumFractionDigits: 2}),
+          amount: amount.toLocaleString('en-US', {minimumFractionDigits: 2}),
         }
       });
       return invoices as (typeof mockInvoices[0] & {id: string})[];
@@ -1236,7 +1239,7 @@ export async function getWorkOrders() {
         }
         return snapshot.docs.map(doc => doc.data()) as typeof mockWorkOrders;
     } catch (error) {
-        console.error("Error fetching work orders:", error);
+        console.error("Error fetching work orders from Firestore:", error);
         return mockWorkOrders;
     }
 }

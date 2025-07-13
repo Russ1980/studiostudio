@@ -1,5 +1,5 @@
 
-import { getClientById, getClients } from "@/lib/actions";
+import { getClientById } from "@/lib/actions";
 import { notFound } from "next/navigation";
 import { EditClientForm } from "./edit-client-form";
 
@@ -7,7 +7,6 @@ export default async function EditClientPage({ params }: { params: Promise<{ id:
   const { id } = await params;
   const client = await getClientById(id);
   
-  // This check ensures that the client object is not null and has the necessary properties before proceeding.
   if (!client || !client.businessName) {
     notFound();
   }

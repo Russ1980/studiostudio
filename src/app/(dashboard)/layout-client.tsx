@@ -70,31 +70,26 @@ export function RootLayoutClient({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   
   useEffect(() => {
-    // If we're not loading, there's no user, and we're not on a public-facing page, redirect to signin
+    // If we're not loading, there's no user, and we're on a protected app route, redirect to signin
     if (!loading && !user && isAppRoute) {
         router.push('/signin');
     }
   }, [user, loading, isAppRoute, router]);
 
-  if (loading) {
-      return (
-        <div className="flex h-screen items-center justify-center bg-background">
-            <div className="flex flex-col items-center gap-4">
-                <Logo className="h-12 w-12 animate-pulse" />
-                <p className="text-muted-foreground">Loading Mardisen Suite...</p>
-            </div>
-        </div>
-      )
-  }
-
   if (isAppRoute) {
-    if (!user) {
-        // Render a loading state or null while redirecting
-        return null;
+    if (loading || !user) {
+         return (
+            <div className="flex h-screen items-center justify-center bg-background">
+                <div className="flex flex-col items-center gap-4">
+                    <Logo className="h-12 w-12 animate-pulse" />
+                    <p className="text-muted-foreground">Loading Mardisen Suite...</p>
+                </div>
+            </div>
+          )
     }
     return <AppLayout>{children}</AppLayout>;
   }
   
   // This is for public pages like the landing page, signin, etc.
-  return <div className="bg-white">{children}</div>;
+  return <div className="bg-background">{children}</div>;
 }
