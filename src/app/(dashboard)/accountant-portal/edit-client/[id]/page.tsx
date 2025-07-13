@@ -7,7 +7,7 @@ export default async function EditClientPage({ params }: { params: Promise<{ id:
   const { id } = await params;
   const client = await getClientById(id);
   
-  if (!client || !client.businessName) {
+  if (!client) {
     notFound();
   }
 
