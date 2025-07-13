@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -11,6 +12,7 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Check } from "lucide-react";
+import Link from "next/link";
 
 const plans = [
     { name: "Starter", price: "$49", features: ["Core Accounting", "Invoicing", "Basic Reporting"], current: false },
@@ -49,8 +51,10 @@ export default function BillingPage() {
                 </ul>
             </CardContent>
             <CardFooter>
-                <Button className="w-full" variant={plan.current ? "outline" : "default"}>
-                    {plan.current ? "Manage Plan" : "Upgrade"}
+                <Button className="w-full" variant={plan.current ? "outline" : "default"} asChild>
+                    <Link href="/pricing">
+                        {plan.current ? "Manage Plan" : "Upgrade"}
+                    </Link>
                 </Button>
             </CardFooter>
           </Card>
@@ -80,7 +84,7 @@ export default function BillingPage() {
             </CardContent>
              <CardFooter>
                 <Button variant="outline">View Billing History</Button>
-            </CardFooter>
+             </CardFooter>
         </Card>
       </div>
     </div>
