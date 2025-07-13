@@ -12,4 +12,3 @@ export default async function SearchPage({
   const stockData = await getStockData(ticker);
   return <SearchClientPage stockData={stockData} />;
 }
-
