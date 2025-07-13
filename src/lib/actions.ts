@@ -36,11 +36,7 @@ import {
   mockDataValidationResults,
   mockScheduledReports,
   mockAccountingDashboard,
-  mockCustomers,
-  mockBills,
-  mockVendors,
   mockLedgerTransactions,
-  mockArDashboard,
   mockBankDashboard,
   mockBankConnections,
   mockReviewTransactions,
@@ -48,8 +44,6 @@ import {
   mockReconciliationData,
   mockOperationsDashboard,
   mockOperationsAnalytics,
-  mockProductionTracking,
-  mockScheduling,
   mockJobCostingDashboard,
   mockJobProfitabilityData,
   mockWipReportData,
@@ -81,7 +75,6 @@ import { z } from 'zod';
 import admin from 'firebase-admin';
 import { migrateData, migrateSingleDoc } from './migration';
 import { getRevenueDataTool } from '@/ai/tools/get-revenue-data';
-import { v4 as uuidv4 } from 'uuid';
 import { getStockPrice } from '@/ai/tools/get-stock-price';
 
 // Placeholder for the currently logged-in user's ID.
@@ -94,7 +87,7 @@ const simulateDelay = (ms: number) => new Promise(resolve => setTimeout(resolve,
 export async function getClients() {
   if (!firestore) {
     console.log("Firestore not initialized, returning mock data.");
-    return mockClients;
+    return mockClients.filter(c => c.status !== 'Inactive');
   }
   try {
     const clientsSnapshot = await firestore.collection('clients')
@@ -135,8 +128,9 @@ export async function deactivateClient(clientId: string) {
 
 export async function getClientById(id: string) {
     if (!firestore) {
-        console.log("Firestore not initialized, cannot fetch client.");
-        return null;
+        console.log("Firestore not initialized, returning mock client.");
+        const client = mockClients.find(c => c.id === id);
+        return client ? { id, ...client } : null;
     }
     try {
         const docRef = firestore.collection('clients').doc(id);
@@ -630,34 +624,38 @@ export async function getInvoicingDashboardData() {
     }
 }
 export async function getInvoices() {
-  if (!firestore) {
-    console.log("Firestore not initialized, returning mock data for invoices.");
-    return mockInvoices;
-  }
-  try {
-    const invoicesSnapshot = await firestore.collection('invoices').where('userId', '==', FAKE_USER_ID).orderBy('invoiceNumber', 'desc').get();
-    if (invoicesSnapshot.empty) {
-      console.log("No invoices found in Firestore, returning mock data as fallback.");
-      return mockInvoices;
+    if (!firestore) {
+      console.log("Firestore not initialized, returning mock data for invoices.");
+      return mockInvoices.map(i => ({...i, id: i.invoice}));
     }
-    const invoices = invoicesSnapshot.docs.map(doc => {
-      const data = doc.data();
-      return {
-        ...data,
-        id: doc.id,
-        // Ensure amount is a formatted string
-        amount: parseFloat(data.amount).toLocaleString('en-US', {minimumFractionDigits: 2}),
+    try {
+      const invoicesSnapshot = await firestore.collection('invoices').where('userId', '==', FAKE_USER_ID).orderBy('invoiceNumber', 'desc').get();
+      if (invoicesSnapshot.empty) {
+        console.log("No invoices found in Firestore, returning mock data as fallback.");
+        return mockInvoices.map(i => ({...i, id: i.invoice}));
       }
-    });
-    return invoices as (typeof mockInvoices[0] & {id: string})[];
-  } catch (error) {
-    console.error("Error fetching invoices from Firestore:", error);
-    return mockInvoices.map(i => ({...i, id: i.invoice}));
+      const invoices = invoicesSnapshot.docs.map(doc => {
+        const data = doc.data();
+        return {
+          ...data,
+          id: doc.id,
+          // Ensure amount is a formatted string
+          amount: parseFloat(data.amount).toLocaleString('en-US', {minimumFractionDigits: 2}),
+        }
+      });
+      return invoices as (typeof mockInvoices[0] & {id: string})[];
+    } catch (error) {
+      console.error("Error fetching invoices from Firestore:", error);
+      return mockInvoices.map(i => ({...i, id: i.invoice}));
+    }
   }
-}
 
 export async function getInvoiceById(id: string) {
-    if (!firestore) return null;
+    if (!firestore) {
+        console.log("Firestore not initialized, returning mock invoice.");
+        const invoice = mockInvoices.find(inv => inv.invoice === id); // Fallback to matching by invoice number
+        return invoice ? { id, ...invoice } : null;
+    }
     try {
         const docRef = firestore.collection('invoices').doc(id);
         const docSnap = await docRef.get();
@@ -871,85 +869,74 @@ export async function getScheduledReports() {
 
 // Accounting
 export async function getAccountingDashboardData() {
-  if (!firestore) {
-    throw new Error("Firestore not initialized.");
-  }
-  
-  const invoicesSnapshot = await firestore.collection('invoices').where('userId', '==', FAKE_USER_ID).get();
-  
-  const invoices = invoicesSnapshot.docs.map(doc => doc.data());
-  const now = new Date();
-  let totalRevenue = 0;
-  let totalExpenses = 0;
-  let outstandingReceivables = 0;
-  let overdueReceivables = 0;
-  let salesLast30Days = 0;
-
-  invoices.forEach(invoice => {
-    const amount = parseFloat(invoice.amount.replace(/,/g, ''));
-    const dueDate = new Date(invoice.dueDate);
-    totalRevenue += amount;
-    if (invoice.status === 'Paid') {
-      const paidDate = dueDate; // Mock paid date
-      if (paidDate > new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000)) {
-        salesLast30Days += amount;
-      }
-    } else {
-      outstandingReceivables += amount;
-      if (dueDate < now) {
-        overdueReceivables += amount;
-      }
+    // This function can now throw an error, and the page component will handle it.
+    if (!firestore) {
+      throw new Error("Firestore not initialized.");
     }
-  });
-
-  totalExpenses = totalRevenue * 0.65;
-  const netProfit = totalRevenue - totalExpenses;
-
-  const formatCurrency = (value: number) => {
-    if (value >= 1000000) return `$${(value / 1000000).toFixed(1)}M`;
-    if (value >= 1000) return `$${(value / 1000).toFixed(1)}k`;
-    return `$${value.toFixed(2)}`;
-  }
-
-  return {
-    ...mockAccountingDashboard,
-    mainKpis: {
-      netRevenue: formatCurrency(totalRevenue),
-      growth: "+12.4%",
-      healthScore: "94%",
-    },
-    metricCards: [
-      { title: "Monthly Expenses", value: formatCurrency(totalExpenses / 12), change: "+5.0%", changeType: "increase", icon: 'TrendingUp', details: null },
-      { title: "Net Profit", value: formatCurrency(netProfit), details: `Income: ${formatCurrency(totalRevenue)}\nExpenses: ${formatCurrency(totalExpenses)}`, icon: 'DollarSign', change: null, changeType: null },
-      { title: "Sales (30 Days)", value: formatCurrency(salesLast30Days), change: "+8.4%", changeType: "increase", icon: 'BarChart3', details: null },
-      { title: "A/R Total", value: formatCurrency(outstandingReceivables), details: `Overdue: ${formatCurrency(overdueReceivables)}`, icon: 'Receipt', change: null, changeType: null },
-    ],
-    performanceMetrics: {
-      ...mockDashboardPageData.performanceMetrics,
-      accountsReceivable: {
-        outstanding: formatCurrency(outstandingReceivables),
-        overdue: formatCurrency(overdueReceivables),
+    
+    const invoicesSnapshot = await firestore.collection('invoices').where('userId', '==', FAKE_USER_ID).get();
+    
+    const invoices = invoicesSnapshot.docs.map(doc => doc.data());
+    const now = new Date();
+    let totalRevenue = 0;
+    let totalExpenses = 0;
+    let outstandingReceivables = 0;
+    let overdueReceivables = 0;
+    let salesLast30Days = 0;
+  
+    invoices.forEach(invoice => {
+      const amount = parseFloat(invoice.amount.replace(/,/g, ''));
+      const dueDate = new Date(invoice.dueDate);
+      totalRevenue += amount;
+      if (invoice.status === 'Paid') {
+        const paidDate = dueDate; // Mock paid date
+        if (paidDate > new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000)) {
+          salesLast30Days += amount;
+        }
+      } else {
+        outstandingReceivables += amount;
+        if (dueDate < now) {
+          overdueReceivables += amount;
+        }
       }
-    },
-    alerts: invoices.filter(i => i.status === 'Overdue').slice(0, 2).map((i: any, idx: number) => ({
-      id: idx,
-      type: 'critical',
-      message: `Invoice #${i.invoice} is ${Math.round((now.getTime() - new Date(i.dueDate).getTime()) / (1000 * 60 * 60 * 24))} days overdue.`
-    })),
-  };
-}
-export async function getCustomers() {
-    await simulateDelay(50);
-    return mockCustomers;
-}
-export async function getBills() {
-    await simulateDelay(50);
-    return mockBills;
-}
-export async function getVendors() {
-    await simulateDelay(50);
-    return mockVendors;
-}
+    });
+  
+    totalExpenses = totalRevenue * 0.65;
+    const netProfit = totalRevenue - totalExpenses;
+  
+    const formatCurrency = (value: number) => {
+      if (value >= 1000000) return `$${(value / 1000000).toFixed(1)}M`;
+      if (value >= 1000) return `$${(value / 1000).toFixed(1)}k`;
+      return `$${value.toFixed(2)}`;
+    }
+  
+    return {
+      ...mockAccountingDashboard,
+      mainKpis: {
+        netRevenue: formatCurrency(totalRevenue),
+        growth: "+12.4%",
+        healthScore: "94%",
+      },
+      metricCards: [
+        { title: "Monthly Expenses", value: formatCurrency(totalExpenses / 12), change: "+5.0%", changeType: "increase", icon: 'TrendingUp', details: null },
+        { title: "Net Profit", value: formatCurrency(netProfit), details: `Income: ${formatCurrency(totalRevenue)}\nExpenses: ${formatCurrency(totalExpenses)}`, icon: 'DollarSign', change: null, changeType: null },
+        { title: "Sales (30 Days)", value: formatCurrency(salesLast30Days), change: "+8.4%", changeType: "increase", icon: 'BarChart3', details: null },
+        { title: "A/R Total", value: formatCurrency(outstandingReceivables), details: `Overdue: ${formatCurrency(overdueReceivables)}`, icon: 'Receipt', change: null, changeType: null },
+      ],
+      performanceMetrics: {
+        ...mockDashboardPageData.performanceMetrics,
+        accountsReceivable: {
+          outstanding: formatCurrency(outstandingReceivables),
+          overdue: formatCurrency(overdueReceivables),
+        }
+      },
+      alerts: invoices.filter(i => i.status === 'Overdue').slice(0, 2).map((i: any, idx: number) => ({
+        id: idx,
+        type: 'critical',
+        message: `Invoice #${i.invoice} is ${Math.round((now.getTime() - new Date(i.dueDate).getTime()) / (1000 * 60 * 60 * 24))} days overdue.`
+      })),
+    };
+  }
 
 export async function getJournalEntries() {
   if (!firestore) return mockJournalEntries;
@@ -1143,11 +1130,6 @@ export async function getLedgerTransactions() {
     }
 }
 
-export async function getArDashboardData() {
-    await simulateDelay(50);
-    return mockArDashboard;
-}
-
 // Banking
 export async function getBankAccounts() {
     if (!firestore) {
@@ -1274,7 +1256,8 @@ export async function getSchedulingData() {
 export async function getJobDetails(id: string) {
     if (!firestore) {
         console.log("Firestore not initialized, returning mock data for job details.");
-        return mockJobsWithDetails.find(job => job.id === id) || null;
+        const job = mockJobsWithDetails.find(job => job.id === id);
+        return job ? { ...job } : null;
     }
     try {
         const docRef = firestore.collection('jobs').doc(id);
@@ -1291,7 +1274,15 @@ export async function getJobDetails(id: string) {
             return null;
         }
         
-        return { id: docSnap.id, ...data };
+        // Find mock details to merge in for now
+        const mockDetails = mockJobsWithDetails.find(j => j.id === id);
+
+        return { 
+            id: docSnap.id, 
+            ...data,
+            costEntries: mockDetails?.costEntries || [],
+            changeOrders: mockDetails?.changeOrders || [],
+        };
     } catch (error) {
         console.error("Error fetching job details from Firestore:", error);
         return mockJobsWithDetails.find(job => job.id === id) || null; // Fallback
