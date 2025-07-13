@@ -3,12 +3,11 @@ import { getClientById } from "@/lib/actions";
 import { notFound } from "next/navigation";
 import { EditClientForm } from "./edit-client-form";
 
-export default async function EditClientPage({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default async function EditClientPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const client = await getClientById(id);
   
-  // This is the critical check. If the client or its core properties don't exist, stop rendering.
-  if (!client || !client.businessName) {
+  if (!client) {
     notFound();
   }
 
