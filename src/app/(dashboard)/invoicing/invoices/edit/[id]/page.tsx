@@ -7,7 +7,7 @@ export default async function EditInvoicePage({ params }: { params: { id: string
   const { id } = params;
   const invoice = await getInvoiceById(id);
   
-  if (!invoice) {
+  if (!invoice || !invoice.invoiceNumber) {
     notFound();
   }
 

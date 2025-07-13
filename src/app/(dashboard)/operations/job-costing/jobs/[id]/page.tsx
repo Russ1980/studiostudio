@@ -7,7 +7,7 @@ export default async function JobDetailsPage({ params }: { params: { id: string 
   const { id } = params;
   const job = await getJobDetails(id);
 
-  if (!job) {
+  if (!job || !job.name) {
     notFound();
   }
 

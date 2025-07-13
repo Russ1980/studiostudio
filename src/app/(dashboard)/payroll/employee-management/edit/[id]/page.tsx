@@ -7,7 +7,7 @@ export default async function EditEmployeePage({ params }: { params: { id: strin
   const { id } = params;
   const employee = await getEmployeeById(id);
   
-  if (!employee) {
+  if (!employee || !employee.name) {
     notFound();
   }
 
