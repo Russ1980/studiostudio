@@ -15,7 +15,7 @@ import { FileDown, FileUp, History, ShieldQuestion, Database, CheckSquare, HardD
 import { getDataManagementDashboardData } from "@/lib/actions";
 import { MigrationCardWrapper } from "./migration-card-wrapper";
 
-const kpiIconMap: { [key: string]: React.ElementType } = {
+const kpiIconMap: { [key: string]: ElementType } = {
   CheckSquare,
   Database,
   HardDrive

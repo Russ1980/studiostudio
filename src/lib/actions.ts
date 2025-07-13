@@ -1243,7 +1243,7 @@ export async function getInventoryData() {
         const snapshot = await firestore.collection('inventory').where('userId', '==', FAKE_USER_ID).get();
         const inventory = snapshot.empty ? mockInventory.inventory : snapshot.docs.map(doc => doc.data());
 
-        const totalValue = inventory.reduce((acc, item: any) => acc + item.cost * item.quantity, 0);
+        const totalValue = inventory.reduce((acc: any, item: any) => acc + item.cost * item.quantity, 0);
         const lowStockItems = inventory.filter((item: any) => item.quantity <= item.reorderPoint).length;
         
         return {
