@@ -1,0 +1,1634 @@
+
+'use server';
+
+import { firestore } from './firebase-admin';
+import {
+  mockClients,
+  mockInvoices,
+  mockEmployees,
+  mockJobs,
+  mockJobsWithDetails,
+  mockTaxFilings,
+  mockTaxPayments,
+  mockBankAccounts,
+  mockTasks,
+  mockChartOfAccounts,
+  mockTimeLogs,
+  mockJournalEntries,
+  mockPurchaseOrders,
+  mockInventory,
+  mockProductionPlans,
+  mockWorkOrders,
+  mockDashboardPageData,
+  mockAccountantDashboard,
+  mockRecentReports,
+  mockFiles,
+  mockDocRequests,
+  mockDocActivities,
+  mockInvoicingDashboard,
+  mockArAgingData,
+  mockSalesByCustomerData,
+  mockSalesByItemData,
+  mockTaxSummaryData,
+  mockExpenseAnalyticsData,
+  mockTrialBalanceData,
+  mockSalesAnalyticsData,
+  mockDataValidationResults,
+  mockScheduledReports,
+  mockAccountingDashboard,
+  mockLedgerTransactions,
+  mockBankDashboard,
+  mockBankConnections,
+  mockReviewTransactions,
+  mockTransactionRules,
+  mockReconciliationData,
+  mockOperationsDashboard,
+  mockOperationsAnalytics,
+  mockJobCostingDashboard,
+  mockJobProfitabilityData,
+  mockWipReportData,
+  mockShipments,
+  mockMaintenanceTasks,
+  mockPayrollDashboard,
+  mockPayRuns,
+  mockPaySlips,
+  mockBenefitsAdmin,
+  mockTimeAndAttendance,
+  mockComplianceItems,
+  mockPortfolioOverview,
+  mockStockData,
+  mockLearningResources,
+  mockTradingData,
+  mockProjectsDashboardData,
+  mockDataManagementDashboard,
+  mockBackupRestoreData,
+  mockExportHistory,
+  mockKeyboardShortcuts,
+  mockTroubleshootingFAQs,
+  mockRecurringInvoices,
+  mockClientBillingData,
+  mockClientComplianceData,
+  mockPaymentsToProcess,
+} from './data';
+import { revalidatePath } from 'next/cache';
+import { z } from 'zod';
+import admin from 'firebase-admin';
+import { migrateData, migrateSingleDoc } from './migration';
+import { getRevenueDataTool } from '@/ai/tools/get-revenue-data';
+import { getStockPrice } from '@/ai/tools/get-stock-price';
+
+// Placeholder for the currently logged-in user's ID.
+// In a real app, you would get this from the session.
+const FAKE_USER_ID = "user-placeholder-id";
+
+const simulateDelay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+// Accountant Portal
+export async function getClients() {
+  if (!firestore) {
+    console.log("Firestore not initialized, returning mock data.");
+    return mockClients.filter((c: any) => c.status !== 'Inactive');
+  }
+  try {
+    const clientsSnapshot = await firestore.collection('clients')
+      .where('userId', '==', FAKE_USER_ID)
+      .get();
+      
+    const allClients = clientsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const activeClients = allClients.filter((c: any) => c.status !== 'Inactive');
+
+    if (activeClients.length === 0) {
+      console.log("No active clients found in Firestore, returning mock data as fallback.");
+      return mockClients.filter((c: any) => c.status !== 'Inactive');
+    }
+
+    return activeClients as typeof mockClients;
+  } catch (error) {
+    console.error("Error fetching clients from Firestore:", error);
+    // Fallback to mock data in case of error
+    return mockClients.filter((c: any) => c.status !== 'Inactive');
+  }
+}
+
+export async function deactivateClient(clientId: string) {
+    if (!firestore) {
+        return { success: false, error: "Firestore not initialized." };
+    }
+    try {
+        const docRef = firestore.collection('clients').doc(clientId);
+        const doc = await docRef.get();
+        if (doc.data()?.userId !== FAKE_USER_ID) {
+            return { success: false, error: "Permission denied." };
+        }
+        await docRef.update({ status: 'Inactive' });
+        revalidatePath('/accountant-portal/client-list');
+        return { success: true };
+    } catch (error: any) {
+        return { success: false, error: error.message };
+    }
+}
+
+
+export async function getClientById(id: string) {
+    if (!firestore) {
+        console.log("Firestore not initialized, returning mock client.");
+        const client = mockClients.find(c => c.id === id);
+        return client ? { ...client, id } : null;
+    }
+    try {
+        const docRef = firestore.collection('clients').doc(id);
+        const docSnap = await docRef.get();
+
+        if (!docSnap.exists) {
+            console.log('No such client document!');
+            return null;
+        }
+
+        const data = docSnap.data();
+        if (data?.userId !== FAKE_USER_ID) {
+            console.log('Access denied for this client.');
+            return null;
+        }
+        
+        return { id: docSnap.id, ...data };
+
+    } catch (error) {
+        console.error("Error fetching client by ID:", error);
+        return null;
+    }
+}
+
+export async function onboardNewClient(formData: any) {
+  if (!firestore) {
+    return { success: false, error: 'Firestore not initialized' };
+  }
+
+  try {
+    const primaryContactUser = formData.clientUsers?.find((u: any) => u.role === 'Admin') || formData.clientUsers?.[0];
+
+    const newClientData = {
+      userId: FAKE_USER_ID,
+      businessName: formData.legalName || 'Unnamed Client',
+      ein: formData.ein || '',
+      address: formData.address || '',
+      tier: formData.subscriptionTier || 'Standard',
+      status: 'Onboarding',
+      onboarded: new Date().toISOString().split('T')[0],
+      contact: primaryContactUser ? primaryContactUser.email : 'N/A',
+      // Store other fields as completeness
+      fiscalYearEnd: formData.fiscalYear || '',
+      addons: {
+        payroll: formData.payrollAddon || false,
+        tax: formData.taxAddon || false,
+        advisory: formData.advisoryAddon || false,
+      },
+      chartOfAccountsSetup: formData.chartOfAccountsSetup || '',
+    };
+
+    const clientRef = await firestore.collection('clients').add(newClientData);
+    
+    // Also save users to a subcollection if they exist
+    if (formData.clientUsers && formData.clientUsers.length > 0) {
+      const usersBatch = firestore.batch();
+      formData.clientUsers.forEach((user: any) => {
+        const userRef = clientRef.collection('users').doc();
+        usersBatch.set(userRef, user);
+      });
+      await usersBatch.commit();
+    }
+
+    revalidatePath('/accountant-portal/client-list');
+    return { success: true, clientId: clientRef.id };
+  } catch (error: any) {
+    console.error("Error onboarding new client:", error);
+    return { success: false, error: error.message };
+  }
+}
+
+export async function getAccountantDashboardData() {
+    if (!firestore) {
+        return mockAccountantDashboard;
+    }
+    try {
+        const clientsSnapshot = await firestore.collection('clients').where('userId', '==', FAKE_USER_ID).get();
+        const tasksSnapshot = await firestore.collection('tasks').where('userId', '==', FAKE_USER_ID).get();
+        const invoicesSnapshot = await firestore.collection('invoices').where('userId', '==', FAKE_USER_ID).get();
+
+        const activeClients = clientsSnapshot.docs.filter(doc => doc.data().status === 'Active').length;
+        const tasks = tasksSnapshot.docs.map(doc => doc.data());
+        const pendingTasks = tasks.filter(task => task.status !== 'Done').length;
+        const overdueTasks = tasks.filter(task => task.status !== 'Done' && new Date(task.due) < new Date()).length;
+        
+        const revenueYTD = invoicesSnapshot.docs.reduce((acc, doc) => {
+            if (doc.data().status === 'Paid') {
+                return acc + parseFloat(doc.data().amount.replace(/,/g, ''));
+            }
+            return acc;
+        }, 0);
+
+        return {
+            ...mockAccountantDashboard, // keep mock deadlines & chart now
+            kpiData: [
+                { title: "Active Clients", value: activeClients.toString(), change: "" },
+                { title: "Pending Tasks", value: pendingTasks.toString(), change: `${overdueTasks} overdue` },
+                { title: "Revenue YTD", value: `$${(revenueYTD / 1000000).toFixed(1)}M`, change: "+15% vs last year", changeType: "up" },
+                { title: "Client Health", value: "92%", change: "Avg. Satisfaction" },
+            ],
+        };
+
+    } catch (e) {
+        console.error("Error fetching accountant dashboard data:", e);
+        return mockAccountantDashboard;
+    }
+}
+
+export async function getTasks() {
+    if (!firestore) {
+        console.log("Firestore not initialized, returning mock data tasks.");
+        return mockTasks;
+    }
+    try {
+        const tasksSnapshot = await firestore.collection('tasks').where('userId', '==', FAKE_USER_ID).orderBy('due').get();
+        if (tasksSnapshot.empty) {
+            console.log("No tasks found in Firestore, returning mock data as fallback.");
+            return mockTasks;
+        }
+        const tasks = tasksSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        return tasks as typeof mockTasks;
+    } catch (error) {
+        console.error("Error fetching tasks from Firestore:", error);
+        return mockTasks;
+    }
+}
+export async function getRecentReports() {
+    await simulateDelay(50);
+    return mockRecentReports;
+}
+
+const ClientFormSchema = z.object({
+    id: z.string().optional(),
+    businessName: z.string().min(1, 'Business name is required'),
+    businessType: z.string().min(1, 'Business type is required'),
+    ein: z.string().optional(),
+    industry: z.string().optional(),
+    contactName: z.string().min(1, 'Contact name is required'),
+    contactEmail: z.string().email('Invalid email address'),
+    contactPhone: z.string().optional(),
+    streetAddress: z.string().optional(),
+    city: z.string().optional(),
+    state: z.string().optional(),
+    zip: z.string().optional(),
+});
+
+export async function addNewClient(values: z.infer<typeof ClientFormSchema>) {
+    if (!firestore) {
+        return { success: false, error: "Firestore not initialized." };
+    }
+    const validatedFields = ClientFormSchema.safeParse(values);
+    if (!validatedFields.success) {
+        return { success: false, error: "Invalid form data." };
+    }
+
+    try {
+        await firestore.collection('clients').add({
+            userId: FAKE_USER_ID,
+            ...validatedFields.data,
+            onboarded: new Date().toISOString().split('T')[0],
+            status: "Active",
+            contact: validatedFields.data.contactName,
+            tier: validatedFields.data.businessType,
+        });
+        revalidatePath('/accountant-portal/client-list');
+        return { success: true };
+    } catch (error: any) {
+        if (error.message.includes('ALREADY_EXISTS')) {
+             return { success: false, error: "A client with this information already exists." };
+        }
+        return { success: false, error: "An unknown error occurred while adding the client." };
+    }
+}
+
+const UpdateClientSchema = ClientFormSchema.extend({
+    id: z.string(),
+    status: z.enum(["Active", "Onboarding", "Inactive"]),
+});
+
+export async function updateClient(values: z.infer<typeof UpdateClientSchema>) {
+    if (!firestore) {
+        return { success: false, error: "Firestore not initialized." };
+    }
+    const validatedFields = UpdateClientSchema.safeParse(values);
+    if (!validatedFields.success) {
+        return { success: false, error: "Invalid form data." };
+    }
+
+    try {
+        const { id, ...clientData } = validatedFields.data;
+        const docRef = firestore.collection('clients').doc(id);
+
+        const doc = await docRef.get();
+        if (doc.data()?.userId !== FAKE_USER_ID) {
+            return { success: false, error: "Permission denied." };
+        }
+
+        await docRef.update({
+            ...clientData,
+            contact: clientData.contactName,
+            tier: clientData.businessType,
+        });
+
+        revalidatePath('/accountant-portal/client-list');
+        revalidatePath(`/accountant-portal/edit-client/${id}`);
+        return { success: true };
+
+    } catch (error: any) {
+        console.error("Error updating client:", error);
+        return { success: false, error: error.message };
+    }
+}
+
+
+const TaskSchema = z.object({
+    task: z.string().min(1, 'Task name is required'),
+    client: z.string().min(1, 'Client is required'),
+    due: z.string().min(1, 'Due date is required'),
+    priority: z.enum(['High', 'Medium', 'Low']),
+    status: z.enum(['Not Started', 'In Progress', 'Done']),
+});
+
+export async function addNewTask(values: z.infer<typeof TaskSchema>) {
+    if (!firestore) {
+        return { success: false, error: "Firestore not initialized." };
+    }
+
+    const validatedFields = TaskSchema.safeParse(values);
+
+    if (!validatedFields.success) {
+        return { success: false, error: "Invalid form data." };
+    }
+
+    try {
+        await firestore.collection('tasks').add({
+            userId: FAKE_USER_ID,
+            ...validatedFields.data
+        });
+        revalidatePath('/accountant-portal/task-management');
+        return { success: true };
+    } catch (error: any) {
+        return { success: false, error: error.message };
+    }
+}
+
+const EmployeeSchema = z.object({
+    name: z.string().min(1, 'Employee name is required'),
+    email: z.string().email('Invalid email address'),
+    department: z.string().min(1, 'Department is required'),
+    role: z.string().min(1, 'Role is required'),
+    hireDate: z.string().min(1, 'Hire date is required'),
+    status: z.enum(['Active', 'On Leave', 'Terminated']),
+    salary: z.coerce.number().positive('Salary must be a positive number'),
+});
+
+const EmployeeUpdateSchema = EmployeeSchema.extend({
+    id: z.string(),
+});
+
+export async function addNewEmployee(values: z.infer<typeof EmployeeSchema>) {
+    if (!firestore) {
+        return { success: false, error: "Firestore not initialized." };
+    }
+
+    const validatedFields = EmployeeSchema.safeParse(values);
+
+    if (!validatedFields.success) {
+        return { success: false, error: "Invalid form data." };
+    }
+
+    try {
+        await firestore.collection('employees').add({
+            userId: FAKE_USER_ID,
+            ...validatedFields.data
+        });
+        revalidatePath('/payroll/employee-management');
+        return { success: true };
+    } catch (error: any) {
+        return { success: false, error: error.message };
+    }
+}
+
+export async function updateEmployee(values: z.infer<typeof EmployeeUpdateSchema>) {
+    if (!firestore) {
+        return { success: false, error: "Firestore not initialized." };
+    }
+    const validatedFields = EmployeeUpdateSchema.safeParse(values);
+    if (!validatedFields.success) {
+        return { success: false, error: "Invalid form data." };
+    }
+
+    try {
+        const { id, ...employeeData } = validatedFields.data;
+        const docRef = firestore.collection('employees').doc(id);
+
+        const doc = await docRef.get();
+        if (doc.data()?.userId !== FAKE_USER_ID) {
+            return { success: false, error: "Permission denied." };
+        }
+
+        await docRef.update(employeeData);
+
+        revalidatePath('/payroll/employee-management');
+        revalidatePath(`/payroll/employee-management/edit/${id}`);
+        return { success: true };
+
+    } catch (error: any) {
+        console.error("Error updating employee:", error);
+        return { success: false, error: error.message };
+    }
+}
+
+export async function getEmployeeById(id: string) {
+    if (!firestore) {
+        console.log("Firestore not initialized, cannot fetch employee.");
+        return null;
+    }
+    try {
+        const docRef = firestore.collection('employees').doc(id);
+        const docSnap = await docRef.get();
+
+        if (!docSnap.exists) {
+            console.log('No such employee document!');
+            return null;
+        }
+
+        const data = docSnap.data();
+        if (data?.userId !== FAKE_USER_ID) {
+            console.log('Access denied this employee.');
+            return null;
+        }
+        
+        return { id: docSnap.id, ...data };
+
+    } catch (error) {
+        console.error("Error fetching employee by ID:", error);
+        return null;
+    }
+}
+
+const JobSchema = z.object({
+  name: z.string().min(1, 'Job name is required'),
+  customer: z.string().min(1, 'Customer is required'),
+  startDate: z.string().min(1, 'Start date is required'),
+  endDate: z.string().min(1, 'End date is required'),
+  budget: z.coerce.number().positive('Budget must be a positive number'),
+  jobType: z.string().min(1, 'Job type is required'),
+  description: z.string().optional(),
+});
+
+export async function addNewJob(values: z.infer<typeof JobSchema>) {
+    if (!firestore) {
+        return { success: false, error: "Firestore not initialized." };
+    }
+    const validatedFields = JobSchema.safeParse(values);
+    if (!validatedFields.success) {
+        return { success: false, error: "Invalid form data." };
+    }
+
+    try {
+        const newJob = {
+            ...validatedFields.data,
+            userId: FAKE_USER_ID,
+            status: "In Progress", // Default status
+            spent: 0,
+            profitability: 0,
+            costEntries: [],
+            changeOrders: [],
+        };
+        await firestore.collection('jobs').add(newJob);
+        revalidatePath('/operations/job-costing/jobs');
+        return { success: true };
+    } catch (error: any) {
+        return { success: false, error: error.message };
+    }
+}
+
+const PurchaseOrderSchema = z.object({
+  vendor: z.string().min(1),
+  location: z.string().min(1),
+  deliveryDate: z.string().min(1),
+  lineItems: z.array(z.object({
+    item: z.string().min(1),
+    description: z.string().optional(),
+    quantity: z.coerce.number().min(1),
+    unitCost: z.coerce.number().min(0),
+  })).min(1),
+});
+
+export async function addNewPurchaseOrder(values: z.infer<typeof PurchaseOrderSchema>) {
+    if (!firestore) {
+        return { success: false, error: "Firestore not initialized." };
+    }
+    const validatedFields = PurchaseOrderSchema.safeParse(values);
+    if (!validatedFields.success) {
+        return { success: false, error: "Invalid form data." };
+    }
+    
+    try {
+        const { lineItems, ...poData } = validatedFields.data;
+        const total = lineItems.reduce((acc, item) => acc + item.quantity * item.unitCost, 0);
+
+        const newPO = {
+            ...poData,
+            userId: FAKE_USER_ID,
+            poNumber: `PO-${Date.now().toString().slice(-6)}`,
+            status: 'Sent',
+            total,
+            orderDate: new Date().toISOString().split('T')[0],
+            expectedDelivery: poData.deliveryDate,
+        };
+        await firestore.collection('purchaseOrders').add(newPO);
+        revalidatePath('/operations/inventory/purchase-orders');
+        return { success: true };
+    } catch (error: any) {
+        return { success: false, error: error.message };
+    }
+}
+
+
+// Document Management
+export async function getDocumentManagementData() {
+  await simulateDelay(50);
+  return {
+    files: mockFiles,
+    requests: mockDocRequests,
+    activities: mockDocActivities,
+  };
+}
+
+// Invoicing
+export async function getInvoicingDashboardData() {
+    if (!firestore) {
+        console.log("Firestore not initialized, returning mock invoicing dashboard data.");
+        return mockInvoicingDashboard;
+    }
+
+    try {
+        const invoicesSnapshot = await firestore.collection('invoices').where('userId', '==', FAKE_USER_ID).get();
+        if (invoicesSnapshot.empty) {
+            console.log("No invoices found in Firestore, returning mock invoicing dashboard data.");
+            return mockInvoicingDashboard;
+        }
+
+        const invoices: any[] = invoicesSnapshot.docs.map(doc => doc.data());
+        const now = new Date();
+        const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+        let outstanding = 0;
+        let overdue = 0;
+        let paidThisMonth = 0;
+
+        invoices.forEach(invoice => {
+            const amount = parseFloat(invoice.amount.replace(/,/g, ''));
+            const dueDate = new Date(invoice.dueDate);
+            
+            if (invoice.status !== 'Paid') {
+                outstanding += amount;
+                if (dueDate < now) {
+                    overdue += amount;
+                }
+            } else {
+                // Assuming a 'paidDate' field would exist on a paid invoice.
+                // this example, we'll just use the due date.
+                if (dueDate >= startOfMonth && dueDate <= now) {
+                    paidThisMonth += amount;
+                }
+            }
+        });
+
+        // "Average Days to Pay", a more complex calculation involving paidDate is needed.
+        // We will keep a mock value this KPI now.
+        
+        const recentInvoices = invoices
+            .sort((a, b) => new Date(b.dueDate).getTime() - new Date(a.dueDate).getTime())
+            .slice(0, 4);
+
+        return {
+            kpiData: [
+                { title: "Outstanding Invoices", value: `$${outstanding.toLocaleString('en-US', {minimumFractionDigits: 2})}` },
+                { title: "Overdue Invoices", value: `$${overdue.toLocaleString('en-US', {minimumFractionDigits: 2})}` },
+                { title: "Paid This Month", value: `$${paidThisMonth.toLocaleString('en-US', {minimumFractionDigits: 2})}` },
+                { title: "Average Days to Pay", value: "22 Days" }, // Mock value
+            ],
+            recentInvoices: recentInvoices,
+        };
+
+    } catch (error) {
+        console.error("Error fetching invoicing dashboard data from Firestore:", error);
+        return mockInvoicingDashboard; // Fallback to mock data
+    }
+}
+export async function getInvoices() {
+    if (!firestore) {
+      console.log("Firestore not initialized, returning mock data invoices.");
+      return mockInvoices.map(i => ({...i, id: i.invoice}));
+    }
+    try {
+      const invoicesSnapshot = await firestore.collection('invoices').where('userId', '==', FAKE_USER_ID).orderBy('invoiceNumber', 'desc').get();
+      if (invoicesSnapshot.empty) {
+        console.log("No invoices found in Firestore, returning mock data as fallback.");
+        return mockInvoices.map(i => ({...i, id: i.invoice}));
+      }
+      const invoices = invoicesSnapshot.docs.map(doc => {
+        const data = doc.data();
+        const amount = parseFloat(data.amount) || 0;
+        return {
+          ...data,
+          id: doc.id,
+          amount: amount.toLocaleString('en-US', {minimumFractionDigits: 2}),
+        }
+      });
+      return invoices as (typeof mockInvoices[0] & {id: string})[];
+    } catch (error) {
+      console.error("Error fetching invoices from Firestore:", error);
+      return mockInvoices.map(i => ({...i, id: i.invoice}));
+    }
+  }
+
+export async function getInvoiceById(id: string) {
+    if (!firestore) {
+        console.log("Firestore not initialized, returning mock invoice.");
+        const invoice = mockInvoices.find(inv => inv.invoice === id); // Fallback to matching by invoice number
+        return invoice ? { id, ...invoice } : null;
+    }
+    try {
+        const docRef = firestore.collection('invoices').doc(id);
+        const docSnap = await docRef.get();
+        if (!docSnap.exists || docSnap.data()?.userId !== FAKE_USER_ID) {
+            return null;
+        }
+        return { id: docSnap.id, ...docSnap.data() };
+    } catch (error) {
+        console.error("Error fetching invoice by ID:", error);
+        return null;
+    }
+}
+
+
+const InvoiceFormSchema = z.object({
+  customer: z.string().min(1),
+  invoiceDate: z.string().min(1),
+  dueDate: z.string().min(1),
+  invoiceNumber: z.string().min(1),
+  lineItems: z.array(z.object({
+    description: z.string().min(1),
+    quantity: z.coerce.number().min(0.01),
+    rate: z.coerce.number().min(0),
+  })).min(1),
+  notes: z.string().optional(),
+});
+
+const UpdateInvoiceSchema = InvoiceFormSchema.extend({
+    id: z.string(),
+});
+
+export async function addNewInvoice(values: z.infer<typeof InvoiceFormSchema>) {
+    if (!firestore) {
+        return { success: false, error: "Firestore not initialized." };
+    }
+
+    const validatedFields = InvoiceFormSchema.safeParse(values);
+    if (!validatedFields.success) {
+        return { success: false, error: "Invalid form data." };
+    }
+
+    try {
+        const { lineItems, ...invoiceData } = validatedFields.data;
+
+        const subtotal = lineItems.reduce((acc, item) => acc + item.quantity * item.rate, 0);
+        const tax = subtotal * 0.08; // 8% tax
+        const total = subtotal + tax;
+
+        const newInvoice = {
+            userId: FAKE_USER_ID,
+            ...invoiceData,
+            invoice: invoiceData.invoiceNumber, // Match field name in data
+            amount: total.toFixed(2),
+            status: 'Sent', // Default status
+        };
+
+        const docRef = await firestore.collection('invoices').add(newInvoice);
+        revalidatePath('/invoicing/invoices');
+        return { success: true, id: docRef.id };
+    } catch (error: any) {
+        return { success: false, error: error.message };
+    }
+}
+
+export async function updateInvoice(values: z.infer<typeof UpdateInvoiceSchema>) {
+    if (!firestore) return { success: false, error: "Firestore not initialized." };
+    
+    const validatedFields = UpdateInvoiceSchema.safeParse(values);
+    if (!validatedFields.success) return { success: false, error: "Invalid form data." };
+
+    try {
+        const { id, lineItems, ...invoiceData } = validatedFields.data;
+        const subtotal = lineItems.reduce((acc, item) => acc + item.quantity * item.rate, 0);
+        const tax = subtotal * 0.08;
+        const total = subtotal + tax;
+
+        const docRef = firestore.collection('invoices').doc(id);
+        const doc = await docRef.get();
+        if (doc.data()?.userId !== FAKE_USER_ID) return { success: false, error: "Permission denied." };
+        
+        await docRef.update({
+            ...invoiceData,
+            amount: total.toFixed(2),
+        });
+
+        revalidatePath(`/invoicing/invoices`);
+        revalidatePath(`/invoicing/invoices/edit/${id}`);
+        return { success: true };
+    } catch (e: any) {
+        return { success: false, error: e.message };
+    }
+}
+
+export async function getRecurringInvoices() {
+    await simulateDelay(50);
+    return mockRecurringInvoices;
+}
+
+export async function getArAgingData() {
+    if (!firestore) return mockArAgingData;
+
+    try {
+        const invoicesSnapshot = await firestore.collection('invoices').where('status', '!=', 'Paid').where('userId', '==', FAKE_USER_ID).get();
+        if (invoicesSnapshot.empty) return mockArAgingData;
+
+        const agingData: { [key: string]: { current: number; "1-30": number; "31-60": number; "61-90": number; "90+": number; total: number } } = {};
+        const now = new Date();
+
+        invoicesSnapshot.forEach(doc => {
+            const invoice = doc.data();
+            const customer = invoice.customer || 'Unknown Customer';
+            if (!agingData[customer]) {
+                agingData[customer] = { current: 0, "1-30": 0, "31-60": 0, "61-90": 0, "90+": 0, total: 0 };
+            }
+
+            const dueDate = new Date(invoice.dueDate);
+            const amount = parseFloat(invoice.amount.replace(/,/g, ''));
+            const daysOverdue = Math.floor((now.getTime() - dueDate.getTime()) / (1000 * 3600 * 24));
+
+            if (daysOverdue <= 0) {
+                agingData[customer].current += amount;
+            } else if (daysOverdue <= 30) {
+                agingData[customer]["1-30"] += amount;
+            } else if (daysOverdue <= 60) {
+                agingData[customer]["31-60"] += amount;
+            } else if (daysOverdue <= 90) {
+                agingData[customer]["61-90"] += amount;
+            } else {
+                agingData[customer]["90+"] += amount;
+            }
+            agingData[customer].total += amount;
+        });
+
+        return Object.entries(agingData).map(([customer, data]) => ({
+            customer,
+            current: data.current.toFixed(2),
+            "1-30": data["1-30"].toFixed(2),
+            "31-60": data["31-60"].toFixed(2),
+            "61-90": data["61-90"].toFixed(2),
+            "90+": data["90+"].toFixed(2),
+            total: data.total.toFixed(2),
+        }));
+
+    } catch (e) {
+        console.error("Error fetching A/R Aging data:", e);
+        return mockArAgingData;
+    }
+}
+
+export async function getSalesByCustomerData() {
+    if (!firestore) return mockSalesByCustomerData;
+    try {
+        const invoicesSnapshot = await firestore.collection('invoices').where('status', '==', 'Paid').where('userId', '==', FAKE_USER_ID).get();
+        if (invoicesSnapshot.empty) return mockSalesByCustomerData;
+
+        const salesData: { [key: string]: { invoices: number; sales: number } } = {};
+        invoicesSnapshot.forEach(doc => {
+            const invoice = doc.data();
+            const customer = invoice.customer || 'Unknown Customer';
+            if (!salesData[customer]) {
+                salesData[customer] = { invoices: 0, sales: 0 };
+            }
+            salesData[customer].invoices += 1;
+            salesData[customer].sales += parseFloat(invoice.amount.replace(/,/g, ''));
+        });
+
+        return Object.entries(salesData)
+            .map(([customer, data]) => ({
+                customer,
+                invoices: data.invoices,
+                sales: data.sales.toString(),
+            }))
+            .sort((a, b) => parseFloat(b.sales) - parseFloat(a.sales));
+
+    } catch (e) {
+        console.error("Error fetching Sales by Customer data:", e);
+        return mockSalesByCustomerData;
+    }
+}
+export async function getSalesByItemData() {
+    await simulateDelay(50);
+    return mockSalesByItemData;
+}
+export async function getTaxSummaryData() {
+    await simulateDelay(50);
+    return mockTaxSummaryData;
+}
+
+// Reports & Insights
+export async function getExpenseAnalyticsData() {
+    await simulateDelay(50);
+    return mockExpenseAnalyticsData;
+}
+export async function getTrialBalanceData() {
+    await simulateDelay(50);
+    return mockTrialBalanceData;
+}
+export async function getSalesAnalyticsData() {
+    await simulateDelay(50);
+    return mockSalesAnalyticsData;
+}
+export async function getDataValidationResults() {
+    await simulateDelay(50);
+    return mockDataValidationResults;
+}
+export async function getScheduledReports() {
+    await simulateDelay(50);
+    return mockScheduledReports;
+}
+
+
+// Accounting
+export async function getAccountingDashboardData() {
+    console.log("Using mock data for accounting dashboard.");
+    return mockAccountingDashboard;
+}
+
+export async function getJournalEntries() {
+  if (!firestore) return mockJournalEntries;
+  try {
+    const snapshot = await firestore.collection('journalEntries').where('userId', '==', FAKE_USER_ID).orderBy('date', 'desc').get();
+    if (snapshot.empty) {
+        console.log('No journal entries found, returning mock data.');
+        return mockJournalEntries;
+    }
+    return snapshot.docs.map(doc => doc.data()) as typeof mockJournalEntries;
+  } catch (error) {
+    console.error("Error fetching journal entries:", error);
+    return mockJournalEntries;
+  }
+}
+
+const JournalEntrySchema = z.object({
+    date: z.string().min(1),
+    entryNo: z.string().min(1),
+    ref: z.string().optional(),
+    lineItems: z.array(z.object({
+        account: z.string().min(1),
+        debit: z.coerce.number().optional(),
+        credit: z.coerce.number().optional(),
+        description: z.string().optional(),
+    })).min(2),
+}).refine(data => {
+    const totalDebits = data.lineItems.reduce((acc, item) => acc + (item.debit || 0), 0);
+    const totalCredits = data.lineItems.reduce((acc, item) => acc + (item.credit || 0), 0);
+    return Math.abs(totalDebits - totalCredits) < 0.001;
+}, {
+    message: "Total debits must equal total credits.",
+    path: ["lineItems"],
+});
+
+export async function addNewJournalEntry(values: z.infer<typeof JournalEntrySchema>) {
+    if (!firestore) return { success: false, error: "Firestore not initialized." };
+    
+    const validatedFields = JournalEntrySchema.safeParse(values);
+    if (!validatedFields.success) return { success: false, error: "Invalid form data." };
+
+    try {
+        const { lineItems, ...entryData } = validatedFields.data;
+        const totalDebits = lineItems.reduce((acc, item) => acc + (item.debit || 0), 0);
+        const totalCredits = lineItems.reduce((acc, item) => acc + (item.credit || 0), 0);
+
+        const newEntry = {
+            ...entryData,
+            userId: FAKE_USER_ID,
+            status: "Posted", // Default to posted now
+            debits: totalDebits.toFixed(2),
+            credits: totalCredits.toFixed(2),
+            description: "Manual Journal Entry" // Simplified description
+        };
+
+        await firestore.collection('journalEntries').add(newEntry);
+        revalidatePath('/accounting/journal-entries');
+        return { success: true };
+    } catch (error: any) {
+        return { success: false, error: error.message };
+    }
+}
+
+export async function getChartOfAccounts() {
+  if (!firestore) return mockChartOfAccounts;
+  try {
+    const docRef = firestore.collection('chartOfAccounts').doc(FAKE_USER_ID);
+    const docSnap = await docRef.get();
+    if (!docSnap.exists) {
+        // If it doesn't exist, create it from mock data
+        await docRef.set({ ...mockChartOfAccounts, userId: FAKE_USER_ID });
+        return mockChartOfAccounts;
+    }
+    return docSnap.data() as typeof mockChartOfAccounts;
+  } catch (error) {
+    console.error("Error fetching chart of accounts:", error);
+    return mockChartOfAccounts;
+  }
+}
+
+const AccountSchema = z.object({
+    name: z.string().min(2, { message: "Account name must be at least 2 characters." }),
+    code: z.string().optional(),
+    type: z.enum(["Asset", "Liability", "Equity", "Income", "Expense"]),
+    detailType: z.string().min(2, { message: "Detail type is required." }),
+    balance: z.coerce.number().optional().default(0),
+});
+
+export async function addChartOfAccount(values: z.infer<typeof AccountSchema>) {
+  if (!firestore) {
+    return { success: false, error: "Firestore not initialized." };
+  }
+
+  const validatedFields = AccountSchema.safeParse(values);
+  if (!validatedFields.success) {
+    return { success: false, error: "Invalid form data." };
+  }
+  
+  const { name, code, type, detailType, balance } = validatedFields.data;
+
+  try {
+    const docRef = firestore.collection('chartOfAccounts').doc(FAKE_USER_ID);
+    
+    await firestore.runTransaction(async (transaction) => {
+        const doc = await transaction.get(docRef);
+        if (!doc.exists) {
+            throw new Error("Chart of Accounts document not found!");
+        }
+
+        const data = doc.data();
+        if (!data) {
+             throw new Error("Chart of Accounts data is empty!");
+        }
+
+        const newAccount = {
+            name,
+            code: code || '',
+            type,
+            detailType,
+            status: "Active",
+            balance,
+            ytd: balance,
+        };
+        
+        const categoryKey = type.toLowerCase() + 's';
+        const targetCategory = data[categoryKey];
+
+        if (targetCategory && Array.isArray(targetCategory.accounts)) {
+             targetCategory.accounts.push({
+                name: "New Parent Account", // Simplified parent creation
+                code: "",
+                type,
+                balance: newAccount.balance,
+                subAccounts: [newAccount]
+            });
+            targetCategory.balance = (parseFloat(targetCategory.balance) + newAccount.balance).toString();
+
+             const updatePayload: { [key: string]: any } = {};
+             updatePayload[categoryKey] = targetCategory;
+
+            transaction.update(docRef, updatePayload);
+        } else {
+             throw new Error(`Category "${categoryKey}" not found or invalid in Chart of Accounts.`);
+        }
+    });
+    
+    revalidatePath('/accounting/chart-of-accounts');
+    return { success: true };
+  } catch (error: any) {
+    console.error("Error adding chart of account:", error);
+    return { success: false, error: error.message };
+  }
+}
+
+
+export async function getLedgerTransactions() {
+    if (!firestore) return mockLedgerTransactions;
+    try {
+        const snapshot = await firestore.collection('journalEntries').where('userId', '==', FAKE_USER_ID).orderBy('date', 'desc').get();
+        if (snapshot.empty) {
+            console.log("No journal entries found in Firestore, returning mock data ledger.");
+            return mockLedgerTransactions
+        };
+
+        // This is a simplified ledger one account. A real one would be much more complex.
+        let runningBalance = 1250320.50; // Starting balance from mock
+        const transactions = snapshot.docs.map(doc => {
+            const entry = doc.data();
+            const debit = parseFloat(entry.debits) || 0;
+            const credit = parseFloat(entry.credits) || 0;
+            // Assuming this is a cash account ledger
+            const newBalance = runningBalance - credit + debit;
+            runningBalance = newBalance;
+            return {
+                date: entry.date,
+                journalNo: entry.entryNo,
+                description: entry.description,
+                debit: debit > 0 ? debit.toFixed(2) : "",
+                credit: credit > 0 ? credit.toFixed(2) : "",
+                balance: newBalance.toLocaleString('en-US', {minimumFractionDigits: 2}),
+            };
+        }).reverse(); // Reverse to show oldest first
+
+        return {
+            transactions: transactions.reverse(), // reverse back display
+            currentBalance: runningBalance.toLocaleString('en-US', {minimumFractionDigits: 2}),
+        };
+    } catch(e) {
+        console.error("Error fetching ledger transactions:", e);
+        return mockLedgerTransactions;
+    }
+}
+
+// Banking
+export async function getBankAccounts() {
+    if (!firestore) {
+        console.log("Firestore not initialized, returning mock data bank accounts.");
+        return mockBankAccounts;
+    }
+    try {
+        const snapshot = await firestore.collection('bankAccounts').where('userId', '==', FAKE_USER_ID).get();
+        if (snapshot.empty) {
+            console.log("No bank accounts found in Firestore, returning mock data as fallback.");
+            return mockBankAccounts;
+        }
+        const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        return data as typeof mockBankAccounts;
+    } catch (error) {
+        console.error("Error fetching bank accounts from Firestore:", error);
+        return mockBankAccounts; // Fallback
+    }
+}
+export async function getBankDashboardData() {
+    await simulateDelay(50);
+    return mockBankDashboard;
+}
+export async function getBankConnections() {
+    await simulateDelay(50);
+    return mockBankConnections;
+}
+export async function getReviewTransactions() {
+    await simulateDelay(50);
+    return mockReviewTransactions;
+}
+export async function getTransactionRules() {
+    await simulateDelay(50);
+    return mockTransactionRules;
+}
+export async function getReconciliationData() {
+    await simulateDelay(50);
+    return mockReconciliationData;
+}
+
+// Operations
+export async function getOperationsDashboardData() {
+    await simulateDelay(50);
+    return mockOperationsDashboard;
+}
+export async function getPurchaseOrders() {
+    if (!firestore) return mockPurchaseOrders;
+    try {
+        const snapshot = await firestore.collection('purchaseOrders').where('userId', '==', FAKE_USER_ID).orderBy('orderDate', 'desc').get();
+        if (snapshot.empty) {
+            console.log('No purchase orders found, returning mock data.');
+            return mockPurchaseOrders;
+        }
+        return snapshot.docs.map(doc => doc.data()) as typeof mockPurchaseOrders;
+    } catch (error) {
+        console.error("Error fetching purchase orders from Firestore:", error);
+        return mockPurchaseOrders;
+    }
+}
+
+export async function getInventoryData() {
+    if (!firestore) return { kpiData: mockInventory.kpiData, inventory: mockInventory.inventory };
+    try {
+        const snapshot = await firestore.collection('inventory').where('userId', '==', FAKE_USER_ID).get();
+        const inventory = snapshot.empty ? mockInventory.inventory : snapshot.docs.map(doc => doc.data());
+
+        const totalValue = inventory.reduce((acc: any, item: any) => acc + item.cost * item.quantity, 0);
+        const lowStockItems = inventory.filter((item: any) => item.quantity <= item.reorderPoint).length;
+        
+        return {
+            kpiData: [
+                { title: "Total Inventory Value", value: `$${totalValue.toLocaleString('en-US', {minimumFractionDigits: 2})}`, icon: "DollarSign" },
+                { title: "Items in Stock", value: inventory.length.toLocaleString(), icon: "Package" },
+                { title: "Low Stock Items", value: lowStockItems, icon: "AlertCircle" },
+            ],
+            inventory: inventory as typeof mockInventory.inventory,
+        }
+    } catch (error) {
+        console.error("Error fetching inventory data from Firestore:", error);
+        return { kpiData: mockInventory.kpiData, inventory: mockInventory.inventory };
+    }
+}
+export async function getProductionPlans() {
+    if (!firestore) return mockProductionPlans;
+    try {
+        const snapshot = await firestore.collection('productionPlans').where('userId', '==', FAKE_USER_ID).get();
+        if (snapshot.empty) {
+            console.log('No production plans found, returning mock data.');
+            return mockProductionPlans;
+        }
+        return snapshot.docs.map(doc => doc.data()) as typeof mockProductionPlans;
+    } catch (error) {
+        console.error("Error fetching production plans from Firestore:", error);
+        return mockProductionPlans;
+    }
+}
+export async function getWorkOrders() {
+    if (!firestore) return mockWorkOrders;
+    try {
+        const snapshot = await firestore.collection('workOrders').where('userId', '==', FAKE_USER_ID).get();
+        if (snapshot.empty) {
+            console.log('No work orders found, returning mock data.');
+            return mockWorkOrders;
+        }
+        return snapshot.docs.map(doc => doc.data()) as typeof mockWorkOrders;
+    } catch (error) {
+        console.error("Error fetching work orders from Firestore:", error);
+        return mockWorkOrders;
+    }
+}
+export async function getOperationsAnalytics() {
+    await simulateDelay(50);
+    return mockOperationsAnalytics;
+}
+export async function getProductionTrackingData() {
+    await simulateDelay(50);
+    return mockProductionTracking;
+}
+export async function getSchedulingData() {
+    await simulateDelay(50);
+    return mockScheduling;
+}
+
+export async function getJobDetails(id: string) {
+    if (!firestore) {
+        console.log("Firestore not initialized, returning mock data job details.");
+        const job = mockJobsWithDetails.find(job => job.id === id);
+        return job ? { ...job } : null;
+    }
+    try {
+        const docRef = firestore.collection('jobs').doc(id);
+        const docSnap = await docRef.get();
+
+        if (!docSnap.exists) {
+            console.log('No such document!');
+            return null;
+        }
+        
+        const data = docSnap.data();
+        if (!data || data.userId !== FAKE_USER_ID) {
+            console.log('Job not found or access denied.');
+            return null;
+        }
+        
+        // Find mock details to merge in now
+        const mockDetails = mockJobsWithDetails.find(j => j.id === id);
+
+        return { 
+            id: docSnap.id, 
+            ...data,
+            costEntries: mockDetails?.costEntries || [],
+            changeOrders: mockDetails?.changeOrders || [],
+        };
+    } catch (error) {
+        console.error("Error fetching job details from Firestore:", error);
+        return mockJobsWithDetails.find(job => job.id === id) || null; // Fallback
+    }
+}
+
+export async function getJobProfitabilityData() {
+    await simulateDelay(50);
+    return mockJobProfitabilityData;
+}
+export async function getWipReportData() {
+  await simulateDelay(50);
+  return mockWipReportData;
+}
+export async function getLogisticsData() {
+  await simulateDelay(50);
+  return { shipments: mockShipments };
+}
+export async function getMaintenanceData() {
+  await simulateDelay(50);
+  return { tasks: mockMaintenanceTasks };
+}
+
+// Payroll
+export async function getPayrollDashboardData() {
+    await simulateDelay(50);
+    return mockPayrollDashboard;
+}
+export async function getEmployees() {
+    if (!firestore) {
+        console.log("Firestore not initialized, returning mock data employees.");
+        return mockEmployees;
+    }
+    try {
+        const employeesSnapshot = await firestore.collection('employees').where('userId', '==', FAKE_USER_ID).get();
+        if (employeesSnapshot.empty) {
+            console.log("No employees found in Firestore, returning mock data as fallback.");
+            return mockEmployees;
+        }
+        const employees = employeesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        return employees as typeof mockEmployees;
+    } catch (error) {
+        console.error("Error fetching employees from Firestore:", error);
+        return mockEmployees;
+    }
+}
+export async function getPayRuns() {
+    await simulateDelay(50);
+    return mockPayRuns;
+}
+export async function getPaySlips() {
+    await simulateDelay(50);
+    return mockPaySlips;
+}
+export async function getTaxFilings() {
+    if (!firestore) {
+        console.log("Firestore not initialized, returning mock data tax filings.");
+        return mockTaxFilings;
+    }
+    try {
+        const snapshot = await firestore.collection('taxFilings').where('userId', '==', FAKE_USER_ID).get();
+        if (snapshot.empty) {
+            console.log("No tax filings found in Firestore, returning mock data as fallback.");
+            return mockTaxFilings;
+        }
+        const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        return data as typeof mockTaxFilings;
+    } catch (error) {
+        console.error("Error fetching tax filings from Firestore:", error);
+        return mockTaxFilings; // Fallback
+    }
+}
+export async function getTaxPayments() {
+     if (!firestore) {
+        console.log("Firestore not initialized, returning mock data tax payments.");
+        return mockTaxPayments;
+    }
+    try {
+        const snapshot = await firestore.collection('taxPayments').where('userId', '==', FAKE_USER_ID).get();
+        if (snapshot.empty) {
+            console.log("No tax payments found in Firestore, returning mock data as fallback.");
+            return mockTaxPayments;
+        }
+        const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        return data as typeof mockTaxPayments;
+    } catch (error) {
+        console.error("Error fetching tax payments from Firestore:", error);
+        return mockTaxPayments; // Fallback
+    }
+}
+export async function getBenefitsAdminData() {
+    await simulateDelay(50);
+    return mockBenefitsAdmin;
+}
+export async function getTimeAndAttendanceData() {
+    await simulateDelay(50);
+    return mockTimeAndAttendance;
+}
+export async function getComplianceItems() {
+    await simulateDelay(50);
+    return mockComplianceItems;
+}
+
+// Investments
+export async function getPortfolioOverviewData() {
+    await simulateDelay(50);
+    return mockPortfolioOverview;
+}
+
+export async function getStockData(ticker: string = 'AAPL') {
+    try {
+        const price = await getStockPrice({ ticker });
+        
+        // Use a hash of the ticker to create deterministic, but unique, mock data
+        const tickerHash = ticker.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+        const change = parseFloat(((tickerHash % 5) - 2.5).toFixed(2));
+        const changePercent = parseFloat(((change / price) * 100).toFixed(2));
+
+        const generateChartData = () => {
+            const data = [];
+            let currentPrice = price - change * 7;
+            for (let i = 0; i < 8; i++) {
+                data.push({
+                    date: `${9 + i}:30`,
+                    value: parseFloat(currentPrice.toFixed(2)),
+                });
+                currentPrice += change + ((Math.random() - 0.5) * 2);
+            }
+            return data;
+        };
+
+        const stockDetails = mockStockData[ticker.toUpperCase() as keyof typeof mockStockData] || mockStockData['DEFAULT'];
+
+        return {
+            ...stockDetails,
+            ticker: ticker.toUpperCase(),
+            price: price.toFixed(2),
+            change: change.toFixed(2),
+            changePercent: changePercent.toFixed(2),
+            chartData: generateChartData(),
+        };
+    } catch (e) {
+        console.error(`Failed to get stock data ${ticker}:`, e);
+        return mockStockData['DEFAULT'];
+    }
+}
+export async function getLearningResources() {
+    await simulateDelay(50);
+    return mockLearningResources;
+}
+export async function getTradingData() {
+    await simulateDelay(50);
+    return mockTradingData;
+}
+
+// Projects
+export async function getProjectsDashboardData() {
+  if (!firestore) {
+    console.log("Firestore not initialized, returning mock project dashboard data.");
+    return mockProjectsDashboardData;
+  }
+  try {
+    const jobs = await getJobs();
+    const timeLogs = await getTimeLogs();
+    const tasks = await getTasks();
+
+    const activeProjects = jobs.filter(j => j.status === 'In Progress').length;
+    const overallProfitability = jobs.reduce((acc, job) => acc + job.profitability, 0);
+    const totalBillableHours = timeLogs.reduce((acc, log) => acc + log.hours, 0);
+    const overdueTasks = tasks.filter(t => t.status !== 'Done' && new Date(t.due) < new Date()).length;
+
+    const kpiData = [
+        { title: "Active Projects", value: activeProjects, icon: 'Activity' },
+        { title: "Overall Profitability", value: `$${overallProfitability.toLocaleString()}`, icon: 'DollarSign', isPositive: overallProfitability >= 0 },
+        { title: "Total Billable Hours", value: totalBillableHours.toLocaleString(), icon: 'Clock' },
+        { title: "Tasks Overdue", value: overdueTasks, icon: 'ListChecks', isPositive: overdueTasks === 0 },
+    ];
+
+    const projectBudgetData = jobs.slice(0, 3).map(job => ({
+        name: job.name,
+        budget: job.budget,
+        actual: job.spent,
+    }));
+
+    const recentTimeLogs = timeLogs.slice(0, 3);
+
+    return {
+        kpiData,
+        projectBudgetData,
+        recentTimeLogs,
+    };
+
+  } catch (error) {
+      console.error("Error fetching projects dashboard data:", error);
+      return mockProjectsDashboardData;
+  }
+}
+
+export async function getJobs() {
+  if (!firestore) {
+    console.log("Firestore not initialized, returning mock data jobs.");
+    return mockJobs;
+  }
+  try {
+    const jobsSnapshot = await firestore.collection('jobs').where('userId', '==', FAKE_USER_ID).get();
+    if (jobsSnapshot.empty) {
+      console.log("No jobs found in Firestore, returning mock data as fallback.");
+      return mockJobs;
+    }
+    const jobs = jobsSnapshot.docs.map(doc => {
+        const data = doc.data();
+        return {
+            id: doc.id, 
+            ...data,
+            profitability: parseFloat(data.profitability),
+        }
+    });
+    return jobs as typeof mockJobs;
+  } catch (error) {
+    console.error("Error fetching jobs from Firestore:", error);
+    return mockJobs;
+  }
+}
+export async function getTimeLogs() {
+    if (!firestore) {
+        console.log("Firestore not initialized, returning mock data time logs.");
+        return mockTimeLogs;
+    }
+    try {
+        const snapshot = await firestore.collection('timeLogs').where('userId', '==', FAKE_USER_ID).orderBy('date', 'desc').limit(10).get();
+        if (snapshot.empty) {
+            console.log("No time logs found in Firestore, returning mock data as fallback.");
+            return mockTimeLogs;
+        }
+        return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as typeof mockTimeLogs;
+    } catch (error) {
+        console.error("Error fetching time logs from Firestore:", error);
+        return mockTimeLogs;
+    }
+}
+export async function getJobCostingDashboardData() {
+  if (!firestore) {
+    console.log("Firestore not initialized, returning mock job costing data.");
+    return mockJobCostingDashboard;
+  }
+  try {
+    const jobsSnapshot = await firestore.collection('jobs').where('userId', '==', FAKE_USER_ID).get();
+    if (jobsSnapshot.empty) {
+        return mockJobCostingDashboard;
+    }
+    const jobs = jobsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() as any }));
+
+    const activeJobs = jobs.filter(j => j.status === 'In Progress').length;
+    const totalBudget = jobs.reduce((acc, job) => acc + job.budget, 0);
+    const totalSpent = jobs.reduce((acc, job) => acc + job.spent, 0);
+    const overallProfitability = jobs.reduce((acc, job) => acc + job.profitability, 0);
+
+    return {
+        kpiData: [
+            { title: "Active Jobs", value: activeJobs.toString() },
+            { title: "Total Budget", value: `$${totalBudget.toLocaleString()}` },
+            { title: "Total Spent", value: `$${totalSpent.toLocaleString()}` },
+            { title: "Overall Profitability", value: `$${overallProfitability.toLocaleString()}` },
+        ],
+        budgetVsActualData: jobs.map(j => ({ name: j.name, budget: j.budget, actual: j.spent })).slice(0, 3),
+        recentCostEntries: mockJobCostingDashboard.recentCostEntries, // Keep mock now
+    };
+  } catch (error) {
+    console.error("Error fetching job costing dashboard data:", error);
+    return mockJobCostingDashboard;
+  }
+}
+
+
+// Client Management
+export async function getClientBillingData() {
+    await simulateDelay(50);
+    return mockClientBillingData;
+}
+export async function getClientComplianceData() {
+    await simulateDelay(50);
+    return mockClientComplianceData;
+}
+
+// Payments
+export async function getPaymentsToProcess() {
+    await simulateDelay(50);
+    return mockPaymentsToProcess;
+}
+
+// Asset Management
+export async function getAssetLocationsData() {
+    await simulateDelay(50);
+    return {
+        physicalAssets: [],
+        digitalAssets: []
+    }
+}
+
+// Help
+export async function getKeyboardShortcuts() {
+    await simulateDelay(50);
+    return mockKeyboardShortcuts;
+}
+
+export async function getTroubleshootingFAQs() {
+    await simulateDelay(50);
+    return mockTroubleshootingFAQs;
+}
+
+// Data Management
+export async function getDataManagementDashboardData() {
+  await simulateDelay(50);
+  return mockDataManagementDashboard;
+}
+
+export async function getBackupRestoreData() {
+    await simulateDelay(50);
+    return mockBackupRestoreData;
+}
+
+export async function getExportHistory() {
+    await simulateDelay(50);
+    return mockExportHistory;
+}
+
+const checkFirestore = () => {
+    if (!firestore) {
+        console.error("MIGRATION FAILED: Firestore is not initialized.");
+        return { success: false, error: "Database not initialized." };
+    }
+    return null;
+}
+
+// MIGRATION SERVER ACTIONS
+export async function migrateClientData() { 
+    const check = checkFirestore();
+    if(check || !firestore) return check || { success: false, error: "DB not available" };
+    return migrateData(firestore, mockClients, 'clients'); 
+}
+export async function migrateInvoiceData() { 
+    const check = checkFirestore();
+    if(check || !firestore) return check || { success: false, error: "DB not available" };
+    return migrateData(firestore, mockInvoices, 'invoices', 'invoice'); 
+}
+export async function migrateEmployeeData() { 
+    const check = checkFirestore();
+    if(check || !firestore) return check || { success: false, error: "DB not available" };
+    return migrateData(firestore, mockEmployees, 'employees');
+}
+export async function migrateJobData() { 
+    const check = checkFirestore();
+    if(check || !firestore) return check || { success: false, error: "DB not available" };
+    return migrateData(firestore, mockJobsWithDetails, 'jobs'); 
+}
+export async function migrateTaxFilings() { 
+    const check = checkFirestore();
+    if(check || !firestore) return check || { success: false, error: "DB not available" };
+    return migrateData(firestore, mockTaxFilings, 'taxFilings'); 
+}
+export async function migrateTaxPayments() { 
+    const check = checkFirestore();
+    if(check || !firestore) return check || { success: false, error: "DB not available" };
+    return migrateData(firestore, mockTaxPayments, 'taxPayments'); 
+}
+export async function migrateBankAccounts() { 
+    const check = checkFirestore();
+    if(check || !firestore) return check || { success: false, error: "DB not available" };
+    return migrateData(firestore, mockBankAccounts, 'bankAccounts'); 
+}
+export async function migrateTaskData() { 
+    const check = checkFirestore();
+    if(check || !firestore) return check || { success: false, error: "DB not available" };
+    return migrateData(firestore, mockTasks, 'tasks'); 
+}
+export async function migrateChartOfAccounts() { 
+    const check = checkFirestore();
+    if(check || !firestore) return check || { success: false, error: "DB not available" };
+    return migrateSingleDoc(firestore, mockChartOfAccounts, 'chartOfAccounts', FAKE_USER_ID); 
+}
+export async function migrateTimeLogs() { 
+    const check = checkFirestore();
+    if(check || !firestore) return check || { success: false, error: "DB not available" };
+    return migrateData(firestore, mockTimeLogs, 'timeLogs'); 
+}
+export async function migrateJournalEntries() { 
+    const check = checkFirestore();
+    if(check || !firestore) return check || { success: false, error: "DB not available" };
+    return migrateData(firestore, mockJournalEntries, 'journalEntries', 'entryNo'); 
+}
+export async function migratePurchaseOrders() { 
+    const check = checkFirestore();
+    if(check || !firestore) return check || { success: false, error: "DB not available" };
+    return migrateData(firestore, mockPurchaseOrders, 'purchaseOrders', 'poNumber'); 
+}
+export async function migrateInventory() { 
+    const check = checkFirestore();
+    if(check || !firestore) return check || { success: false, error: "DB not available" };
+    return migrateData(firestore, mockInventory.inventory, 'inventory', 'sku'); 
+}
+export async function migrateProductionPlans() { 
+    const check = checkFirestore();
+    if(check || !firestore) return check || { success: false, error: "DB not available" };
+    return migrateData(firestore, mockProductionPlans, 'productionPlans'); 
+}
+export async function migrateWorkOrders() { 
+    const check = checkFirestore();
+    if(check || !firestore) return check || { success: false, error: "DB not available" };
+    return migrateData(firestore, mockWorkOrders, 'workOrders'); 
+}
+    

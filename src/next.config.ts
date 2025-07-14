@@ -3,6 +3,7 @@ import type {NextConfig} from 'next';
 
 const nextConfig: NextConfig = {
   /* config options here */
+  output: 'standalone',
   typescript: {
     ignoreBuildErrors: false,
   },
@@ -28,12 +29,6 @@ const nextConfig: NextConfig = {
   experimental: {
     // This is needed to allow the Next.js dev server to accept requests from the
     // Firebase Studio preview URL.
-    serverActions: {
-      allowedOrigins: [
-        "*.proxy.prod.unverified.cloud.goog",
-        "*.us-central1.cloudshell.dev"
-      ]
-    }
   },
 };
 

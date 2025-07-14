@@ -45,7 +45,7 @@ export function TradingClientPage({ data }: { data: any }) {
     // In a real app, you'd fetch the current price. We'll mock it.
     const currentPrice = Math.floor(Math.random() * 200) + 50;
 
-    setHistory((prev: any) => [
+    setHistory(prev => [
       {
         id: prev.length + 1,
         type,
