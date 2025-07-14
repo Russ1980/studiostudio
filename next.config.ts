@@ -1,9 +1,7 @@
-
-import type {NextConfig} from 'next';
-
-const nextConfig: NextConfig = {
-  /* config options here */
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   output: 'standalone',
+  outputFileTracing: false, // This is the recommended fix to bypass Firebase's faulty regex generation.
   typescript: {
     ignoreBuildErrors: false,
   },
@@ -26,13 +24,6 @@ const nextConfig: NextConfig = {
       }
     ],
   },
-  serverExternalPackages: ['firebase-admin'],
-  experimental: {
-    // This is needed to allow the Next.js dev server to accept requests from the
-    // Firebase Studio preview URL.
-    // Exclude the 'workspace' directory from being watched to prevent an infinite restart loop.
-    serverComponentsExternalPackages: ["!**/workspace/**"],
-  },
 };
 
-export default nextConfig;
+module.exports = nextConfig;

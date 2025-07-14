@@ -1,11 +1,26 @@
+import { AuthProvider } from '@/components/auth-provider';
+import { AppShell } from '@/components/app-shell';
+import { OnboardingProvider, OnboardingController } from '@/components/onboarding';
+import { ServaAIProvider } from '@/hooks/use-serva-ai';
+import { SidebarProvider } from '@/components/ui/sidebar';
 
-
-// This layout file is now simpler, as the main shell and providers
-// are handled by the RootLayoutClient. It just passes children through.
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return <>{children}</>;
+  return (
+    <AuthProvider>
+      <SidebarProvider>
+        <OnboardingProvider>
+            <ServaAIProvider>
+                <AppShell>
+                    <OnboardingController />
+                    {children}
+                </AppShell>
+            </ServaAIProvider>
+        </OnboardingProvider>
+      </SidebarProvider>
+    </AuthProvider>
+  );
 }

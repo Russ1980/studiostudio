@@ -1,7 +1,7 @@
 
 import { getEmployeeById } from "@/lib/actions";
 import { notFound } from "next/navigation";
-import EditEmployeeForm from "./edit-employee-form";
+import { EditEmployeeForm } from "@/app/(dashboard)/payroll/employee-management/edit/[id]/edit-employee-form";
 
 export default async function EditEmployeePage({ params }: { params: { id: string } }) {
   const { id } = params;
