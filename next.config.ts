@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',
-  outputFileTracing: false, // This is the recommended fix to bypass Firebase's faulty regex generation.
   typescript: {
     ignoreBuildErrors: false,
   },
