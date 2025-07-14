@@ -30,6 +30,8 @@ const nextConfig: NextConfig = {
   experimental: {
     // This is needed to allow the Next.js dev server to accept requests from the
     // Firebase Studio preview URL.
+    // Exclude the 'workspace' directory from being watched to prevent an infinite restart loop.
+    serverComponentsExternalPackages: ["!**/workspace/**"],
   },
 };
 
