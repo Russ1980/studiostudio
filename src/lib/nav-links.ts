@@ -217,7 +217,6 @@ export const navLinks: NavLink[] = [
         href: '/operations/job-costing/dashboard',
         items: [
            { href: '/operations/job-costing/dashboard', label: 'Dashboard', icon: LayoutGrid },
-           { href: '/operations/job-costing/jobs', label: 'All Jobs', icon: Briefcase },
            { href: '/operations/job-costing/enter-bill', label: 'Enter Bill', icon: Receipt },
            { 
              href: '/operations/job-costing/reports', 
