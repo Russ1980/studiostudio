@@ -1,3 +1,4 @@
+import type { AuthUser } from '@/lib/auth';
 
 "use client";
 
@@ -101,7 +102,6 @@ import {
   Laptop
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { AuthUser } from "@/components/auth-provider";
 import { Separator } from "@/components/ui/separator";
 import { useServaAI } from "@/hooks/use-serva-ai";
 import dynamic from "next/dynamic";
