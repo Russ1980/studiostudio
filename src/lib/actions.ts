@@ -1411,7 +1411,7 @@ export async function getStockData(ticker: string = 'AAPL') {
         const generateChartData = () => {
             const data = [];
             let currentPrice = price - change * 7;
-            for (let i = 0; < 8; i++) {
+            for (let i = 0; i < 8; i++) {
                 data.push({
                     date: `${9 + i}:30`,
                     value: parseFloat(currentPrice.toFixed(2)),
