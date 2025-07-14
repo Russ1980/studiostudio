@@ -646,14 +646,6 @@ export function AppShell({ children, user }: { children: React.ReactNode, user: 
           </div>
         </header>
         <main className="flex-1 p-4 md:p-6">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <Breadcrumb />
-              </div>
-               <div className="flex items-center gap-2">
-                <Badge variant="outline">Sample Data Mode</Badge>
-              </div>
-            </div>
             {children}
         </main>
       </SidebarInset>
