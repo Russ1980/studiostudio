@@ -872,77 +872,8 @@ export async function getScheduledReports() {
 
 // Accounting
 export async function getAccountingDashboardData() {
-    try {
-        if (!firestore) {
-            throw new Error("Firestore not initialized.");
-        }
-        
-        const invoicesSnapshot = await firestore.collection('invoices').where('userId', '==', FAKE_USER_ID).get();
-        
-        const invoices = invoicesSnapshot.docs.map(doc => doc.data());
-        const now = new Date();
-        let totalRevenue = 0;
-        let totalExpenses = 0;
-        let outstandingReceivables = 0;
-        let overdueReceivables = 0;
-        let salesLast30Days = 0;
-      
-        invoices.forEach(invoice => {
-          const amount = parseFloat(invoice.amount.replace(/,/g, ''));
-          const dueDate = new Date(invoice.dueDate);
-          totalRevenue += amount;
-          if (invoice.status === 'Paid') {
-            const paidDate = dueDate; // Mock paid date
-            if (paidDate > new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000)) {
-              salesLast30Days += amount;
-            }
-          } else {
-            outstandingReceivables += amount;
-            if (dueDate < now) {
-              overdueReceivables += amount;
-            }
-          }
-        });
-      
-        totalExpenses = totalRevenue * 0.65;
-        const netProfit = totalRevenue - totalExpenses;
-      
-        const formatCurrency = (value: number) => {
-          if (value >= 1000000) return `$${(value / 1000000).toFixed(1)}M`;
-          if (value >= 1000) return `$${(value / 1000).toFixed(1)}k`;
-          return `$${value.toFixed(2)}`;
-        }
-      
-        return {
-          ...mockAccountingDashboard,
-          mainKpis: {
-            netRevenue: formatCurrency(totalRevenue),
-            growth: "+12.4%",
-            healthScore: "94%",
-          },
-          metricCards: [
-            { title: "Monthly Expenses", value: formatCurrency(totalExpenses / 12), change: "+5.0%", changeType: "increase", icon: 'TrendingUp', details: null },
-            { title: "Net Profit", value: formatCurrency(netProfit), details: `Income: ${formatCurrency(totalRevenue)}\nExpenses: ${formatCurrency(totalExpenses)}`, icon: 'DollarSign', change: null, changeType: null },
-            { title: "Sales (30 Days)", value: formatCurrency(salesLast30Days), change: "+8.4%", changeType: "increase", icon: 'BarChart3', details: null },
-            { title: "A/R Total", value: formatCurrency(outstandingReceivables), details: `Overdue: ${formatCurrency(overdueReceivables)}`, icon: 'Receipt', change: null, changeType: null },
-          ],
-          performanceMetrics: {
-            ...mockDashboardPageData.performanceMetrics,
-            accountsReceivable: {
-              outstanding: formatCurrency(outstandingReceivables),
-              overdue: formatCurrency(overdueReceivables),
-            }
-          },
-          alerts: invoices.filter(i => i.status === 'Overdue').slice(0, 2).map((i: any, idx: number) => ({
-            id: idx,
-            type: 'critical',
-            message: `Invoice #${i.invoice} is ${Math.round((now.getTime() - new Date(i.dueDate).getTime()) / (1000 * 60 * 60 * 24))} days overdue.`
-          })),
-        };
-    } catch (error) {
-        console.error("Error in getAccountingDashboardData, falling back to mock data:", error);
-        return mockAccountingDashboard;
-    }
+    console.log("Using mock data for accounting dashboard.");
+    return mockAccountingDashboard;
 }
 
 export async function getJournalEntries() {
