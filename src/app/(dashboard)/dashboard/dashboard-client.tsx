@@ -41,6 +41,7 @@ import {
   Landmark,
   CreditCard,
   Activity,
+  Loader2,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
