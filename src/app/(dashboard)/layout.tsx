@@ -1,4 +1,6 @@
 
+"use client";
+
 import { AuthProvider, useAuth } from '@/components/auth-provider';
 import { AppShell } from '@/components/app-shell';
 import { OnboardingProvider, OnboardingController } from '@/components/onboarding';
@@ -51,5 +53,3 @@ export default function DashboardLayout({
     </AuthProvider>
   );
 }
-
-    
