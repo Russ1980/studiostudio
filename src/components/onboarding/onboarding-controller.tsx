@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { createContext, useState, useEffect, useCallback, useMemo, useContext } from 'react';
@@ -30,7 +31,9 @@ export const OnboardingProvider = ({ children }: OnboardingProviderProps) => {
 
     useEffect(() => {
         const completed = localStorage.getItem('onboarding-completed');
-        setIsFinished(completed === 'true');
+        if (typeof window !== 'undefined') {
+            setIsFinished(completed === 'true');
+        }
     }, []);
 
     const setRoleBasedSteps = useCallback((role: string) => {
@@ -67,7 +70,7 @@ export const OnboardingProvider = ({ children }: OnboardingProviderProps) => {
 
     const prevStep = useCallback(() => {
         if (currentStep > 0) {
-            setCurrentStep(prev => prev + 1);
+            setCurrentStep(prev => prev - 1);
         }
     }, [currentStep]);
 
@@ -102,18 +105,19 @@ export const OnboardingController = ({ userRole }: { userRole: string }) => {
     const context = useContext(OnboardingContext);
     
     const startOnboarding = context?.startOnboarding;
+    const isFinished = context?.isFinished;
 
     useEffect(() => {
         if (!startOnboarding) return;
-
-        const completed = localStorage.getItem('onboarding-completed');
-        if (completed !== 'true') {
-            const timer = setTimeout(() => {
+        
+        if (isFinished === false) {
+             const timer = setTimeout(() => {
                 startOnboarding(userRole);
-            }, 1000); // Delay to ensure target elements are mounted
+            }, 1000); 
             return () => clearTimeout(timer);
         }
-    }, [startOnboarding, userRole]);
 
-    return null; // This component only triggers the onboarding
+    }, [startOnboarding, userRole, isFinished]);
+
+    return null;
 };

@@ -8,7 +8,7 @@ import { AuthProvider, useAuth } from '@/components/auth-provider';
 import { ThemeProvider } from '@/components/theme-provider';
 import { usePathname, useRouter } from 'next/navigation';
 import { AppShell } from '@/components/app-shell';
-import { OnboardingProvider } from '@/components/onboarding';
+import { OnboardingProvider, OnboardingController } from '@/components/onboarding';
 import { ServaAIProvider } from '@/hooks/use-serva-ai';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { useEffect } from 'react';
@@ -44,7 +44,7 @@ function AppLayout({ children }: { children: React.ReactNode }) {
         <SidebarProvider>
             <OnboardingProvider>
                 <ServaAIProvider>
-                    <AppShell user={user}>{children}</AppShell>
+                    <AppShell user={user}><OnboardingController userRole={user.role} />{children}</AppShell>
                 </ServaAIProvider>
             </OnboardingProvider>
         </SidebarProvider>
