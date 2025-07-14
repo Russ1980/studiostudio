@@ -68,6 +68,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 import { useToast } from "@/hooks/use-toast";
 import React from "react";
+import { mockDashboardPageData } from "@/lib/data";
 
 
 const iconMap: { [key: string]: React.ElementType } = {
@@ -613,31 +614,28 @@ export function DashboardClientPage({ initialData }: { initialData: any }) {
         }
     };
     
-    if (!initialData) {
-        // You can return a loading skeleton or a simple message
-        return <div>Loading dashboard...</div>;
-    }
-    const { user, mainKpis, navItems } = initialData;
+    const data = initialData || mockDashboardPageData;
+    const { user, mainKpis, navItems } = data;
     const [activeView, setActiveView] = useState('Executive Overview');
 
     const renderView = () => {
         switch (activeView) {
             case 'Executive Overview':
-                return <ExecutiveOverviewView data={initialData} />;
+                return <ExecutiveOverviewView data={data} />;
             case 'Financial Health':
-                return <FinancialHealthView data={initialData.financialHealthData} />;
+                return <FinancialHealthView data={data.financialHealthData} />;
             case 'Serva AI Insights':
-                return <ServaAIInsightsView data={initialData.servaAiInsightsData} />;
+                return <ServaAIInsightsView data={data.servaAiInsightsData} />;
             case 'Workflow Hub':
-                return <WorkflowHubView data={initialData.workflowHubData} />;
+                return <WorkflowHubView data={data.workflowHubData} />;
             case 'Process Visibility':
-                return <ProcessVisibilityView data={initialData.processVisibilityData} />;
+                return <ProcessVisibilityView data={data.processVisibilityData} />;
             case 'Business Context':
-                return <BusinessContextView data={initialData.businessContextData} />;
+                return <BusinessContextView data={data.businessContextData} />;
             case 'Customize Dashboard':
                 return <CustomizeDashboardView />;
             default:
-                return <ExecutiveOverviewView data={initialData} />;
+                return <ExecutiveOverviewView data={data} />;
         }
     };
 
