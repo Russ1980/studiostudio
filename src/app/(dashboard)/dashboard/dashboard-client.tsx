@@ -597,9 +597,6 @@ const CustomizeDashboardView = () => (
 );
 
 export function DashboardClientPage({ initialData }: { initialData: any }) {
-    const { toast } = useToast();
-    const [avatarSrc, setAvatarSrc] = useState<string | null>(null);
-
     if (!initialData || !initialData.user) {
         return (
             <div className="flex h-64 items-center justify-center">
@@ -607,21 +604,6 @@ export function DashboardClientPage({ initialData }: { initialData: any }) {
             </div>
         );
     }
-    
-    const handleAvatarUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (event.target.files && event.target.files[0]) {
-            const file = event.target.files[0];
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                setAvatarSrc(e.target?.result as string);
-                toast({
-                    title: "Profile Photo Updated",
-                    description: "Your new photo has been uploaded successfully.",
-                });
-            };
-            reader.readAsDataURL(file);
-        }
-    };
     
     const data = initialData || mockDashboardPageData;
     const { user, mainKpis, navItems } = data;
@@ -650,55 +632,6 @@ export function DashboardClientPage({ initialData }: { initialData: any }) {
 
     return (
         <div className="flex flex-col gap-6">
-            <Card>
-                <CardContent className="p-4">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                    <div className="flex items-center gap-4">
-                    <label htmlFor="avatar-upload" className="cursor-pointer group relative">
-                        <Avatar className="h-14 w-14">
-                            <AvatarImage src={avatarSrc || undefined} alt={user.name} />
-                            <AvatarFallback className="bg-primary text-primary-foreground text-2xl group-hover:bg-primary/80 transition-colors">
-                                {user.initials}
-                            </AvatarFallback>
-                        </Avatar>
-                        <div className="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                            <Upload className="h-6 w-6 text-white" />
-                        </div>
-                        <input id="avatar-upload" type="file" className="sr-only" accept="image/*" onChange={handleAvatarUpload} />
-                    </label>
-                    <div>
-                        <h2 className="text-xl font-bold">{user.name}</h2>
-                        <p className="text-muted-foreground">{user.title}</p>
-                    </div>
-                    </div>
-                    <div className="flex items-center gap-4 sm:gap-6">
-                    <div className="text-right sm:text-left">
-                        <p className="text-2xl font-bold">{mainKpis.netRevenue}</p>
-                        <p className="text-sm text-muted-foreground">Net Revenue</p>
-                    </div>
-                    <div className="text-right sm:text-left">
-                        <p className="text-2xl font-bold text-success">{mainKpis.growth}</p>
-                        <p className="text-sm text-muted-foreground">Growth</p>
-                    </div>
-                    <div className="text-right sm:text-left">
-                        <p className="text-2xl font-bold text-primary">{mainKpis.healthScore}</p>
-                        <p className="text-sm text-muted-foreground">Health Score</p>
-                    </div>
-                    <Separator orientation="vertical" className="h-10 hidden sm:block" />
-                    <div className="flex items-center gap-1">
-                        <Button variant="ghost" size="icon"><RefreshCw className="h-5 w-5" /></Button>
-                        <Button variant="ghost" size="icon"><Download className="h-5 w-5" /></Button>
-                        <Button variant="ghost" size="icon"><Share2 className="h-5 w-5" /></Button>
-                        <Button variant="ghost" size="icon" className="relative">
-                        <Bell className="h-5 w-5" />
-                        <div className="absolute top-2 right-2.5 w-2 h-2 rounded-full bg-destructive border-2 border-background" />
-                        </Button>
-                    </div>
-                    </div>
-                </div>
-                </CardContent>
-            </Card>
-
             <Card>
                 <CardContent className="p-0">
                 <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7">
