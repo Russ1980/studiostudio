@@ -3,8 +3,8 @@ import { getInvoiceById, getClients } from "@/lib/actions";
 import { notFound } from "next/navigation";
 import { EditInvoiceForm } from "@/app/(dashboard)/invoicing/invoices/edit/[id]/edit-invoice-form";
 
-export default async function EditInvoicePage({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default async function EditInvoicePage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const invoice = await getInvoiceById(id);
   
   if (!invoice) {
