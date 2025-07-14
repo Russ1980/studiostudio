@@ -599,6 +599,14 @@ export function DashboardClientPage({ initialData }: { initialData: any }) {
     const { toast } = useToast();
     const [avatarSrc, setAvatarSrc] = useState<string | null>(null);
 
+    if (!initialData || !initialData.user) {
+        return (
+            <div className="flex h-64 items-center justify-center">
+                <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+            </div>
+        );
+    }
+    
     const handleAvatarUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files[0]) {
             const file = event.target.files[0];
