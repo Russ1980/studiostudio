@@ -98,7 +98,6 @@ export default async function AllJobsPage() {
                            <Link href={`/operations/job-costing/jobs/${job.id}`}>View Details</Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem>Enter Costs</DropdownMenuItem>
-                        <DropdownMenuItem>Edit Job</DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>

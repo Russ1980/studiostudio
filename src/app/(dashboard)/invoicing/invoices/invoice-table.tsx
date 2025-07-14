@@ -140,10 +140,6 @@ export function InvoiceTable({ invoices, clients }: { invoices: Invoice[], clien
                                                 <Button variant="ghost" size="icon"><MoreHorizontal /></Button>
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent align="end">
-                                                <DropdownMenuItem onSelect={() => router.push(`/invoicing/invoices/edit/${invoice.id}`)}>
-                                                    <Pencil className="mr-2 h-4 w-4" />
-                                                    Edit Invoice
-                                                </DropdownMenuItem>
                                                 <DropdownMenuItem>Send Reminder</DropdownMenuItem>
                                                 <DropdownMenuItem>Record Payment</DropdownMenuItem>
                                             </DropdownMenuContent>

@@ -89,10 +89,6 @@ export function EmployeeTable({ employees }: { employees: any[] }) {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                       <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                      <DropdownMenuItem onSelect={() => router.push(`/payroll/employee-management/edit/${employee.id}`)}>
-                        <Pencil className="mr-2 h-4 w-4" />
-                        Edit Employee
-                      </DropdownMenuItem>
                       <DropdownMenuItem>View Profile</DropdownMenuItem>
                       <DropdownMenuItem>Manage Benefits</DropdownMenuItem>
                       <DropdownMenuSeparator />

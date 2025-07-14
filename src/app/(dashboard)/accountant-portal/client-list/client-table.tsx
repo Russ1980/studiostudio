@@ -175,10 +175,6 @@ export function ClientListTable({ clients }: { clients: any[] }) {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem onSelect={() => router.push(`/accountant-portal/edit-client/${client.id}`)}>
-                          <Pencil className="mr-2 h-4 w-4" />
-                          Edit Client
-                        </DropdownMenuItem>
                         <DropdownMenuItem>Manage Subscription</DropdownMenuItem>
                         <DropdownMenuItem>Go to Client Portal</DropdownMenuItem>
                         <DropdownMenuSeparator />
