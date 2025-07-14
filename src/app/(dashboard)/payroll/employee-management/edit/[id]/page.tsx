@@ -14,6 +14,7 @@ export default async function EditEmployeePage({ params }: { params: { id: strin
   // Ensure all fields are strings or numbers as expected by the form
   const safeEmployee = {
       ...employee,
+      id: employee.id || '',
       name: employee.name || '',
       email: employee.email || '',
       department: employee.department || '',
