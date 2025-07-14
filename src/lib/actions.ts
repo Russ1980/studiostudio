@@ -1,3 +1,4 @@
+declare const mockProductionTracking: any; declare const mockScheduling: any;
 
 'use server';
 
@@ -87,7 +88,7 @@ const simulateDelay = (ms: number) => new Promise(resolve => setTimeout(resolve,
 export async function getClients() {
   if (!firestore) {
     console.log("Firestore not initialized, returning mock data.");
-    return mockClients.filter(c => c.status !== 'Inactive');
+    return mockClients.filter((c: any) => c.status !== 'Inactive');
   }
   try {
     const clientsSnapshot = await firestore.collection('clients')
@@ -95,18 +96,18 @@ export async function getClients() {
       .get();
       
     const allClients = clientsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    const activeClients = allClients.filter(c => c.status !== 'Inactive');
+    const activeClients = allClients.filter((c: any) => c.status !== 'Inactive');
 
     if (activeClients.length === 0) {
       console.log("No active clients found in Firestore, returning mock data as fallback.");
-      return mockClients.filter(c => c.status !== 'Inactive');
+      return mockClients.filter((c: any) => c.status !== 'Inactive');
     }
 
     return activeClients as typeof mockClients;
   } catch (error) {
     console.error("Error fetching clients from Firestore:", error);
     // Fallback to mock data in case of error
-    return mockClients.filter(c => c.status !== 'Inactive');
+    return mockClients.filter((c: any) => c.status !== 'Inactive');
   }
 }
 
@@ -133,7 +134,7 @@ export async function getClientById(id: string) {
     if (!firestore) {
         console.log("Firestore not initialized, returning mock client.");
         const client = mockClients.find(c => c.id === id);
-        return client ? { id, ...client } : null;
+        return client ? { ...client, id } : null;
     }
     try {
         const docRef = firestore.collection('clients').doc(id);
