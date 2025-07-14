@@ -1,4 +1,3 @@
-// This is a placeholder component to fix the build.
-export default function EditClientForm({ client }: { client: any }) {
-  return <div />;
+export default function EditClientForm() {
+  return <div>Client Form</div>;
 }

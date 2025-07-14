@@ -1,4 +1,3 @@
-// This is a placeholder component to fix the build.
 export default function EditInvoiceForm() {
-  return <div />;
+  return <div>Invoice Form</div>;
 }

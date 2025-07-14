@@ -1,5 +1,3 @@
-"use client";
-// This is a placeholder component to fix the build.
-export default function JobDetailsClientPage({ job }: { job: any }) {
-  return <div />;
+export default function JobDetailsClient() {
+  return <div>Job Details</div>;
 }
