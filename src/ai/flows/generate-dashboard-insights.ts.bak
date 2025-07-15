@@ -1,3 +1,5 @@
+
+'use server';
 /**
  * @fileOverview Generates high-level financial insights for a dashboard.
  *
@@ -26,7 +28,6 @@ export const GenerateDashboardInsightsOutputSchema = z.object({
 export type GenerateDashboardInsightsOutput = z.infer<typeof GenerateDashboardInsightsOutputSchema>;
 
 export async function generateDashboardInsights(input: GenerateDashboardInsightsInput): Promise<GenerateDashboardInsightsOutput> {
-'use server';
   return generateDashboardInsightsFlow(input);
 }
 
