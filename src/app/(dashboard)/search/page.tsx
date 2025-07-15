@@ -4,9 +4,12 @@ import { SearchClientPage } from "./search-client";
 
 
 export default async function SearchPage({
-  searchParams,
+  searchParams
+}: {
+  searchParams: Promise<Record<string, string | string[]>>
 }) {
-  const ticker = typeof searchParams?.ticker === 'string' ? searchParams.ticker : 'AAPL';
+  const params = await searchParams;
+  const ticker = typeof params?.ticker === 'string' ? params.ticker : 'AAPL';
   const stockData = await getStockData(ticker);
   return <SearchClientPage stockData={stockData} />;
 }

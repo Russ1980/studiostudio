@@ -27,10 +27,6 @@ const nextConfig: NextConfig = {
     ],
   },
   serverExternalPackages: ['firebase-admin'],
-  experimental: {
-    // This is needed to allow the Next.js dev server to accept requests from the
-    // Firebase Studio preview URL.
-  },
 };
 
 export default nextConfig;
